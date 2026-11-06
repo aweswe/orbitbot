@@ -84,6 +84,7 @@ import { ArchivedChats } from "./shell/archived-chats";
 import { ChatContextMenu } from "./shell/chat-context-menu";
 import { ChatFindBar } from "./shell/chat-find-bar";
 import { ChatHeader } from "./shell/chat-header";
+import { CommandRail, type CommandRailMode } from "./shell/CommandRail";
 import { FALLBACK_BOT_COLOR } from "./shell/chat-shared";
 import type { CommandPaletteAction } from "./shell/command-palette";
 import { Composer } from "./shell/composer";
@@ -192,6 +193,7 @@ function SpaceShell() {
   const enterToSend = composerEnterToSendPreference.use();
   const rightPanel = useRightPanel({ searchParams, setSearchParams });
   const { panel, setPanel, modelFocusRequest, setModelFocusRequest } = rightPanel;
+  const [railMode, setRailMode] = useState<CommandRailMode>("chats");
   const lastBotTab = useRef<Panel>("routines");
   if (panel === "routines" || panel === "computer" || panel === "pages" || panel === "settings")
     lastBotTab.current = panel;
@@ -1011,6 +1013,36 @@ function SpaceShell() {
       {bootstrapMe !== undefined ? (
         <HostComputerPrompt initialMe={bootstrapMe ?? undefined} onMeUpdated={setBootstrapMe} />
       ) : null}
+      <CommandRail
+        activeMode={railMode}
+        onSelectMode={(mode) => {
+          setRailMode(mode);
+          if (mode === "chats") {
+            if (botsSidebarCollapsed) setBotsSidebarCollapsedPref(false);
+          } else if (mode === "agents") {
+            dialogs.setCreateBotOpen(true);
+          } else if (mode === "deck") {
+            computerControls.onOpenComputer();
+          } else if (mode === "skills") {
+            setOverlay({ kind: "skills" });
+          }
+        }}
+        drawerOpen={!botsSidebarCollapsed}
+        onToggleDrawer={() => setBotsSidebarCollapsedPref(!botsSidebarCollapsed)}
+        openSettings={openSettings}
+        openIntegrations={() => setOverlay({ kind: "integrations" })}
+        openSkills={() => setOverlay({ kind: "skills" })}
+        onOpenComputer={() => computerControls.onOpenComputer()}
+        unreadCount={countUnreadChats(sidebarGroups)}
+        computerActive={computerOpen}
+        user={session.data?.user}
+        footerLogos={footerLogos}
+        ticketBoardEnabled={Boolean(bootstrapMe?.ticketBoardEnabled)}
+        navLinks={desktopBridge() ? [] : (bootstrapMe?.navLinks ?? [])}
+        navigate={navigate}
+        openSpaceChat={openSpaceChat}
+        setCreateBotOpen={dialogs.setCreateBotOpen}
+      />
       <ShellSidebar
         isMobile={isMobileSidebar}
         mobileOpen={mobileSidebarOpen}
@@ -1133,6 +1165,20 @@ function SpaceShell() {
                 return;
               }
               callBot(bot);
+            }}
+            drawerOpen={!botsSidebarCollapsed}
+            onToggleDrawer={() => setBotsSidebarCollapsedPref(!botsSidebarCollapsed)}
+            spaceName={spaces.find((s) => s.id === bootstrapMe?.spaceId)?.name}
+            onOpenFind={() => {
+              setFindOpen(true);
+              requestAnimationFrame(() => findInputRef.current?.focus());
+            }}
+            onOpenComputer={() => computerControls.onOpenComputer(active?.id)}
+            onOpenModels={() => {
+              if (active && !inGroup) {
+                setPanel("settings");
+                setModelFocusRequest(Date.now());
+              } else openSettings("models");
             }}
           />
           {!active && !activeGroup && initialBotsLoaded ? (

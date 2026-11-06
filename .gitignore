@@ -48,5 +48,6 @@ apps/web/scripts/msgids.json
 playwright-report-www
 
 # Downloaded embedded computer screen SDK files
+.tools/
 apps/web/public/computer-screen/*.js
 apps/web/public/computer-screen/sdk/
