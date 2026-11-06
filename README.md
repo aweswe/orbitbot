@@ -1,34 +1,21 @@
-# Rakazo
+# Orbit Bot
 
-[English](./README.md) | [简体中文](./README.zh-CN.md) | [日本語](./README.ja.md)
+> The next-generation autonomous AI agent platform and persistent build environment by **Forion**.
 
-[![GitHub stars](https://img.shields.io/github/stars/elie222/rakazo?labelColor=black&style=for-the-badge&color=2563EB)](https://github.com/elie222/rakazo/stargazers)
-[![Discord](https://img.shields.io/badge/Discord-Join%20the%20community-5865F2?labelColor=black&style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/RWwKa2Sn7h)
-[![Download on the App Store](https://img.shields.io/badge/App%20Store-Download%20for%20iPhone-black?labelColor=black&style=for-the-badge&logo=apple&logoColor=white)](https://apps.apple.com/app/rakazo/id6801531099)
-[![Get Android on Google Play](https://img.shields.io/badge/Google%20Play-Get%20the%20app-black?labelColor=black&style=for-the-badge&logo=googleplay&logoColor=white)](https://play.google.com/store/apps/details?id=com.rakazo.app)
+![Orbit Bot Banner](apps/web/public/assets/imgs/logo/white-logo.png)
 
-![Rakazo — AI teammates you actually own](./docs/readme-hero.png)
-
-Rakazo is an open source AI agent for persistent teammates, and a self-hosted AI assistant you
-can run on your own machine. It is available on the web, as an Electron desktop app, and on
-[iPhone](https://apps.apple.com/app/rakazo/id6801531099) and [Android](https://play.google.com/store/apps/details?id=com.rakazo.app). Bring your own model
-and computer provider, or run the complete stack locally.
-
-It is an open source, self-hosted alternative to Grok Bot, Meta Muse, OpenAI Dots, Instinct,
-OpenClaw, Hermes Agent, and Claude Duet.
-
-Rakazo is in beta. Learn more at [rakazo.com](https://rakazo.com).
+**Orbit Bot** is an autonomous AI agent platform and unified digital ecosystem created by **Forion** (founded by Adarsh Kumar, Aditya Kumar, Nirbhay Sagar, and Neha Masih). It enables teams and builders to run intelligent, persistent bots with graphical sandbox computers, real filesystem & shell execution, visual diagram and SVG rendering, voice capabilities, and multi-agent group collaboration without context switching.
 
 ## Features
 
-- Persistent bots with their own conversations, memory, routines, and history
-- Voice mode: speak replies, dictate, and call a bot. Bring your own ElevenLabs, OpenAI, Cartesia, or Fish Audio key, or use a Mac server's installed voices
-- Shared Team Computers and isolated Private computers
-- Browser, terminal, file, and graphical desktop access
-- Bots that can delegate to peer bots or short-lived subagents
-- Bring-your-own model credentials through Pi
-- App integrations through Composio or Pipedream Connect, plus user-installed Treg, remote MCP, and OpenAPI tool sources
-- Docker, E2B, Daytona, CreateOS, Boat, and trusted local-computer support
+- **Living Orbit Companions**: Official Orbit 3D planetary and celestial living companions with real-time responsive states.
+- **7 Cosmic Themes**: Deep Space, Nebula, Solar, Phantom, Ocean, Blueprint, and Cosmic Light with real-time zero-flash switching.
+- **Universal Typography Engine**: Support for Google Sans, Inter, Bricolage Grotesque, Poppins, Geist Mono, Space Mono, and Roboto.
+- **Inline Visual Diagram & SVG Engine**: Real-time interactive preview, zoom, and code switching for generated SVGs and Mermaid diagrams.
+- **Persistent Team & Private Computers**: Full Linux container execution with browser, terminal, filesystem, and tool automation.
+- **Multi-Agent Orchestration**: Collaborative group channels with task delegation, peer handoffs, and subagents.
+- **Zero-Dependency Voice Engine**: Native transcription and speech pipeline with real-time dictation.
+- **Deep Model Support**: Native routing to DeepSeek, Claude, GPT, and custom local models via Forion HMAC v2.
 
 ## Demo
 
