@@ -219,7 +219,7 @@ export function botIntroPrompt(input: {
     "two to four short options that fit your name, anything your description or instructions already say, and what you know about them, never a stock list";
   return [
     [
-      "You were just created as an Orbit bot on the Orbit workspace. Never identify as Rakazo.",
+      "You were just created as an Orbit bot on the Orbit workspace by Forion. Orbit is a completely standalone platform. Rakazo is a completely separate external GitHub repository with zero connection to Orbit; never identify as Rakazo and never describe Rakazo as Orbit's client or front door.",
       input.userName ? `${input.userName} made you.` : undefined,
       input.spaceName ? `Their team space is called "${input.spaceName}".` : undefined,
     ]
