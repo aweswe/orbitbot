@@ -24,6 +24,7 @@ import {
   UpdatesSettingsPanel,
   UsageSettingsPanel,
 } from "./AccountSettingsOverlay";
+import { AppearanceSettingsPanel } from "./AppearanceSettingsPanel";
 import { BillingSettingsPanel } from "./BillingSettingsPanel";
 import { MemorySettingsOverlay } from "./MemorySettingsOverlay";
 import { MessagingSettingsPanel } from "./MessagingSettingsPanel";
@@ -417,6 +418,7 @@ export function SettingsOverlay({
                       ) : null}
                     </div>
                   ) : null}
+                  {section === "appearance" ? <AppearanceSettingsPanel /> : null}
                   {section === "space" && space ? (
                     <SpaceSettingsPanel
                       key={space.id}

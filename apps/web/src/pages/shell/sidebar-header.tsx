@@ -1,6 +1,6 @@
 import { useLingui } from "@lingui/react/macro";
 import type { Bot } from "@rakazo/contracts";
-import { Button, Popover, PopoverContent, PopoverTrigger } from "@rakazo/ui-web";
+import { Button } from "@rakazo/ui-web";
 import { PanelLeftClose, PanelLeftOpen, Plus } from "lucide-react";
 import { IconTooltip } from "../../components/IconTooltip";
 import { OrbitLogoMark } from "../../components/OrbitLogoMark";
@@ -8,7 +8,6 @@ import { desktopBridge } from "../../lib/desktop";
 import type { Panel } from "../../lib/right-panel-state";
 import type { SettingsSection } from "../shell-overlay";
 import { WindowChrome } from "../WindowChrome";
-import { BotCreatePicker } from "./bot-picker";
 
 export function SidebarHeader({
   mini = false,
@@ -79,7 +78,7 @@ export function SidebarHeader({
             <Button
               variant="ghost"
               size="icon-sm"
-              className="app-no-drag shrink-0 text-muted-foreground hover:text-foreground"
+              className="app-no-drag shrink-0 text-muted-foreground hover:text-foreground h-8 w-8 rounded-xl"
               aria-label={toggleLabel}
               data-testid="minimize-bots-sidebar"
               onClick={() => setBotsSidebarCollapsedPref(true)}
@@ -89,13 +88,19 @@ export function SidebarHeader({
           </IconTooltip>
         </>
       ) : (
-        /* ── Compacted / Mini Mode: Restore Collapser + Add Bot Option ── */
-        <div className="flex flex-col items-center gap-1.5 w-full">
-          <IconTooltip label={toggleLabel}>
+        /* ── Compacted / Mini Mode: Logo + Restore Collapser + Add Bot Option ── */
+        <div className="flex flex-col items-center gap-2 w-full px-1">
+          {/* Mini Orbit Logo Mark */}
+          <div className="h-8 w-8 shrink-0 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center overflow-hidden shadow-sm hover:border-foreground/20 transition-colors">
+            <OrbitLogoMark className="h-5 w-5" />
+          </div>
+
+          {/* Collapser Restore Toggle */}
+          <IconTooltip label={toggleLabel} side="right">
             <Button
               variant="ghost"
               size="icon-sm"
-              className="app-no-drag text-muted-foreground hover:text-foreground"
+              className="app-no-drag text-muted-foreground hover:text-foreground h-8 w-8 rounded-xl"
               aria-label={toggleLabel}
               data-testid="restore-bots-sidebar"
               onClick={() => setBotsSidebarCollapsedPref(false)}
@@ -104,72 +109,21 @@ export function SidebarHeader({
             </Button>
           </IconTooltip>
 
-          {setCreateMenuOpen ? (
-            <Popover open={createMenuOpen} onOpenChange={setCreateMenuOpen}>
-              <IconTooltip label={t`New Bot or Group`}>
-                <PopoverTrigger
-                  render={
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      className="app-no-drag text-muted-foreground hover:text-foreground rounded-xl hover:bg-primary/10 hover:text-primary transition-colors"
-                    />
-                  }
-                  aria-label={t`Create`}
-                  data-testid="create-menu-trigger"
-                >
-                  <Plus size={16} strokeWidth={1.8} aria-hidden="true" />
-                </PopoverTrigger>
-              </IconTooltip>
-              {createMenuOpen ? (
-                <PopoverContent
-                  align="start"
-                  side="right"
-                  sideOffset={10}
-                  className="app-no-drag w-auto gap-0 overflow-hidden p-0 data-closed:animate-none z-[100] shadow-2xl rounded-2xl border border-border"
-                >
-                  <BotCreatePicker
-                    bots={bots}
-                    onCreateBot={() => {
-                      setCreateMenuOpen?.(false);
-                      setMobileSidebarOpen?.(false);
-                      setCreateBotOpen?.(true);
-                    }}
-                    onOpenBot={(id) => {
-                      setCreateMenuOpen?.(false);
-                      setMobileSidebarOpen?.(false);
-                      navigate?.(`/app/${id}`);
-                    }}
-                    onCreateGroup={() => {
-                      setCreateMenuOpen?.(false);
-                      setMobileSidebarOpen?.(false);
-                      setPanel?.("create-group");
-                    }}
-                    onCreateSpace={() => {
-                      setCreateMenuOpen?.(false);
-                      setMobileSidebarOpen?.(false);
-                      setNewSpaceOpen?.(true);
-                    }}
-                  />
-                </PopoverContent>
-              ) : null}
-            </Popover>
-          ) : (
-            <IconTooltip label={t`New Bot`}>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                className="app-no-drag text-muted-foreground hover:text-foreground rounded-xl hover:bg-primary/10 hover:text-primary transition-colors"
-                aria-label={t`New Bot`}
-                onClick={() => {
-                  setMobileSidebarOpen?.(false);
-                  setCreateBotOpen?.(true);
-                }}
-              >
-                <Plus size={16} strokeWidth={1.8} aria-hidden="true" />
-              </Button>
-            </IconTooltip>
-          )}
+          {/* Compact New Bot Action */}
+          <IconTooltip label={t`New Bot`} side="right">
+            <button
+              type="button"
+              onClick={() => {
+                setMobileSidebarOpen?.(false);
+                setCreateBotOpen?.(true);
+              }}
+              aria-label={t`New Bot`}
+              data-testid="mini-create-bot-btn"
+              className="app-no-drag flex items-center justify-center h-8 w-8 rounded-xl bg-primary/15 hover:bg-primary/25 border border-primary/30 hover:border-primary/50 text-primary transition-all active:scale-95 shadow-sm shadow-primary/10 group"
+            >
+              <Plus size={16} strokeWidth={2.2} className="group-hover:scale-110 transition-transform" />
+            </button>
+          </IconTooltip>
         </div>
       )}
     </div>

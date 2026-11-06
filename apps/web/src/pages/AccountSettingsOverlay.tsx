@@ -291,18 +291,6 @@ export function GeneralSettingsPanels({
             <OrbitFontPicker />
           </div>
         </SettingsRow>
-        <SettingsRow
-          label={<Trans>Color Mode</Trans>}
-          control={
-            <AppearancePicker
-              value={appearance}
-              onChange={(next) => {
-                setAppearance(next);
-                setUiAppearance(next);
-              }}
-            />
-          }
-        />
         {botAvatarSet && onBotAvatarSetChange ? (
           <SettingsRow
             label={

@@ -9,6 +9,7 @@ import {
   KeyRound,
   MessageCircle,
   Monitor,
+  Palette,
   Settings,
   ShieldCheck,
   Volume2,
@@ -38,6 +39,12 @@ export function useSettingsNavItems(available: {
     // Ordered by how many people need each page: the essentials, then optional features, then
     // the account's usage and admin pages.
     { id: "general", label: t`General`, icon: Settings },
+    {
+      id: "appearance",
+      label: t`Appearance`,
+      icon: Palette,
+      description: t`Orbit Cosmic Themes, custom typography, and visual density.`,
+    },
     { id: "models", label: t`Models`, icon: Cpu, description: t`Which LLMs your bots use.` },
     {
       id: "confirmations",
