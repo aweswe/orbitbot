@@ -21,11 +21,13 @@ export const BOT_AVATAR_VALUE_MAX_LENGTH = 200_000;
 const HEX_COLOR = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
 const SHAPE_SUFFIX = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})::shape_\d+$/;
 const DATA_IMAGE = /^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/]+={0,2}$/;
+const ORBIT_AVATAR = /^orbit-[a-zA-Z0-9_-]+(?:::.*)?$/;
 
 export type ParsedBotAvatar =
   | { kind: "image"; imageUrl: string }
   | { kind: "shape"; color: string; shapeIndex: number }
   | { kind: "color"; color: string }
+  | { kind: "orbit"; color: string; raw: string }
   | { kind: "other"; raw: string };
 
 export function parseBotAvatarValue(raw: string): ParsedBotAvatar {
@@ -41,13 +43,24 @@ export function parseBotAvatarValue(raw: string): ParsedBotAvatar {
     return { kind: "shape", color, shapeIndex };
   }
   if (HEX_COLOR.test(raw)) return { kind: "color", color: raw };
+  if (ORBIT_AVATAR.test(raw)) {
+    const parts = raw.split("::");
+    const lastPart = parts[parts.length - 1];
+    const color = lastPart && HEX_COLOR.test(lastPart) ? lastPart : "#ff8a3d";
+    return { kind: "orbit", color, raw };
+  }
   return { kind: "other", raw };
 }
 
-/** True for values we persist on `bots.color` (hex, encoded shape, or data image). */
+/** True for values we persist on `bots.color` (hex, encoded shape, data image, or Orbit avatar). */
 export function isBotAvatarValue(raw: string): boolean {
   if (!raw || raw.length > BOT_AVATAR_VALUE_MAX_LENGTH) return false;
-  return HEX_COLOR.test(raw) || SHAPE_SUFFIX.test(raw) || DATA_IMAGE.test(raw);
+  return (
+    HEX_COLOR.test(raw) ||
+    SHAPE_SUFFIX.test(raw) ||
+    DATA_IMAGE.test(raw) ||
+    ORBIT_AVATAR.test(raw)
+  );
 }
 
 export const BotAvatarValueSchema = z

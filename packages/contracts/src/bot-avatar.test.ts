@@ -38,11 +38,20 @@ describe("bot avatar values", () => {
     expect(isBotAvatarValue("#3EC5A8")).toBe(true);
     expect(isBotAvatarValue("#8B5CF6::shape_0")).toBe(true);
     expect(isBotAvatarValue("data:image/webp;base64,aGVsbG8=")).toBe(true);
+    expect(isBotAvatarValue("orbit-planet::#ff8a3d")).toBe(true);
+    expect(isBotAvatarValue("orbit-planet")).toBe(true);
+    expect(isBotAvatarValue("orbit-creature::2::#f97316")).toBe(true);
+    expect(isBotAvatarValue("orbit-star::0::#22d3ee")).toBe(true);
+    expect(isBotAvatarValue("orbit-astro::1::#818cf8")).toBe(true);
     expect(isBotAvatarValue("#8B5CF6::shape_3junk")).toBe(false);
     expect(
       isBotAvatarValue(`data:image/png;base64,${"A".repeat(BOT_AVATAR_VALUE_MAX_LENGTH)}`),
     ).toBe(false);
     expect(BotAvatarValueSchema.safeParse("#fff").success).toBe(true);
+    expect(BotAvatarValueSchema.safeParse("orbit-planet::#ff8a3d").success).toBe(true);
+    expect(CreateBotInput.safeParse({ name: "Friday", color: "orbit-planet::#ff8a3d" }).success).toBe(
+      true,
+    );
     expect(BotAvatarValueSchema.safeParse("not-a-color").success).toBe(false);
     expect(UpdateBotInput.safeParse({ botId: "bot-1", color: "#8B5CF6::shape_2" }).success).toBe(
       true,
