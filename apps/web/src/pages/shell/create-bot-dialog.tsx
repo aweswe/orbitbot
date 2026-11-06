@@ -20,6 +20,7 @@ import {
   Input,
   parseBotAvatar,
 } from "@rakazo/ui-web";
+import { Code2, Compass, Sparkles, Sun, Terminal } from "lucide-react";
 import { useRef, useState } from "react";
 import { errorText } from "../../lib/user-error";
 import { BotLookPicker } from "./avatar-studio-popover";
@@ -40,6 +41,41 @@ export interface CreateBotDialogInput {
   avatarFamily?: number;
 }
 
+const ORBIT_BLUEPRINTS = [
+  {
+    id: "code-architect",
+    name: "Code Architect",
+    color: "orbit-planet::#22d3ee",
+    tagline: "Architecture review, code generation, refactoring, and bug fixes",
+    icon: Code2,
+    accent: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
+  },
+  {
+    id: "deep-researcher",
+    name: "Deep Researcher",
+    color: "orbit-planet::#e879f9",
+    tagline: "Web investigations, paper synthesis, and documentation deep dives",
+    icon: Sparkles,
+    accent: "text-fuchsia-400 bg-fuchsia-500/10 border-fuchsia-500/20",
+  },
+  {
+    id: "morning-briefing",
+    name: "Morning Briefing",
+    color: "orbit-planet::#fb923c",
+    tagline: "Daily digests, scheduled reports, task tracking, and alerts",
+    icon: Sun,
+    accent: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+  },
+  {
+    id: "system-admin",
+    name: "System Admin",
+    color: "orbit-planet::#00ff41",
+    tagline: "Terminal commands, workspace filesystem, scripts, and server tools",
+    icon: Terminal,
+    accent: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+  },
+];
+
 /** Mounted only while open; the parent unmounts it from `onCancel` or after `onCreate`. */
 export function CreateBotDialog({
   avatarSet,
@@ -53,6 +89,7 @@ export function CreateBotDialog({
 }) {
   const { t } = useLingui();
   const nameRef = useRef<HTMLInputElement>(null);
+  const [tab, setTab] = useState<"custom" | "blueprints">("custom");
   const [name, setName] = useState("");
   const [previewId] = useState(() => {
     let id: string;
@@ -87,6 +124,12 @@ export function CreateBotDialog({
     }
   }
 
+  function selectBlueprint(blueprint: (typeof ORBIT_BLUEPRINTS)[number]) {
+    setName(blueprint.name);
+    setLook((prev) => ({ ...prev, value: blueprint.color }));
+    setTab("custom");
+  }
+
   return (
     <Dialog
       open
@@ -110,44 +153,109 @@ export function CreateBotDialog({
         >
           <DialogHeader>
             <DialogTitle className="text-center">
-              <Trans>New Orbit Bot</Trans>
+              <Trans>Orbit Agent Studio</Trans>
             </DialogTitle>
           </DialogHeader>
-          <div className="flex justify-center py-2">
-            <BotAvatar
-              color={look.value}
-              identity={avatarSet === "rakazo" ? previewId : look.identity}
-              size={96}
-              avatarSet={avatarSet}
-            />
+
+          {/* Tab Switcher */}
+          <div className="flex items-center justify-center border-b border-border/50 pb-2.5">
+            <div className="inline-flex rounded-xl bg-muted/40 p-0.5 border border-border">
+              <button
+                type="button"
+                onClick={() => setTab("custom")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                  tab === "custom"
+                    ? "bg-card text-foreground shadow-xs border border-border/40"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Trans>Custom Agent</Trans>
+              </button>
+              <button
+                type="button"
+                onClick={() => setTab("blueprints")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                  tab === "blueprints"
+                    ? "bg-card text-foreground shadow-xs border border-border/40"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Trans>Orbit Blueprints</Trans>
+              </button>
+            </div>
           </div>
-          <Input
-            ref={nameRef}
-            aria-label={t`Name`}
-            placeholder={t`Name your Orbit Bot`}
-            value={name}
-            maxLength={BOT_NAME_MAX_LENGTH}
-            onChange={(event) => setName(event.target.value)}
-            className="text-center"
-          />
-          {error ? (
-            <p
-              role="alert"
-              data-testid="create-bot-error"
-              className="text-body-sm text-destructive"
-            >
-              {error}
-            </p>
-          ) : null}
-          <BotLookPicker
-            value={look.value}
-            identity={avatarSet === "rakazo" ? previewId : look.identity}
-            organicIdentities={ORGANIC_IDENTITIES}
-            avatarSet={avatarSet}
-            onChange={(value, identity) => {
-              setLook((current) => ({ value, identity: identity ?? current.identity }));
-            }}
-          />
+
+          {tab === "custom" ? (
+            <>
+              <div className="flex justify-center py-2">
+                <BotAvatar
+                  color={look.value}
+                  identity={avatarSet === "rakazo" ? previewId : look.identity}
+                  size={96}
+                  avatarSet={avatarSet}
+                />
+              </div>
+              <Input
+                ref={nameRef}
+                aria-label={t`Name`}
+                placeholder={t`Name your Orbit Bot`}
+                value={name}
+                maxLength={BOT_NAME_MAX_LENGTH}
+                onChange={(event) => setName(event.target.value)}
+                className="text-center"
+              />
+              {error ? (
+                <p
+                  role="alert"
+                  data-testid="create-bot-error"
+                  className="text-body-sm text-destructive"
+                >
+                  {error}
+                </p>
+              ) : null}
+              <BotLookPicker
+                value={look.value}
+                identity={avatarSet === "rakazo" ? previewId : look.identity}
+                organicIdentities={ORGANIC_IDENTITIES}
+                avatarSet={avatarSet}
+                onChange={(value, identity) => {
+                  setLook((current) => ({ value, identity: identity ?? current.identity }));
+                }}
+              />
+            </>
+          ) : (
+            <div className="space-y-2.5 py-2">
+              <p className="text-body-sm text-muted-foreground text-center">
+                <Trans>Select a pre-configured Orbit Agent blueprint to get started:</Trans>
+              </p>
+              <div className="grid grid-cols-1 gap-2">
+                {ORBIT_BLUEPRINTS.map((blueprint) => {
+                  const Icon = blueprint.icon;
+                  return (
+                    <button
+                      key={blueprint.id}
+                      type="button"
+                      onClick={() => selectBlueprint(blueprint)}
+                      className="flex items-start gap-3 p-3 rounded-xl border border-border/60 bg-card/60 hover:bg-card hover:border-primary/40 transition-all text-start group active:scale-[0.99]"
+                    >
+                      <div className={`size-9 rounded-lg border flex items-center justify-center shrink-0 ${blueprint.accent}`}>
+                        <Icon size={18} />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
+                          {blueprint.name}
+                        </div>
+                        <div className="text-[11px] text-muted-foreground line-clamp-2 mt-0.5">
+                          {blueprint.tagline}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           <DialogFooter>
             <Button type="button" variant="outline" disabled={submitting} onClick={onCancel}>
               <Trans>Cancel</Trans>

@@ -112,7 +112,7 @@ export const BotAvatar = memo(function BotAvatar({
   );
 
   // Orbit official planet bot avatar (pearl-white planet, animated eyes, cosmic ring & moon)
-  const planet = useMemo(() => parsePlanetAvatar(color), [color]);
+  const planet = parsePlanetAvatar(color);
   if (planet) {
     return (
       <OrbitPlanetAvatar
@@ -125,7 +125,7 @@ export const BotAvatar = memo(function BotAvatar({
   }
 
   // Orbit cosmic companion creature avatar (with living eyes & space personality)
-  const creature = useMemo(() => parseCreatureAvatar(color), [color]);
+  const creature = parseCreatureAvatar(color);
   if (creature) {
     return (
       <CosmicCreatureAvatar
@@ -138,7 +138,7 @@ export const BotAvatar = memo(function BotAvatar({
   }
 
   // Orbit celestial star avatar — color is "orbit-star::<index>::<color>"
-  const star = useMemo(() => parseStarAvatar(color), [color]);
+  const star = parseStarAvatar(color);
   if (star) {
     return (
       <CelestialStarAvatar
@@ -151,7 +151,7 @@ export const BotAvatar = memo(function BotAvatar({
   }
 
   // Orbit astronaut avatar — color is "orbit-astro::<index>::<bgColor>"
-  const astro = useMemo(() => parseAstroAvatar(color), [color]);
+  const astro = parseAstroAvatar(color);
   if (astro) {
     return (
       <AstroAvatar

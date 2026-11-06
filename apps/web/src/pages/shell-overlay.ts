@@ -1,5 +1,6 @@
 const SETTINGS_SECTIONS = [
   "general",
+  "appearance",
   "organization",
   "space",
   "models",
