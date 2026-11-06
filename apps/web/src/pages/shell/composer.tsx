@@ -933,8 +933,8 @@ const ComposerBody = memo(function Composer({
         ref={composerBarRef}
         data-testid="composer-bar"
         data-expanded={expanded}
-        className={`grid grid-cols-[auto_minmax(0,1fr)_auto] content-end items-center rounded-[28px] border border-white/10 pe-2.5 ps-3 transition-all duration-200 focus-within:border-cyan-500/50 focus-within:shadow-[0_0_25px_rgba(34,211,238,0.15)] shadow-xl shadow-black/50 ${
-          docked ? "bg-[#0a0a0e]/95" : "bg-[#0d0f17]/90 backdrop-blur-md"
+        className={`grid grid-cols-[auto_minmax(0,1fr)_auto] content-end items-center rounded-2xl md:rounded-[26px] border border-border/80 pe-2.5 ps-3 transition-all duration-200 focus-within:border-primary/60 focus-within:shadow-[0_0_25px_rgba(34,211,238,0.15)] shadow-2xl shadow-black/40 ${
+          docked ? "bg-card/95" : "bg-card/90 backdrop-blur-xl"
         } ${
           expanded
             ? "gap-x-2 gap-y-2 pb-[9px] pt-3"
