@@ -207,3 +207,40 @@ body,
   animation: gradient-x 4s ease infinite;
 }
 
+/* Orbit Cosmic Theme Color Mappings */
+[data-orbit-theme='deep-space'] {
+  --primary: #22d3ee;
+  --accent-primary: #22d3ee;
+  --ring: #22d3ee;
+}
+[data-orbit-theme='nebula'] {
+  --primary: #e879f9;
+  --accent-primary: #e879f9;
+  --ring: #e879f9;
+}
+[data-orbit-theme='solar'] {
+  --primary: #fb923c;
+  --accent-primary: #fb923c;
+  --ring: #fb923c;
+}
+[data-orbit-theme='phantom'] {
+  --primary: #00FF41;
+  --accent-primary: #00FF41;
+  --ring: #00FF41;
+}
+[data-orbit-theme='ocean'] {
+  --primary: #38bdf8;
+  --accent-primary: #38bdf8;
+  --ring: #38bdf8;
+}
+[data-orbit-theme='blueprint'] {
+  --primary: #3b82f6;
+  --accent-primary: #3b82f6;
+  --ring: #3b82f6;
+}
+[data-orbit-theme='cosmic-light'] {
+  --primary: #0284c7;
+  --accent-primary: #0284c7;
+  --ring: #0284c7;
+}
+
