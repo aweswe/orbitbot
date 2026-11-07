@@ -1,5 +1,5 @@
-/** The repository a stock Rakazo deployment tracks. */
-export const OFFICIAL_REPO_URL = "https://github.com/elie222/rakazo";
+/** The repository a stock Orbit deployment tracks. */
+export const OFFICIAL_REPO_URL = "https://github.com/forion-ai/orbit";
 export const DEFAULT_UPDATE_BRANCH = "main";
 export const DEFAULT_UPDATE_REMOTE = "origin";
 

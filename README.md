@@ -49,8 +49,8 @@ https://github.com/user-attachments/assets/dccdeddb-2134-4a56-8eed-b2e591736b1c
 You need Docker Engine, the Compose plugin, curl, and OpenSSL. No clone or Node install.
 
 ```bash
-mkdir -p rakazo && cd rakazo &&
-curl -fsSLO https://raw.githubusercontent.com/elie222/rakazo/main/infra/compose/install-images.sh &&
+mkdir -p orbit && cd orbit &&
+curl -fsSLO https://raw.githubusercontent.com/forion-ai/orbit/main/infra/compose/install-images.sh &&
 bash install-images.sh
 ```
 
@@ -94,8 +94,8 @@ You need Node.js 22.22.2 or newer in the 22.x line, Node.js 24.x, or Node.js 26+
 pnpm 12; and Docker. Node.js 23.x and 25.x are not supported.
 
 ```bash
-git clone https://github.com/elie222/rakazo.git
-cd rakazo
+git clone https://github.com/forion-ai/orbit.git
+cd orbit
 cp .env.example .env
 ```
 
@@ -296,22 +296,10 @@ Chinese guides cover [self-hosting](./docs/zh-CN/self-host.md), [models](./docs/
 - [Performance testing](./docs/performance.md)
 - [Bots that manage bots](./docs/fleet-management.md)
 
-## How Rakazo compares
-
-- [Grok Bot](https://rakazo.com/grok-bot-alternative/)
-- [Muse](https://rakazo.com/muse-alternative/)
-- [Dots](https://rakazo.com/dots-alternative/)
-- [Instinct](https://rakazo.com/instinct-alternative/)
-- [OpenClaw](https://rakazo.com/openclaw-alternative/)
-- [Hermes Agent](https://rakazo.com/hermes-alternative/)
-- [All comparisons](https://rakazo.com/alternatives/)
-
 ## Contributing
 
 Contributions are welcome. Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pull
 request. For security vulnerabilities, follow [SECURITY.md](./SECURITY.md) instead of filing a public
 issue.
 
-Rakazo is licensed under the [Apache License 2.0](./LICENSE).
-
-Questions and ideas are welcome in the [Rakazo Discord community](https://discord.gg/RWwKa2Sn7h).
+Orbit is licensed under the [Apache License 2.0](./LICENSE).

@@ -1,9 +1,9 @@
 {
   "name": "@rakazo/desktop",
-  "productName": "Rakazo",
+  "productName": "Orbit",
   "version": "0.8.0",
   "author": {
-    "name": "Rakazo"
+    "name": "Forion"
   },
   "license": "Apache-2.0",
   "type": "module",
@@ -38,7 +38,7 @@
     "yaml": "2.9.1"
   },
   "build": {
-    "appId": "dev.rakazo.desktop",
+    "appId": "dev.forion.orbit",
     "directories": {
       "output": "out",
       "buildResources": "assets"
@@ -62,7 +62,7 @@
       }
     ],
     "extraMetadata": {
-      "name": "rakazo",
+      "name": "orbit",
       "main": "dist/main.js"
     },
     "mac": {
@@ -127,7 +127,7 @@
       "verifyUpdateCodeSignature": true
     },
     "linux": {
-      "executableName": "rakazo",
+      "executableName": "orbit",
       "icon": "assets/icon.png",
       "target": [
         "AppImage"
@@ -136,8 +136,8 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "elie222",
-        "repo": "rakazo"
+        "owner": "forion-ai",
+        "repo": "orbit"
       }
     ]
   }

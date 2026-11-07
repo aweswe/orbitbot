@@ -105,7 +105,7 @@ describe("fetchLinuxUpdateSignature", () => {
       "signature\n",
     );
     expect(fetchUrl).toHaveBeenCalledWith(
-      "https://github.com/elie222/rakazo/releases/download/v1.2.3/Rakazo-1.2.3.AppImage.sig",
+      "https://github.com/forion-ai/orbit/releases/download/v1.2.3/Orbit-1.2.3.AppImage.sig",
       expect.any(AbortSignal),
     );
   });

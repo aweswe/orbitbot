@@ -2,40 +2,13 @@
   "installCommand": "corepack pnpm install",
   "redirects": [
     {
-      "source": "/",
-      "has": [{ "type": "host", "value": { "eq": "www.rakazo.com" } }],
-      "destination": "https://rakazo.com/",
-      "statusCode": 301
-    },
-    {
-      "source": "/:path*",
-      "has": [{ "type": "host", "value": { "eq": "www.rakazo.com" } }],
-      "destination": "https://rakazo.com/:path*",
-      "statusCode": 301
-    },
-    {
       "source": "/sitemap.xml",
       "destination": "/sitemap-index.xml",
       "statusCode": 301
     },
     {
-      "source": "/x",
-      "destination": "https://x.com/rakazobot",
-      "permanent": false
-    },
-    {
-      "source": "/twitter",
-      "destination": "https://x.com/rakazobot",
-      "permanent": false
-    },
-    {
       "source": "/github",
-      "destination": "https://github.com/elie222/rakazo",
-      "permanent": false
-    },
-    {
-      "source": "/discord",
-      "destination": "https://discord.gg/RWwKa2Sn7h",
+      "destination": "https://github.com/forion-ai/orbit",
       "permanent": false
     }
   ],
