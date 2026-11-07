@@ -1008,7 +1008,7 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
             where: { spaceId: m.spaceId, archivedAt: null },
           });
           if (!existingBot) {
-            await prisma.bot.create({
+            const newBot = await prisma.bot.create({
               data: {
                 spaceId: m.spaceId,
                 userId: user.id,
@@ -1018,6 +1018,20 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
                 color: "#22d3ee",
                 avatarSet: "organic",
                 notifyOnFinish: true,
+              },
+            });
+            await prisma.thread.create({
+              data: {
+                spaceId: m.spaceId,
+                botId: newBot.id,
+                userId: user.id,
+              },
+            });
+            await prisma.browserProfile.create({
+              data: {
+                spaceId: m.spaceId,
+                botId: newBot.id,
+                userId: user.id,
               },
             });
           }

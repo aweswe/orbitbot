@@ -232,3 +232,8 @@ Located at `apps/web/src/components/OrbitCreditBadge.tsx`:
 - [x] "Login with Orbit" button uses official Orbit Logo with clean UI.
 - [x] Model picker in chat composer matches Orbit Flash & Orbit Forge tiers.
 - [x] Typechecks pass with 0 errors across API and Web (`tsc --noEmit`).
+- [x] Bot persistence & space synchronization: All user bots mapped with 1:1 atomic threads into active mission control space.
+- [x] Model update validation repair: `hasHostedModelCredits` and `isCatalogModelChoice` extended to natively allow Requesty and Orbit models without credential errors.
+- [x] Theme persistence and contrast: Pre-paint `theme.js` script fixed to preserve `data-theme="light"|"dark"` variant and Cosmic Light color palette refined with high-contrast text and controls.
+
+

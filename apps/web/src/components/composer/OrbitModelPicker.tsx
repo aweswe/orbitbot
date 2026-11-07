@@ -65,23 +65,23 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
         onClick={() => setOpen(!open)}
         className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-150 border ${
           modelTier === "thinking"
-            ? "bg-violet-950/50 text-violet-300 border-violet-500/40 hover:border-violet-400"
+            ? "dark:bg-violet-950/50 bg-violet-50 dark:text-violet-300 text-violet-800 dark:border-violet-500/40 border-violet-300 hover:border-violet-400"
             : modelTier === "custom"
-              ? "bg-emerald-950/50 text-emerald-300 border-emerald-500/40 hover:border-emerald-400"
-              : "bg-amber-950/40 text-amber-300 border-amber-500/30 hover:border-amber-400/50"
+              ? "dark:bg-emerald-950/50 bg-emerald-50 dark:text-emerald-300 text-emerald-800 dark:border-emerald-500/40 border-emerald-300 hover:border-emerald-400"
+              : "dark:bg-amber-950/40 bg-amber-50 dark:text-amber-300 text-amber-800 dark:border-amber-500/30 border-amber-300 hover:border-amber-400/50"
         } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer active:scale-95"}`}
         title={`Selected Model: ${activeLabel}`}
       >
         {modelTier === "thinking" ? (
-          <BrainCircuit size={12} className="text-violet-400 shrink-0" />
+          <BrainCircuit size={12} className="dark:text-violet-400 text-violet-600 shrink-0" />
         ) : modelTier === "custom" ? (
-          <Settings2 size={12} className="text-emerald-400 shrink-0" />
+          <Settings2 size={12} className="dark:text-emerald-400 text-emerald-600 shrink-0" />
         ) : (
-          <Gauge size={12} className="text-amber-400 shrink-0" />
+          <Gauge size={12} className="dark:text-amber-400 text-amber-600 shrink-0" />
         )}
         <span className="truncate max-w-[85px] sm:max-w-none">{activeLabel}</span>
         {modelTier === "thinking" && (
-          <span className="text-[10px] px-1 py-px rounded bg-violet-500/20 text-violet-300 font-mono">
+          <span className="text-[10px] px-1 py-px rounded dark:bg-violet-500/20 bg-violet-100 dark:text-violet-300 text-violet-800 font-mono">
             {REASONING_LABELS[reasoningEffort]}
           </span>
         )}
@@ -107,24 +107,24 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
             }}
             className={`group relative w-full cursor-pointer rounded-lg border p-2 text-left transition-colors mb-1 ${
               modelTier === "instant"
-                ? "border-amber-500/40 bg-amber-500/[0.08]"
+                ? "dark:border-amber-500/40 border-amber-400/60 dark:bg-amber-500/[0.08] bg-amber-50/80"
                 : "border-transparent hover:bg-muted/50"
             }`}
           >
             <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-amber-500/10 text-amber-400">
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md dark:bg-amber-500/10 bg-amber-100 dark:text-amber-400 text-amber-700">
                 <Gauge size={14} />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs font-semibold text-foreground">Orbit Flash</span>
-                  <span className="rounded px-1 py-px text-[10px] font-medium bg-amber-500/20 text-amber-300">
+                  <span className="rounded px-1 py-px text-[10px] font-medium dark:bg-amber-500/20 bg-amber-100 dark:text-amber-300 text-amber-800">
                     Default
                   </span>
                 </div>
                 <p className="text-[11px] text-muted-foreground truncate">Fast · Zero reasoning overhead</p>
               </div>
-              {modelTier === "instant" && <Check size={14} className="text-amber-400 shrink-0" />}
+              {modelTier === "instant" && <Check size={14} className="text-amber-500 shrink-0" />}
             </div>
           </div>
 
@@ -137,30 +137,30 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
             }}
             className={`group relative w-full cursor-pointer rounded-lg border p-2 text-left transition-colors mb-1 ${
               modelTier === "thinking"
-                ? "border-violet-500/40 bg-violet-500/[0.08]"
+                ? "dark:border-violet-500/40 border-violet-400/60 dark:bg-violet-500/[0.08] bg-violet-50/80"
                 : "border-transparent hover:bg-muted/50"
             }`}
           >
             <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-violet-500/10 text-violet-400">
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md dark:bg-violet-500/10 bg-violet-100 dark:text-violet-400 text-violet-700">
                 <BrainCircuit size={14} />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs font-semibold text-foreground">Orbit Forge</span>
-                  <span className="rounded px-1 py-px text-[10px] font-medium bg-violet-500/20 text-violet-300">
+                  <span className="rounded px-1 py-px text-[10px] font-medium dark:bg-violet-500/20 bg-violet-100 dark:text-violet-300 text-violet-800">
                     Thinking
                   </span>
                 </div>
                 <p className="text-[11px] text-muted-foreground truncate">Deep multi-pass reasoning</p>
               </div>
-              {modelTier === "thinking" && <Check size={14} className="text-violet-400 shrink-0" />}
+              {modelTier === "thinking" && <Check size={14} className="text-violet-500 shrink-0" />}
             </div>
 
             {/* Reasoning levels */}
             <div
               className={`mt-2 flex items-center gap-1 rounded-md border p-0.5 ${
-                modelTier === "thinking" ? "border-violet-500/30 bg-violet-500/[0.05]" : "border-border/30 opacity-70"
+                modelTier === "thinking" ? "dark:border-violet-500/30 border-violet-200 dark:bg-violet-500/[0.05] bg-violet-100/50" : "border-border/30 opacity-70"
               }`}
               onClick={(e) => e.stopPropagation()}
             >
@@ -176,7 +176,7 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
                     }}
                     className={`flex flex-1 items-center justify-center gap-0.5 rounded py-0.5 text-[10px] transition-colors ${
                       isActive
-                        ? "bg-violet-500/25 font-semibold text-violet-200"
+                        ? "dark:bg-violet-500/25 bg-violet-200 font-semibold dark:text-violet-200 text-violet-900"
                         : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
@@ -198,24 +198,24 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
             }}
             className={`group relative w-full cursor-pointer rounded-lg border p-2 text-left transition-colors ${
               modelTier === "custom"
-                ? "border-emerald-500/40 bg-emerald-500/[0.08]"
+                ? "dark:border-emerald-500/40 border-emerald-400/60 dark:bg-emerald-500/[0.08] bg-emerald-50/80"
                 : "border-transparent hover:bg-muted/50"
             }`}
           >
             <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-emerald-500/10 text-emerald-400">
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md dark:bg-emerald-500/10 bg-emerald-100 dark:text-emerald-400 text-emerald-700">
                 <Settings2 size={14} />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs font-semibold text-foreground">Custom Model</span>
-                  <span className="rounded px-1 py-px text-[10px] font-medium bg-emerald-500/20 text-emerald-300">
+                  <span className="rounded px-1 py-px text-[10px] font-medium dark:bg-emerald-500/20 bg-emerald-100 dark:text-emerald-300 text-emerald-800">
                     Requesty
                   </span>
                 </div>
                 <p className="text-[11px] text-muted-foreground truncate">Full model catalog router</p>
               </div>
-              {modelTier === "custom" && <Check size={14} className="text-emerald-400 shrink-0" />}
+              {modelTier === "custom" && <Check size={14} className="text-emerald-500 shrink-0" />}
             </div>
           </div>
         </div>
@@ -223,4 +223,3 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
     </div>
   );
 }
-

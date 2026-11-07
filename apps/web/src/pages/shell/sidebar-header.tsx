@@ -61,7 +61,7 @@ export function SidebarHeader({
       {!mini ? (
         <>
           <div className="flex min-w-0 items-center gap-2.5 select-none">
-            <div className="h-8 w-8 shrink-0 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center overflow-hidden shadow-sm hover:border-foreground/20 transition-colors">
+            <div className="h-8 w-8 shrink-0 rounded-xl bg-card border border-border flex items-center justify-center overflow-hidden shadow-xs hover:border-foreground/20 transition-colors">
               <OrbitLogoMark className="h-5 w-5" />
             </div>
             <div className="flex items-center gap-1.5 leading-none">
@@ -95,7 +95,7 @@ export function SidebarHeader({
         /* ── Compacted / Mini Mode: Logo + Restore Collapser + Add Bot Option + Theme Switcher ── */
         <div className="flex flex-col items-center gap-2 w-full px-1">
           {/* Mini Orbit Logo Mark */}
-          <div className="h-8 w-8 shrink-0 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center overflow-hidden shadow-sm hover:border-foreground/20 transition-colors">
+          <div className="h-8 w-8 shrink-0 rounded-xl bg-card border border-border flex items-center justify-center overflow-hidden shadow-xs hover:border-foreground/20 transition-colors">
             <OrbitLogoMark className="h-5 w-5" />
           </div>
 
