@@ -99,10 +99,11 @@ export function OrbitThemeSwitcher({ className }: { className?: string }) {
       localStorage.setItem("rakazo.uiAppearance", themeId === "cosmic-light" ? "light" : "dark");
     } catch {}
 
-    document.documentElement.dataset.theme = themeId;
+    const mode = themeId === "cosmic-light" ? "light" : "dark";
+    document.documentElement.dataset.theme = mode;
     document.documentElement.dataset.orbitTheme = themeId;
 
-    if (themeId === "cosmic-light") {
+    if (mode === "light") {
       document.documentElement.style.colorScheme = "light";
       document.documentElement.classList.remove("dark");
     } else {

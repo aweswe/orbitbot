@@ -997,6 +997,32 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
         // 3. Ensure Personal workspace/organization exists
         await bootstrapUserSpace(prisma, user, env);
 
+        // 3b. Ensure default Orbit Assistant bot exists in ALL spaces the user belongs to
+        const userMemberships = await prisma.spaceMember.findMany({
+          where: { userId: user.id },
+          select: { spaceId: true },
+        });
+
+        for (const m of userMemberships) {
+          const existingBot = await prisma.bot.findFirst({
+            where: { spaceId: m.spaceId, archivedAt: null },
+          });
+          if (!existingBot) {
+            await prisma.bot.create({
+              data: {
+                spaceId: m.spaceId,
+                userId: user.id,
+                name: "Orbit Assistant",
+                description: "Autonomous reasoning and coding companion powered by Forion",
+                instructions: "You are Orbit Assistant, an autonomous AI agent capable of deep research, code generation, and sandboxed execution.",
+                color: "#22d3ee",
+                avatarSet: "organic",
+                notifyOnFinish: true,
+              },
+            });
+          }
+        }
+
         // 4. Create an authenticated session in prisma.session
         // 4. Create an authenticated session in prisma.session
         const sessionToken = "orbit_" + randomUUID().replace(/-/g, "") + randomUUID().replace(/-/g, "");
