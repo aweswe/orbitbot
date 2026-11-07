@@ -10,7 +10,6 @@ import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 
 const billing = vi.hoisted(() => ({ status: null as Partial<BillingStatus> | null }));
-const writeText = vi.hoisted(() => vi.fn(async () => undefined));
 
 vi.mock("@lingui/react/macro", () => ({
   useLingui: () => ({
@@ -26,6 +25,7 @@ vi.mock("@rakazo/ui-web", async (importOriginal) => {
   const Plain = ({ children }: { children?: ReactNode }) => <>{children}</>;
   return {
     useCopyText,
+    AppMarkStack: () => null,
     BotAvatar: () => null,
     Input: (props: Record<string, unknown>) => <input {...props} />,
     GroupAvatar: () => null,
@@ -55,7 +55,6 @@ let root: Root;
 
 beforeEach(() => {
   vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true);
-  Object.defineProperty(navigator, "clipboard", { value: { writeText }, configurable: true });
   container = document.createElement("div");
   document.body.append(container);
   root = createRoot(container);
@@ -65,10 +64,12 @@ afterEach(() => {
   act(() => root.unmount());
   container.remove();
   billing.status = null;
-  writeText.mockClear();
 });
 
-function renderHeader({ inGroup = false } = {}) {
+function renderHeader({
+  inGroup = false,
+  onOpenConnections,
+}: { inGroup?: boolean; onOpenConnections?: () => void } = {}) {
   act(() =>
     root.render(
       <ChatHeader
@@ -85,44 +86,17 @@ function renderHeader({ inGroup = false } = {}) {
         onOpenNavigation={() => undefined}
         onTogglePanel={() => undefined}
         onCall={() => undefined}
+        onOpenConnections={onOpenConnections}
       />,
     ),
   );
 }
 
-const gift = () => container.querySelector<HTMLButtonElement>('[aria-label="Invite a friend"]');
 
-it("shows no gift when the account cannot invite", () => {
-  billing.status = { referral: null };
-  renderHeader();
-  expect(gift()).toBeNull();
-});
-
-it("shows the gift only in a bot chat, as mobile does", () => {
-  billing.status = { referral: { url: "https://example.test/sign-up?ref=abc", rewards: 0 } };
-  renderHeader({ inGroup: true });
-  expect(gift()).toBeNull();
-});
-
-it("opens the invite with both rewards and copies the link", async () => {
-  billing.status = { referral: { url: "https://example.test/sign-up?ref=abc", rewards: 2 } };
-  renderHeader();
-  act(() => gift()!.click());
-  const dialog = container.querySelector('[role="dialog"]')!;
-  expect(dialog.textContent).toContain("Give a friend 2 weeks free");
-  expect(dialog.textContent).toContain("They get 2 weeks free.");
-  expect(dialog.textContent).toContain(
-    "You get a free month when they start their trial with a new card.",
-  );
-  // The link is also shown, so it can be copied by hand.
-  expect(dialog.querySelector<HTMLInputElement>('input[aria-label="Invite link"]')?.value).toBe(
-    "https://example.test/sign-up?ref=abc",
-  );
-  expect(dialog.textContent).toContain("2 free months earned");
-  const copy = [...dialog.querySelectorAll("button")].find(
-    (button) => button.textContent === "Copy link",
-  )!;
-  await act(async () => copy.click());
-  expect(writeText).toHaveBeenCalledWith("https://example.test/sign-up?ref=abc");
-  expect(dialog.textContent).toContain("Copied");
+it("opens connected apps from the header", () => {
+  const onOpenConnections = vi.fn();
+  renderHeader({ onOpenConnections });
+  const apps = container.querySelector<HTMLButtonElement>('[aria-label="Connected apps"]')!;
+  act(() => apps.click());
+  expect(onOpenConnections).toHaveBeenCalledOnce();
 });

@@ -6,7 +6,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { DesktopUpdatesProvider } from "./DesktopUpdates";
-import { SidebarFooter, sidebarMarkCount } from "./SidebarFooter";
+import { SidebarFooter } from "./SidebarFooter";
 
 vi.mock("@lingui/react/macro", () => ({
   useLingui: () => ({
@@ -33,14 +33,12 @@ async function render(
   image?: string,
   onIntegrations = vi.fn(),
   onBoard?: () => void,
-  logos?: Array<{ name: string; logo?: string }>,
 ) {
   const email = "account@rakazo.test";
   await act(async () =>
     root.render(
       <DesktopUpdatesProvider>
         <SidebarFooter
-          logos={logos}
           name={name}
           initials={name
             .split(" ")
@@ -133,19 +131,15 @@ it("shows the account image and falls back to the initial after a load error", a
 it("opens integrations and keeps the existing account actions and links", async () => {
   const onIntegrations = vi.fn();
   await render("Demo User", undefined, onIntegrations, vi.fn());
-  const connect = [...host.querySelectorAll("button")].find((button) =>
-    button.textContent?.includes("Connect apps"),
-  )!;
-  await act(async () => connect.click());
-  expect(onIntegrations).toHaveBeenCalledOnce();
+  // The connected-apps strip moved to the chat header; the footer keeps the menu.
+  expect(host.textContent).not.toContain("Connect apps");
   const menu = document.querySelector('[data-slot="popover-content"]')!;
   expect([...menu.querySelectorAll("button, a")].map((row) => row.textContent)).toEqual([
     "Settings",
     "Skills",
     "Artifacts",
     "Board",
-    "Get the mobile app",
-    "Docs",
+    "Download Orion for Android",
     "Log out",
   ]);
   expect(host.querySelector('[data-testid="user-menu-trigger"]')?.getAttribute("aria-label")).toBe(
@@ -159,30 +153,15 @@ it("omits Board when unavailable", async () => {
   );
 });
 
-it("offers Google Play on Android", async () => {
+it("offers the Android download on Android", async () => {
   vi.spyOn(navigator, "userAgent", "get").mockReturnValue("Android");
   await render();
   const mobile = [...document.querySelectorAll("a")].find(
-    (link) => link.textContent === "Get the mobile app",
+    (link) => link.textContent === "Download Orion for Android",
   )!;
-  expect(mobile.href).toBe("https://play.google.com/store/apps/details?id=com.rakazo.app");
+  expect(mobile.getAttribute("href")).toBe("/download/orbit-bot.apk");
 });
 
-it("falls back when app artwork fails and accepts replacement artwork", async () => {
-  await render("Demo User", undefined, undefined, undefined, [
-    { name: "Slack", logo: "https://example.test/slack.svg" },
-  ]);
-  const pill = [...host.querySelectorAll("button")].find((button) =>
-    button.textContent?.includes("Connect apps"),
-  )!;
-  await act(async () => pill.querySelector("img")!.dispatchEvent(new Event("error")));
-  expect(pill.querySelector("img")).toBeNull();
-  expect(pill.textContent).toContain("S");
-  await render("Demo User", undefined, undefined, undefined, [
-    { name: "Slack", logo: "https://example.test/new-slack.svg" },
-  ]);
-  expect(pill.querySelector("img")?.src).toBe("https://example.test/new-slack.svg");
-});
 it.each(["throw", "state"] as const)(
   "reveals a %s install failure after Later",
   async (failure) => {
@@ -216,33 +195,6 @@ it.each(["throw", "state"] as const)(
     await vi.waitFor(() => expect(notice()).toBeNull());
   },
 );
-
-it.each([
-  [-20, 0],
-  [0, 0],
-  [25, 0],
-  [26, 1],
-  [47, 1],
-  [48, 2],
-  [69, 2],
-  [70, 3],
-  [200, 3],
-])("fits marks into %ipx without consuming label or padding space", (width, count) => {
-  expect(sidebarMarkCount(width)).toBe(count);
-});
-
-it("keeps at most three marks with the same tile and a missing-logo fallback", async () => {
-  await render("Demo User", undefined, undefined, undefined, [
-    { name: "Gmail", logo: "https://example.test/gmail.svg" },
-    { name: "Notion" },
-    { name: "GitHub", logo: "https://example.test/github.svg" },
-    { name: "Slack" },
-  ]);
-  const tiles = [...host.querySelectorAll('span[aria-hidden="true"] > span')];
-  expect(tiles).toHaveLength(3);
-  expect(new Set(tiles.map((tile) => tile.className)).size).toBe(1);
-  expect(tiles[1]!.textContent).toBe("N");
-});
 
 const personal = {
   id: "org-personal",

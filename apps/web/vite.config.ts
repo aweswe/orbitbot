@@ -481,13 +481,17 @@ export default defineConfig(({ command, mode }) => {
   const rootEnv = loadEnv(mode, path.resolve(import.meta.dirname, "../.."), "");
   const api = process.env.API_PROXY_TARGET ?? rootEnv.API_PROXY_TARGET ?? "http://127.0.0.1:3100";
   const previewHost = process.env.RAKAZO_HOST ?? rootEnv.RAKAZO_HOST ?? "localhost";
-  const allowedHosts = [
-    previewHost,
-    ...(process.env.RAKAZO_ALLOWED_HOSTS ?? rootEnv.RAKAZO_ALLOWED_HOSTS ?? "")
-      .split(",")
-      .map((entry) => entry.trim())
-      .filter(Boolean),
-  ];
+  const allowedHostsRaw = process.env.RAKAZO_ALLOWED_HOSTS ?? rootEnv.RAKAZO_ALLOWED_HOSTS;
+  const allowedHosts: readonly string[] | true =
+    allowedHostsRaw === "*" || allowedHostsRaw === "true"
+      ? true
+      : [
+          previewHost,
+          ...(allowedHostsRaw ?? "")
+            .split(",")
+            .map((entry) => entry.trim())
+            .filter(Boolean),
+        ];
   // Set by the server built from this config; reusing one config object for two servers would
   // leave the last one's list.
   let proxyHosts: readonly string[] | true = [];

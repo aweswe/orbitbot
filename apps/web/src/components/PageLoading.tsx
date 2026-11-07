@@ -9,9 +9,9 @@ export function PageLoading(props: React.ComponentPropsWithoutRef<"div">) {
       <div className="flex flex-col items-center gap-3 animate-in fade-in-0 fill-mode-both duration-300">
         <div className="relative flex items-center justify-center">
           <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 blur-md animate-pulse" />
-          <Spinner className="size-6 text-cyan-400" aria-label={t`Loading Orbit Bot…`} />
+          <Spinner className="size-6 text-cyan-400" aria-label={t`Loading Orion…`} />
         </div>
-        <span className="text-caption font-medium orbit-gradient-text tracking-wider uppercase">Orbit Bot</span>
+        <span className="text-caption font-medium orbit-gradient-text tracking-wider uppercase">Orion</span>
       </div>
     </div>
   );

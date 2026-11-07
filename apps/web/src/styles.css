@@ -42,6 +42,36 @@ html[data-font='inter'], html[data-font='inter'] * {
   font-family: 'Corpta DEMO', -apple-system, sans-serif !important;
 }
 
+/* ── Orion ──────────────────────────────────────────────────────────────── */
+.orion-mark {
+  filter: drop-shadow(0 0 6px color-mix(in srgb, currentColor 35%, transparent));
+}
+
+.orion-star {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: orion-twinkle 5.5s ease-in-out infinite;
+}
+
+@keyframes orion-twinkle {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  45% { opacity: 1; transform: scale(1.18); }
+  70% { opacity: 0.7; transform: scale(0.94); }
+}
+
+.orion-lift {
+  transition: transform 240ms cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 240ms ease;
+}
+.orion-lift:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 30px -18px color-mix(in srgb, currentColor 60%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orion-star { animation: none; }
+  .orion-lift { transition: none; }
+}
+
 @source "../../packages/ui-web/src/**/*.{ts,tsx}";
 @source "./src/**/*.{ts,tsx}";
 

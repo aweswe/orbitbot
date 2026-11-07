@@ -469,7 +469,7 @@ export function Wordmark({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-center gap-3", className)}>
       <span className="text-heading1 font-bold tracking-tight orbit-gradient-text">
-        Orbit Bot
+        Orion
       </span>
     </div>
   );

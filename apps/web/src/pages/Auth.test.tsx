@@ -20,6 +20,7 @@ vi.mock("@lingui/react/macro", () => ({
   Trans: ({ children }: { children: ReactNode }) => children,
 }));
 vi.mock("@rakazo/ui-web", () => ({
+  cn: (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" "),
   Button: ({
     children,
     variant,
@@ -125,7 +126,7 @@ it.each(["in", "up", "forgot"] as const)(
 it.each(["in", "up"] as const)("offers SSO and hides credentials on %s", async (mode) => {
   vi.mocked(fetchAuthCapabilities).mockResolvedValue(capabilities);
   await render(mode);
-  expect(host.textContent).toContain("Continue with Example");
+  expect(host.textContent).toContain("Sign in with Example");
   expect(host.querySelector("input")).toBeNull();
   const sso = host.querySelector("button")!;
   expect(sso.dataset.variant).toBe("default");
@@ -143,7 +144,7 @@ it("retries failed capabilities without exposing a password form", async () => {
   )!;
   await act(async () => retry.click());
   expect(fetchAuthCapabilities).toHaveBeenCalledTimes(2);
-  expect(host.textContent).toContain("Continue with Example");
+  expect(host.textContent).toContain("Sign in with Example");
 });
 it.each(["in", "up"] as const)("puts quiet SSO below the primary action on %s", async (mode) => {
   vi.mocked(fetchAuthCapabilities).mockResolvedValue({ ...capabilities, passwordAuth: true });
@@ -162,8 +163,8 @@ it.each(["in", "up"] as const)("puts quiet SSO below the primary action on %s", 
     expect(first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   }
   expect(submit.getAttribute("data-variant")).toBe("default");
-  expect(sso.dataset.variant).toBe("link");
-  expect(sso.dataset.size).toBe("sm");
+  expect(sso.dataset.variant).toBe("outline");
+  expect(sso.dataset.size).toBe("lg");
 });
 
 it("hides SSO in password recovery", async () => {
@@ -182,7 +183,7 @@ it("selects a non-redirecting SSO request on desktop", async () => {
   });
   await render();
   const button = Array.from(host.querySelectorAll("button")).find((button) =>
-    button.textContent?.includes("Continue with"),
+    button.textContent?.includes("Sign in with"),
   );
   expect(button).toBeDefined();
   await act(async () => button!.click());
@@ -213,7 +214,7 @@ it("keeps SSO available for retry while an authorization request is pending", as
   vi.mocked(authClient.signIn.social).mockReturnValue(new Promise(() => undefined));
   await render();
   const button = Array.from(host.querySelectorAll("button")).find((button) =>
-    button.textContent?.includes("Continue with"),
+    button.textContent?.includes("Sign in with"),
   )!;
   await act(async () => button.click());
   expect(button.disabled).toBe(false);

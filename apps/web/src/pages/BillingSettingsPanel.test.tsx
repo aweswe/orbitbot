@@ -79,13 +79,22 @@ beforeEach(() => {
   localStorage.setItem("rakazo:space-id", "space-a");
   vi.stubGlobal(
     "fetch",
-    vi.fn(async (request: Request, init?: RequestInit) => {
+    vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url =
+        typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
+      const headers = new Headers(
+        init?.headers ??
+          (typeof input === "object" && "headers" in input ? input.headers : undefined),
+      );
+      if (url.includes("/api/orbit/billing")) {
+        return Response.json({ success: true, data: { wallet: { availableBalance: 100 } } });
+      }
       requests.push({
-        url: request.url,
-        spaceId: new Headers(init?.headers ?? request.headers).get("x-rakazo-space-id"),
+        url,
+        spaceId: headers.get("x-rakazo-space-id"),
       });
       return Response.json({
-        json: request.url.endsWith("/billing/endTrial") ? {} : status,
+        json: url.endsWith("/billing/endTrial") ? {} : status,
       });
     }),
   );

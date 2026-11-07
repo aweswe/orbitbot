@@ -1,10 +1,11 @@
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { Bot, Group, ThreadSnapshot } from "@rakazo/contracts";
-import { BotAvatar, Button, GroupAvatar } from "@rakazo/ui-web";
+import { AppMarkStack, BotAvatar, Button, GroupAvatar } from "@rakazo/ui-web";
 import {
   Menu,
   PanelLeftOpen,
   Phone,
+  Puzzle,
   Search,
   SlidersHorizontal,
 } from "lucide-react";
@@ -29,6 +30,9 @@ export interface ChatHeaderProps {
   onOpenFind?: () => void;
   onOpenComputer?: () => void;
   onOpenModels?: () => void;
+  /** Connected/familiar app marks; the strip lives here, not in the sidebar footer. */
+  appMarks?: ReadonlyArray<{ name: string; logo?: string | null }>;
+  onOpenConnections?: () => void;
 }
 
 /** Orbital Command Bar: breadcrumbs, companion telemetry HUD, voice, computer deck, and inspector. */
@@ -50,6 +54,8 @@ export function ChatHeader({
   onOpenFind,
   onOpenComputer,
   onOpenModels,
+  appMarks = [],
+  onOpenConnections,
 }: ChatHeaderProps) {
   const { t } = useLingui();
 
@@ -157,6 +163,24 @@ export function ChatHeader({
 
       {/* ─── Right: Header Actions (Max 3: Search, Voice, Inspector) ─── */}
       <div className="flex items-center gap-1 justify-self-end pointer-events-auto">
+        {/* Connected apps: the marks live here now, in reach of the conversation */}
+        {onOpenConnections ? (
+          <IconTooltip label={t`Connected apps`}>
+            <Button
+              variant="ghost"
+              aria-label={t`Connected apps`}
+              onClick={onOpenConnections}
+              className="app-no-drag h-8 rounded-lg gap-1 px-2 text-muted-foreground hover:text-foreground hover:bg-accent"
+            >
+              {appMarks.length ? (
+                <AppMarkStack marks={appMarks.slice(0, 3)} size={18} ringClassName="ring-background" />
+              ) : (
+                <Puzzle strokeWidth={1.5} className="size-4" />
+              )}
+            </Button>
+          </IconTooltip>
+        ) : null}
+
         {/* Find in thread */}
         {onOpenFind ? (
           <IconTooltip label={t`Find in thread (Cmd+F)`}>

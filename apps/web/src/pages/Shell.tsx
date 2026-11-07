@@ -1079,7 +1079,6 @@ function SpaceShell() {
             setDeleteGroupTarget={dialogs.setDeleteGroupTarget}
           />
         }
-        footerLogos={footerLogos}
         user={session.data?.user}
         ticketBoardEnabled={Boolean(bootstrapMe?.ticketBoardEnabled)}
         navLinks={desktopBridge() ? [] : (bootstrapMe?.navLinks ?? [])}
@@ -1153,6 +1152,8 @@ function SpaceShell() {
                 setModelFocusRequest(Date.now());
               } else openSettings("models");
             }}
+            appMarks={footerLogos}
+            onOpenConnections={() => setOverlay({ kind: "integrations" })}
           />
           {!active && !activeGroup && initialBotsLoaded ? (
             <div className="flex flex-1 flex-col items-center justify-center p-6 text-center select-none z-[var(--z-base,1)]">

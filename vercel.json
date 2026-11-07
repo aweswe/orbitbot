@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "https://orion-bot-bfq6huxo2q-ew.a.run.app/$1"
+    }
+  ]
+}

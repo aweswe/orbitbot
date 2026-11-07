@@ -184,56 +184,98 @@ Located at `apps/web/src/components/OrbitCreditBadge.tsx`:
 
 ---
 
-## 7. Production Deployment Blueprint
+## 7. Production Deployment Architecture (Verified Single-Origin Topology)
 
-### 7.1 Web SPA (Vercel)
-- **Repository Directory:** `apps/web`
-- **Build Command:** `pnpm --filter @rakazo/web run build`
-- **Output Directory:** `apps/web/dist`
-- **Environment Variables:**
-  ```env
-  VITE_API_URL=https://api.orbitbot.forion.dev
-  VITE_FORION_SERVER_URL=https://forion-main-bfq6huxo2q-ew.a.run.app
+> **Governing Invariant:** Because Better-Auth cookies use `SameSite=Lax`, the browser must interact with **exactly ONE public origin** (`https://$PUBLIC`). Exposing `api.` on a separate origin breaks session cookies on cross-origin `fetch()` in Chromium and triggers outright third-party cookie blocking in Safari.
+
+### Option A (Recommended) — Vercel Gateway & Cloud Run Single-Container
+Vercel fronts the entire application on the public domain (`$PUBLIC`), proxying all traffic to GCP Cloud Run running the repository's single-container stack (`infra/railway/Dockerfile` + `start.sh`).
+
+```
+Browser ──https──> Vercel host ($PUBLIC) ──rewrites /(.*)──> Cloud Run (Single Origin)
+                                                              ├─ apps/web (vite preview) :PORT [public listener]
+                                                              ├─ apps/api :3100 [loopback only]
+                                                              └─ apps/worker (Graphile)
+```
+
+- **Root `vercel.json`**:
+  ```json
+  {
+    "rewrites": [
+      { "source": "/(.*)", "destination": "https://<cloud-run-service-url>/$1" }
+    ]
+  }
   ```
-- **Custom Domain:** `orbitbot.forion.dev` (Configure CNAME in DNS pointing to `cname.vercel-dns.com`).
+- **Container Build & Deploy (GCP Cloud Run)**:
+  ```bash
+  # Build using the production multi-service Dockerfile
+  docker build -f infra/railway/Dockerfile -t gcr.io/<gcp-project>/orion-bot:latest .
+  
+  # Deploy to Cloud Run
+  gcloud run deploy orion-bot \
+    --image gcr.io/<gcp-project>/orion-bot:latest \
+    --platform managed \
+    --region <region> \
+    --allow-unauthenticated \
+    --set-env-vars="NODE_ENV=production,API_HOST=127.0.0.1,API_PORT=3100,BETTER_AUTH_URL=https://$PUBLIC,WEB_ORIGIN=https://$PUBLIC,RAKAZO_ALLOWED_HOSTS=*,FORION_SERVER_URL=https://forion-main-bfq6huxo2q-ew.a.run.app,ORBIT_BILLING_ENABLED=true"
+  ```
 
-### 7.2 API & Worker (Oracle Cloud Free ARM / GCP Cloud Run)
-- **Containerization:** Built via root `Dockerfile` using multi-stage build.
-- **Always-on Services:**
-  1. `apps/api`: Fastify HTTP & ORPC API server (Port 3100 or 8080).
-  2. `apps/worker`: Graphile background worker for agent job queue.
-  3. Local Redis or Valkey instance for fast pub/sub & ephemeral locks.
-- **Reverse Proxy / SSL:** Caddy or Nginx with Let's Encrypt automated TLS.
-- **Custom Domain:** `api.orbitbot.forion.dev` (A record pointing to VM public IP).
-- **Production Environment Variables:**
+### Option B (Fallback) — Static SPA on Vercel with Cloud Run API Proxy
+Vercel serves the static Vite SPA and rewrites backend paths (`/api`, `/rpc`, `/download`, `/.well-known/*`) to Cloud Run.
+
+- **Vercel Settings**:
+  - Root directory: Repository root `.` (required because `apps/web` imports from workspace packages `../../packages/*`).
+  - Build command: `RAKAZO_ALLOW_DEV_SECRETS=1 pnpm --filter @rakazo/web run build`
+  - Output directory: `apps/web/dist`
+- **`vercel.json` Rewrites**:
+  ```json
+  {
+    "rewrites": [
+      { "source": "/api/:path*", "destination": "https://<cloud-run-service-url>/api/:path*" },
+      { "source": "/rpc/:path*", "destination": "https://<cloud-run-service-url>/rpc/:path*" },
+      { "source": "/download/:path*", "destination": "https://<cloud-run-service-url>/download/:path*" },
+      { "source": "/.well-known/:path*", "destination": "https://<cloud-run-service-url>/.well-known/:path*" },
+      { "source": "/(.*)", "destination": "/index.html" }
+    ]
+  }
+  ```
+
+### 7.3 Supabase Database URLs & Migration Rules
+Supabase enforces connection types strictly by port:
+- **Migrations (`DATABASE_MIGRATION_URL`)**: MUST use direct port **5432** (session mode). Transaction-mode PgBouncer on 6543 rejects DDL transactions.
   ```env
-  NODE_ENV=production
-  PORT=3100
-  WEB_ORIGIN=https://orbitbot.forion.dev
-  BETTER_AUTH_URL=https://api.orbitbot.forion.dev
-  BETTER_AUTH_SECRET=<32-byte-hex>
+  DATABASE_MIGRATION_URL=postgresql://postgres.loanzmtsltoppejrmfdj:<PASSWORD>@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres?schema=orbit_bot
+  ```
+- **Runtime (`DATABASE_URL`)**: Uses pooler port **6543** with PgBouncer flag and scoped application role:
+  ```env
   DATABASE_URL=postgresql://orbit_bot_app:<SECURE_PASSWORD>@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?schema=orbit_bot&pgbouncer=true
-  DATABASE_MIGRATION_URL=postgresql://postgres.loanzmtsltoppejrmfdj:<PASSWORD>@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?schema=orbit_bot
-  FORION_SERVER_URL=https://forion-main-bfq6huxo2q-ew.a.run.app
-  FORION_ORBIT_INTERNAL_SECRET=<STRONG_SHARED_SECRET>
-  REDIS_URL=redis://127.0.0.1:6379
   ```
+
+### 7.4 Forion Control Plane & Orion Integration Contract
+1. **Google Identity Provisioning**:
+   - `syncOrbitUser(prisma, userId)` automatically provisions signed-in users in the Forion control plane via `POST /api/internal/orbit/sync-user`.
+2. **Real-time Credit Observer**:
+   - Agent interaction runs lock credits (`POST /api/orbit/credits/lock`), commit them on completion (`POST /api/orbit/credits/commit`), or refund them on run failure (`POST /api/orbit/credits/refund`).
+   - Authenticated with header: `x-orbit-internal-secret: $FORION_ORBIT_INTERNAL_SECRET`.
+3. **Session Cookie Security**:
+   - Better-Auth sessions are HMAC-SHA256 signed with `BETTER_AUTH_SECRET`.
+   - Cookie flags: `SameSite=Lax; HttpOnly; Secure; Path=/`.
 
 ---
 
 ## 8. Verification & Test Checklist
 
 - [x] Schema `orbit_bot` created on Supabase.
-- [x] All 232 Prisma migrations applied with 0 errors.
+- [x] All 232 Prisma migrations applied with 0 errors on direct port 5432.
 - [x] Database changes are completely additive; 0 regressions to `public.*`.
 - [x] Dedicated role `orbit_bot_app` scoped to `orbit_bot`.
 - [x] Forion Server Control Plane adapter implemented.
-- [x] Better-Auth cookie HMAC signing verified (`curl /api/auth/get-session` returns HTTP 200).
-- [x] "Login with Orbit" button uses official Orbit Logo with clean UI.
-- [x] Model picker in chat composer matches Orbit Flash & Orbit Forge tiers.
+- [x] Single public origin invariant preserved (`SameSite=Lax` cookies first-party).
+- [x] Brand name evolved to **Orion** with constellation vector mark SVG.
+- [x] Model picker in chat composer matches Orion Flash & Orion Forge tiers.
 - [x] Typechecks pass with 0 errors across API and Web (`tsc --noEmit`).
 - [x] Bot persistence & space synchronization: All user bots mapped with 1:1 atomic threads into active mission control space.
-- [x] Model update validation repair: `hasHostedModelCredits` and `isCatalogModelChoice` extended to natively allow Requesty and Orbit models without credential errors.
-- [x] Theme persistence and contrast: Pre-paint `theme.js` script fixed to preserve `data-theme="light"|"dark"` variant and Cosmic Light color palette refined with high-contrast text and controls.
+- [x] Image Generation with Requesty (`google/gemini-3.1-flash-image`) verified.
+- [x] Voice Read-Aloud with Web Speech fallback and message action triggers verified.
 
 

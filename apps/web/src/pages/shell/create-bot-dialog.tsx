@@ -198,7 +198,7 @@ export function CreateBotDialog({
               <Input
                 ref={nameRef}
                 aria-label={t`Name`}
-                placeholder={t`Name your Orbit Bot`}
+                placeholder={t`Name your Orion`}
                 value={name}
                 maxLength={BOT_NAME_MAX_LENGTH}
                 onChange={(event) => setName(event.target.value)}

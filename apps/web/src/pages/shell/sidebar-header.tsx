@@ -65,8 +65,8 @@ export function SidebarHeader({
               <OrbitLogoMark className="h-4.5 w-4.5 text-foreground" />
             </div>
             <div className="flex items-center leading-none">
-              <span className="orbit-brand-text text-body-lg font-bold tracking-tight text-foreground">
-                ORBIT
+              <span className="orbit-brand-text text-body-lg font-bold tracking-[0.18em] text-foreground">
+                ORION
               </span>
             </div>
           </div>

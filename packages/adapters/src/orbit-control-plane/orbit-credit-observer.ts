@@ -13,8 +13,16 @@ interface ActiveReservation {
 
 const activeReservations = new Map<string, ActiveReservation>();
 
+/** Credits for a finished call: priced by cost when known, otherwise by tokens. */
+export function creditCostFor(usage: AgentUsage | null): number {
+  if (!usage) return 0;
+  if (usage.costUsd && usage.costUsd > 0) return Math.max(1, Math.ceil(usage.costUsd / 0.002));
+  const tokens = (usage.inputTokens ?? 0) + (usage.outputTokens ?? 0);
+  return tokens > 0 ? Math.max(1, Math.ceil(tokens / 1000)) : 0;
+}
+
 /**
- * Orbit Credit Observer for Orbit Bot.
+ * Orbit Credit Observer for Orion.
  *
  * Plugs into the PiAgentRuntime's ModelCallObserver hook.
  * Awaited BEFORE models.streamSimple begins, enforcing strict fail-closed balance verification
@@ -62,31 +70,47 @@ export function createOrbitModelCreditObserver(scope: {
       const active = activeReservations.get(reservationId);
       activeReservations.delete(reservationId);
 
-      const userId = active?.userId || scope.userId;
+      const userId = active?.userId ?? scope.userId;
+      const locked = active?.lockedCredits ?? 0;
+      // A reservation this process never recorded (restart, another replica) has no
+      // lock we can safely settle. Forion releases stale reservations on its side.
+      if (locked <= 0) return;
 
-      // If call produced usage, commit actual credits
-      if (usage && ((usage.inputTokens ?? 0) > 0 || (usage.outputTokens ?? 0) > 0 || (usage.costUsd ?? 0) > 0)) {
-        // Calculate credits based on cost or tokens (1 credit ~= $0.005 or default ratio in pricing)
-        let creditCost = 2; // base turn
-        if (usage.costUsd && usage.costUsd > 0) {
-          // 1 credit per $0.002
-          creditCost = Math.max(1, Math.ceil(usage.costUsd / 0.002));
-        } else if (usage.inputTokens || usage.outputTokens) {
-          const totalTokens = (usage.inputTokens ?? 0) + (usage.outputTokens ?? 0);
-          creditCost = Math.max(1, Math.ceil(totalTokens / 1000));
-        }
-
-        await client.commitCredits({
+      const refund = () =>
+        client.refundCredits({
           userId,
-          amount: creditCost,
+          amount: locked,
+          fromLocked: true,
           referenceId: reservationId,
           product: "orbit-bot",
         });
-      } else {
-        // Unstarted, cancelled, or failed call — refund locked credits
+
+      const actual = creditCostFor(usage);
+      if (actual <= 0) {
+        // Unstarted, cancelled, or failed call — release the whole lock.
+        await refund();
+        return;
+      }
+
+      // The lock is the ceiling. Committing more than Forion reserved fails the
+      // whole settlement and leaves the lock stranded, so clamp to it.
+      const committed = Math.min(actual, locked);
+      const committedOk = await client.commitCredits({
+        userId,
+        amount: committed,
+        referenceId: reservationId,
+        product: "orbit-bot",
+      });
+      if (!committedOk) {
+        await refund();
+        return;
+      }
+      // Commit only removes what it charged; without this the unused part of the
+      // lock stays held against the wallet forever.
+      if (locked > committed) {
         await client.refundCredits({
           userId,
-          amount: active?.lockedCredits ?? 0,
+          amount: locked - committed,
           fromLocked: true,
           referenceId: reservationId,
           product: "orbit-bot",

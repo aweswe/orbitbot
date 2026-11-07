@@ -16,13 +16,10 @@ export async function hostedModelCreditObserver(
   prisma: PrismaClient,
   scope: { userId: string; spaceId: string },
 ): Promise<ModelCallObserver> {
-  // If Orbit Control Plane microservices URL is configured (or by default in Orbit Bot environment),
-  // route credit locking, settlement, and deduction directly through Orbit microservices.
-  if (
-    process.env.FORION_SERVER_URL ||
-    process.env.ORBIT_CONTROL_PLANE_URL ||
-    process.env.ORBIT_BILLING_ENABLED !== "false"
-  ) {
+  // Explicit opt-in only. A configured URL must not silently divert metering away
+  // from the local credit ledger — and a test run must never reach a live control
+  // plane just because `FORION_SERVER_URL` leaked into the environment.
+  if (process.env.ORBIT_BILLING_ENABLED === "true") {
     return createOrbitModelCreditObserver(scope);
   }
 
