@@ -5,6 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  toast,
 } from "@rakazo/ui-web";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Settings, Trash2 } from "lucide-react";
@@ -225,11 +226,21 @@ export function ShellDialogs({
           bot={deleteTarget}
           onCancel={() => setDeleteTarget(null)}
           onConfirm={async (deleteMemories) => {
-            await rpc.bots.remove({ botId: deleteTarget.id, deleteMemories });
-            discardChatAttachments(deleteTarget.id);
+            const botId = deleteTarget.id;
+            const botName = deleteTarget.name;
+            await rpc.bots.remove({ botId, deleteMemories });
+            discardChatAttachments(botId);
             setDeleteTarget(null);
             setPanel(null);
             await refreshBots(true);
+            toast(t`Deleted ${botName}`, {
+              action: {
+                label: t`Undo`,
+                onClick: () => {
+                  void rpc.bots.restore({ botId }).then(() => refreshBots(true));
+                },
+              },
+            });
           }}
         />
       ) : null}

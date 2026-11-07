@@ -7,11 +7,15 @@ import {
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Sidebar,
 } from "@rakazo/ui-web";
-import { Plus, Search, SlidersHorizontal } from "lucide-react";
+import { MoreHorizontal, Plus, Search, SlidersHorizontal } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
+import { IconTooltip } from "../../components/IconTooltip";
 import { InviteDialog } from "../../components/InviteDialog";
 import { PasskeyOffer } from "../../components/PasskeyOffer";
 import { SidebarFooter } from "../../components/SidebarFooter";
@@ -26,6 +30,7 @@ import { ActivityList } from "../ActivityList";
 import { SpaceSearchResults } from "../SpaceSearch";
 import type { SettingsSection } from "../shell-overlay";
 import { SidebarHeader } from "./sidebar-header";
+import { BotCreatePicker } from "./bot-picker";
 import type { SidebarSearch } from "./use-sidebar-search";
 
 /** Focuses the search box once it renders, its text selected so typing replaces it. */
@@ -178,44 +183,101 @@ export function ShellSidebar({
           setCreateBotOpen={setCreateBotOpen}
           openSettings={openSettings}
         />
-        {!mini && (
-          <div className="px-3 pb-2 pt-1 flex items-center gap-2">
+        {mini ? (
+          <div className="flex justify-center px-2 pt-2.5 pb-1">
+            <IconTooltip label={t`New Bot`} side="right">
+              <button
+                type="button"
+                data-testid="sidebar-new-bot"
+                onClick={() => {
+                  setMobileOpen(false);
+                  setCreateBotOpen(true);
+                }}
+                aria-label={t`New Bot`}
+                className="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all active:scale-[0.98]"
+              >
+                <Plus size={16} strokeWidth={1.5} />
+              </button>
+            </IconTooltip>
+          </div>
+        ) : (
+          <div className="px-4 pt-3 pb-2 flex items-center gap-1.5">
             <button
               type="button"
+              data-testid="sidebar-new-bot"
               onClick={() => {
                 setMobileOpen(false);
                 setCreateBotOpen(true);
               }}
-              className="flex-1 flex items-center justify-center gap-1.5 h-8 rounded-xl bg-primary/10 hover:bg-primary/[0.18] border border-primary/20 hover:border-primary/40 text-primary text-[12px] font-semibold transition-all active:scale-[0.98] group"
+              className="flex-1 flex items-center justify-center gap-2 h-9 rounded-lg bg-primary/10 hover:bg-primary/[0.18] border border-primary/25 hover:border-primary/40 text-primary text-body-sm font-medium transition-all active:scale-[0.98]"
             >
-              <Plus size={13} className="group-hover:scale-110 transition-transform shrink-0" />
-              <span>New Bot</span>
+              <Plus size={16} strokeWidth={1.5} className="shrink-0" />
+              <span>{t`New Bot`}</span>
             </button>
-            <button
-              type="button"
-              onClick={() => {
-                setMobileOpen(false);
-                setPanel("create-group");
-              }}
-              title="Create group"
-              className="flex items-center justify-center h-8 w-8 rounded-xl bg-muted hover:bg-accent border border-border hover:border-border/80 text-muted-foreground hover:text-foreground transition-all active:scale-[0.98]"
-            >
-              <Plus size={13} />
-            </button>
+            {setCreateMenuOpen ? (
+              <Popover open={createMenuOpen} onOpenChange={setCreateMenuOpen}>
+                <PopoverTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      className="app-no-drag text-muted-foreground hover:text-foreground rounded-lg hover:bg-accent h-9 w-9"
+                    />
+                  }
+                  aria-label={t`Create`}
+                  data-testid="create-menu-trigger"
+                >
+                  <MoreHorizontal size={16} strokeWidth={1.5} aria-hidden="true" />
+                </PopoverTrigger>
+                {createMenuOpen ? (
+                  <PopoverContent
+                    align="end"
+                    side="bottom"
+                    sideOffset={4}
+                    className="app-no-drag w-auto gap-0 overflow-hidden p-0 data-closed:animate-none z-[var(--z-dropdown,20)] shadow-lg rounded-xl border border-border bg-card"
+                  >
+                    <BotCreatePicker
+                      bots={bots}
+                      onCreateBot={() => {
+                        setCreateMenuOpen(false);
+                        setMobileOpen(false);
+                        setCreateBotOpen(true);
+                      }}
+                      onOpenBot={(id) => {
+                        setCreateMenuOpen(false);
+                        setMobileOpen(false);
+                        navigate(`/app/${id}`);
+                      }}
+                      onCreateGroup={() => {
+                        setCreateMenuOpen(false);
+                        setMobileOpen(false);
+                        setPanel("create-group");
+                      }}
+                      onCreateSpace={() => {
+                        setCreateMenuOpen(false);
+                        setMobileOpen(false);
+                        setNewSpaceOpen(true);
+                      }}
+                    />
+                  </PopoverContent>
+                ) : null}
+              </Popover>
+            ) : null}
           </div>
         )}
         {mini ||
         !(
+          bots.length > 5 ||
           searchOpen ||
           query ||
           (activityMode && (activityFilterCount > 0 || activityFiltersExpanded))
         ) ? null : (
           <InputGroup
             data-testid="sidebar-search"
-            className="mx-2.5 mb-3 w-auto rounded-xl bg-card dark:bg-input border border-border text-muted-foreground focus-within:border-ring"
+            className="mx-4 mb-2.5 w-auto rounded-lg bg-card border border-border text-muted-foreground focus-within:border-ring text-label"
           >
             <InputGroupAddon>
-              <Search size={16} strokeWidth={1.8} aria-hidden="true" />
+              <Search size={14} strokeWidth={1.5} aria-hidden="true" />
             </InputGroupAddon>
             <InputGroupInput
               value={activityMode ? activityFilters.query : query}
@@ -238,6 +300,7 @@ export function ShellSidebar({
               aria-label={activityMode ? t`Search runs` : t`Search`}
               autoComplete="off"
               name="sidebar-search"
+              className="text-label h-8"
             />
             {activityMode ? (
               <InputGroupAddon align="inline-end">
@@ -249,7 +312,7 @@ export function ShellSidebar({
                   onClick={() => setActivityFiltersExpanded((expanded) => !expanded)}
                   className="relative rounded-lg"
                 >
-                  <SlidersHorizontal size={16} aria-hidden="true" />
+                  <SlidersHorizontal size={14} strokeWidth={1.5} aria-hidden="true" />
                   {activityFilterCount > 0 ? (
                     <span
                       data-testid="activity-filter-indicator"

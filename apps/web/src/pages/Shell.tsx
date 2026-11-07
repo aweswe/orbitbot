@@ -50,6 +50,7 @@ import {
 } from "react";
 import { useParams } from "react-router-dom";
 import { ComputerUpdateProgress } from "../components/ComputerUpdateProgress";
+import { OrbitLogoMark } from "../components/OrbitLogoMark";
 import { CallCard, CallReturnBar } from "../components/call/CallCard";
 import { IncomingCall } from "../components/call/IncomingCall";
 import { PageLoading } from "../components/PageLoading";
@@ -542,7 +543,7 @@ function SpaceShell() {
     () =>
       sidebarGroupsForSpaces(sidebarSpaces, miniSidebar ? "" : search.query, {
         pinned: t`Pinned`,
-        unassigned: t`Unassigned`,
+        unassigned: t`Recent`,
       }),
     [sidebarSpaces, search.query, miniSidebar, t],
   );
@@ -1038,6 +1039,10 @@ function SpaceShell() {
             bootstrapMe={bootstrapMe}
             botSections={botSections}
             spaces={spaces}
+            initialBotsLoaded={initialBotsLoaded}
+            initialLoadFailed={initialLoadFailed}
+            refreshBots={refreshBots}
+            onCreateBot={() => dialogs.setCreateBotOpen(true)}
             rosterDropKey={rosterDrop.rosterDropKey}
             setRosterDropKey={rosterDrop.setRosterDropKey}
             rosterDropAction={rosterDrop.rosterDropAction}
@@ -1101,11 +1106,11 @@ function SpaceShell() {
         ) : null}
         <CallReturnBar />
         {/* The header floats so the transcript scrolls under its buttons. */}
-        <div ref={chatColumnRef} className="relative flex min-h-0 flex-1 flex-col">
-          {/* Only the pills take input; the gaps pass clicks and scrolling to the transcript. */}
-          <div aria-hidden="true" className="app-drag absolute inset-x-0 top-0 z-10 h-3" />
+        <div ref={chatColumnRef} className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+          {/* Ambient accent glow layer fixed to main container behind messages (Phase 3) */}
+          <div className="ambient-glow ambient-glow-animated" aria-hidden="true" />
           {findOpen ? (
-            <div className="absolute end-3 top-14 z-20">
+            <div className="absolute end-3 top-14 z-[var(--z-dropdown,20)]">
               <ChatFindBar
                 scope={chatColumnRef}
                 inputRef={findInputRef}
@@ -1150,10 +1155,23 @@ function SpaceShell() {
             }}
           />
           {!active && !activeGroup && initialBotsLoaded ? (
-            <div className="grid flex-1 place-items-center">
-              <Button onClick={() => dialogs.setCreateBotOpen(true)}>
-                <Plus size={16} aria-hidden="true" />
-                <Trans>New bot</Trans>
+            <div className="flex flex-1 flex-col items-center justify-center p-6 text-center select-none z-[var(--z-base,1)]">
+              <div className="h-12 w-12 rounded-xl bg-card border border-border flex items-center justify-center mb-4 shadow-xs">
+                <OrbitLogoMark className="h-6 w-6 text-foreground/80" />
+              </div>
+              <h2 className="text-heading3 font-semibold text-foreground tracking-tight mb-1.5">
+                <Trans>No bot selected</Trans>
+              </h2>
+              <p className="text-body-sm text-muted-foreground max-w-[36ch] mb-6">
+                <Trans>Select a bot from the sidebar or create a new companion to begin.</Trans>
+              </p>
+              <Button
+                size="default"
+                onClick={() => dialogs.setCreateBotOpen(true)}
+                className="h-10 px-5 rounded-lg bg-primary text-primary-foreground font-medium shadow-xs hover:opacity-90 transition-opacity"
+              >
+                <Plus size={16} strokeWidth={1.5} className="me-2" />
+                <Trans>Create bot</Trans>
               </Button>
             </div>
           ) : (

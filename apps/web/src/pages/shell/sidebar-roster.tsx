@@ -20,6 +20,7 @@ import {
   Lock,
   MoreHorizontal,
   Pencil,
+  Plus,
   Trash2,
   Users,
 } from "lucide-react";
@@ -66,6 +67,10 @@ export function SidebarRoster({
   activeSnapshot,
   botMenuContent,
   mini = false,
+  initialBotsLoaded = true,
+  initialLoadFailed = false,
+  refreshBots,
+  onCreateBot,
 }: {
   sidebarGroups: ReturnType<
     typeof sidebarGroupsForSpaces<Space["bots"][number], Space["groups"][number]>
@@ -98,9 +103,69 @@ export function SidebarRoster({
   activeSnapshot: ThreadSnapshot | null;
   botMenuContent: ReactNode;
   mini?: boolean;
+  initialBotsLoaded?: boolean;
+  initialLoadFailed?: boolean;
+  refreshBots?: (includeArchived?: boolean) => Promise<void>;
+  onCreateBot?: () => void;
 }) {
   useRedrawAtMidnight();
   const { t } = useLingui();
+  const totalBots = sidebarGroups.reduce((acc, g) => acc + g.bots.length, 0);
+
+  if (!mini && !initialBotsLoaded) {
+    return (
+      <div className="flex flex-col gap-1 px-1 py-1" aria-label={t`Loading bots`}>
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="flex items-center gap-2.5 h-[38px] px-2.5 rounded-lg bg-card/40 border border-border/30 animate-pulse">
+            <div className="size-6 rounded-md bg-muted/60 shrink-0" />
+            <div className="flex-1 space-y-1 overflow-hidden">
+              <div className="h-3 w-20 rounded bg-muted/70" />
+              <div className="h-2 w-12 rounded bg-muted/40" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (!mini && initialLoadFailed) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-2 py-8 px-4 text-center">
+        <CircleAlert size={18} className="text-destructive/80" />
+        <p className="text-label text-muted-foreground">{t`Failed to load bots`}</p>
+        {refreshBots ? (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => void refreshBots()}
+            className="mt-1 h-7 rounded-md text-label"
+          >
+            {t`Retry`}
+          </Button>
+        ) : null}
+      </div>
+    );
+  }
+
+  if (!mini && initialBotsLoaded && totalBots === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-2.5 py-10 px-4 text-center">
+        <p className="text-label text-muted-foreground">{t`No bots yet`}</p>
+        {onCreateBot ? (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onCreateBot}
+            className="h-7.5 rounded-md text-label border-primary/30 text-primary hover:bg-primary/10"
+          >
+            <Plus size={13} className="me-1 stroke-[1.5]" />
+            {t`Create bot`}
+          </Button>
+        ) : null}
+      </div>
+    );
+  }
+
   return (
     <>
       {sidebarGroups.map((group, groupIndex) => {
@@ -380,18 +445,35 @@ export function SidebarRoster({
                     }}
                     data-roster-drop={rosterDropKey === rowDropKey ? "true" : undefined}
                     onKeyDown={(event) => {
-                      if (
-                        item.kind !== "bot" ||
-                        !event.altKey ||
-                        (event.key !== "ArrowUp" && event.key !== "ArrowDown")
-                      )
+                      if (event.key === "F2" && item.kind === "bot") {
+                        event.preventDefault();
+                        setBotMenu({ kind: item.kind, id: item.chat.id });
                         return;
-                      const siblings = groupBotIds;
-                      const index = siblings.indexOf(item.chat.id);
-                      const target = siblings[index + (event.key === "ArrowUp" ? -1 : 1)];
-                      if (!target) return;
-                      event.preventDefault();
-                      reorderRosterBot(item.chat.id, target, groupBotIds);
+                      }
+                      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+                        if (event.altKey && item.kind === "bot") {
+                          const siblings = groupBotIds;
+                          const index = siblings.indexOf(item.chat.id);
+                          const target = siblings[index + (event.key === "ArrowUp" ? -1 : 1)];
+                          if (!target) return;
+                          event.preventDefault();
+                          reorderRosterBot(item.chat.id, target, groupBotIds);
+                        } else {
+                          event.preventDefault();
+                          const allRows = Array.from(
+                            document.querySelectorAll<HTMLButtonElement>(
+                              '[data-roster-bot-id], [data-roster-group-id]',
+                            ),
+                          );
+                          const idx = allRows.indexOf(
+                            event.currentTarget as unknown as HTMLButtonElement,
+                          );
+                          const nextIdx = event.key === "ArrowDown" ? idx + 1 : idx - 1;
+                          if (nextIdx >= 0 && nextIdx < allRows.length) {
+                            allRows[nextIdx]?.focus();
+                          }
+                        }
+                      }
                     }}
                     onClick={() => {
                       openSpaceChat(
@@ -403,16 +485,16 @@ export function SidebarRoster({
                     onContextMenu={(event) => event.currentTarget.focus()}
                     className={`flex items-center ${
                       mini
-                        ? "mx-auto size-12 justify-center rounded-xl"
+                        ? "mx-auto size-10 justify-center rounded-lg"
                         : compact
-                          ? "w-full min-h-11 gap-2 rounded-xl px-2.5 py-1.5"
-                          : "w-full gap-3 rounded-xl px-2.5 py-[10px]"
-                    } text-start ${
+                          ? "w-full min-h-[36px] max-h-9 gap-2 rounded-lg px-2.5 py-1"
+                          : "w-full min-h-[38px] max-h-10 gap-2.5 rounded-lg px-2.5 py-1.5"
+                    } text-start transition-colors ${
                       item.kind === "bot" ? "cursor-grab active:cursor-grabbing" : ""
                     } ${
                       selected || rosterDropKey === rowDropKey
-                        ? "bg-sidebar-accent"
-                        : "group-hover/row:bg-accent"
+                        ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
+                        : "group-hover/row:bg-accent/60 text-muted-foreground hover:text-foreground"
                     }`}
                   >
                     {mini ? (
@@ -470,15 +552,26 @@ export function SidebarRoster({
                               </span>
                             ) : null}
                           </div>
-                          <div className="flex shrink-0 items-center gap-1.5">
+                          <div className="flex shrink-0 items-center gap-1">
                             {!compact ? (
                               <span
                                 data-roster-time
-                                className="text-label text-faint-foreground tabular-nums"
+                                className="text-label text-faint-foreground tabular-nums group-hover/row:hidden"
                               >
                                 {formatRosterTime(item.chat.updatedAt)}
                               </span>
                             ) : null}
+                            <button
+                              type="button"
+                              aria-label={t`Actions for ${item.chat.name}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setBotMenu({ kind: item.kind, id: item.chat.id });
+                              }}
+                              className="hidden group-hover/row:flex focus:flex p-0.5 rounded text-muted-foreground hover:text-foreground transition-opacity"
+                            >
+                              <MoreHorizontal size={14} strokeWidth={1.5} />
+                            </button>
                             {item.chat.unread ? (
                               <span
                                 aria-hidden="true"

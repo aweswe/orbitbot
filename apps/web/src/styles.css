@@ -163,99 +163,208 @@ body,
   color: var(--primary-foreground);
 }
 
-/* Orbit Cosmic Theme Accents & Badges */
-.orbit-glow-card {
-  background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.12) 0%, rgba(17, 20, 34, 0.8) 100%);
-  border: 1px solid rgba(129, 140, 248, 0.22);
-  box-shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.15);
+/* ─────────────────────────────────────────────────────────────
+   ORBIT DESIGN SYSTEM TOKENS (Linear / Vercel Aesthetic)
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --header-h: 56px;
+
+  /* Spacing Scale (no magic numbers) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Radius Scale */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Control Heights */
+  --control-h-sm: 32px;
+  --control-h-md: 36px;
+  --control-h-lg: 40px;
+
+  /* Z-Index Hierarchy */
+  --z-ambient: 0;
+  --z-base: 1;
+  --z-sticky: 10;
+  --z-dropdown: 20;
+  --z-overlay: 30;
+  --z-modal: 40;
+  --z-toast: 50;
 }
 
-.orbit-gradient-text {
-  background: linear-gradient(135deg, #22d3ee 0%, #818cf8 50%, #ec4899 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.orbit-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.2rem 0.6rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  background: rgba(99, 102, 241, 0.15);
-  color: #a5b4fc;
-  border: 1px solid rgba(129, 140, 248, 0.3);
-}
-
-.orbit-pulse-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 9999px;
-  background-color: #22d3ee;
-  box-shadow: 0 0 8px #22d3ee;
-  animation: rkPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes gradient-x {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-.animate-gradient-x {
-  background-size: 200% 200%;
-  animation: gradient-x 4s ease infinite;
-}
-
-/* Orbit Cosmic Theme Color Mappings */
-[data-orbit-theme='deep-space'] {
-  --primary: #22d3ee;
-  --accent-primary: #22d3ee;
+/* ── Dark Theme (Default) ── */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #090a10;
+  --surface: #11131c;
+  --surface-2: #181b28;
+  --surface-hover: #1e2233;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-subtle: #64748b;
+  --accent: #22d3ee;
+  --accent-hover: #06b6d4;
+  --accent-foreground: #090a10;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #f43f5e;
   --ring: #22d3ee;
+  --shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.5);
+  --glow-color: #22d3ee;
+  --glow-opacity: 0.12;
+
+  /* Framework Mappings */
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --muted: var(--surface-2);
+  --muted-foreground: var(--text-muted);
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-foreground);
+  --accent-primary: var(--accent);
+  --destructive: var(--danger);
+  --sidebar: var(--bg);
+  --sidebar-foreground: var(--text);
+  --sidebar-border: var(--border);
+  --sidebar-accent: var(--surface-hover);
+  --sidebar-accent-foreground: var(--text);
+}
+
+/* ── Light Theme (High Contrast Calm Off-White) ── */
+[data-theme="light"],
+[data-orbit-theme="cosmic-light"] {
+  color-scheme: light;
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-2: #f1f5f9;
+  --surface-hover: #e2e8f0;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --text: #0f172a;
+  --text-muted: #475569;
+  --text-subtle: #64748b;
+  --accent: #0284c7;
+  --accent-hover: #0369a1;
+  --accent-foreground: #ffffff;
+  --success: #059669;
+  --warning: #d97706;
+  --danger: #e11d48;
+  --ring: #0284c7;
+  --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
+  --glow-color: #0284c7;
+  --glow-opacity: 0.06;
+
+  /* Framework Mappings */
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --muted: var(--surface-2);
+  --muted-foreground: var(--text-muted);
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-foreground);
+  --accent-primary: var(--accent);
+  --destructive: var(--danger);
+  --sidebar: var(--bg);
+  --sidebar-foreground: var(--text);
+  --sidebar-border: var(--border);
+  --sidebar-accent: var(--surface-hover);
+  --sidebar-accent-foreground: var(--text);
+}
+
+/* ── Cosmic Accent Variants ── */
+[data-orbit-theme='deep-space'] {
+  --accent: #22d3ee;
+  --accent-hover: #06b6d4;
+  --accent-foreground: #090a10;
+  --ring: #22d3ee;
+  --primary: #22d3ee;
+  --glow-color: #22d3ee;
 }
 [data-orbit-theme='nebula'] {
-  --primary: #e879f9;
-  --accent-primary: #e879f9;
+  --accent: #e879f9;
+  --accent-hover: #d946ef;
+  --accent-foreground: #090a10;
   --ring: #e879f9;
+  --primary: #e879f9;
+  --glow-color: #e879f9;
 }
 [data-orbit-theme='solar'] {
-  --primary: #fb923c;
-  --accent-primary: #fb923c;
+  --accent: #fb923c;
+  --accent-hover: #f97316;
+  --accent-foreground: #090a10;
   --ring: #fb923c;
+  --primary: #fb923c;
+  --glow-color: #fb923c;
 }
 [data-orbit-theme='phantom'] {
-  --primary: #00FF41;
-  --accent-primary: #00FF41;
+  --accent: #00FF41;
+  --accent-hover: #00cc33;
+  --accent-foreground: #090a10;
   --ring: #00FF41;
+  --primary: #00FF41;
+  --glow-color: #00FF41;
 }
 [data-orbit-theme='ocean'] {
-  --primary: #38bdf8;
-  --accent-primary: #38bdf8;
+  --accent: #38bdf8;
+  --accent-hover: #0284c7;
+  --accent-foreground: #090a10;
   --ring: #38bdf8;
+  --primary: #38bdf8;
+  --glow-color: #38bdf8;
 }
 [data-orbit-theme='blueprint'] {
-  --primary: #3b82f6;
-  --accent-primary: #3b82f6;
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --accent-foreground: #ffffff;
   --ring: #3b82f6;
+  --primary: #3b82f6;
+  --glow-color: #3b82f6;
 }
-[data-orbit-theme='cosmic-light'] {
-  --primary: #0284c7;
-  --accent-primary: #0284c7;
-  --ring: #0284c7;
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --card: #ffffff;
-  --card-foreground: #0f172a;
-  --popover: #ffffff;
-  --popover-foreground: #0f172a;
-  --muted: #f1f5f9;
-  --muted-foreground: #475569;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --sidebar: #f8fafc;
-  --sidebar-foreground: #0f172a;
-  --sidebar-border: #e2e8f0;
-  --sidebar-accent: #e2e8f0;
-  --sidebar-accent-foreground: #0f172a;
+
+/* ── Ambient Background Glow Layer (Phase 3) ── */
+.ambient-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--z-ambient, 0);
+  background:
+    radial-gradient(60% 45% at 50% 0%, color-mix(in srgb, var(--glow-color) calc(var(--glow-opacity) * 100%), transparent), transparent 70%),
+    radial-gradient(40% 30% at 85% 10%, color-mix(in srgb, var(--glow-color) calc(var(--glow-opacity) * 50%), transparent), transparent 70%);
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .ambient-glow-animated {
+    animation: ambientDrift 28s ease-in-out infinite alternate;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .ambient-glow {
+    display: none !important;
+  }
+}
+
+@keyframes ambientDrift {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(14px) scale(1.02); }
+}
+
 
