@@ -292,7 +292,7 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
               <Button
                 type="button"
                 disabled={pending}
-                className="mt-3 h-14 w-full rounded-2xl text-[16px] font-semibold bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-cyan-500/25 border-0 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-3 cursor-pointer"
+                className="mt-3 h-14 w-full rounded-2xl text-body font-semibold bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-cyan-500/25 border-0 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-3 cursor-pointer"
                 onClick={() => void (reset?.sso?.name === "Orbit" ? signInWithOrbit() : signInWithSso())}
               >
                 <OrbitLogoIcon className="h-6 w-6 text-white" />
@@ -458,7 +458,7 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
                 <>
                   <div className="mt-4 flex items-center gap-3 w-full">
                     <div className="flex-1 h-px bg-border" />
-                    <span className="text-xs text-muted-foreground">or</span>
+                    <span className="text-caption text-muted-foreground">or</span>
                     <div className="flex-1 h-px bg-border" />
                   </div>
                   <Button

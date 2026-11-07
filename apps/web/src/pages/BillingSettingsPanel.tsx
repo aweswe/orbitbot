@@ -73,13 +73,13 @@ export function BillingSettingsPanel({ client }: { client: RpcClient }) {
               <Zap size={16} className="text-white fill-white" />
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-foreground">Orbit Control Plane Billing</h4>
-              <p className="text-xs text-muted-foreground">Unified credit deductions for Orbit & Orbit Bot</p>
+              <h4 className="text-body-sm font-semibold text-foreground">Orbit Control Plane Billing</h4>
+              <p className="text-caption text-muted-foreground">Unified credit deductions for Orbit & Orbit Bot</p>
             </div>
           </div>
           <OrbitCreditBadge />
         </div>
-        <p className="text-xs text-muted-foreground/80 mt-2">
+        <p className="text-caption text-muted-foreground/80 mt-2">
           Every agent interaction in Orbit Bot automatically draws from your Orbit credit ledger in real time.
         </p>
       </div>

@@ -252,10 +252,10 @@ function SvgDiagram({ source, fallback }: { source: string; fallback: ReactNode 
               <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
             </svg>
           </span>
-          <span className="text-xs font-semibold tracking-wide text-foreground">
+          <span className="text-caption font-semibold tracking-wide text-foreground">
             {parsed.title}
           </span>
-          <span className="rounded bg-white/5 px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground">
+          <span className="rounded bg-white/5 px-1.5 py-0.5 text-caption font-mono text-muted-foreground">
             {parsed.width}×{parsed.height}
           </span>
         </div>
@@ -264,7 +264,7 @@ function SvgDiagram({ source, fallback }: { source: string; fallback: ReactNode 
             <button
               type="button"
               onClick={() => setViewMode("preview")}
-              className={`px-2 py-0.5 text-xs font-medium rounded-md transition-all ${
+              className={`px-2 py-0.5 text-caption font-medium rounded-md transition-all ${
                 viewMode === "preview"
                   ? "bg-cyan-500/20 text-cyan-300 shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
@@ -275,7 +275,7 @@ function SvgDiagram({ source, fallback }: { source: string; fallback: ReactNode 
             <button
               type="button"
               onClick={() => setViewMode("code")}
-              className={`px-2 py-0.5 text-xs font-medium rounded-md transition-all ${
+              className={`px-2 py-0.5 text-caption font-medium rounded-md transition-all ${
                 viewMode === "code"
                   ? "bg-cyan-500/20 text-cyan-300 shadow-sm"
                   : "text-muted-foreground hover:text-foreground"

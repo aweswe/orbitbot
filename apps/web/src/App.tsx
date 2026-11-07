@@ -360,7 +360,7 @@ function SessionUnavailable({ refetch }: { refetch: () => Promise<void> }) {
         </div>
 
         {/* Live Reconnecting Status Pill */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-500 dark:text-amber-400 text-xs font-mono font-medium tracking-wide">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-500 dark:text-amber-400 text-caption font-mono font-medium tracking-wide">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
@@ -371,10 +371,10 @@ function SessionUnavailable({ refetch }: { refetch: () => Promise<void> }) {
         </div>
 
         {/* Title & Description */}
-        <h2 className="mt-4 text-xl sm:text-2xl font-semibold tracking-tight text-foreground">
+        <h2 className="mt-4 text-heading2 font-semibold tracking-tight text-foreground">
           <Trans>Lost connection to Orbit</Trans>
         </h2>
-        <p className="mt-2 text-xs sm:text-sm text-muted-foreground/80 leading-relaxed max-w-[280px]">
+        <p className="mt-2 text-body-sm text-muted-foreground/80 leading-relaxed max-w-[280px]">
           <Trans>Can&apos;t reach the server. Attempting to re-establish your workspace link...</Trans>
         </p>
 
@@ -383,7 +383,7 @@ function SessionUnavailable({ refetch }: { refetch: () => Promise<void> }) {
           <Button
             variant="default"
             size="lg"
-            className="w-full sm:w-auto px-7 py-2.5 rounded-xl font-medium text-sm shadow-lg transition-all duration-200 active:scale-95 bg-primary hover:bg-primary/90 text-primary-foreground cursor-pointer"
+            className="w-full sm:w-auto px-7 py-2.5 rounded-xl font-medium text-body-sm shadow-lg transition-all duration-200 active:scale-95 bg-primary hover:bg-primary/90 text-primary-foreground cursor-pointer"
             onClick={() => {
               retryImmediately.current = true;
               setAttempt(0);
@@ -396,7 +396,7 @@ function SessionUnavailable({ refetch }: { refetch: () => Promise<void> }) {
           <button
             type="button"
             onClick={() => window.location.reload()}
-            className="mt-3.5 text-xs text-muted-foreground/60 hover:text-foreground transition-colors cursor-pointer"
+            className="mt-3.5 text-caption text-muted-foreground/60 hover:text-foreground transition-colors cursor-pointer"
           >
             <Trans>Or reload window</Trans>
           </button>
@@ -423,14 +423,14 @@ function AppFailed() {
           <OrbitPlanetAvatar size={64} isWorking={false} ringColor="#f43f5e" />
         </div>
 
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-500 dark:text-rose-400 text-xs font-medium">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-500 dark:text-rose-400 text-caption font-medium">
           <Trans>System Interruption</Trans>
         </div>
 
-        <h2 className="mt-4 text-xl sm:text-2xl font-semibold tracking-tight text-foreground">
+        <h2 className="mt-4 text-heading2 font-semibold tracking-tight text-foreground">
           <Trans>Something went wrong</Trans>
         </h2>
-        <p className="mt-2 text-xs sm:text-sm text-muted-foreground/80 leading-relaxed max-w-[280px]">
+        <p className="mt-2 text-body-sm text-muted-foreground/80 leading-relaxed max-w-[280px]">
           <Trans>Orbit encountered an unexpected state. Refreshing will reload the interface cleanly.</Trans>
         </p>
 
@@ -438,7 +438,7 @@ function AppFailed() {
           <Button
             variant="default"
             size="lg"
-            className="px-7 py-2.5 rounded-xl font-medium text-sm shadow-lg transition-all duration-200 active:scale-95 bg-primary hover:bg-primary/90 text-primary-foreground cursor-pointer"
+            className="px-7 py-2.5 rounded-xl font-medium text-body-sm shadow-lg transition-all duration-200 active:scale-95 bg-primary hover:bg-primary/90 text-primary-foreground cursor-pointer"
             onClick={() => window.location.reload()}
           >
             <Trans>Refresh</Trans>

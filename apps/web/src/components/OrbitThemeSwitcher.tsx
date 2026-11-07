@@ -142,10 +142,10 @@ export function OrbitThemeSwitcher({ className }: { className?: string }) {
         className="w-64 rounded-2xl border border-border bg-popover text-popover-foreground p-2 backdrop-blur-xl shadow-2xl"
       >
         <div className="px-2 py-1.5 border-b border-border/60 mb-1 flex items-center justify-between">
-          <span className="text-[11px] font-bold tracking-wider uppercase text-muted-foreground">
+          <span className="text-caption font-bold tracking-wider uppercase text-muted-foreground">
             <Trans>Orbit Themes</Trans>
           </span>
-          <span className="text-[10px] font-semibold text-primary">
+          <span className="text-caption font-semibold text-primary">
             {activeTheme.name}
           </span>
         </div>
@@ -175,10 +175,10 @@ export function OrbitThemeSwitcher({ className }: { className?: string }) {
                     <Icon size={13} style={{ color: theme.accent }} />
                   </div>
                   <div className="min-w-0">
-                    <div className="truncate text-[12px] font-semibold text-foreground">
+                    <div className="truncate text-label font-semibold text-foreground">
                       {theme.name}
                     </div>
-                    <div className="truncate text-[10px] text-muted-foreground">
+                    <div className="truncate text-caption text-muted-foreground">
                       {theme.tagline}
                     </div>
                   </div>
