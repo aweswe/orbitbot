@@ -41,6 +41,7 @@ import {
   HoldToTalkStrip,
   useHoldToTalk,
 } from "../../components/composer/HoldToTalk";
+import { OrbitModelPicker } from "../../components/composer/OrbitModelPicker";
 import { recordMessageSent } from "../../components/GitHubStarPrompt";
 import type { ArtifactTarget } from "../../lib/artifact-open";
 import { attachmentPickerAccept } from "../../lib/attachment-picker-accept";
@@ -1124,6 +1125,7 @@ const ComposerBody = memo(function Composer({
               {phoneCallsEnabled && draft.trim().length === 0 ? (
                 <HoldToTalkControls talk={talk} disabled={disabled || onCall} />
               ) : null}
+              <OrbitModelPicker disabled={disabled || sending} />
               <Button
                 size="icon"
                 aria-label={t`Send`}
@@ -1150,6 +1152,7 @@ const ComposerBody = memo(function Composer({
               {phoneCallsEnabled && draft.trim().length === 0 ? (
                 <HoldToTalkControls talk={talk} disabled={disabled || onCall} />
               ) : null}
+              <OrbitModelPicker disabled={disabled || sending} />
               <Button
                 size="icon"
                 aria-label={t`Send`}

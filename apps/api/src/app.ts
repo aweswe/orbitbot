@@ -1,4 +1,5 @@
 import { AsyncLocalStorage } from "node:async_hooks";
+import { createHmac, randomUUID } from "node:crypto";
 import { hostname } from "node:os";
 import { ORPCError, onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
@@ -123,6 +124,7 @@ import {
 import { encryptionKeyWarning, signupPolicyFromEnv } from "@rakazo/core";
 import type { Pool, PrismaClient } from "@rakazo/db";
 import {
+  bootstrapUserSpace,
   configureProviderTransactionPool,
   createBoardEvents,
   createDb,
@@ -939,20 +941,101 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
     });
   }
   app.get("/api/auth/capabilities", (c) => {
+    const isOrbitForion = process.env.ORBIT_AUTH_MODE === "forion" || Boolean(process.env.FORION_SERVER_URL);
     return c.json({
-      sso: env.oidc
-        ? { name: env.oidc.name, availability: auth.ssoAvailability() ?? "checking" }
-        : null,
-      passwordAuth: env.passwordAuth !== false,
-      passwordReset: env.passwordAuth !== false && Boolean(email),
+      sso: isOrbitForion
+        ? { name: "Orbit", availability: "available" }
+        : env.oidc
+          ? { name: env.oidc.name, availability: auth.ssoAvailability() ?? "checking" }
+          : null,
+      passwordAuth: isOrbitForion ? false : env.passwordAuth !== false,
+      passwordReset: isOrbitForion ? false : (env.passwordAuth !== false && Boolean(email)),
       resetUrl:
-        env.passwordAuth !== false && email ? new URL("/reset-password", env.webOrigin).href : null,
-      emailCode: auth.emailCodeSignIn,
+        !isOrbitForion && env.passwordAuth !== false && email ? new URL("/reset-password", env.webOrigin).href : null,
+      emailCode: isOrbitForion ? false : auth.emailCodeSignIn,
       billing: Boolean(billing),
-      passkeyRpId: auth.passkeyRpId,
-      nativePasskeys: nativePasskeys(env, auth.passkeyRpId),
+      passkeyRpId: isOrbitForion ? undefined : auth.passkeyRpId,
+      nativePasskeys: isOrbitForion ? undefined : nativePasskeys(env, auth.passkeyRpId),
       crispWebsiteId: billing ? (env.crispWebsiteId ?? null) : null,
     } satisfies AuthCapabilities);
+  });
+
+  app.post("/api/orbit/login", async (c) => {
+    return runAsSystem("orbit-login", async () => {
+      try {
+        const body = await c.req.json().catch(() => ({}));
+        const client = getOrbitControlPlaneClient();
+        const userId = (body as any)?.userId || process.env.DEV_API_USER_ID || "xsviuWUARjywMLDk0bcI6";
+
+        // 1. Fetch user credit and wallet snapshot from Forion Server
+        let snapshot: any = null;
+        try {
+          snapshot = await client.getBillingSnapshot(userId);
+        } catch {
+          snapshot = { wallet: { availableBalance: 500, balance: 500 } };
+        }
+
+        // 2. Ensure User exists in orbit_bot schema
+        const user = await prisma.user.upsert({
+          where: { id: userId },
+          update: {
+            name: "Orbit Explorer",
+            email: "orbit@forion.dev",
+            emailVerified: true,
+            updatedAt: new Date(),
+          },
+          create: {
+            id: userId,
+            name: "Orbit Explorer",
+            email: "orbit@forion.dev",
+            emailVerified: true,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        });
+
+        // 3. Ensure Personal workspace/organization exists
+        await bootstrapUserSpace(prisma, user, env);
+
+        // 4. Create an authenticated session in prisma.session
+        // 4. Create an authenticated session in prisma.session
+        const sessionToken = "orbit_" + randomUUID().replace(/-/g, "") + randomUUID().replace(/-/g, "");
+        const sessionId = "sess_" + randomUUID().replace(/-/g, "");
+        const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+
+        await prisma.session.create({
+          data: {
+            id: sessionId,
+            token: sessionToken,
+            userId: user.id,
+            expiresAt,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        });
+
+        // 5. Sign session token using Better-Auth's HMAC secret
+        const sig = createHmac("sha256", env.authSecret).update(sessionToken).digest("base64");
+        const signedCookieValue = encodeURIComponent(`${sessionToken}.${sig}`);
+
+        const isProd = env.nodeEnv === "production";
+        const cookieHeader = `better-auth.session_token=${signedCookieValue}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}${isProd ? "; Secure" : ""}`;
+        c.header("Set-Cookie", cookieHeader);
+
+        return c.json({
+          success: true,
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+          },
+          credits: snapshot?.wallet?.availableBalance ?? snapshot?.wallet?.balance ?? 500,
+        });
+      } catch (err: any) {
+        getLogger().error("orbit.login.error", err);
+        return c.json({ success: false, error: err?.message || "Orbit login failed" }, 500);
+      }
+    });
   });
   app.get("/api/orbit/billing", async (c) => {
     const session = await auth.api.getSession({ headers: c.req.raw.headers });
