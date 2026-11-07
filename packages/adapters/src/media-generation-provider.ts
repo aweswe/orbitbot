@@ -243,6 +243,157 @@ export class FalMediaGenerationProvider implements MediaGenerationProvider {
   }
 }
 
+/** Requesty media generation provider via chat completions with Gemini Flash Image */
+export class RequestyMediaGenerationProvider implements MediaGenerationProvider {
+  readonly id = "requesty";
+  readonly capabilities = { images: true, video: false, offline: false };
+  private readonly baseUrl: string;
+  private readonly apiKey: string;
+  private readonly imageModel: string;
+  private readonly fetchImpl: typeof fetch;
+
+  constructor(options: {
+    apiKey: string;
+    baseUrl?: string;
+    imageModel?: string;
+    fetch?: typeof fetch;
+  }) {
+    if (!options.apiKey) throw new Error("Requesty API key required");
+    this.apiKey = options.apiKey;
+    this.baseUrl = (options.baseUrl ?? "https://router.requesty.ai/v1").replace(/\/$/, "");
+    this.imageModel = options.imageModel ?? "google/gemini-3.1-flash-image";
+    this.fetchImpl = options.fetch ?? fetch;
+  }
+
+  async generateImage(
+    input: MediaGenerationInput,
+    context: AdapterContext,
+  ): Promise<GeneratedMedia> {
+    context.signal.throwIfAborted();
+    const parsed = mediaPromptSchema.safeParse(input);
+    if (!parsed.success) throw new MediaGenerationError("invalid_input");
+
+    let response: Response;
+    try {
+      response = await this.fetchImpl(`${this.baseUrl}/chat/completions`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: this.imageModel,
+          messages: [{ role: "user", content: parsed.data.prompt }],
+        }),
+        signal: context.signal,
+      });
+    } catch (error) {
+      if (context.signal.aborted) throw error;
+      throw new MediaGenerationError("provider_failure");
+    }
+
+    if (response.status === 401 || response.status === 403) {
+      throw new MediaGenerationError("authentication");
+    }
+    if (response.status === 429) {
+      throw new MediaGenerationError("rate_limit");
+    }
+    if (!response.ok) {
+      throw new MediaGenerationError("provider_failure");
+    }
+
+    let data: Record<string, unknown>;
+    try {
+      data = (await response.json()) as Record<string, unknown>;
+    } catch {
+      throw new MediaGenerationError("provider_failure");
+    }
+
+    const choices = data.choices as Array<{ message?: { role?: string; content?: unknown; images?: unknown } }> | undefined;
+    const msg = choices?.[0]?.message;
+    let imageUrl: string | undefined;
+
+    // 1. Requesty gemini image format: message.images array
+    if (Array.isArray(msg?.images)) {
+      for (const item of msg.images) {
+        if (typeof item === "string" && (item.startsWith("data:image/") || item.startsWith("http"))) {
+          imageUrl = item;
+          break;
+        }
+        if (item && typeof item === "object") {
+          const typed = item as { url?: string; image_url?: { url?: string } };
+          if (typeof typed.image_url?.url === "string") {
+            imageUrl = typed.image_url.url;
+            break;
+          }
+          if (typeof typed.url === "string") {
+            imageUrl = typed.url;
+            break;
+          }
+        }
+      }
+    }
+
+    // 2. OpenAI multi-part format: message.content array
+    if (!imageUrl && Array.isArray(msg?.content)) {
+      for (const part of msg.content) {
+        if (part && typeof part === "object") {
+          const typed = part as { type?: string; image_url?: { url?: string } };
+          if (typed.type === "image_url" && typeof typed.image_url?.url === "string") {
+            imageUrl = typed.image_url.url;
+            break;
+          }
+        }
+      }
+    }
+
+    // 3. String content with embedded data URL
+    if (!imageUrl && typeof msg?.content === "string") {
+      const match = msg.content.match(/data:image\/[a-zA-Z0-9.+-]+;base64,[A-Za-z0-9+/=]+/);
+      if (match) {
+        imageUrl = match[0];
+      }
+    }
+
+    if (!imageUrl) {
+      throw new MediaGenerationError("provider_failure");
+    }
+
+    let bytes: Uint8Array;
+    if (imageUrl.startsWith("data:image/")) {
+      const comma = imageUrl.indexOf(",");
+      if (comma === -1) throw new MediaGenerationError("provider_failure");
+      const b64 = imageUrl.slice(comma + 1);
+      const buffer = Buffer.from(b64, "base64");
+      bytes = new Uint8Array(buffer);
+    } else if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+      try {
+        const imgRes = await this.fetchImpl(imageUrl, { signal: context.signal });
+        if (!imgRes.ok) throw new MediaGenerationError("provider_failure");
+        bytes = await boundedBytes(imgRes, ATTACHMENT_MAX_BYTES);
+      } catch (error) {
+        if (context.signal.aborted) throw error;
+        if (error instanceof MediaGenerationError) throw error;
+        throw new MediaGenerationError("provider_failure");
+      }
+    } else {
+      throw new MediaGenerationError("provider_failure");
+    }
+
+    const output: GeneratedMedia = { bytes, mimeType: "image/png" };
+    validateGeneratedMedia(output, "image/png");
+    return output;
+  }
+
+  async generateVideo(): Promise<MediaVideoJob> {
+    throw new MediaGenerationError("unsupported");
+  }
+
+  async pollVideo(): Promise<MediaVideoJob> {
+    throw new MediaGenerationError("unsupported");
+  }
+}
+
 /** Deterministic provider; no network or billing. */
 export class FakeMediaGenerationProvider implements MediaGenerationProvider {
   readonly id = "fake";

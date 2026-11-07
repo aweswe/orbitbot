@@ -66,6 +66,9 @@ export class Speaker {
     this.token += 1;
     this.request?.abort();
     this.request = null;
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
     if (this.settlePlayback) this.settlePlayback(false);
     else this.teardownAudio();
     if (this.snapshot.status !== "idle" || this.snapshot.error) this.set(IDLE);
@@ -125,6 +128,9 @@ export class Speaker {
       if (!current) break;
       const rendered = await current;
       if ("error" in rendered) {
+        if (typeof window !== "undefined" && "speechSynthesis" in window) {
+          return this.speakWithWebSpeech(utterances.slice(i).join(" "), opts, live);
+        }
         const failure = live() ? errorText(rendered.error) : undefined;
         if (failure) this.set({ ...IDLE, error: failure });
         if (this.request === controller) this.request = null;
@@ -148,6 +154,67 @@ export class Speaker {
     if (this.request === controller) this.request = null;
   }
 
+  private speakWithWebSpeech(
+    text: string,
+    opts: SpeakOptions,
+    live: () => boolean,
+  ): Promise<string | undefined> {
+    return new Promise((resolve) => {
+      if (typeof window === "undefined" || !("speechSynthesis" in window)) {
+        if (live()) this.set(IDLE);
+        resolve(undefined);
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        const preferred = opts.voiceId
+          ? voices.find((v) => v.name === opts.voiceId || v.voiceURI === opts.voiceId)
+          : (voices.find(
+              (v) =>
+                v.lang.startsWith("en") &&
+                (v.name.includes("Natural") ||
+                  v.name.includes("Neural") ||
+                  v.name.includes("Google") ||
+                  v.name.includes("Samantha")),
+            ) ?? voices[0]);
+        if (preferred) utterance.voice = preferred;
+      }
+
+      utterance.onstart = () => {
+        if (!live()) {
+          window.speechSynthesis.cancel();
+          return;
+        }
+        this.set({
+          status: "speaking",
+          botId: opts.botId,
+          messageId: opts.messageId,
+          caption: text,
+        });
+      };
+
+      utterance.onend = () => {
+        if (live()) this.set(IDLE);
+        resolve(undefined);
+      };
+
+      utterance.onerror = (e) => {
+        if (live()) this.set(IDLE);
+        if (e.error === "canceled" || e.error === "interrupted") {
+          resolve(undefined);
+        } else {
+          resolve(e.error ? `Speech synthesis: ${e.error}` : undefined);
+        }
+      };
+
+      window.speechSynthesis.speak(utterance);
+    });
+  }
+
   private async prepare(
     text: string,
     opts: SpeakOptions,
@@ -159,6 +226,9 @@ export class Speaker {
       { signal, context: { spaceId } },
     );
     if (!body.ready) {
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        return [text];
+      }
       throw new Error(t`Add a voice provider key and pick a voice in Voice settings.`);
     }
     return body.utterances ?? [];

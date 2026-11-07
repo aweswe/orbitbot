@@ -67,14 +67,14 @@ export function ChatHeader({
       className="pointer-events-none absolute inset-x-0 top-0 z-[var(--z-sticky,10)] grid grid-cols-[1fr_auto_1fr] h-[var(--header-h,56px)] w-full shrink-0 items-center border-b border-border/40 bg-background/80 px-4 backdrop-blur-xl select-none [&_button]:pointer-events-auto [&_a]:pointer-events-auto"
     >
       {/* ─── Left: Navigator Toggle & Space Indicator ─── */}
-      <div className="flex min-w-0 items-center gap-2 justify-self-start">
+      <div className="flex min-w-0 items-center gap-2 justify-self-start pointer-events-auto">
         {/* Mobile menu trigger */}
         <Button
           variant="ghost"
           size="icon-sm"
           aria-label={t`Open navigation`}
           onClick={onOpenNavigation}
-          className="app-no-drag md:hidden h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground"
+          className="app-no-drag md:hidden h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent"
         >
           <Menu strokeWidth={1.5} className="size-5" />
         </Button>
@@ -101,7 +101,7 @@ export function ChatHeader({
       </div>
 
       {/* ─── Center: Active Companion Telemetry HUD (Single Bot Switcher / Status) ─── */}
-      <div className="flex items-center justify-center justify-self-center min-w-0 max-w-[280px] sm:max-w-[340px]">
+      <div className="flex items-center justify-center justify-self-center min-w-0 max-w-[170px] sm:max-w-[280px] md:max-w-[340px] pointer-events-auto">
         <button
           type="button"
           data-testid="bot-settings-trigger"
@@ -142,7 +142,7 @@ export function ChatHeader({
             <span className="block truncate text-label font-semibold leading-tight text-foreground tracking-tight" dir="auto">
               {title}
             </span>
-            <span className="block truncate text-caption leading-tight text-muted-foreground font-mono">
+            <span className="hidden sm:block truncate text-caption leading-tight text-muted-foreground font-mono">
               {hasError
                 ? t`Needs attention`
                 : isWorking
@@ -156,7 +156,7 @@ export function ChatHeader({
       </div>
 
       {/* ─── Right: Header Actions (Max 3: Search, Voice, Inspector) ─── */}
-      <div className="flex items-center gap-1 justify-self-end">
+      <div className="flex items-center gap-1 justify-self-end pointer-events-auto">
         {/* Find in thread */}
         {onOpenFind ? (
           <IconTooltip label={t`Find in thread (Cmd+F)`}>

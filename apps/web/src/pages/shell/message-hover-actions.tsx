@@ -13,7 +13,7 @@ import {
   PopoverTrigger,
   useCopyText,
 } from "@rakazo/ui-web";
-import { Check, Copy, MessageSquareDot, MoreHorizontal, Reply, Smile } from "lucide-react";
+import { Check, Copy, MessageSquareDot, MoreHorizontal, Reply, Smile, Volume2, VolumeX } from "lucide-react";
 import { useState } from "react";
 import { MessageHoverMetadata } from "../../components/MessageHoverMetadata";
 
@@ -24,6 +24,8 @@ export function MessageHoverActions({
   onMarkUnread,
   markedUnread = false,
   onReact,
+  onSpeak,
+  speaking = false,
 }: {
   message: ThreadMessage;
   side: "start" | "end";
@@ -31,6 +33,8 @@ export function MessageHoverActions({
   onMarkUnread: (message: ThreadMessage) => void;
   markedUnread?: boolean;
   onReact: (message: ThreadMessage, reaction: MessageReaction) => Promise<void>;
+  onSpeak?: (message: ThreadMessage) => void;
+  speaking?: boolean;
 }) {
   const { t } = useLingui();
   const [copiedNow, copy, copyFailed, resetCopy, copyFailedText] = useCopyText();
@@ -94,6 +98,21 @@ export function MessageHoverActions({
         >
           <Reply size={15} strokeWidth={1.7} />
         </button>
+        {onSpeak && message.blocks.some((b) => b.kind === "text") ? (
+          <button
+            type="button"
+            aria-label={speaking ? t`Stop speaking` : t`Read aloud`}
+            onClick={() => onSpeak(message)}
+            className={`${iconButtonClass} ${speaking ? "text-primary" : ""}`}
+            title={speaking ? t`Stop speaking` : t`Read aloud`}
+          >
+            {speaking ? (
+              <VolumeX size={15} strokeWidth={1.7} className="text-primary animate-pulse" />
+            ) : (
+              <Volume2 size={15} strokeWidth={1.7} />
+            )}
+          </button>
+        ) : null}
         <DropdownMenu open={moreOpen} onOpenChange={setMoreOpen}>
           <DropdownMenuTrigger
             aria-label={copied ? t`Copied` : t`More`}
@@ -106,6 +125,21 @@ export function MessageHoverActions({
             )}
           </DropdownMenuTrigger>
           <DropdownMenuContent align={side === "end" ? "start" : "end"} className="w-auto">
+            {onSpeak && message.blocks.some((b) => b.kind === "text") ? (
+              <DropdownMenuItem
+                onClick={() => {
+                  setMoreOpen(false);
+                  onSpeak(message);
+                }}
+              >
+                {speaking ? (
+                  <VolumeX size={14} strokeWidth={1.7} className="text-primary" />
+                ) : (
+                  <Volume2 size={14} strokeWidth={1.7} />
+                )}
+                {speaking ? <Trans>Stop speaking</Trans> : <Trans>Read aloud</Trans>}
+              </DropdownMenuItem>
+            ) : null}
             <DropdownMenuItem
               onClick={() => {
                 setMoreOpen(false);

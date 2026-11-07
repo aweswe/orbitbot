@@ -26,7 +26,7 @@ import {
   Spinner,
 } from "@rakazo/ui-web";
 import { useQueryClient } from "@tanstack/react-query";
-import { XIcon } from "lucide-react";
+import { Volume2, XIcon } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useSpaceQueries } from "../lib/query";
 import { useBoundSpaceId, useSpaceRpc } from "../lib/space-rpc";
@@ -390,6 +390,49 @@ export function VoiceSettingsOverlay({
       ) : null}
       {error ? <p className="mb-4 text-body text-destructive">{error}</p> : null}
       {notice ? <p className="mb-4 text-body text-success">{notice}</p> : null}
+
+      {/* Orbit Voice Engine - Pre-configured Card */}
+      <div className="rounded-xl border border-border/80 bg-muted/20 p-4 space-y-3 mb-5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Volume2 size={16} strokeWidth={1.5} />
+            </div>
+            <div>
+              <p className="text-body-sm font-semibold text-foreground">Orbit Voice Engine</p>
+              <p className="text-caption text-muted-foreground">Pre-configured &amp; Ready out of the box</p>
+            </div>
+          </div>
+          <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-caption font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            <Trans>Ready</Trans>
+          </span>
+        </div>
+        <p className="text-caption text-muted-foreground leading-relaxed">
+          <Trans>
+            Neural voice synthesis is pre-configured. Bot messages can be read aloud at any time by clicking the speaker icon on any message bubble.
+          </Trans>
+        </p>
+        <div className="flex items-center gap-2 pt-1">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={busy || pending === "test"}
+            onClick={() => void testVoice()}
+            className="gap-2"
+          >
+            <Volume2 size={14} strokeWidth={1.5} />
+            {pending === "test" ? <Trans>Playing sample…</Trans> : <Trans>Hear a sample</Trans>}
+          </Button>
+        </div>
+      </div>
+
+      <details className="mt-4 border-t border-border/40 pt-4 group/custom">
+        <summary className="text-caption font-medium text-muted-foreground hover:text-foreground cursor-pointer select-none">
+          <Trans>Advanced: Custom Voice Endpoint</Trans>
+        </summary>
+        <div className="mt-3 space-y-4">
       {catalog.length ? (
         <Field>
           <FieldLabel htmlFor={providerSelectId}>
@@ -640,6 +683,8 @@ export function VoiceSettingsOverlay({
           ) : null}
         </>
       ) : null}
+        </div>
+      </details>
     </>
   );
 

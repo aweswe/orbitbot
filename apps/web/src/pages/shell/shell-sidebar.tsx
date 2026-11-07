@@ -134,8 +134,8 @@ export function ShellSidebar({
         inert={mobileOpen ? undefined : true}
         tabIndex={mobileOpen ? undefined : -1}
         onClick={() => setMobileOpen(false)}
-        className={`absolute inset-y-0 end-0 start-[min(calc(100%-48px),316px)] z-30 bg-overlay transition-opacity duration-150 ease-out motion-reduce:transition-none md:hidden ${
-          mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        className={`fixed inset-y-0 end-0 start-[min(calc(100%-48px),316px)] z-30 bg-black/60 backdrop-blur-xs transition-opacity duration-200 ease-out motion-reduce:transition-none md:hidden ${
+          mobileOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none opacity-0"
         }`}
       />
       <Sidebar
@@ -155,6 +155,7 @@ export function ShellSidebar({
       >
         <SidebarHeader
           mini={mini}
+          isMobile={isMobile}
           createMenuOpen={createMenuOpen}
           setCreateMenuOpen={setCreateMenuOpen}
           activityMode={activityMode}

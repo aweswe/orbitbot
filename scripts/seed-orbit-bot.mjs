@@ -109,6 +109,25 @@ async function seed() {
     update: {},
   });
 
+  // 6.5 Computer for Space
+  const existingComputer = await prisma.computer.findFirst({ where: { spaceId } });
+  let compId = existingComputer?.id;
+  if (!compId) {
+    const createdComp = await prisma.computer.create({
+      data: {
+        spaceId,
+        userId,
+        scope: "team",
+        scopeKey: `team:${spaceId}:${userId}`,
+        homeKey: `team-${spaceId}`,
+        homeRevision: "empty",
+        kind: "desktop",
+        state: "running",
+      },
+    });
+    compId = createdComp.id;
+  }
+
   // 7. Orbit Bot Agent
   await prisma.bot.upsert({
     where: { id: botId },
@@ -129,11 +148,13 @@ async function seed() {
       fleetManagement: true,
       position: 0,
       thinkingLevel: "medium",
+      computerId: compId,
     },
     update: {
       name: "Orbit Bot",
       modelProvider: "requesty",
       modelId: "deepseek/deepseek-v4-flash",
+      computerId: compId,
     },
   });
   console.log("✔ Created/updated Orbit Bot agent:", botId);
