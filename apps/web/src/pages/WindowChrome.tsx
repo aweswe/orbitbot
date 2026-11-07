@@ -4,6 +4,7 @@ import { desktopBridge, windowChromeKind } from "../lib/desktop";
 export function WindowChrome() {
   const { t } = useLingui();
   const desktop = desktopBridge();
+  if (!desktop) return null;
   const kind = windowChromeKind(desktop);
   if (kind === "spacer") {
     return <div className="h-3 w-[72px] shrink-0" aria-hidden="true" />;
