@@ -2,7 +2,7 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import type { LinkFavicons } from "@rakazo/chat-ui/web";
 import { LinkFaviconsContext, RemoteImagesContext } from "@rakazo/chat-ui/web";
 import { analyticsScreen } from "@rakazo/core";
-import { Button } from "@rakazo/ui-web";
+import { Button, OrbitPlanetAvatar } from "@rakazo/ui-web";
 import {
   Suspense,
   useEffect,
@@ -12,7 +12,7 @@ import {
   useSyncExternalStore,
 } from "react";
 import { Navigate, Outlet, Route, Routes, useLocation, useSearchParams } from "react-router-dom";
-import { LoadingState } from "./components/ai/primitives";
+import { formatElapsed, LoadingState } from "./components/ai/primitives";
 import { CallLayout } from "./components/call/CallLayout";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { MarkdownLinkPrompt } from "./components/markdown-link-prompt";
@@ -317,6 +317,15 @@ function SessionUnavailable({ refetch }: { refetch: () => Promise<void> }) {
   const retryImmediately = useRef(false);
   const refetchRef = useRef(refetch);
   refetchRef.current = refetch;
+  const [mountedAt] = useState(() => Date.now());
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 100);
+    return () => clearInterval(timer);
+  }, []);
+
+  const elapsed = formatElapsed(mountedAt, now);
 
   useEffect(() => {
     let cancelled = false;
@@ -334,15 +343,47 @@ function SessionUnavailable({ refetch }: { refetch: () => Promise<void> }) {
   }, [attempt, retryKey]);
 
   return (
-    <div className="grid h-full place-items-center bg-background px-6 text-center">
-      <div className="flex flex-col items-center">
-        <LoadingState label={t`Reconnecting`} />
-        <p className="mt-3 text-body text-muted-foreground/80">
-          <Trans>Can&apos;t reach the server.</Trans>
+    <div className="relative grid h-full place-items-center overflow-hidden bg-background px-6 text-center select-none">
+      {/* Cosmic ambient glow backdrop */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <div className="h-96 w-96 rounded-full bg-cyan-500/10 blur-[120px] animate-pulse" />
+        <div className="h-80 w-80 rounded-full bg-amber-500/10 blur-[140px]" />
+      </div>
+
+      {/* Floating glassmorphic orbital status card */}
+      <div className="relative flex flex-col items-center max-w-sm sm:max-w-md w-full p-8 sm:p-10 rounded-3xl bg-card/60 border border-border/50 backdrop-blur-2xl shadow-2xl">
+        {/* Animated Orbit Planet with pulsing signal radar rings */}
+        <div className="relative mb-6 flex items-center justify-center">
+          <div className="absolute h-24 w-24 rounded-full border border-cyan-500/25 animate-ping opacity-35" />
+          <div className="absolute h-32 w-32 rounded-full border border-amber-500/20 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] opacity-25" />
+          <OrbitPlanetAvatar size={64} isWorking={true} ringColor="#ff8a3d" />
+        </div>
+
+        {/* Live Reconnecting Status Pill */}
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-500 dark:text-amber-400 text-xs font-mono font-medium tracking-wide">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+          </span>
+          <span>{t`Reconnecting`}</span>
+          <span className="text-muted-foreground/50">•</span>
+          <span className="tabular-nums">{elapsed}</span>
+        </div>
+
+        {/* Title & Description */}
+        <h2 className="mt-4 text-xl sm:text-2xl font-semibold tracking-tight text-foreground">
+          <Trans>Lost connection to Orbit</Trans>
+        </h2>
+        <p className="mt-2 text-xs sm:text-sm text-muted-foreground/80 leading-relaxed max-w-[280px]">
+          <Trans>Can&apos;t reach the server. Attempting to re-establish your workspace link...</Trans>
         </p>
-        <div className="mt-4">
+
+        {/* Action Button */}
+        <div className="mt-6 flex flex-col items-center w-full sm:w-auto">
           <Button
-            variant="secondary"
+            variant="default"
+            size="lg"
+            className="w-full sm:w-auto px-7 py-2.5 rounded-xl font-medium text-sm shadow-lg transition-all duration-200 active:scale-95 bg-primary hover:bg-primary/90 text-primary-foreground cursor-pointer"
             onClick={() => {
               retryImmediately.current = true;
               setAttempt(0);
@@ -351,6 +392,14 @@ function SessionUnavailable({ refetch }: { refetch: () => Promise<void> }) {
           >
             <Trans>Retry now</Trans>
           </Button>
+
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="mt-3.5 text-xs text-muted-foreground/60 hover:text-foreground transition-colors cursor-pointer"
+          >
+            <Trans>Or reload window</Trans>
+          </button>
         </div>
       </div>
     </div>
@@ -361,15 +410,37 @@ function SessionUnavailable({ refetch }: { refetch: () => Promise<void> }) {
 function AppFailed() {
   return (
     <div
-      className="grid h-full place-items-center bg-background px-6 text-center"
+      className="relative grid h-full place-items-center overflow-hidden bg-background px-6 text-center select-none"
       data-rakazo-app-state="failed"
     >
-      <div className="flex flex-col items-center">
-        <p className="text-body text-muted-foreground/80">
-          <Trans>Something went wrong. Try again.</Trans>
+      {/* Subtle red/cosmic alert ambient glow */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <div className="h-96 w-96 rounded-full bg-rose-500/10 blur-[130px]" />
+      </div>
+
+      <div className="relative flex flex-col items-center max-w-sm sm:max-w-md w-full p-8 sm:p-10 rounded-3xl bg-card/60 border border-border/50 backdrop-blur-2xl shadow-2xl">
+        <div className="relative mb-6 flex items-center justify-center">
+          <OrbitPlanetAvatar size={64} isWorking={false} ringColor="#f43f5e" />
+        </div>
+
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-500 dark:text-rose-400 text-xs font-medium">
+          <Trans>System Interruption</Trans>
+        </div>
+
+        <h2 className="mt-4 text-xl sm:text-2xl font-semibold tracking-tight text-foreground">
+          <Trans>Something went wrong</Trans>
+        </h2>
+        <p className="mt-2 text-xs sm:text-sm text-muted-foreground/80 leading-relaxed max-w-[280px]">
+          <Trans>Orbit encountered an unexpected state. Refreshing will reload the interface cleanly.</Trans>
         </p>
-        <div className="mt-4">
-          <Button variant="secondary" onClick={() => window.location.reload()}>
+
+        <div className="mt-6">
+          <Button
+            variant="default"
+            size="lg"
+            className="px-7 py-2.5 rounded-xl font-medium text-sm shadow-lg transition-all duration-200 active:scale-95 bg-primary hover:bg-primary/90 text-primary-foreground cursor-pointer"
+            onClick={() => window.location.reload()}
+          >
             <Trans>Refresh</Trans>
           </Button>
         </div>
