@@ -74,13 +74,13 @@ export function BillingSettingsPanel({ client }: { client: RpcClient }) {
             </div>
             <div>
               <h4 className="text-body-sm font-semibold text-foreground">Orbit Control Plane Billing</h4>
-              <p className="text-caption text-muted-foreground">Unified credit deductions for Orbit & Orbit Bot</p>
+              <p className="text-caption text-muted-foreground">Unified credit deductions for Forion & Orion</p>
             </div>
           </div>
           <OrbitCreditBadge />
         </div>
         <p className="text-caption text-muted-foreground/80 mt-2">
-          Every agent interaction in Orbit Bot automatically draws from your Orbit credit ledger in real time.
+          Every agent interaction in Orion automatically draws from your Forion credit ledger in real time.
         </p>
       </div>
 

@@ -431,7 +431,7 @@ function AppFailed() {
           <Trans>Something went wrong</Trans>
         </h2>
         <p className="mt-2 text-body-sm text-muted-foreground/80 leading-relaxed max-w-[280px]">
-          <Trans>Orbit encountered an unexpected state. Refreshing will reload the interface cleanly.</Trans>
+          <Trans>Orion encountered an unexpected state. Refreshing will reload the interface cleanly.</Trans>
         </p>
 
         <div className="mt-6">

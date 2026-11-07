@@ -72,6 +72,8 @@ export interface AuthEnv {
   /** Opt-in: rejects new passwords found in Have I Been Pwned. Calls an outside service. */
   breachedPasswordCheck?: boolean;
   oidc?: OidcConfig;
+  /** Google sign-in. When present, "Sign in with Google" is the deployment's identity path. */
+  google?: { clientId: string; clientSecret: string };
   secret: string;
   baseURL: string;
   webOrigin: string;
@@ -159,8 +161,8 @@ export function authRateLimitOptions(nodeEnv = process.env.NODE_ENV) {
 }
 
 export function createAuth(prisma: PrismaClient, env: AuthEnv) {
-  if (env.passwordAuth === false && !env.oidc)
-    throw new Error("Password auth requires OIDC when disabled");
+  if (env.passwordAuth === false && !env.oidc && !env.google)
+    throw new Error("Password auth requires OIDC or Google when disabled");
   // A failed lookup still sends the email, in the asking browser's language.
   const emailLocaleOf: EmailLocaleOf = async (account, headers) => {
     try {
@@ -245,6 +247,7 @@ export function createAuth(prisma: PrismaClient, env: AuthEnv) {
     secret: env.secret,
     baseURL: env.baseURL,
     trustedOrigins: [...buildTrustedOrigins(env), "rakazo://"],
+    ...(env.google ? { socialProviders: { google: env.google } } : {}),
     account: {
       accountLinking: { enabled: true, disableImplicitLinking: true, trustedProviders: [] },
       encryptOAuthTokens: true,

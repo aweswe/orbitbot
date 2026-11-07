@@ -1,4 +1,4 @@
-import { Coins, Zap } from "lucide-react";
+import { Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface OrbitBillingData {
@@ -17,6 +17,7 @@ interface OrbitBillingData {
 export function OrbitCreditBadge() {
   const [billing, setBilling] = useState<OrbitBillingData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [unavailable, setUnavailable] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -24,21 +25,29 @@ export function OrbitCreditBadge() {
     async function fetchBilling() {
       try {
         const res = await fetch("/api/orbit/billing");
-        if (res.ok) {
-          const json = await res.json();
-          if (mounted && json.data) {
-            setBilling(json.data);
-          }
+        if (!mounted) return;
+        if (!res.ok) {
+          // 401 (signed out) and 503 (control plane down) both mean "no balance to show".
+          setUnavailable(true);
+          return;
+        }
+        const json = await res.json();
+        if (json.data) {
+          setBilling(json.data);
+          setUnavailable(false);
+        } else {
+          setUnavailable(true);
         }
       } catch (err) {
         console.warn("Could not fetch Orbit billing:", err);
+        if (mounted) setUnavailable(true);
       } finally {
         if (mounted) setLoading(false);
       }
     }
 
-    fetchBilling();
-    // Poll every 30 seconds for live balance update
+    void fetchBilling();
+    // Poll every 30 seconds for a live balance update.
     const interval = setInterval(fetchBilling, 30_000);
     return () => {
       mounted = false;
@@ -46,7 +55,9 @@ export function OrbitCreditBadge() {
     };
   }, []);
 
-  const balance = billing?.wallet?.availableBalance ?? billing?.wallet?.balance ?? 500;
+  const balance = billing?.wallet?.availableBalance ?? billing?.wallet?.balance;
+  // Never invent a balance. If the control plane has nothing to say, render nothing.
+  if (unavailable || balance === undefined || balance === null) return null;
 
   return (
     <div
@@ -54,9 +65,10 @@ export function OrbitCreditBadge() {
       title={`Orbit Control Plane Balance: ${balance} credits`}
     >
       <Zap size={12} className="dark:text-cyan-400 text-sky-600 animate-pulse" />
-      <span className="font-semibold dark:text-cyan-300 text-sky-800">{loading ? "..." : balance}</span>
+      <span className="font-semibold dark:text-cyan-300 text-sky-800">
+        {loading ? "…" : balance}
+      </span>
       <span className="text-caption text-muted-foreground uppercase tracking-wider">Credits</span>
     </div>
   );
 }
-

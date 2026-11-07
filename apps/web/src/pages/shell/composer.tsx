@@ -1087,7 +1087,7 @@ const ComposerBody = memo(function Composer({
                 showComposerPlaceholder
                   ? activeName
                     ? t`Message ${activeName}`
-                    : t`Message Orbit Bot…`
+                    : t`Message Orion…`
                   : undefined
               }
               aria-label={activeName ? t`Message ${activeName}` : t`Message`}

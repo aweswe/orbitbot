@@ -2,7 +2,6 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import type { NavLink } from "@rakazo/contracts";
 import { ANDROID_APP_STORE_URL, IOS_APP_STORE_URL } from "@rakazo/contracts";
 import {
-  AppMarkStack,
   Button,
   buttonVariants,
   Popover,
@@ -24,7 +23,7 @@ import {
   UserPlus,
   UserRound,
 } from "lucide-react";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useState } from "react";
 import type { Organization } from "../lib/organizations";
 import { useSidebarUpdate } from "./DesktopUpdates";
 import { IconTooltip } from "./IconTooltip";
@@ -34,7 +33,6 @@ type Props = {
   name: string;
   initials: string | null;
   image?: string | null;
-  logos?: Array<{ name: string; logo?: string | null }>;
   email?: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -64,7 +62,6 @@ export function SidebarFooter({
   name,
   initials,
   image,
-  logos = [],
   email,
   open,
   onOpenChange,
@@ -84,31 +81,10 @@ export function SidebarFooter({
   onSwitchOrganization,
 }: Props) {
   const { t } = useLingui();
+  // The platform is a separate deployment; never ship a localhost link to users.
+  const platformUrl = import.meta.env.VITE_ORION_PLATFORM_URL;
   const update = useSidebarUpdate();
   const [failedImage, setFailedImage] = useState<string | null>(null);
-  const pillRef = useRef<HTMLButtonElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
-  const [markCount, setMarkCount] = useState(3);
-  useLayoutEffect(() => {
-    const pill = pillRef.current;
-    const label = labelRef.current;
-    if (!pill || !label || typeof ResizeObserver === "undefined") return;
-    const measure = () => {
-      const style = getComputedStyle(pill);
-      const available =
-        pill.clientWidth -
-        Number.parseFloat(style.paddingLeft) -
-        Number.parseFloat(style.paddingRight) -
-        label.scrollWidth -
-        Number.parseFloat(style.columnGap);
-      setMarkCount(sidebarMarkCount(available));
-    };
-    const observer = new ResizeObserver(measure);
-    observer.observe(pill);
-    observer.observe(label);
-    measure();
-    return () => observer.disconnect();
-  }, [mini]);
   return (
     <div
       data-testid="sidebar-footer"
@@ -232,7 +208,7 @@ export function SidebarFooter({
               download="orbit-bot.apk"
             >
               <Smartphone className="text-cyan-400" strokeWidth={1.75} />
-              <Trans>Download Orbit Android APK</Trans>
+              <Trans>Download Orion for Android</Trans>
             </a>
             {onInvite ? (
               <Button
@@ -244,15 +220,17 @@ export function SidebarFooter({
                 <Trans>Invite friends</Trans>
               </Button>
             ) : null}
-            <a
-              className={`${buttonVariants({ variant: "ghost" })} h-9 w-full justify-start gap-2.5 font-normal`}
-              href="http://localhost:3000"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <BookOpen className="text-muted-foreground" strokeWidth={1.75} />
-              <Trans>Orbit Platform</Trans>
-            </a>
+            {platformUrl ? (
+              <a
+                className={`${buttonVariants({ variant: "ghost" })} h-9 w-full justify-start gap-2.5 font-normal`}
+                href={platformUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <BookOpen className="text-muted-foreground" strokeWidth={1.75} />
+                <Trans>Orion Platform</Trans>
+              </a>
+            ) : null}
             <div className="my-1 border-t border-border" />
             <Button
               variant="ghost"
@@ -271,19 +249,6 @@ export function SidebarFooter({
           </PopoverContent>
         ) : null}
       </Popover>
-      {!mini ? (
-        <Button
-          variant="outline"
-          ref={pillRef}
-          onClick={onIntegrations}
-          className="h-9 min-w-0 flex-1 justify-between bg-sidebar-accent hover:border-foreground/30 hover:bg-sidebar-accent dark:hover:bg-sidebar-accent"
-        >
-          <span ref={labelRef} className="min-w-0 truncate">
-            <Trans>Connect apps</Trans>
-          </span>
-          <AppMarkStack marks={logos.slice(0, markCount)} ringClassName="ring-sidebar-accent" />
-        </Button>
-      ) : null}
       {update.available ? (
         <IconTooltip label={t`Install update`}>
           <Button

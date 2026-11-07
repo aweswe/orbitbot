@@ -41,6 +41,8 @@ export interface AppEnv {
   /** Opt-in Have I Been Pwned check for new passwords. Default off: it calls an outside service. */
   breachedPasswordCheck?: boolean;
   oidc?: OidcConfig;
+  /** Google sign-in credentials; both values must be present to enable the provider. */
+  google?: { clientId: string; clientSecret: string };
   /** Bearer token the identity provider presents to provision accounts over SCIM. */
   scimBearerToken?: string;
   nodeEnv: string;
@@ -240,6 +242,7 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): AppEnv {
     passwordAuth,
     breachedPasswordCheck: source.AUTH_BREACHED_PASSWORD_CHECK_ENABLED === "true",
     oidc,
+    google: googleProvider(source),
     scimBearerToken,
     nodeEnv: source.NODE_ENV ?? "",
     databaseUrl: required(source, "DATABASE_URL"),
@@ -367,6 +370,22 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): AppEnv {
  * `${webOrigin}/path` cannot produce `https://host//path`; providers reject a
  * double-slash redirect URI as a mismatch against the one registered with them.
  */
+/**
+ * Google sign-in is enabled only when both halves of the OAuth client are set.
+ * Half a configuration is a deployment mistake, not a silent downgrade.
+ */
+function googleProvider(
+  source: NodeJS.ProcessEnv,
+): { clientId: string; clientSecret: string } | undefined {
+  const clientId = optional(source.GOOGLE_CLIENT_ID);
+  const clientSecret = optional(source.GOOGLE_CLIENT_SECRET);
+  if (!clientId && !clientSecret) return undefined;
+  if (!clientId || !clientSecret) {
+    throw new Error("GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET must be set together");
+  }
+  return { clientId, clientSecret };
+}
+
 function resolveWebOrigin(value: string | undefined, fallback: string, name: string): string {
   const origin = (optional(value) ?? fallback).replace(/\/+$/, "");
   try {

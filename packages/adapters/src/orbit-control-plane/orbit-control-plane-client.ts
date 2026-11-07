@@ -1,7 +1,7 @@
 import { createHmac } from 'node:crypto';
 
 /**
- * Orbit Control Plane Client for Orbit Bot
+ * Orbit Control Plane Client for Orion
  *
  * Communicates with `forion-server` (Orbit Microservices Control Plane) for:
  * 1. Wallet balances & billing status
@@ -71,15 +71,23 @@ export class OrbitControlPlaneClient {
       process.env.ORBIT_CONTROL_PLANE_URL ||
       'http://localhost:3001'
     ).replace(/\/$/, '');
-    this.internalSecret =
-      process.env.FORION_ORBIT_INTERNAL_SECRET ||
+    const secret =
       options?.apiKey ||
-      process.env.FORION_API_KEY ||
-      '***REMOVED***';
-    this.defaultUserId =
-      options?.defaultUserId ||
-      process.env.DEV_API_USER_ID ||
-      'xsviuWUARjywMLDk0bcI6';
+      process.env.FORION_ORBIT_INTERNAL_SECRET ||
+      process.env.FORION_API_KEY;
+    // No shipped fallback: a missing secret must stop billing, not fall back to
+    // a value every Orion checkout knows.
+    if (!secret) {
+      throw new Error('FORION_ORBIT_INTERNAL_SECRET is required for Orbit billing');
+    }
+    this.internalSecret = secret;
+    this.defaultUserId = options?.defaultUserId || process.env.DEV_API_USER_ID || '';
+  }
+
+  /** Billing is always user-scoped; an empty id is a bug, never "the default user". */
+  private requireUserId(userId: string | undefined): string {
+    if (!userId) throw new Error('Orbit billing requires an authenticated user id');
+    return userId;
   }
 
   private headers(method: string, pathAndQuery: string, userId: string): Record<string, string> {
@@ -106,57 +114,53 @@ export class OrbitControlPlaneClient {
     lockedCredits: number;
     referenceId: string;
   }> {
-    const userId = input.userId || this.defaultUserId;
+    const userId = this.requireUserId(input.userId);
     const referenceId = input.referenceId || `orbit_bot_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
     const path = '/api/credits/use';
     const url = `${this.baseUrl}${path}`;
 
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: this.headers('POST', path, userId),
-        body: JSON.stringify({
-          user_id: userId,
-          model: input.model,
-          input_tokens: Math.max(0, input.inputTokens),
-          max_output_tokens: Math.max(1, input.maxOutputTokens),
-          product: input.product || 'orbit-bot',
-          reference_id: referenceId,
-        }),
-      });
+    // Fail closed: an unreachable control plane must not grant free usage. The
+    // caller turns this into a refused model call, never a fabricated lock.
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: this.headers('POST', path, userId),
+      signal: AbortSignal.timeout(10_000),
+      body: JSON.stringify({
+        user_id: userId,
+        model: input.model,
+        input_tokens: Math.max(0, input.inputTokens),
+        max_output_tokens: Math.max(1, input.maxOutputTokens),
+        product: input.product || 'orbit-bot',
+        reference_id: referenceId,
+      }),
+    });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        if (response.status === 402 || response.status === 400) {
-          throw new Error(
-            `Insufficient Orbit credits for model ${input.model}. Please recharge your Orbit account (${response.status}: ${errorText})`,
-          );
-        }
-        throw new Error(`Orbit Control Plane credit lock error [${response.status}]: ${errorText}`);
+    if (!response.ok) {
+      const errorText = await response.text();
+      if (response.status === 402 || response.status === 400) {
+        throw new Error(
+          `Insufficient Orbit credits for model ${input.model}. Please recharge your Orbit account (${response.status}: ${errorText})`,
+        );
       }
-
-      const json = await response.json() as { success?: boolean; data?: { cost?: number; locked?: boolean } };
-      return {
-        lockedCredits: json.data?.cost ?? 2,
-        referenceId,
-      };
-    } catch (err) {
-      if (err instanceof Error && err.message.includes('Insufficient Orbit credits')) {
-        throw err;
-      }
-      console.warn(`[OrbitControlPlane] Failed to lock credits on ${url}: ${(err as Error).message}`);
-      return {
-        lockedCredits: 2,
-        referenceId,
-      };
+      throw new Error(`Orbit Control Plane credit lock error [${response.status}]: ${errorText}`);
     }
+
+    const json = await response.json() as { success?: boolean; data?: { cost?: number; locked?: boolean } };
+    const lockedCredits = json.data?.cost;
+    if (typeof lockedCredits !== 'number' || !Number.isFinite(lockedCredits) || lockedCredits <= 0) {
+      throw new Error('Orbit Control Plane returned no locked amount');
+    }
+    return {
+      lockedCredits,
+      referenceId,
+    };
   }
 
   /**
    * Step 2a: Commit credits consumed by the model call.
    */
   async commitCredits(input: OrbitCreditCommitInput): Promise<boolean> {
-    const userId = input.userId || this.defaultUserId;
+    const userId = this.requireUserId(input.userId);
     const path = '/api/credits/commit';
     const url = `${this.baseUrl}${path}`;
 
@@ -189,7 +193,7 @@ export class OrbitControlPlaneClient {
    * Step 2b: Refund locked credits if model call failed or cancelled.
    */
   async refundCredits(input: OrbitCreditRefundInput): Promise<boolean> {
-    const userId = input.userId || this.defaultUserId;
+    const userId = this.requireUserId(input.userId);
     const path = '/api/credits/refund';
     const url = `${this.baseUrl}${path}`;
 
@@ -223,7 +227,7 @@ export class OrbitControlPlaneClient {
    * Get balance and subscription snapshot for user.
    */
   async getBillingSnapshot(userId?: string): Promise<OrbitBillingSnapshot | null> {
-    const targetUser = userId || this.defaultUserId;
+    const targetUser = this.requireUserId(userId);
     const path = `/api/credits/balance/${encodeURIComponent(targetUser)}`;
     const url = `${this.baseUrl}${path}`;
 
@@ -274,7 +278,7 @@ export class OrbitControlPlaneClient {
     try {
       const response = await fetch(url, {
         method: 'GET',
-        headers: this.headers('GET', path, this.defaultUserId),
+        headers: this.headers('GET', path, this.defaultUserId || 'orbit-internal'),
       });
 
       if (!response.ok) return [];

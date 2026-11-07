@@ -66,7 +66,6 @@ export function ShellSidebar({
   setCreateBotOpen,
   roster,
   archived,
-  footerLogos,
   user,
   ticketBoardEnabled,
   navLinks,
@@ -95,7 +94,6 @@ export function ShellSidebar({
   setCreateBotOpen: (open: boolean) => void;
   roster: ReactNode;
   archived: ReactNode;
-  footerLogos: Array<{ name: string; logo?: string | null }>;
   user: User | undefined;
   ticketBoardEnabled: boolean;
   navLinks: NavLink[];
@@ -372,7 +370,6 @@ export function ShellSidebar({
         </div>
         <ShellSidebarFooter
           mini={mini}
-          logos={footerLogos}
           user={user}
           ticketBoardEnabled={ticketBoardEnabled}
           navLinks={navLinks}
@@ -390,7 +387,6 @@ export function ShellSidebar({
 
 function ShellSidebarFooter({
   mini,
-  logos,
   user,
   ticketBoardEnabled,
   navLinks,
@@ -402,7 +398,6 @@ function ShellSidebarFooter({
   openSpaceChat,
 }: {
   mini: boolean;
-  logos: Array<{ name: string; logo?: string | null }>;
   user: User | undefined;
   ticketBoardEnabled: boolean;
   navLinks: NavLink[];
@@ -450,7 +445,6 @@ function ShellSidebarFooter({
       ) : null}
       <SidebarFooter
         mini={mini}
-        logos={logos}
         name={userName}
         initials={initials}
         image={user?.image}

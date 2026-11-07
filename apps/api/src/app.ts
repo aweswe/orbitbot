@@ -198,6 +198,7 @@ import { mountApiRequestBodyLimits, rpcBodyLimit } from "./request-body-limit.js
 import { createRouter } from "./router.js";
 import { mountScreenTarget } from "./screen-proxy.js";
 import { mountScriptAssets } from "./script-assets.js";
+import { syncOrbitUser } from "./orbit-user-sync.js";
 import { createAuthResponseAudit } from "./security-audit.js";
 import { mountSharedPages } from "./shared-pages.js";
 import { afterSpaceDeparture } from "./space-departure.js";
@@ -582,6 +583,7 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
     passwordAuth: env.passwordAuth,
     breachedPasswordCheck: env.breachedPasswordCheck,
     oidc: env.oidc,
+    google: env.google,
     secret: env.authSecret,
     baseURL: env.authUrl,
     webOrigin: env.webOrigin,
@@ -598,21 +600,29 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
         ),
     },
     onEmailError,
-    afterSignIn:
-      email && env.welcomeEmailEnabled
-        ? (userId, headers) =>
-            sendWelcomeEmail(
-              {
-                prisma,
-                email,
-                origin: env.authUrl,
-                secret: env.authSecret,
-                onError: (error) => getLogger().error("welcome email delivery failed", error),
-              },
-              userId,
-              headers,
-            )
-        : undefined,
+    afterSignIn: async (userId, headers) => {
+      if (email && env.welcomeEmailEnabled) {
+        await sendWelcomeEmail(
+          {
+            prisma,
+            email,
+            origin: env.authUrl,
+            secret: env.authSecret,
+            onError: (error) => getLogger().error("welcome email delivery failed", error),
+          },
+          userId,
+          headers,
+        );
+      }
+      // Make sure the wallet behind this login exists before the first model call.
+      if (process.env.ORBIT_BILLING_ENABLED === "true") {
+        try {
+          await syncOrbitUser(prisma, userId);
+        } catch (error) {
+          getLogger().error("orbit.user.sync.failed", error);
+        }
+      }
+    },
     extraOrigins: MOBILE_AUTH_ORIGINS,
     androidAppCertFingerprints: env.passkeyAndroidCertFingerprints,
     beforeDeleteUser: async (userId) => {
@@ -941,14 +951,18 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
     });
   }
   app.get("/api/auth/capabilities", (c) => {
-    const isOrbitForion = process.env.ORBIT_AUTH_MODE === "forion" || Boolean(process.env.FORION_SERVER_URL);
+    const isOrbitForion =
+      process.env.ORBIT_AUTH_MODE === "forion" || Boolean(process.env.FORION_SERVER_URL);
+    // Orion signs in with Google. Password auth stays available only when
+    // Google is not configured, so a missing client id is never a lockout.
+    const googleOnly = isOrbitForion && Boolean(env.google);
     return c.json({
-      sso: isOrbitForion
-        ? { name: "Orbit", availability: "available" }
-        : env.oidc
+      sso: env.google
+        ? { name: "Google", availability: "available" }
+        : !isOrbitForion && env.oidc
           ? { name: env.oidc.name, availability: auth.ssoAvailability() ?? "checking" }
           : null,
-      passwordAuth: isOrbitForion ? false : env.passwordAuth !== false,
+      passwordAuth: googleOnly ? false : env.passwordAuth !== false,
       passwordReset: isOrbitForion ? false : (env.passwordAuth !== false && Boolean(email)),
       resetUrl:
         !isOrbitForion && env.passwordAuth !== false && email ? new URL("/reset-password", env.webOrigin).href : null,
@@ -960,133 +974,21 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
     } satisfies AuthCapabilities);
   });
 
-  app.post("/api/orbit/login", async (c) => {
-    return runAsSystem("orbit-login", async () => {
-      try {
-        const body = await c.req.json().catch(() => ({}));
-        const client = getOrbitControlPlaneClient();
-        const userId = (body as any)?.userId || process.env.DEV_API_USER_ID || "xsviuWUARjywMLDk0bcI6";
-
-        // 1. Fetch user credit and wallet snapshot from Forion Server
-        let snapshot: any = null;
-        try {
-          snapshot = await client.getBillingSnapshot(userId);
-        } catch {
-          snapshot = { wallet: { availableBalance: 500, balance: 500 } };
-        }
-
-        // 2. Ensure User exists in orbit_bot schema
-        const user = await prisma.user.upsert({
-          where: { id: userId },
-          update: {
-            name: "Orbit Explorer",
-            email: "orbit@forion.dev",
-            emailVerified: true,
-            updatedAt: new Date(),
-          },
-          create: {
-            id: userId,
-            name: "Orbit Explorer",
-            email: "orbit@forion.dev",
-            emailVerified: true,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          },
-        });
-
-        // 3. Ensure Personal workspace/organization exists
-        await bootstrapUserSpace(prisma, user, env);
-
-        // 3b. Ensure default Orbit Assistant bot exists in ALL spaces the user belongs to
-        const userMemberships = await prisma.spaceMember.findMany({
-          where: { userId: user.id },
-          select: { spaceId: true },
-        });
-
-        for (const m of userMemberships) {
-          const existingBot = await prisma.bot.findFirst({
-            where: { spaceId: m.spaceId, archivedAt: null },
-          });
-          if (!existingBot) {
-            const newBot = await prisma.bot.create({
-              data: {
-                spaceId: m.spaceId,
-                userId: user.id,
-                name: "Orbit Assistant",
-                description: "Autonomous reasoning and coding companion powered by Forion",
-                instructions: "You are Orbit Assistant, an autonomous AI agent capable of deep research, code generation, and sandboxed execution.",
-                color: "#22d3ee",
-                avatarSet: "organic",
-                notifyOnFinish: true,
-              },
-            });
-            await prisma.thread.create({
-              data: {
-                spaceId: m.spaceId,
-                botId: newBot.id,
-                userId: user.id,
-              },
-            });
-            await prisma.browserProfile.create({
-              data: {
-                spaceId: m.spaceId,
-                botId: newBot.id,
-                userId: user.id,
-              },
-            });
-          }
-        }
-
-        // 4. Create an authenticated session in prisma.session
-        // 4. Create an authenticated session in prisma.session
-        const sessionToken = "orbit_" + randomUUID().replace(/-/g, "") + randomUUID().replace(/-/g, "");
-        const sessionId = "sess_" + randomUUID().replace(/-/g, "");
-        const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
-
-        await prisma.session.create({
-          data: {
-            id: sessionId,
-            token: sessionToken,
-            userId: user.id,
-            expiresAt,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          },
-        });
-
-        // 5. Sign session token using Better-Auth's HMAC secret
-        const sig = createHmac("sha256", env.authSecret).update(sessionToken).digest("base64");
-        const signedCookieValue = encodeURIComponent(`${sessionToken}.${sig}`);
-
-        const isProd = env.nodeEnv === "production";
-        const cookieHeader = `better-auth.session_token=${signedCookieValue}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}${isProd ? "; Secure" : ""}`;
-        c.header("Set-Cookie", cookieHeader);
-
-        return c.json({
-          success: true,
-          user: {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-          },
-          credits: snapshot?.wallet?.availableBalance ?? snapshot?.wallet?.balance ?? 500,
-        });
-      } catch (err: any) {
-        getLogger().error("orbit.login.error", err);
-        return c.json({ success: false, error: err?.message || "Orbit login failed" }, 500);
-      }
-    });
-  });
   app.get("/api/orbit/billing", async (c) => {
+    // Billing is per signed-in user. There is no default wallet to fall back to.
     const session = await auth.api.getSession({ headers: c.req.raw.headers });
-    const userId = session?.user?.id || process.env.DEV_API_USER_ID || "xsviuWUARjywMLDk0bcI6";
-    const client = getOrbitControlPlaneClient();
-    const snapshot = await client.getBillingSnapshot(userId);
-    return c.json({
-      success: true,
-      controlPlaneConnected: true,
-      data: snapshot,
-    });
+    if (!session?.user?.id) {
+      return c.json({ success: false, error: "Not authenticated" }, 401);
+    }
+    try {
+      const snapshot = await getOrbitControlPlaneClient().getBillingSnapshot(session.user.id);
+      // Never invent a balance: an unreachable control plane is a 503, not 500 credits.
+      if (!snapshot) return c.json({ success: false, error: "Billing unavailable" }, 503);
+      return c.json({ success: true, data: snapshot });
+    } catch (err) {
+      getLogger().error("orbit.billing.error", err);
+      return c.json({ success: false, error: "Billing unavailable" }, 503);
+    }
   });
 
   app.get("/api/orbit/models", async (c) => {
@@ -1124,7 +1026,7 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Orbit Bot — Android App</title>
+<title>Orion — Android App</title>
 <style>
   body{font-family:system-ui,sans-serif;background:#050508;color:#e2e8f0;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:1rem;}
   .card{max-width:360px;text-align:center;padding:2rem 1.5rem;}
@@ -1147,12 +1049,11 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
   });
 
   app.get("/api/orbit/status", (c) => {
+    // Public status surface: no infrastructure hosts, no database URLs, no secrets.
     return c.json({
-      brand: "Orbit Bot",
-      status: "connected",
-      controlPlaneUrl: process.env.FORION_SERVER_URL || "http://localhost:3001",
-      billingEnabled: true,
-      localDatabase: "postgresql://postgres:p0probe@127.0.0.1:55433/orbit_bot",
+      brand: "Orion",
+      billingEnabled: process.env.ORBIT_BILLING_ENABLED === "true",
+      signIn: env.google ? "google" : "password",
     });
   });
 

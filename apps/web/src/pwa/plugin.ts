@@ -17,8 +17,8 @@ export function webManifest() {
   }));
   return {
     id: "/",
-    name: "Orbit Bot",
-    short_name: "Orbit Bot",
+    name: "Orion",
+    short_name: "Orion",
     description: "Orbit Autonomous AI Agent.",
     start_url: "/",
     scope: "/",

@@ -33,7 +33,7 @@ export function OrbitPlanetAvatar({
   ringColor = "#ff8a3d",
   isWorking = false,
   className,
-  title = "Orbit Bot",
+  title = "Orion",
 }: OrbitPlanetAvatarProps) {
   // Scaling unit: 1u at 220px design size = size / 220
   const u = size / 220;
