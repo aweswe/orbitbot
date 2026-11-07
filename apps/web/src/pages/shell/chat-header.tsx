@@ -88,21 +88,17 @@ export function ChatHeader({
           <Menu strokeWidth={1.8} className="size-5" />
         </Button>
 
-        {/* Desktop Drawer Toggle */}
-        {onToggleDrawer ? (
-          <IconTooltip label={drawerOpen ? t`Collapse Navigator (Cmd+B)` : t`Expand Navigator (Cmd+B)`}>
+        {/* Desktop Expand Toggle when collapsed */}
+        {!drawerOpen && onToggleDrawer ? (
+          <IconTooltip label={t`Expand Sidebar (Cmd+B)`}>
             <Button
               variant="ghost"
               size="icon-sm"
-              aria-label={drawerOpen ? t`Collapse Navigator` : t`Expand Navigator`}
+              aria-label={t`Expand Sidebar`}
               onClick={onToggleDrawer}
               className="app-no-drag hidden md:flex rounded-xl text-muted-foreground hover:text-foreground hover:bg-white/[0.05]"
             >
-              {drawerOpen ? (
-                <PanelLeftClose strokeWidth={1.8} className="size-4" />
-              ) : (
-                <PanelLeftOpen strokeWidth={1.8} className="size-4" />
-              )}
+              <PanelLeftOpen strokeWidth={1.8} className="size-4" />
             </Button>
           </IconTooltip>
         ) : null}
