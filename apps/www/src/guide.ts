@@ -23,7 +23,7 @@ export const PUBLISHED_IMAGES_SERVER = `bash install-images.sh --prepare-only
 # Edit .env, then:
 bash install-images.sh`;
 
-export const SOURCE_CHECKOUT = `git clone https://github.com/elie222/rakazo.git
+export const SOURCE_CHECKOUT = `git clone https://github.com/forion-ai/orbit.git
 cd rakazo
 cp .env.example .env`;
 

@@ -637,10 +637,10 @@ describe("managed env assignments", () => {
 describe("sidecar boundary validation", () => {
   it("normalizes a request the API already validated", () => {
     expect(
-      validateUpdateRequest({ repoUrl: "https://github.com/elie222/rakazo.git", branch: " main " }),
+      validateUpdateRequest({ repoUrl: "https://github.com/forion-ai/orbit.git", branch: " main " }),
     ).toEqual({
       request: {
-        repoUrl: "https://github.com/elie222/rakazo.git",
+        repoUrl: "https://github.com/forion-ai/orbit.git",
         branch: "main",
         official: true,
       },
@@ -649,12 +649,12 @@ describe("sidecar boundary validation", () => {
 
   it("marks a fork as unofficial so the sidecar picks the build path", () => {
     const result = validateUpdateRequest({
-      repoUrl: "https://github.com/someone/rakazo",
+      repoUrl: "https://github.com/someone/orbit",
       branch: "main",
     });
     expect(result).toEqual({
       request: {
-        repoUrl: "https://github.com/someone/rakazo",
+        repoUrl: "https://github.com/someone/orbit",
         branch: "main",
         official: false,
       },

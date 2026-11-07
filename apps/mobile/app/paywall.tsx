@@ -54,7 +54,7 @@ import { errorText } from "../lib/user-error";
 type Amount = (typeof MODEL_CREDIT_AMOUNTS)[number];
 type SymbolName = ComponentProps<typeof NativeSymbol>["android"];
 
-const TERMS_URL = "https://rakazo.com/terms/";
+const TERMS_URL = "https://orbit.forion.dev/terms/";
 
 // Bots carry the app's only colour, so the paywall's colour is a small crew of them.
 const CREW = [

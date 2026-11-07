@@ -81,11 +81,11 @@ ${getHomeCopy("en")
 
 ${home.cta.copy}
 
-- [Agent setup prompt](https://github.com/elie222/rakazo/blob/main/SETUP_PROMPT.md)
+- [Agent setup prompt](https://github.com/forion-ai/orbit/blob/main/SETUP_PROMPT.md)
 - [Self-hosting guide](https://rakazo.com/self-hosted-ai-agent/)
-- [Full self-hosting reference](https://github.com/elie222/rakazo/blob/main/docs/self-host.md)
+- [Full self-hosting reference](https://github.com/forion-ai/orbit/blob/main/docs/self-host.md)
 - [OpenClaw comparison](https://rakazo.com/openclaw-alternative/)
-- [Source code](https://github.com/elie222/rakazo)
+- [Source code](https://github.com/forion-ai/orbit)
 
 ## Site index
 
@@ -116,11 +116,11 @@ Rakazo is an open source Grok Bot alternative for persistent AI teammates: bots 
 
 The project started from a simple premise: useful agents should be understandable and controllable by the people who run them. Rakazo keeps routines in readable Markdown, supports multiple model providers, records actions in an audit log, and lets operators keep model keys, browser sessions, and deployment infrastructure under their own control.
 
-Rakazo targets the web, macOS, Windows, Linux, iOS, and Android. The source is available under the Apache-2.0 license and accepts public issues and contributions on GitHub. Inbox Zero Inc. maintains the project and offers support at hello@rakazo.com.
+Rakazo targets the web, macOS, Windows, Linux, iOS, and Android. The source is available under the Apache-2.0 license and accepts public issues and contributions on GitHub. Inbox Zero Inc. maintains the project and offers support at hello@forion.dev.
 
-- [Source code](https://github.com/elie222/rakazo)
+- [Source code](https://github.com/forion-ai/orbit)
 - [Self-hosting guide](https://rakazo.com/self-hosted-ai-agent/)
-- [Full self-hosting reference](https://github.com/elie222/rakazo/blob/main/docs/self-host.md)
+- [Full self-hosting reference](https://github.com/forion-ai/orbit/blob/main/docs/self-host.md)
 - [Support](https://rakazo.com/support/)
 `;
 
@@ -138,11 +138,11 @@ The apps also connect to a self-hosted server. See the [self-hosting guide](http
 
 export const SUPPORT_MARKDOWN = `# Rakazo support
 
-For help with the Rakazo mobile app or a hosted Rakazo account, email [hello@rakazo.com](mailto:hello@rakazo.com). Include the email address on the account, what you expected to happen, and any error message you saw. Never send passwords, API keys, access tokens, or other secrets.
+For help with the Rakazo mobile app or a hosted Rakazo account, email [hello@forion.dev](mailto:hello@forion.dev). Include the email address on the account, what you expected to happen, and any error message you saw. Never send passwords, API keys, access tokens, or other secrets.
 
-For self-hosted Rakazo, start with the [self-hosting guide](https://rakazo.com/self-hosted-ai-agent/). The [full reference](https://github.com/elie222/rakazo/blob/main/docs/self-host.md) is on GitHub. Open reproducible bugs and feature requests in the [public GitHub repository](https://github.com/elie222/rakazo/issues). Report vulnerabilities only to [security@rakazo.com](mailto:security@rakazo.com).
+For self-hosted Rakazo, start with the [self-hosting guide](https://rakazo.com/self-hosted-ai-agent/). The [full reference](https://github.com/forion-ai/orbit/blob/main/docs/self-host.md) is on GitHub. Open reproducible bugs and feature requests in the [public GitHub repository](https://github.com/forion-ai/orbit/issues). Report vulnerabilities only to [security@forion.dev](mailto:security@forion.dev).
 
-Hosted users can permanently delete their account and associated personal Space data from the Account screen in the Rakazo app, or on the web at [app.rakazo.com](https://app.rakazo.com) under Settings → Account. Without access to the app, email [hello@rakazo.com](mailto:hello@rakazo.com) from the account's email address to ask us to delete it. Sign-in security records are kept for up to 90 days.
+Hosted users can permanently delete their account and associated personal Space data from the Account screen in the Rakazo app, or on the web at [app.rakazo.com](https://app.rakazo.com) under Settings → Account. Without access to the app, email [hello@forion.dev](mailto:hello@forion.dev) from the account's email address to ask us to delete it. Sign-in security records are kept for up to 90 days.
 `;
 
 export const PRIVACY_MARKDOWN = `# Rakazo privacy
@@ -159,7 +159,7 @@ Permission records include the recipient, Space, disclosure version, and time. C
 
 Services we select must provide protection equal to or greater than the safeguards in our complete policy, including limited processing purposes, security, retention, and deletion protections. We review provider terms and safeguards before enabling a provider. Self-hosted operators are responsible for the services they select and their agreements. Provider terms govern processing and retention after receipt; provider policy links are available in AI data sharing and in the complete policy.
 
-Hosted users can delete their account and associated personal Space data from Account. In self-hosted deployments, the server operator controls information sent to that deployment. For privacy requests, email [hello@rakazo.com](mailto:hello@rakazo.com).
+Hosted users can delete their account and associated personal Space data from Account. In self-hosted deployments, the server operator controls information sent to that deployment. For privacy requests, email [hello@forion.dev](mailto:hello@forion.dev).
 
 Read the [complete privacy policy](https://rakazo.com/privacy/) for account information, other service providers, retention, deletion, security, international transfers, children, and your rights.
 `;
@@ -172,7 +172,7 @@ These terms are an agreement between you and Inbox Zero Inc. for the Rakazo serv
 
 You are responsible for your account and for actions your bots take on your behalf, including in scheduled routines; give bots only the access they need and require approval for actions that are hard to undo. AI output can be wrong, so review it before relying on it, and do not use the Service where an error could cause serious harm. Do not use the Service to break the law, send spam or malware, access systems without authorization, abuse its computers, or violate the terms of connected providers. You keep ownership of your content and bot output, and you pay any fees charged by third-party services, including usage on your own API keys.
 
-Free trials convert to a paid plan when they end unless cancelled before then. Fair use on hosted plans is the computer-hours a month listed for your plan on the [pricing page](https://rakazo.com/pricing/) and 5 computers running at once per account; computers sleep when idle, there are no charges for computer use beyond the plan, and we may slow or pause usage beyond these limits. Self-hosted deployments have no such limits. Paid plans renew automatically until cancelled and are charged through Stripe. Cancel at any time from billing settings or by emailing [hello@rakazo.com](mailto:hello@rakazo.com); access continues until the end of the paid period. Payments are non-refundable and not prorated except where required by law. Credits, including top-ups, are used up by the work your bots do, whatever its outcome, and used credits are not refunded. Charges made in error are refunded when reported within 30 days. If we close your account or stop offering the Service for reasons other than a violation of these terms, we refund prepaid fees for the unused period. Consumers in the EU and UK can withdraw from a new subscription within 14 days and are refunded less the value of the Service already provided. For credits, that means a refund of the credits not yet used.
+Free trials convert to a paid plan when they end unless cancelled before then. Fair use on hosted plans is the computer-hours a month listed for your plan on the [pricing page](https://rakazo.com/pricing/) and 5 computers running at once per account; computers sleep when idle, there are no charges for computer use beyond the plan, and we may slow or pause usage beyond these limits. Self-hosted deployments have no such limits. Paid plans renew automatically until cancelled and are charged through Stripe. Cancel at any time from billing settings or by emailing [hello@forion.dev](mailto:hello@forion.dev); access continues until the end of the paid period. Payments are non-refundable and not prorated except where required by law. Credits, including top-ups, are used up by the work your bots do, whatever its outcome, and used credits are not refunded. Charges made in error are refunded when reported within 30 days. If we close your account or stop offering the Service for reasons other than a violation of these terms, we refund prepaid fees for the unused period. Consumers in the EU and UK can withdraw from a new subscription within 14 days and are refunded less the value of the Service already provided. For credits, that means a refund of the credits not yet used.
 
 The Service is provided as is. Our liability is limited to the greater of what you paid us in the previous 12 months or US$100, except where the law does not allow a limit. Delaware law governs these terms.
 
@@ -193,10 +193,10 @@ Rakazo Cloud at https://app.rakazo.com is in beta. Self-hosting is also availabl
 
 ## How an agent should use Rakazo
 
-1. Read the [setup prompt](https://github.com/elie222/rakazo/blob/main/SETUP_PROMPT.md) before changing the user's machine.
-2. Use the [self-hosting guide](https://rakazo.com/self-hosted-ai-agent/) for setup. The [GitHub guide](https://github.com/elie222/rakazo/blob/main/docs/self-host.md) is the full reference for backups, upgrades, and production layout.
+1. Read the [setup prompt](https://github.com/forion-ai/orbit/blob/main/SETUP_PROMPT.md) before changing the user's machine.
+2. Use the [self-hosting guide](https://rakazo.com/self-hosted-ai-agent/) for setup. The [GitHub guide](https://github.com/forion-ai/orbit/blob/main/docs/self-host.md) is the full reference for backups, upgrades, and production layout.
 3. Confirm deployment choices and any host-level commands with the user, and keep secrets in local environment configuration rather than tracked files.
-4. Use the [public issue tracker](https://github.com/elie222/rakazo/issues) for reproducible bugs. Send vulnerabilities only to [security@rakazo.com](mailto:security@rakazo.com).
+4. Use the [public issue tracker](https://github.com/forion-ai/orbit/issues) for reproducible bugs. Send vulnerabilities only to [security@forion.dev](mailto:security@forion.dev).
 
 ## Canonical resources
 
@@ -209,10 +209,10 @@ Rakazo Cloud at https://app.rakazo.com is in beta. Self-hosting is also availabl
 - [Download](https://rakazo.com/download/): desktop, mobile, and web apps.
 - [About](https://rakazo.com/about/)
 - [Brand](https://rakazo.com/brand/)
-- [Source](https://github.com/elie222/rakazo)
+- [Source](https://github.com/forion-ai/orbit)
 - [Self-hosting guide](https://rakazo.com/self-hosted-ai-agent/): requirements, Docker install, source setup, and desktop and mobile connections.
 - [Self-hosting Markdown](https://rakazo.com/self-hosted-ai-agent.md): the setup guide with language-tagged code examples.
-- [Full self-hosting reference](https://github.com/elie222/rakazo/blob/main/docs/self-host.md)
+- [Full self-hosting reference](https://github.com/forion-ai/orbit/blob/main/docs/self-host.md)
 - [OpenClaw comparison](https://rakazo.com/openclaw-alternative/)
 - [Docs](https://rakazo.com/docs/): getting started, using Rakazo, and self-hosting. Each page has a Markdown version.
 - [Integrations](https://rakazo.com/integrations/): every app a bot can connect to. [Markdown list](https://rakazo.com/integrations.md); each app page has a Markdown version with its actions.
@@ -221,7 +221,7 @@ Rakazo Cloud at https://app.rakazo.com is in beta. Self-hosting is also availabl
 - [Voice providers for AI agents](https://rakazo.com/voice-providers/): ElevenLabs, OpenAI, Cartesia, Fish Audio, self-hosted speech servers and macOS voices compared, with a page for each. Each page has a Markdown version.
 - [Submit a plugin](https://rakazo.com/plugins/submit/): list a plugin in the Rakazo marketplace. [Markdown with the API](https://rakazo.com/plugins/submit.md).
 - [Blog](https://rakazo.com/blog/)
-- [Releases](https://github.com/elie222/rakazo/releases)
+- [Releases](https://github.com/forion-ai/orbit/releases)
 - [Support](https://rakazo.com/support/)
 - [Privacy](https://rakazo.com/privacy/)
 - [Terms](https://rakazo.com/terms/)
@@ -244,7 +244,7 @@ ${BRAND_COLORS.map((color) => `- ${color.name}: \`${color.hex}\``).join("\n")}
 
 Write Rakazo with a capital R in text. The wordmark is lowercase. Do not alter the mascot or imply an endorsement.
 
-For press, email hello@rakazo.com.
+For press, email hello@forion.dev.
 `;
 
 export const PLUGIN_SUBMIT_MARKDOWN = `# Submit a plugin to Rakazo
