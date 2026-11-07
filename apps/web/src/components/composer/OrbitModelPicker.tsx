@@ -63,7 +63,7 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
         type="button"
         disabled={disabled}
         onClick={() => setOpen(!open)}
-        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-150 border ${
+        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-caption font-medium transition-all duration-150 border ${
           modelTier === "thinking"
             ? "dark:bg-violet-950/50 bg-violet-50 dark:text-violet-300 text-violet-800 dark:border-violet-500/40 border-violet-300 hover:border-violet-400"
             : modelTier === "custom"
@@ -81,7 +81,7 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
         )}
         <span className="truncate max-w-[85px] sm:max-w-none">{activeLabel}</span>
         {modelTier === "thinking" && (
-          <span className="text-[10px] px-1 py-px rounded dark:bg-violet-500/20 bg-violet-100 dark:text-violet-300 text-violet-800 font-mono">
+          <span className="text-caption px-1 py-px rounded dark:bg-violet-500/20 bg-violet-100 dark:text-violet-300 text-violet-800 font-mono">
             {REASONING_LABELS[reasoningEffort]}
           </span>
         )}
@@ -92,7 +92,7 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
       {open && (
         <div className="absolute bottom-full right-0 mb-2 w-72 rounded-xl border border-border/80 bg-popover/95 p-1.5 text-popover-foreground shadow-2xl backdrop-blur-xl z-50 animate-in fade-in-0 zoom-in-95">
           <div className="px-2.5 py-1.5 border-b border-border/40 mb-1">
-            <span className="text-[11px] font-semibold tracking-wider uppercase text-muted-foreground">
+            <span className="text-caption font-semibold tracking-wider uppercase text-muted-foreground">
               Intelligence Tier
             </span>
           </div>
@@ -117,12 +117,12 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-semibold text-foreground">Orbit Flash</span>
-                  <span className="rounded px-1 py-px text-[10px] font-medium dark:bg-amber-500/20 bg-amber-100 dark:text-amber-300 text-amber-800">
+                  <span className="text-caption font-semibold text-foreground">Orbit Flash</span>
+                  <span className="rounded px-1 py-px text-caption font-medium dark:bg-amber-500/20 bg-amber-100 dark:text-amber-300 text-amber-800">
                     Default
                   </span>
                 </div>
-                <p className="text-[11px] text-muted-foreground truncate">Fast · Zero reasoning overhead</p>
+                <p className="text-caption text-muted-foreground truncate">Fast · Zero reasoning overhead</p>
               </div>
               {modelTier === "instant" && <Check size={14} className="text-amber-500 shrink-0" />}
             </div>
@@ -147,12 +147,12 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-semibold text-foreground">Orbit Forge</span>
-                  <span className="rounded px-1 py-px text-[10px] font-medium dark:bg-violet-500/20 bg-violet-100 dark:text-violet-300 text-violet-800">
+                  <span className="text-caption font-semibold text-foreground">Orbit Forge</span>
+                  <span className="rounded px-1 py-px text-caption font-medium dark:bg-violet-500/20 bg-violet-100 dark:text-violet-300 text-violet-800">
                     Thinking
                   </span>
                 </div>
-                <p className="text-[11px] text-muted-foreground truncate">Deep multi-pass reasoning</p>
+                <p className="text-caption text-muted-foreground truncate">Deep multi-pass reasoning</p>
               </div>
               {modelTier === "thinking" && <Check size={14} className="text-violet-500 shrink-0" />}
             </div>
@@ -174,14 +174,14 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
                       setModelTier("thinking");
                       setReasoningEffort(lvl);
                     }}
-                    className={`flex flex-1 items-center justify-center gap-0.5 rounded py-0.5 text-[10px] transition-colors ${
+                    className={`flex flex-1 items-center justify-center gap-0.5 rounded py-0.5 text-caption transition-colors ${
                       isActive
                         ? "dark:bg-violet-500/25 bg-violet-200 font-semibold dark:text-violet-200 text-violet-900"
                         : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
                     <span>{REASONING_LABELS[lvl]}</span>
-                    <span className="opacity-60 text-[9px] font-mono">{REASONING_COSTS[lvl]}</span>
+                    <span className="opacity-60 text-caption font-mono">{REASONING_COSTS[lvl]}</span>
                   </button>
                 );
               })}
@@ -208,12 +208,12 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-semibold text-foreground">Custom Model</span>
-                  <span className="rounded px-1 py-px text-[10px] font-medium dark:bg-emerald-500/20 bg-emerald-100 dark:text-emerald-300 text-emerald-800">
+                  <span className="text-caption font-semibold text-foreground">Custom Model</span>
+                  <span className="rounded px-1 py-px text-caption font-medium dark:bg-emerald-500/20 bg-emerald-100 dark:text-emerald-300 text-emerald-800">
                     Requesty
                   </span>
                 </div>
-                <p className="text-[11px] text-muted-foreground truncate">Full model catalog router</p>
+                <p className="text-caption text-muted-foreground truncate">Full model catalog router</p>
               </div>
               {modelTier === "custom" && <Check size={14} className="text-emerald-500 shrink-0" />}
             </div>

@@ -99,10 +99,10 @@ export function AppearanceSettingsPanel() {
               spacing={1}
               className="rounded-lg bg-muted/40 p-0.5 border border-border"
             >
-              <ToggleGroupItem value="spacious" className="px-3 py-1.5 text-xs font-medium">
+              <ToggleGroupItem value="spacious" className="px-3 py-1.5 text-caption font-medium">
                 <span><Trans>Comfortable</Trans></span>
               </ToggleGroupItem>
-              <ToggleGroupItem value="compact" className="px-3 py-1.5 text-xs font-medium">
+              <ToggleGroupItem value="compact" className="px-3 py-1.5 text-caption font-medium">
                 <span><Trans>Compact</Trans></span>
               </ToggleGroupItem>
             </ToggleGroup>

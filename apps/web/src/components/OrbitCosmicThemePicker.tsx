@@ -201,16 +201,16 @@ export function OrbitCosmicThemePicker({
               {/* Theme Name & Tagline */}
               <div className="space-y-0.5 px-2.5 py-2">
                 <div className="flex items-center justify-between">
-                  <p className="text-[12px] font-semibold text-foreground tracking-tight">
+                  <p className="text-label font-semibold text-foreground tracking-tight">
                     {theme.name}
                   </p>
                   {isSelected && (
-                    <span className="text-[9px] font-bold uppercase tracking-wider text-primary">
+                    <span className="text-caption font-bold uppercase tracking-wider text-primary">
                       {t`Active`}
                     </span>
                   )}
                 </div>
-                <p className="line-clamp-1 text-[10px] leading-tight text-muted-foreground">
+                <p className="line-clamp-1 text-caption leading-tight text-muted-foreground">
                   {theme.tagline}
                 </p>
               </div>

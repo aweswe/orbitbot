@@ -468,7 +468,7 @@ export function BotShapePreview({
 export function Wordmark({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      <span className="text-[26px] font-bold tracking-tight orbit-gradient-text">
+      <span className="text-heading1 font-bold tracking-tight orbit-gradient-text">
         Orbit Bot
       </span>
     </div>

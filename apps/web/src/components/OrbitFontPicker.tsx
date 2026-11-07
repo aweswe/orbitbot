@@ -88,8 +88,8 @@ export function OrbitFontPicker() {
           <Type className="size-4" />
         </div>
         <div>
-          <h4 className="text-sm font-semibold text-foreground">Orbit Typography</h4>
-          <p className="text-xs text-muted-foreground">Select your workspace font family across all chat, sidebars, and panels.</p>
+          <h4 className="text-body-sm font-semibold text-foreground">Orbit Typography</h4>
+          <p className="text-caption text-muted-foreground">Select your workspace font family across all chat, sidebars, and panels.</p>
         </div>
       </div>
 
@@ -109,8 +109,8 @@ export function OrbitFontPicker() {
             >
               <div className="flex w-full items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-foreground">{font.name}</span>
-                  <span className="text-[10px] font-medium text-muted-foreground/80 px-1.5 py-0.5 rounded bg-white/5 border border-white/5">
+                  <span className="text-body-sm font-medium text-foreground">{font.name}</span>
+                  <span className="text-caption font-medium text-muted-foreground/80 px-1.5 py-0.5 rounded bg-white/5 border border-white/5">
                     {font.category}
                   </span>
                 </div>
@@ -121,7 +121,7 @@ export function OrbitFontPicker() {
                 )}
               </div>
               <p
-                className="mt-1 text-xs text-muted-foreground line-clamp-1 group-hover:text-foreground/90 transition-colors"
+                className="mt-1 text-caption text-muted-foreground line-clamp-1 group-hover:text-foreground/90 transition-colors"
                 style={{ fontFamily: font.fontFamily }}
               >
                 {font.preview}

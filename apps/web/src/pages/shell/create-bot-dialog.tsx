@@ -163,7 +163,7 @@ export function CreateBotDialog({
               <button
                 type="button"
                 onClick={() => setTab("custom")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-caption font-semibold transition-all ${
                   tab === "custom"
                     ? "bg-card text-foreground shadow-xs border border-border/40"
                     : "text-muted-foreground hover:text-foreground"
@@ -174,7 +174,7 @@ export function CreateBotDialog({
               <button
                 type="button"
                 onClick={() => setTab("blueprints")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-caption font-semibold transition-all ${
                   tab === "blueprints"
                     ? "bg-card text-foreground shadow-xs border border-border/40"
                     : "text-muted-foreground hover:text-foreground"
@@ -242,10 +242,10 @@ export function CreateBotDialog({
                         <Icon size={18} />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
+                        <div className="text-caption font-semibold text-foreground group-hover:text-primary transition-colors">
                           {blueprint.name}
                         </div>
-                        <div className="text-[11px] text-muted-foreground line-clamp-2 mt-0.5">
+                        <div className="text-caption text-muted-foreground line-clamp-2 mt-0.5">
                           {blueprint.tagline}
                         </div>
                       </div>
