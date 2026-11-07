@@ -19,6 +19,7 @@ import {
   ACTIVE_RUN_STATUSES,
   BACKGROUND_RUN_TRIGGERS,
   callIdFromClientNonce,
+  detectMessageReaction,
   isConversationalRun,
   MODEL_REQUIRED_SEND_ERROR,
   mentionedGroupBotIds,
@@ -958,6 +959,34 @@ export async function sendThreadMessage(
         });
         // A bare "stop" from the owner while work is active is the Stop button, not a reply.
         const stopping = activeRuns.length > 0 && !routineRuns.length && isStopMessage(input);
+        const botReaction = detectMessageReaction(input.text);
+        let reactionEventSeq: number | undefined;
+        if (botReaction && !stopping) {
+          const reactionNonce = `bot-reaction:${message.id}`;
+          const reactionMsg = await createThreadMessageInTransaction(tx, {
+            threadId: target.threadId,
+            role: "bot",
+            botId: target.botId,
+            blocks: [{ kind: "text", text: botReaction }],
+            replyToMessageId: message.id,
+            clientNonce: reactionNonce,
+            markUnread: false,
+          });
+          const reactionEvent = await appendEventInTransaction(tx, {
+            spaceId: actor.spaceId,
+            threadId: target.threadId,
+            botId: target.botId,
+            type: "thread.message.created",
+            payload: {
+              messageId: reactionMsg.id,
+              seq: reactionMsg.seq,
+              role: "bot",
+              blocks: [{ kind: "text", text: botReaction }],
+              replyToMessageId: message.id,
+            },
+          });
+          reactionEventSeq = reactionEvent.seq;
+        }
         if (input.noModel && !stopping) {
           throw new ORPCError("BAD_REQUEST", { message: MODEL_REQUIRED_SEND_ERROR });
         }
@@ -1022,7 +1051,7 @@ export async function sendThreadMessage(
               replyPreview,
             },
           });
-          return { message, runs: answered, routineRuns, eventSeq: event.seq };
+          return { message, runs: answered, routineRuns, eventSeq: reactionEventSeq ?? event.seq };
         }
         const holdingRuns = stopping
           ? activeRuns
@@ -1070,9 +1099,9 @@ export async function sendThreadMessage(
           });
           if (stopping) {
             const stop = await cancelThreadRuns(actor, target, { botId: target.botId })(tx);
-            return { message, runs: [active], routineRuns, eventSeq: event.seq, stop };
+            return { message, runs: [active], routineRuns, eventSeq: reactionEventSeq ?? event.seq, stop };
           }
-          return { message, runs: [active], routineRuns, eventSeq: event.seq };
+          return { message, runs: [active], routineRuns, eventSeq: reactionEventSeq ?? event.seq };
         }
         const task = await tx.task.create({
           data: {
@@ -1122,7 +1151,7 @@ export async function sendThreadMessage(
             replyPreview,
           },
         });
-        return { message, runs: [run], routineRuns, eventSeq: event.seq };
+        return { message, runs: [run], routineRuns, eventSeq: reactionEventSeq ?? event.seq };
       }
 
       const members = await lockAndLoadGroupMembers(tx, actor, target);
@@ -1339,7 +1368,35 @@ export async function sendThreadMessage(
           replyPreview,
         },
       });
-      return { message, runs, routineRuns, eventSeq: event.seq };
+      const botReaction = detectMessageReaction(input.text);
+      let reactionEventSeq: number | undefined;
+      if (botReaction && eventBotId) {
+        const reactionNonce = `bot-reaction:${message.id}`;
+        const reactionMsg = await createThreadMessageInTransaction(tx, {
+          threadId: target.threadId,
+          role: "bot",
+          botId: eventBotId,
+          blocks: [{ kind: "text", text: botReaction }],
+          replyToMessageId: message.id,
+          clientNonce: reactionNonce,
+          markUnread: false,
+        });
+        const reactionEvent = await appendEventInTransaction(tx, {
+          spaceId: actor.spaceId,
+          threadId: target.threadId,
+          botId: eventBotId,
+          type: "thread.message.created",
+          payload: {
+            messageId: reactionMsg.id,
+            seq: reactionMsg.seq,
+            role: "bot",
+            blocks: [{ kind: "text", text: botReaction }],
+            replyToMessageId: message.id,
+          },
+        });
+        reactionEventSeq = reactionEvent.seq;
+      }
+      return { message, runs, routineRuns, eventSeq: reactionEventSeq ?? event.seq };
     }, THREAD_LOCK_TRANSACTION_OPTIONS);
 
   const committed = await withTransactionRetry(commit).catch(async (error) => {

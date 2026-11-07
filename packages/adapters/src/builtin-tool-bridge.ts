@@ -34,6 +34,7 @@ export const CORE_BUILTIN_TOOL_NAMES: ReadonlySet<string> = new Set([
   "browser_act",
   "ask_user",
   "message_user",
+  "react_to_message",
   "request_takeover",
   "request_secret",
   "connect_app",

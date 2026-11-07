@@ -1,5 +1,6 @@
 import { posix } from "node:path";
-import { ATTACHMENT_MAX_COUNT } from "@rakazo/contracts";
+import { ATTACHMENT_MAX_COUNT, MESSAGE_REACTIONS } from "@rakazo/contracts";
+import { appendEventInTransaction, createThreadMessageInTransaction } from "@rakazo/db";
 import {
   BOT_MESSAGE_MAX_LENGTH,
   isBackgroundRunTrigger,
@@ -272,6 +273,52 @@ export const messagingTools: ToolHandlers = {
           }
         : { ok: true },
     );
+  },
+  async react_to_message(ctx, call) {
+    const { deps, run } = ctx;
+    const { args } = call;
+    const reaction = String(args.reaction ?? "");
+    const allowed = MESSAGE_REACTIONS as readonly string[];
+    if (!allowed.includes(reaction)) {
+      return call.finish({ error: `Invalid reaction. Must be one of: ${allowed.join(", ")}` });
+    }
+    const targetMessageId = args.message_id ? String(args.message_id) : run.sourceMessageId;
+    if (!targetMessageId) {
+      return call.finish({ error: "No target message available to react to." });
+    }
+    const nonce = `bot-react:${run.id}:${call.executionId}`;
+    await deps.prisma.$transaction(async (tx) => {
+      const parent = await tx.message.findFirst({
+        where: { id: targetMessageId, threadId: run.threadId },
+        select: { id: true },
+      });
+      if (!parent) return;
+      const msg = await createThreadMessageInTransaction(tx, {
+        threadId: run.threadId,
+        role: "bot",
+        botId: run.botId,
+        blocks: [{ kind: "text", text: reaction }],
+        replyToMessageId: parent.id,
+        clientNonce: nonce,
+        markUnread: false,
+      });
+      const event = await appendEventInTransaction(tx, {
+        spaceId: run.spaceId,
+        threadId: run.threadId,
+        botId: run.botId,
+        type: "thread.message.created",
+        runId: run.id,
+        payload: {
+          messageId: msg.id,
+          seq: msg.seq,
+          role: "bot",
+          blocks: [{ kind: "text", text: reaction }],
+          replyToMessageId: parent.id,
+        },
+      });
+      await deps.events.notify(run.threadId, event.seq).catch(() => undefined);
+    });
+    return call.finish({ ok: true, reaction, messageId: targetMessageId });
   },
   async message_bot(ctx, call) {
     const { deps, run, bot } = ctx;

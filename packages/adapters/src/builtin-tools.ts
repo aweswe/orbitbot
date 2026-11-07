@@ -629,6 +629,27 @@ export const builtinAgentTools: ConnectorTool[] = [
     },
   },
   {
+    name: "react_to_message",
+    description:
+      "React to a message in the conversation with an emoji reaction (👍, 👎, ❤️, 😂, 🎉, 😮). If message_id is omitted, defaults to the user's message that started this turn. Does not end your turn; you can react and then continue with your normal reply.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        reaction: {
+          type: "string",
+          enum: ["👍", "👎", "❤️", "😂", "🎉", "😮"],
+          description: "The emoji reaction to place on the message.",
+        },
+        message_id: {
+          type: "string",
+          description: "Optional ID of the message to react to. Defaults to the user message that initiated this turn.",
+        },
+      },
+      required: ["reaction"],
+      additionalProperties: false,
+    },
+  },
+  {
     name: "request_secret",
     get description() {
       return secretAskToolSurface().description;
