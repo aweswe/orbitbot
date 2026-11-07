@@ -429,6 +429,11 @@ let ports = null;
 if (!setting("WEB_PORT") && !setting("API_PORT")) {
   ports = await choosePorts();
   Object.assign(env, portEnv(ports));
+} else {
+  const web = Number(setting("WEB_PORT") ?? DEFAULT_PORTS.web);
+  const api = Number(setting("API_PORT") ?? DEFAULT_PORTS.api);
+  const supervisor = Number(setting("SUPERVISOR_PORT") ?? DEFAULT_PORTS.supervisor);
+  Object.assign(env, portEnv({ web, api, supervisor }));
 }
 
 // Checkouts that share a database also share its job queue, so any checkout's worker may write a

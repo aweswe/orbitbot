@@ -27,6 +27,20 @@ export interface DbClientOptions {
   encryptContent?: boolean;
 }
 
+/**
+ * Prisma's `?schema=` parameter. `pg` ignores it, and the driver adapter only
+ * honours the explicit `schema` option — without this, a Supabase deployment
+ * silently reads and writes `public` instead of its isolated schema.
+ */
+export function schemaFromConnectionString(connectionString: string): string | undefined {
+  try {
+    const schema = new URL(connectionString).searchParams.get("schema");
+    return schema && /^[A-Za-z_][A-Za-z0-9_]*$/.test(schema) ? schema : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 const DEFAULT_POOL_MAX = 4;
 const CHECKOUT_TIMEOUT_MS = 10_000;
 const CONNECT_RETRY_ATTEMPTS = 8;
@@ -34,8 +48,12 @@ const SLOW_CHECKOUT_MS = 1_000;
 const SATURATION_REPORT_INTERVAL_MS = 10_000;
 
 export function createPool(connectionString: string, options: DbClientOptions = {}): Pool {
+  const schema = schemaFromConnectionString(connectionString);
   const pool = new Pool({
     connectionString,
+    // Raw SQL in this package is written unqualified, so the session search_path
+    // must follow the same schema Prisma qualifies its queries with.
+    ...(schema ? { options: `-c search_path=${schema}` } : {}),
     max: options.poolMax ?? DEFAULT_POOL_MAX,
     // Fail a checkout instead of queueing forever when Postgres is already at
     // max_connections (53300) or the pool is saturated.
@@ -76,9 +94,11 @@ export function createDb(
     throw new Error(
       "MASTER_KEY_PROVIDER needs createDb(url, { keyProvider }) from @rakazo/adapters",
     );
+  const schema = schemaFromConnectionString(connectionString);
   const pool = createPool(connectionString, options);
   const keyPool = new Pool({
     connectionString,
+    ...(schema ? { options: `-c search_path=${schema}` } : {}),
     max: 2,
     connectionTimeoutMillis: CHECKOUT_TIMEOUT_MS,
     idleTimeoutMillis: 30_000,
@@ -98,7 +118,7 @@ export function createDb(
     new PgSpaceKeyStore(keyPool),
     { encryptWrites },
   );
-  const adapter = new PrismaPg(pool);
+  const adapter = new PrismaPg(pool, schema ? { schema } : undefined);
   // A transaction waits for a connection as long as any other query does. Prisma's 2s
   // default failed runs whenever a busy pool took a few seconds to free a connection.
   const client = new PrismaClient({
