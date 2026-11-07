@@ -45,25 +45,25 @@ BEGIN
   WHEN NEW.usage IS DISTINCT FROM OLD.usage THEN 'receipt'
   WHEN NEW."providerRequestId" IS DISTINCT FROM OLD."providerRequestId" THEN 'provider_request'
   ELSE 'reconciliation' END;
- INSERT INTO public.billing_audit_events(source,kind,"organizationId","callId","userId","spaceId",provider,model,"providerRequestId","amountMicros",details)
+ INSERT INTO billing_audit_events(source,kind,"organizationId","callId","userId","spaceId",provider,model,"providerRequestId","amountMicros",details)
  VALUES ('credit:'||NEW.id||':'||NEW."auditRevision",event_kind,NEW."organizationId",NEW."callId",NEW."userId",NEW."spaceId",NEW.provider,NEW.model,NEW."providerRequestId",delta,
  jsonb_build_object('entry',to_jsonb(NEW),'previous',CASE WHEN TG_OP='INSERT' THEN NULL ELSE to_jsonb(OLD) END));
  RETURN NEW;
 END $$;
 CREATE TRIGGER credit_audit_write AFTER INSERT OR UPDATE ON model_credit_entries FOR EACH ROW EXECUTE FUNCTION billing_audit_credit();
-CREATE FUNCTION billing_audit_usage() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = pg_catalog, public AS $$
+CREATE FUNCTION billing_audit_usage() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER AS $$
 DECLARE org TEXT;
 BEGIN
- SELECT "organizationId" INTO org FROM public.model_credit_entries WHERE "callId"=NEW."callId";
- IF org IS NULL THEN SELECT "organizationId" INTO org FROM public.spaces WHERE id=NEW."spaceId"; END IF;
- INSERT INTO public.billing_audit_events(source,kind,"organizationId","callId","userId","spaceId",provider,model,"providerRequestId",details)
+ SELECT "organizationId" INTO org FROM model_credit_entries WHERE "callId"=NEW."callId";
+ IF org IS NULL THEN SELECT "organizationId" INTO org FROM spaces WHERE id=NEW."spaceId"; END IF;
+ INSERT INTO billing_audit_events(source,kind,"organizationId","callId","userId","spaceId",provider,model,"providerRequestId",details)
  VALUES ('usage:'||NEW.id||':'||NEW."auditRevision",CASE WHEN TG_OP='INSERT' THEN 'usage' ELSE 'usage_correction' END,org,NEW."callId",NEW."userId",NEW."spaceId",NEW.provider,NEW.model,NEW."providerRequestId",to_jsonb(NEW));
  RETURN NEW;
 END $$;
 CREATE TRIGGER usage_audit_write AFTER INSERT OR UPDATE ON usage_records FOR EACH ROW EXECUTE FUNCTION billing_audit_usage();
-CREATE FUNCTION billing_audit_account_closed() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = pg_catalog, public AS $$
+CREATE FUNCTION billing_audit_account_closed() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER AS $$
 BEGIN
- INSERT INTO public.billing_audit_events(source,kind,"organizationId",details)
+ INSERT INTO billing_audit_events(source,kind,"organizationId",details)
  VALUES ('closed:'||gen_random_uuid()::text,'account_closed',OLD."organizationId",to_jsonb(OLD));
  RETURN OLD;
 END $$;

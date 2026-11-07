@@ -26,7 +26,7 @@ DECLARE
 BEGIN
   FOR policy IN
     SELECT p.polname, c.relname FROM pg_policy p JOIN pg_class c ON c.oid = p.polrelid
-    WHERE c.relnamespace = 'public'::regnamespace
+    WHERE (c.relnamespace = 'public'::regnamespace OR c.relnamespace = current_schema()::regnamespace)
       AND pg_get_expr(p.polqual, p.polrelid) = '(current_setting(''app.rls_bypass''::text, true) = ''on''::text)'
       AND p.polwithcheck IS NULL
   LOOP
@@ -43,10 +43,10 @@ DECLARE
 BEGIN
   FOR policy IN
     SELECT p.polname, c.relname FROM pg_policy p JOIN pg_class c ON c.oid = p.polrelid
-    WHERE c.relnamespace = 'public'::regnamespace AND p.polname LIKE '%\_previous\_release'
+    WHERE (c.relnamespace = 'public'::regnamespace OR c.relnamespace = current_schema()::regnamespace) AND p.polname LIKE '%\_previous\_release'
   LOOP
     EXECUTE format('DROP POLICY %I ON %I', policy.polname, policy.relname);
   END LOOP;
 END $$;
 
-DROP FUNCTION IF EXISTS app_rls_version();
+DROP FUNCTION IF EXISTS app_rls_version() CASCADE;

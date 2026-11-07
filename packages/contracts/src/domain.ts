@@ -2334,13 +2334,13 @@ export function byokYearlySwitchSavings(status: BillingStatus): number | null {
 export function byokTierChangeOffered(status: BillingStatus): boolean {
   return Boolean(
     status.canManage &&
-      status.funding === "byok" &&
-      !status.byokFreeUntil &&
-      !status.monthlyAmountCents &&
-      !status.cancelAtPeriodEnd &&
-      (status.state === "active" || status.state === "trialing") &&
-      status.byokPriceCents &&
-      (status.byokTiers?.length ?? 0) > 1,
+    status.funding === "byok" &&
+    !status.byokFreeUntil &&
+    !status.monthlyAmountCents &&
+    !status.cancelAtPeriodEnd &&
+    (status.state === "active" || status.state === "trialing") &&
+    status.byokPriceCents &&
+    (status.byokTiers?.length ?? 0) > 1,
   );
 }
 

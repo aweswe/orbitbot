@@ -15,9 +15,9 @@ CREATE INDEX "model_credit_lots_organizationId_expiresAt_idx" ON model_credit_lo
 CREATE INDEX "model_credit_lots_expiresAt_idx" ON model_credit_lots("expiresAt");
 GRANT SELECT, INSERT, UPDATE, DELETE ON model_credit_lots TO rakazo_app;
 CREATE TRIGGER lot_audit_revision BEFORE UPDATE ON model_credit_lots FOR EACH ROW EXECUTE FUNCTION billing_audit_revision();
-CREATE FUNCTION billing_audit_lot() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = pg_catalog, public AS $$
+CREATE FUNCTION billing_audit_lot() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER AS $$
 BEGIN
- INSERT INTO public.billing_audit_events(source,kind,"organizationId",details)
+ INSERT INTO billing_audit_events(source,kind,"organizationId",details)
  VALUES ('lot:'||NEW.id||':'||NEW."auditRevision", CASE WHEN TG_OP='UPDATE' AND NEW."expiredMicros">OLD."expiredMicros" THEN 'credits_expired' ELSE 'credit_allocation' END, NEW."organizationId",to_jsonb(NEW));
  RETURN NEW;
 END $$;
