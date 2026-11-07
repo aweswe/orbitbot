@@ -50,11 +50,11 @@ export function OrbitCreditBadge() {
 
   return (
     <div
-      className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium bg-indigo-950/60 text-indigo-200 border border-indigo-500/30 shadow-sm shadow-indigo-500/10 backdrop-blur-sm cursor-pointer hover:border-indigo-400/50 transition-all"
+      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium dark:bg-indigo-950/60 bg-sky-50 dark:text-indigo-200 text-sky-900 border dark:border-indigo-500/30 border-sky-200 shadow-sm backdrop-blur-sm cursor-pointer hover:border-sky-400/50 transition-all"
       title={`Orbit Control Plane Balance: ${balance} credits`}
     >
-      <Zap size={12} className="text-cyan-400 animate-pulse" />
-      <span className="font-semibold text-cyan-300">{loading ? "..." : balance}</span>
+      <Zap size={12} className="dark:text-cyan-400 text-sky-600 animate-pulse" />
+      <span className="font-semibold dark:text-cyan-300 text-sky-800">{loading ? "..." : balance}</span>
       <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Credits</span>
     </div>
   );

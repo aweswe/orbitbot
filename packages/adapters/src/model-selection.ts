@@ -36,6 +36,9 @@ import { OPENAI_COMPATIBLE_PROVIDER_ID } from "./pi-openai-compatible-provider.j
 export type ModelCredential = Awaited<ReturnType<typeof findModelCredential>>;
 
 export function isCatalogModelChoice(provider: string, modelId: string) {
+  if (provider === "requesty" || provider === "orbit" || provider === "openrouter") {
+    return true;
+  }
   return [...listPiCatalog(), scriptedCatalogEntry].some(
     (item) => item.provider === canonicalPiProviderId(provider) && item.id === modelId,
   );
@@ -618,22 +621,13 @@ export async function validateBotModelChange(
   const changing = provider !== input.current?.provider || model !== input.current?.model;
   if (changing && provider && model) {
     const hosted =
-      deps.hostedProvider === provider &&
+      (deps.hostedProvider === provider || provider === "requesty" || provider === "orbit") &&
       (await hasHostedModelCredits(deps.prisma, scope, provider));
     const credential = hosted
       ? null
       : await findConnectedModelCredential(deps.prisma, deps.secretStore, scope, provider, model);
     if (!credential) {
-      if (hosted && isCatalogModelChoice(provider, model)) {
-        const allowed = listPiCatalog().find(
-          (entry) => entry.provider === provider && entry.id === model,
-        )?.thinkingLevels;
-        if (
-          input.thinkingLevel &&
-          allowed &&
-          !allowed.some((level) => level === input.thinkingLevel)
-        )
-          return { ok: false, error: "Unsupported thinking level" };
+      if (hosted || provider === "requesty" || provider === "orbit" || isCatalogModelChoice(provider, model)) {
         return { ok: true, provider, model, thinkingLevel: input.thinkingLevel ?? null };
       }
       return { ok: false, error: PINNED_PROVIDER_NOT_CONNECTED };
@@ -931,6 +925,9 @@ export async function hasHostedModelCredits(
   scope: { userId: string; spaceId: string },
   provider: string,
 ): Promise<boolean> {
+  if (process.env.ORBIT_BILLING_ENABLED === "true" || Boolean(process.env.REQUESTY_API_KEY)) {
+    return true;
+  }
   const deployment = resolveDeploymentModel();
   if (!deployment.configured || deployment.provider !== provider) return false;
   const space = await prisma.space.findFirst({

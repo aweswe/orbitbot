@@ -19,6 +19,7 @@ export interface OrbitThemeItem {
   icon: typeof Moon;
   accent: string;
   bg: string;
+  isLight?: boolean;
 }
 
 export const ORBIT_THEMES: OrbitThemeItem[] = [
@@ -77,6 +78,7 @@ export const ORBIT_THEMES: OrbitThemeItem[] = [
     icon: SunMedium,
     accent: "#0284c7",
     bg: "#f8fafc",
+    isLight: true,
   },
 ];
 
@@ -128,7 +130,7 @@ export function OrbitThemeSwitcher({ className }: { className?: string }) {
             type="button"
             aria-label={t`Orbit Theme: ${activeTheme.name}`}
             title={t`Theme: ${activeTheme.name}`}
-            className={`flex size-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground transition-all hover:border-cyan-500/40 hover:bg-white/[0.07] hover:text-foreground ${className ?? ""}`}
+            className={`flex size-8 items-center justify-center rounded-lg border border-border bg-card/60 text-muted-foreground transition-all hover:border-primary/50 hover:bg-card hover:text-foreground ${className ?? ""}`}
           >
             <Palette size={15} strokeWidth={1.8} style={{ color: activeTheme.accent }} />
           </button>
@@ -137,13 +139,13 @@ export function OrbitThemeSwitcher({ className }: { className?: string }) {
       <PopoverContent
         align="start"
         sideOffset={8}
-        className="w-64 rounded-2xl border border-white/10 bg-[#0c0d14]/95 p-2 backdrop-blur-xl shadow-2xl shadow-black/70"
+        className="w-64 rounded-2xl border border-border bg-popover text-popover-foreground p-2 backdrop-blur-xl shadow-2xl"
       >
-        <div className="px-2 py-1.5 border-b border-white/5 mb-1 flex items-center justify-between">
+        <div className="px-2 py-1.5 border-b border-border/60 mb-1 flex items-center justify-between">
           <span className="text-[11px] font-bold tracking-wider uppercase text-muted-foreground">
             <Trans>Orbit Themes</Trans>
           </span>
-          <span className="text-[10px] font-medium text-cyan-400">
+          <span className="text-[10px] font-semibold text-primary">
             {activeTheme.name}
           </span>
         </div>
@@ -161,13 +163,13 @@ export function OrbitThemeSwitcher({ className }: { className?: string }) {
                 }}
                 className={`flex w-full items-center justify-between rounded-xl px-2.5 py-2 text-start transition-all ${
                   isSelected
-                    ? "bg-white/[0.08] text-foreground border border-white/10"
-                    : "text-muted-foreground hover:bg-white/[0.04] hover:text-foreground border border-transparent"
+                    ? "bg-accent text-accent-foreground border border-border font-medium shadow-xs"
+                    : "text-muted-foreground hover:bg-muted/70 hover:text-foreground border border-transparent"
                 }`}
               >
                 <div className="flex items-center gap-2.5 min-w-0">
                   <div
-                    className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-white/10 shadow-sm"
+                    className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-border shadow-xs"
                     style={{ backgroundColor: theme.bg }}
                   >
                     <Icon size={13} style={{ color: theme.accent }} />
@@ -182,7 +184,7 @@ export function OrbitThemeSwitcher({ className }: { className?: string }) {
                   </div>
                 </div>
                 {isSelected && (
-                  <Check size={14} className="shrink-0 text-cyan-400 ms-2" />
+                  <Check size={14} className="shrink-0 text-primary ms-2" />
                 )}
               </button>
             );
