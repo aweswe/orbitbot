@@ -83,17 +83,31 @@ async function seed() {
     );
     console.log("✔ Created space member:", userId);
 
+    // 6.5 Ensure Team Computer
+    const compRes = await client.query(`SELECT id FROM "computers" WHERE "spaceId" = $1 LIMIT 1`, [spaceId]);
+    let computerId = compRes.rows[0]?.id;
+    if (!computerId) {
+      computerId = `comp_${spaceId}`;
+      await client.query(
+        `INSERT INTO "computers" ("id", "spaceId", "userId", "scope", "scopeKey", "homeKey", "homeRevision", "kind", "state", "createdAt", "updatedAt")
+         VALUES ($1, $2, $3, 'team', $4, $5, 'empty', 'desktop', 'running', $6, $7)
+         ON CONFLICT ("id") DO NOTHING`,
+        [computerId, spaceId, userId, `team:${spaceId}:${userId}`, `team-${spaceId}`, now, now]
+      );
+    }
+
     // 7. Bot
     await client.query(
       `INSERT INTO "bots" (
          "id", "spaceId", "userId", "name", "description", "instructions", "color", "avatarSet",
-         "modelProvider", "modelId", "thinkingLevel", "fleetManagement", "position", "createdAt", "updatedAt"
+         "modelProvider", "modelId", "thinkingLevel", "fleetManagement", "position", "computerId", "createdAt", "updatedAt"
        )
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
        ON CONFLICT ("id") DO UPDATE SET
          "name" = EXCLUDED."name",
          "modelProvider" = EXCLUDED."modelProvider",
          "modelId" = EXCLUDED."modelId",
+         "computerId" = EXCLUDED."computerId",
          "updatedAt" = EXCLUDED."updatedAt"`,
       [
         botId,
@@ -109,6 +123,7 @@ async function seed() {
         "medium",
         true,
         0,
+        computerId,
         now,
         now
       ]

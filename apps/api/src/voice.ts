@@ -93,23 +93,22 @@ export function catalogEntry(provider: string) {
 }
 
 export function toVoiceStatus(cred: { provider: string; voiceId: string } | null): VoiceStatus {
-  if (cred && cred.voiceId) {
-    const entry = catalogEntry(cred.provider);
+  if (!cred) {
     return {
-      configured: true,
-      ready: true,
-      transcribe: Boolean(entry?.transcribe),
-      provider: cred.provider,
-      voiceId: cred.voiceId,
+      configured: false,
+      ready: false,
+      transcribe: false,
+      provider: null,
+      voiceId: "",
     };
   }
-  // Default: Orbit Neural Voice via Forion Server - ready without user API keys!
+  const entry = catalogEntry(cred.provider);
   return {
     configured: true,
-    ready: true,
-    transcribe: true,
-    provider: "orbit",
-    voiceId: "orbit-neural-voice",
+    ready: Boolean(cred.voiceId),
+    transcribe: Boolean(entry?.transcribe),
+    provider: cred.provider,
+    voiceId: cred.voiceId,
   };
 }
 

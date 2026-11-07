@@ -12,6 +12,7 @@ import { WindowChrome } from "../WindowChrome";
 
 export function SidebarHeader({
   mini = false,
+  isMobile = false,
   createMenuOpen = false,
   setCreateMenuOpen,
   activityMode,
@@ -28,6 +29,7 @@ export function SidebarHeader({
   openSettings,
 }: {
   mini?: boolean;
+  isMobile?: boolean;
   createMenuOpen?: boolean;
   setCreateMenuOpen?: (open: boolean) => void;
   activityMode?: boolean;
@@ -94,7 +96,13 @@ export function SidebarHeader({
                 className="app-no-drag shrink-0 text-muted-foreground hover:text-foreground h-8 w-8 rounded-lg"
                 aria-label={toggleLabel}
                 data-testid="minimize-bots-sidebar"
-                onClick={() => setBotsSidebarCollapsedPref(true)}
+                onClick={() => {
+                  if (isMobile && setMobileSidebarOpen) {
+                    setMobileSidebarOpen(false);
+                  } else {
+                    setBotsSidebarCollapsedPref(true);
+                  }
+                }}
               >
                 <PanelLeftClose size={16} strokeWidth={1.5} aria-hidden="true" />
               </Button>

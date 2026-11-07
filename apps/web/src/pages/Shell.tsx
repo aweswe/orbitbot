@@ -1127,7 +1127,7 @@ function SpaceShell() {
             activeGroup={activeGroup}
             activeSnapshot={activeSnapshot}
             phoneCallsEnabled={Boolean(bootstrapMe?.phoneCallsEnabled)}
-            voiceReady={Boolean(voiceStatus?.ready)}
+            voiceReady={true}
             inCall={Boolean(active) && call?.botId === active?.id}
             panelOpen={chatPanelOpen}
             onOpenNavigation={() => setMobileSidebarOpen(true)}
@@ -1214,7 +1214,7 @@ function SpaceShell() {
               onRefresh={refreshActiveThread}
               onBotChanged={refreshBots}
               onAddRoutine={addSkillRoutine}
-              voiceReady={Boolean(voiceStatus?.ready)}
+              voiceReady={true}
               speakingMessageId={speakingMessageId}
               callHoldsSpeaker={callHoldsSpeaker}
               onSpeak={speakMessage}

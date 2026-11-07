@@ -10,7 +10,7 @@ import type {
 import type { ChildBotBlock, PeerExchange } from "@rakazo/core";
 import { isPeerReceiptBlocks, isToolActivityBlock, otherAuthor } from "@rakazo/core";
 import { BotAvatar, Button, cn, resolvePersonaColorDef } from "@rakazo/ui-web";
-import { UserRound } from "lucide-react";
+import { UserRound, Volume2, VolumeX } from "lucide-react";
 import { memo, useCallback, useMemo } from "react";
 import { ArtifactFileCard } from "../../components/ArtifactFileCard";
 import { AskCard } from "../../components/AskCard";
@@ -245,6 +245,8 @@ export const MessageView = memo(function MessageView({
       onMarkUnread={onMarkUnread}
       markedUnread={markedUnread}
       onReact={onReact}
+      onSpeak={speak}
+      speaking={speaking}
     />
   );
   if (isNarration) {
@@ -313,9 +315,19 @@ export const MessageView = memo(function MessageView({
                   // Stopping the speech in progress stays available; a call blocks new reads.
                   disabled={callHoldsSpeaker && !speaking}
                   onClick={speak}
-                  className="font-normal"
+                  className="font-normal inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground"
                 >
-                  {speaking ? <Trans>Stop</Trans> : <Trans>Speak</Trans>}
+                  {speaking ? (
+                    <>
+                      <VolumeX size={13} strokeWidth={1.5} className="text-primary animate-pulse" />
+                      <Trans>Stop</Trans>
+                    </>
+                  ) : (
+                    <>
+                      <Volume2 size={13} strokeWidth={1.5} />
+                      <Trans>Speak</Trans>
+                    </>
+                  )}
                 </Button>
               ) : null}
             </div>
@@ -599,9 +611,19 @@ export const MessageView = memo(function MessageView({
                       // Stopping the speech in progress stays available; a call blocks new reads.
                       disabled={callHoldsSpeaker && !speaking}
                       onClick={speak}
-                      className="mt-2 font-normal"
+                      className="mt-2 font-normal inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground"
                     >
-                      {speaking ? <Trans>Stop</Trans> : <Trans>Speak</Trans>}
+                      {speaking ? (
+                        <>
+                          <VolumeX size={13} strokeWidth={1.5} className="text-primary animate-pulse" />
+                          <Trans>Stop</Trans>
+                        </>
+                      ) : (
+                        <>
+                          <Volume2 size={13} strokeWidth={1.5} />
+                          <Trans>Speak</Trans>
+                        </>
+                      )}
                     </Button>
                   ) : null}
                 </div>

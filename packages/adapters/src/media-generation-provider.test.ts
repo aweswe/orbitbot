@@ -5,6 +5,7 @@ import { createMediaGenerationProvider } from "./media-generation-factory.js";
 import {
   FakeMediaGenerationProvider,
   FalMediaGenerationProvider,
+  RequestyMediaGenerationProvider,
 } from "./media-generation-provider.js";
 
 const context: AdapterContext = {
@@ -57,6 +58,47 @@ describe("media generation connection", () => {
         MEDIA_GENERATION_BASE_URL: "https://media.example.test",
       })?.capabilities,
     ).toEqual({ images: true, video: false, offline: false });
+    expect(
+      createMediaGenerationProvider({
+        MEDIA_GENERATION_PROVIDER: "requesty",
+        MEDIA_GENERATION_API_KEY: "req-key",
+      })?.capabilities,
+    ).toEqual({ images: true, video: false, offline: false });
+  });
+  it("translates Requesty image generation from message.images format", async () => {
+    const fetch = vi.fn<typeof globalThis.fetch>().mockResolvedValueOnce(
+      json({
+        choices: [
+          {
+            message: {
+              role: "assistant",
+              images: [
+                {
+                  type: "image_url",
+                  image_url: {
+                    url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a0u8AAAAASUVORK5CYII=",
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }),
+    );
+    const provider = new RequestyMediaGenerationProvider({
+      apiKey: "test-key",
+      fetch,
+    });
+    const result = await provider.generateImage({ prompt: "blue circle" }, context);
+    expect(result.mimeType).toBe("image/png");
+    expect(result.bytes.byteLength).toBeGreaterThan(0);
+    expect(fetch).toHaveBeenCalledWith(
+      "https://router.requesty.ai/v1/chat/completions",
+      expect.objectContaining({
+        method: "POST",
+        headers: expect.objectContaining({ Authorization: "Bearer test-key" }),
+      }),
+    );
   });
   it("has an offline image and async video implementation", async () => {
     const provider = new FakeMediaGenerationProvider();

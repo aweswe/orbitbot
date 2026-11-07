@@ -1,7 +1,7 @@
-import { BrainCircuit, Check, ChevronDown, Gauge, Settings2, Sparkles } from "lucide-react";
+import { BrainCircuit, Check, ChevronDown, Gauge, Image as ImageIcon, Settings2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-export type OrbitModelTier = "instant" | "thinking" | "custom";
+export type OrbitModelTier = "instant" | "thinking" | "image" | "custom";
 export type ReasoningEffortLevel = "low" | "medium" | "high" | "max";
 
 const REASONING_LEVELS: ReasoningEffortLevel[] = ["low", "medium", "high", "max"];
@@ -54,7 +54,13 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
   }, [open]);
 
   const activeLabel =
-    modelTier === "instant" ? "Orbit Flash" : modelTier === "thinking" ? "Orbit Forge" : "Custom AI";
+    modelTier === "instant"
+      ? "Orbit Flash"
+      : modelTier === "thinking"
+        ? "Orbit Forge"
+        : modelTier === "image"
+          ? "Orbit Canvas"
+          : "Custom AI";
 
   return (
     <div className="relative inline-block" ref={menuRef}>
@@ -66,14 +72,18 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
         className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-caption font-medium transition-all duration-150 border ${
           modelTier === "thinking"
             ? "dark:bg-violet-950/50 bg-violet-50 dark:text-violet-300 text-violet-800 dark:border-violet-500/40 border-violet-300 hover:border-violet-400"
-            : modelTier === "custom"
-              ? "dark:bg-emerald-950/50 bg-emerald-50 dark:text-emerald-300 text-emerald-800 dark:border-emerald-500/40 border-emerald-300 hover:border-emerald-400"
-              : "dark:bg-amber-950/40 bg-amber-50 dark:text-amber-300 text-amber-800 dark:border-amber-500/30 border-amber-300 hover:border-amber-400/50"
+            : modelTier === "image"
+              ? "dark:bg-sky-950/50 bg-sky-50 dark:text-sky-300 text-sky-800 dark:border-sky-500/40 border-sky-300 hover:border-sky-400"
+              : modelTier === "custom"
+                ? "dark:bg-emerald-950/50 bg-emerald-50 dark:text-emerald-300 text-emerald-800 dark:border-emerald-500/40 border-emerald-300 hover:border-emerald-400"
+                : "dark:bg-amber-950/40 bg-amber-50 dark:text-amber-300 text-amber-800 dark:border-amber-500/30 border-amber-300 hover:border-amber-400/50"
         } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer active:scale-95"}`}
         title={`Selected Model: ${activeLabel}`}
       >
         {modelTier === "thinking" ? (
           <BrainCircuit size={12} className="dark:text-violet-400 text-violet-600 shrink-0" />
+        ) : modelTier === "image" ? (
+          <ImageIcon size={12} className="dark:text-sky-400 text-sky-600 shrink-0" />
         ) : modelTier === "custom" ? (
           <Settings2 size={12} className="dark:text-emerald-400 text-emerald-600 shrink-0" />
         ) : (
@@ -185,6 +195,37 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
                   </button>
                 );
               })}
+            </div>
+          </div>
+
+          {/* Orbit Canvas Option (Image Generation) */}
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => {
+              setModelTier("image");
+              setOpen(false);
+            }}
+            className={`group relative w-full cursor-pointer rounded-lg border p-2 text-left transition-colors mb-1 ${
+              modelTier === "image"
+                ? "dark:border-sky-500/40 border-sky-400/60 dark:bg-sky-500/[0.08] bg-sky-50/80"
+                : "border-transparent hover:bg-muted/50"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md dark:bg-sky-500/10 bg-sky-100 dark:text-sky-400 text-sky-700">
+                <ImageIcon size={14} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-caption font-semibold text-foreground">Orbit Canvas</span>
+                  <span className="rounded px-1 py-px text-caption font-medium dark:bg-sky-500/20 bg-sky-100 dark:text-sky-300 text-sky-800">
+                    Image Gen
+                  </span>
+                </div>
+                <p className="text-caption text-muted-foreground truncate">Gemini 3.1 Flash Image · Requesty</p>
+              </div>
+              {modelTier === "image" && <Check size={14} className="text-sky-500 shrink-0" />}
             </div>
           </div>
 
