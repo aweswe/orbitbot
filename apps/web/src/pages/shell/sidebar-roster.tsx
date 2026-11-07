@@ -561,17 +561,30 @@ export function SidebarRoster({
                                 {formatRosterTime(item.chat.updatedAt)}
                               </span>
                             ) : null}
-                            <button
-                              type="button"
+                            {/*
+                              The whole row is a <button> (the ContextMenuTrigger).
+                              A nested <button> is invalid HTML and makes React warn
+                              about a hydration error, so this action is a focusable
+                              span instead. It stops propagation from the row's click.
+                            */}
+                            <span
+                              role="button"
+                              tabIndex={0}
                               aria-label={t`Actions for ${item.chat.name}`}
                               onClick={(e) => {
+                                e.stopPropagation();
+                                setBotMenu({ kind: item.kind, id: item.chat.id });
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key !== "Enter" && e.key !== " ") return;
+                                e.preventDefault();
                                 e.stopPropagation();
                                 setBotMenu({ kind: item.kind, id: item.chat.id });
                               }}
                               className="hidden group-hover/row:flex focus:flex p-0.5 rounded text-muted-foreground hover:text-foreground transition-opacity"
                             >
                               <MoreHorizontal size={14} strokeWidth={1.5} />
-                            </button>
+                            </span>
                             {item.chat.unread ? (
                               <span
                                 aria-hidden="true"
