@@ -5,7 +5,7 @@ import type {
   ComputerRef,
   JobPublisher,
   SandboxProvider,
-} from "@rakazo/adapter-kit";
+} from "@forion/orbit-adapter-kit";
 import {
   computerControlExpireJobKey,
   SandboxAllowanceUsedError,
@@ -13,16 +13,16 @@ import {
   SandboxSizeUnavailableError,
   SandboxUnavailableError,
   SandboxUnresponsiveError,
-} from "@rakazo/adapter-kit";
-import type { ComputerSize, ComputerUpdate } from "@rakazo/contracts";
+} from "@forion/orbit-adapter-kit";
+import type { ComputerSize, ComputerUpdate } from "@forion/orbit-contracts";
 import {
   ACTIVE_RUN_STATUSES,
   abortableDelay,
   isRetryableError,
   parseScreenLeaseId,
   screenLeaseId,
-} from "@rakazo/core";
-import type { Prisma, PrismaClient, ThreadEvents } from "@rakazo/db";
+} from "@forion/orbit-core";
+import type { Prisma, PrismaClient, ThreadEvents } from "@forion/orbit-db";
 import {
   expireComputerExecutionLeases,
   isUniqueViolation,
@@ -31,8 +31,8 @@ import {
   recordComputerRunEnd,
   recordComputerRunStart,
   spaceTakesWork,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import {
   clearInactiveUserComputerControl,
   expireComputerControl,

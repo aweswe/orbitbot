@@ -18,9 +18,9 @@ import type {
   ScreenRequest,
   ScreenSession,
   TerminalRequest,
-} from "@rakazo/adapter-kit";
-import { COMPUTER_CACHE_ENV } from "@rakazo/core/node/desktop-runtime";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import { COMPUTER_CACHE_ENV } from "@forion/orbit-core/node/desktop-runtime";
+import { getLogger } from "@forion/orbit-logging";
 import { Agent, request as httpRequest } from "undici";
 import WebSocket from "ws";
 import type { RawExecEvent } from "./exec-computer.js";

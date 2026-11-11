@@ -1,4 +1,4 @@
-import type { AgentUsage, ModelCallObserver, UsageOperationKind } from "@rakazo/adapter-kit";
+import type { AgentUsage, ModelCallObserver, UsageOperationKind } from "@forion/orbit-adapter-kit";
 import { getOrbitControlPlaneClient } from "./orbit-control-plane-client.js";
 
 interface ActiveReservation {
@@ -22,7 +22,7 @@ export function creditCostFor(usage: AgentUsage | null): number {
 }
 
 /**
- * Orbit Credit Observer for Orion.
+ * Orbit Credit Observer for Orbit.
  *
  * Plugs into the PiAgentRuntime's ModelCallObserver hook.
  * Awaited BEFORE models.streamSimple begins, enforcing strict fail-closed balance verification
@@ -39,7 +39,8 @@ export function createOrbitModelCreditObserver(scope: {
 
   return {
     async beforeCall(call) {
-      const callId = call.callId || `orbit_call_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+      const callId =
+        call.callId || `orbit_call_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
       const inputTokens = call.inputTokensEstimate || 120;
       const maxOutput = call.maxOutputTokens || 4096;
 
@@ -120,8 +121,9 @@ export function createOrbitModelCreditObserver(scope: {
 
     async onRequestId(reservationId, providerRequestId) {
       // Correlation log for auditing
-      console.log(`[OrbitBot Billing] Call ${reservationId} connected to providerRequestId: ${providerRequestId}`);
+      console.log(
+        `[OrbitBot Billing] Call ${reservationId} connected to providerRequestId: ${providerRequestId}`,
+      );
     },
   };
 }
-

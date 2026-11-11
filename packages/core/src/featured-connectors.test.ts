@@ -1,4 +1,4 @@
-import type { ConnectionCatalogItem } from "@rakazo/contracts";
+import type { ConnectionCatalogItem } from "@forion/orbit-contracts";
 import { describe, expect, it } from "vitest";
 import {
   buildFeaturedConnectorTiles,

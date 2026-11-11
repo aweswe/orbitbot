@@ -1,6 +1,6 @@
+import type { ThreadMessage } from "@forion/orbit-contracts";
+import { previewMessageText as previewText } from "@forion/orbit-core";
 import { t } from "@lingui/core/macro";
-import type { ThreadMessage } from "@rakazo/contracts";
-import { previewMessageText as previewText } from "@rakazo/core";
 
 export type PendingAttachment = {
   id: string;

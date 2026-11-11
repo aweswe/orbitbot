@@ -1,13 +1,17 @@
 import { AsyncLocalStorage } from "node:async_hooks";
-import type { SecurityEvent, SecurityEventMetadata, SecurityEventType } from "@rakazo/contracts";
-import { SECURITY_EVENT_TYPES, SecurityEventTypeSchema } from "@rakazo/contracts";
-import { getLogContext, getLogger, redactBindings } from "@rakazo/logging";
+import type {
+  SecurityEvent,
+  SecurityEventMetadata,
+  SecurityEventType,
+} from "@forion/orbit-contracts";
+import { SECURITY_EVENT_TYPES, SecurityEventTypeSchema } from "@forion/orbit-contracts";
+import { getLogContext, getLogger, redactBindings } from "@forion/orbit-logging";
 import { recordAuditEvent } from "./audit-events.js";
 import type { PrismaClient } from "./client.js";
 import { parsePositiveInteger } from "./client.js";
 import { runAsSystem } from "./row-security.js";
 
-export type { SecurityEventType } from "@rakazo/contracts";
+export type { SecurityEventType } from "@forion/orbit-contracts";
 
 type SecurityEventDb = Pick<PrismaClient, "securityEvent">;
 

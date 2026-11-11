@@ -1,4 +1,4 @@
-import { notificationAvatarSource } from "@rakazo/core";
+import { notificationAvatarSource } from "@forion/orbit-core";
 
 type AvatarBot = { id: string; color: string; avatarSet?: string | null };
 

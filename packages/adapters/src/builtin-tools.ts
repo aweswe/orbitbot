@@ -1,4 +1,4 @@
-import type { ConnectorTool } from "@rakazo/adapter-kit";
+import type { ConnectorTool } from "@forion/orbit-adapter-kit";
 import {
   ATTACHMENT_MAX_COUNT,
   BOT_DESCRIPTION_MAX_LENGTH,
@@ -22,7 +22,7 @@ import {
   TICKET_PRIORITIES,
   TICKET_STATUSES,
   TICKET_TITLE_MAX_LENGTH,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import { z } from "zod";
 import { allowPrivateHttpSecretOrigins } from "./bot-secrets.js";
 import { BROWSER_ACT_KINDS } from "./browser-tools.js";
@@ -642,7 +642,8 @@ export const builtinAgentTools: ConnectorTool[] = [
         },
         message_id: {
           type: "string",
-          description: "Optional ID of the message to react to. Defaults to the user message that initiated this turn.",
+          description:
+            "Optional ID of the message to react to. Defaults to the user message that initiated this turn.",
         },
       },
       required: ["reaction"],
@@ -728,7 +729,7 @@ export const builtinAgentTools: ConnectorTool[] = [
   {
     name: "save_page",
     description:
-      'Save a page the user opens from the chat: a dashboard, report, tracker or comparison. Pass the page as JSX source written against the Rakazo page kit; call with {"help": true} first for the kit guide. Problems come back with line numbers and nothing is saved. To change a page, pass its pageId with edits (applied together, or not at all) or full source; pass only pageId to read its current source. A result with sharedByLink is a page the user shared: anyone with its link sees each save at once.',
+      'Save a page the user opens from the chat: a dashboard, report, tracker or comparison. Pass the page as JSX source written against the Orbit page kit; call with {"help": true} first for the kit guide. Problems come back with line numbers and nothing is saved. To change a page, pass its pageId with edits (applied together, or not at all) or full source; pass only pageId to read its current source. A result with sharedByLink is a page the user shared: anyone with its link sees each save at once.',
     inputSchema: {
       type: "object",
       properties: {
@@ -1856,7 +1857,7 @@ export const builtinAgentTools: ConnectorTool[] = [
   {
     name: "update_preferences",
     description:
-      "Read or change the user's own account preferences: timezone and Rakazo marketing emails. Change them only when the user asks. Call with no fields to read the current values. Email, password, sign-in, billing and account deletion are only in the app's settings.",
+      "Read or change the user's own account preferences: timezone and Orbit marketing emails. Change them only when the user asks. Call with no fields to read the current values. Email, password, sign-in, billing and account deletion are only in the app's settings.",
     inputSchema: {
       type: "object",
       properties: {
@@ -1866,7 +1867,7 @@ export const builtinAgentTools: ConnectorTool[] = [
         },
         marketingEmails: {
           type: "boolean",
-          description: "false unsubscribes from Rakazo's product emails; true resubscribes.",
+          description: "false unsubscribes from Orbit's product emails; true resubscribes.",
         },
       },
       additionalProperties: false,
@@ -1875,7 +1876,7 @@ export const builtinAgentTools: ConnectorTool[] = [
   {
     name: "feedback",
     description:
-      "Send a bug report or product feedback about Rakazo to the people who run this server. Only when the user asks you to report something. Describe what happened and what was expected in general terms; leave out names, contact details, message text, credentials and other personal details. The report already identifies this chat, bot and run.",
+      "Send a bug report or product feedback about Orbit to the people who run this server. Only when the user asks you to report something. Describe what happened and what was expected in general terms; leave out names, contact details, message text, credentials and other personal details. The report already identifies this chat, bot and run.",
     inputSchema: {
       type: "object",
       properties: {

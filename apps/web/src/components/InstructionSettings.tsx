@@ -1,9 +1,13 @@
+import type { Bot } from "@forion/orbit-contracts";
+import { BOT_INSTRUCTIONS_MAX_LENGTH } from "@forion/orbit-contracts";
+import { Button, Disclosure, Textarea } from "@forion/orbit-ui-web";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@forion/orbit-ui-web/components/ui/popover";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { ORPCError } from "@orpc/client";
-import type { Bot } from "@rakazo/contracts";
-import { BOT_INSTRUCTIONS_MAX_LENGTH } from "@rakazo/contracts";
-import { Button, Disclosure, Textarea } from "@rakazo/ui-web";
-import { Popover, PopoverContent, PopoverTrigger } from "@rakazo/ui-web/components/ui/popover";
 import { History } from "lucide-react";
 import { useId, useState } from "react";
 import { rpc } from "../lib/rpc";

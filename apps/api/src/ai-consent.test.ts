@@ -1,5 +1,5 @@
-import type { Actor } from "@rakazo/contracts";
-import { AI_DISCLOSURE_VERSION } from "@rakazo/contracts";
+import type { Actor } from "@forion/orbit-contracts";
+import { AI_DISCLOSURE_VERSION } from "@forion/orbit-contracts";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("./thread-target.js", () => ({

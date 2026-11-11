@@ -1,6 +1,6 @@
+import { isLocalhostOrLoopbackIp } from "@forion/orbit-contracts";
+import { COMPUTER_SCREEN_PATH } from "@forion/orbit-contracts/content-security-policy";
 import { t } from "@lingui/core/macro";
-import { isLocalhostOrLoopbackIp } from "@rakazo/contracts";
-import { COMPUTER_SCREEN_PATH } from "@rakazo/contracts/content-security-policy";
 import { errorText } from "./user-error";
 
 export interface ComputerScreenResult {

@@ -1,6 +1,5 @@
 import { randomBytes } from "node:crypto";
-import { ORPCError } from "@orpc/server";
-import { runContinueJob } from "@rakazo/adapter-kit";
+import { runContinueJob } from "@forion/orbit-adapter-kit";
 import {
   archiveBot,
   checkpointAndStopComputer,
@@ -20,17 +19,17 @@ import {
   storeBotSecret,
   toComputerRef,
   validateBotModelChange,
-} from "@rakazo/adapters";
+} from "@forion/orbit-adapters";
 import type {
   Actor,
   Bot,
   BotSecretMetadata,
   SettingsScope,
   VaultPutInput,
-} from "@rakazo/contracts";
-import { BotSecretAuth, resolveBotAvatarSet } from "@rakazo/contracts";
-import { ACTIVE_RUN_STATUSES, displayName } from "@rakazo/core";
-import type { Prisma } from "@rakazo/db";
+} from "@forion/orbit-contracts";
+import { BotSecretAuth, resolveBotAvatarSet } from "@forion/orbit-contracts";
+import { ACTIVE_RUN_STATUSES, displayName } from "@forion/orbit-core";
+import type { Prisma } from "@forion/orbit-db";
 import {
   BotSectionNameConflictError,
   botProfileLabelsChanged,
@@ -46,8 +45,9 @@ import {
   SpaceDeletionInProgressError,
   settingsTarget,
   THREAD_LOCK_TRANSACTION_OPTIONS,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
+import { ORPCError } from "@orpc/server";
 import type { AgentImportServices } from "../agent-import.js";
 import { agentImportSetupState, createImportedBot, previewAgentImport } from "../agent-import.js";
 import { deleteAgentSecret, listAgentSecrets, putAgentSecret } from "../agent-secrets.js";
@@ -219,7 +219,7 @@ export function botIntroPrompt(input: {
     "two to four short options that fit your name, anything your description or instructions already say, and what you know about them, never a stock list";
   return [
     [
-      "You were just created as an Orbit bot on the Orbit workspace by Forion. Orbit is a completely standalone platform. Rakazo is a completely separate external GitHub repository with zero connection to Orbit; never identify as Rakazo and never describe Rakazo as Orbit's client or front door.",
+      "You were just created as an Orbit bot on the Orbit workspace by Forion. Orbit is a standalone platform. Never identify as another product or describe another product as Orbit's client or front door.",
       input.userName ? `${input.userName} made you.` : undefined,
       input.spaceName ? `Their team space is called "${input.spaceName}".` : undefined,
     ]

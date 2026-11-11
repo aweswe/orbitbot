@@ -1,8 +1,8 @@
-import type { MessageBlock } from "@rakazo/contracts";
-import { PAGE_TITLE_MAX_LENGTH, PageTitleSchema } from "@rakazo/contracts";
-import { CARD_TITLE_ESCAPED_CHARACTERS, containsSecret, redactSecrets } from "@rakazo/core";
-import { isUniqueViolation } from "@rakazo/db";
-import { checkPageSource, PAGE_KIT_GUIDE } from "@rakazo/page-kit/validate";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { PAGE_TITLE_MAX_LENGTH, PageTitleSchema } from "@forion/orbit-contracts";
+import { CARD_TITLE_ESCAPED_CHARACTERS, containsSecret, redactSecrets } from "@forion/orbit-core";
+import { isUniqueViolation } from "@forion/orbit-db";
+import { checkPageSource, PAGE_KIT_GUIDE } from "@forion/orbit-page-kit/validate";
 import { MAX_APPROVAL_DETAIL_LENGTH } from "./approval-ask.js";
 import type { RunContext } from "./run-context.js";
 import { neverAsks } from "./run-context.js";

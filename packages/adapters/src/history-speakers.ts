@@ -1,7 +1,7 @@
-import type { MessageBlock } from "@rakazo/contracts";
-import { botMessageContext } from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
-import { loadMessageAuthors } from "@rakazo/db";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { botMessageContext } from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
+import { loadMessageAuthors } from "@forion/orbit-db";
 
 /** What the model reads for the person of a personal space: never their real name. */
 export const USER_SPEAKER = "User";

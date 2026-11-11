@@ -1,37 +1,37 @@
 {
   "specVersion": "1.0",
   "host": {
-    "displayName": "Rakazo",
-    "documentationUrl": "https://rakazo.com/self-hosted-ai-agent/"
+    "displayName": "Orbit Bot",
+    "documentationUrl": "https://docs.forion.dev"
   },
   "entries": [
     {
-      "identifier": "urn:air:rakazo.com:docs:llms",
-      "displayName": "Rakazo agent guide",
+      "identifier": "urn:air:orbit.forion.dev:docs:llms",
+      "displayName": "Orbit Bot agent guide",
       "type": "text/plain",
-      "url": "https://rakazo.com/llms.txt",
-      "description": "Product overview, agent-assisted setup guidance, and canonical resources."
+      "url": "https://orbit.forion.dev/llms.txt",
+      "description": "Product overview, canonical resources, and safety guidance."
     },
     {
-      "identifier": "urn:air:rakazo.com:docs:overview",
-      "displayName": "Rakazo overview",
+      "identifier": "urn:air:orbit.forion.dev:docs:overview",
+      "displayName": "Orbit Bot overview",
       "type": "text/markdown",
-      "url": "https://rakazo.com/index.md",
-      "description": "Features, model choices, self-hosting, and common questions."
+      "url": "https://orbit.forion.dev/index.md",
+      "description": "Features, platforms, and getting started."
     },
     {
-      "identifier": "urn:air:rakazo.com:docs:self-host",
-      "displayName": "Self-hosting guide",
-      "type": "text/html",
-      "url": "https://rakazo.com/self-hosted-ai-agent/",
-      "description": "Requirements, installation, and connecting desktop and mobile clients."
-    },
-    {
-      "identifier": "urn:air:rakazo.com:docs:self-host-markdown",
-      "displayName": "Self-hosting guide as Markdown",
+      "identifier": "urn:air:orbit.forion.dev:docs:about",
+      "displayName": "About Orbit Bot",
       "type": "text/markdown",
-      "url": "https://rakazo.com/self-hosted-ai-agent.md",
-      "description": "The setup guide with language-tagged command examples."
+      "url": "https://orbit.forion.dev/about.md",
+      "description": "The Orbit and Forion product hierarchy and source attribution."
+    },
+    {
+      "identifier": "urn:air:orbit.forion.dev:docs:support",
+      "displayName": "Orbit support",
+      "type": "text/markdown",
+      "url": "https://orbit.forion.dev/support.md",
+      "description": "Support, account deletion, and vulnerability reporting."
     }
   ]
 }

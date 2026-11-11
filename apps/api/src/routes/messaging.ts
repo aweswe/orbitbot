@@ -1,7 +1,6 @@
-import { ORPCError } from "@orpc/server";
-import { messagingDeliverJob } from "@rakazo/adapter-kit";
-import { displayName } from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
+import { messagingDeliverJob } from "@forion/orbit-adapter-kit";
+import { displayName } from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
 import {
   crossSpaceCommunicationAllowed,
   formatMessagingLinkCode,
@@ -9,8 +8,9 @@ import {
   isUniqueViolation,
   runAsSystem,
   spaceIsShared,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
+import { ORPCError } from "@orpc/server";
 import type { RouterContext } from "./context.js";
 
 export function messagingRoutes(ctx: RouterContext) {

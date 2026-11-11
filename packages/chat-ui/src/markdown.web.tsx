@@ -19,8 +19,8 @@ import { unified } from "unified";
 import type { HastNode } from "./table-utils";
 import "./markdown.web.css";
 import "./markdown-table.css";
-import { droppedTableHtmlText } from "@rakazo/contracts";
-import { cssVariableName, pageIconBars } from "@rakazo/ui-tokens";
+import { droppedTableHtmlText } from "@forion/orbit-contracts";
+import { cssVariableName, pageIconBars } from "@forion/orbit-ui-tokens";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,7 +32,7 @@ import {
   AlertDialogTitle,
   CopyTextFallback,
   useCopyText,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
 import { CheckIcon, CopyIcon, GlobeIcon, ImageIcon } from "./icons";
 import type { ChatMarkdownProps } from "./markdown";
 import {
@@ -194,11 +194,16 @@ function svgFenceSource(node: MarkdownHast | undefined): string | undefined {
   return undefined;
 }
 
-function parseSvgDimensions(svg: string): { width: number; height: number; src: string; title: string } | undefined {
+function parseSvgDimensions(
+  svg: string,
+): { width: number; height: number; src: string; title: string } | undefined {
   const open = /<svg\b[^>]*>/i.exec(svg)?.[0];
   if (!open) return undefined;
 
-  const viewBoxMatch = /\sviewBox=["']([^"']+)["']/i.exec(open)?.[1]?.trim().split(/[\s,]+/);
+  const viewBoxMatch = /\sviewBox=["']([^"']+)["']/i
+    .exec(open)?.[1]
+    ?.trim()
+    .split(/[\s,]+/);
   let width = viewBoxMatch ? Number(viewBoxMatch[2]) : NaN;
   let height = viewBoxMatch ? Number(viewBoxMatch[3]) : NaN;
 
@@ -219,7 +224,10 @@ function parseSvgDimensions(svg: string): { width: number; height: number; src: 
 
   let sizedSvg = svg;
   if (!/\swidth=/i.test(open) || !/\sheight=/i.test(open)) {
-    sizedSvg = svg.replace(open, open.replace(/^<svg\b/i, `<svg width="${width}" height="${height}"`));
+    sizedSvg = svg.replace(
+      open,
+      open.replace(/^<svg\b/i, `<svg width="${width}" height="${height}"`),
+    );
   }
   if (!/\sxmlns=/i.test(sizedSvg)) {
     sizedSvg = sizedSvg.replace(/^<svg\b/i, '<svg xmlns="http://www.w3.org/2000/svg"');
@@ -246,10 +254,16 @@ function SvgDiagram({ source, fallback }: { source: string; fallback: ReactNode 
       <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-3.5 py-2">
         <div className="flex items-center gap-2">
           <span className="flex h-5 w-5 items-center justify-center rounded-md bg-cyan-500/10 text-cyan-400">
-            <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
-              <circle cx="9" cy="9" r="2"/>
-              <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+            <svg
+              className="size-3.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+              <circle cx="9" cy="9" r="2" />
+              <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
             </svg>
           </span>
           <span className="text-caption font-semibold tracking-wide text-foreground">
@@ -298,9 +312,7 @@ function SvgDiagram({ source, fallback }: { source: string; fallback: ReactNode 
           />
         </figure>
       ) : (
-        <div className="relative">
-          {fallback}
-        </div>
+        <div className="relative">{fallback}</div>
       )}
     </div>
   );
@@ -314,7 +326,8 @@ function MarkdownPre({
   const diagram = mermaidFenceSource(node);
   const svgDiagram = diagram === undefined ? svgFenceSource(node) : undefined;
   // Prose an author wrote in a fence reads as prose; code keeps the monospaced font.
-  const prose = diagram === undefined && svgDiagram === undefined && isProseFence(fenceLanguage(node));
+  const prose =
+    diagram === undefined && svgDiagram === undefined && isProseFence(fenceLanguage(node));
   // An empty fence has nothing to copy.
   const codeBlock = (
     <CodeBlock {...props} copyable={/\S/.test(codeText(codeElement(node)))} prose={prose} />

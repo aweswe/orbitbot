@@ -7,10 +7,10 @@ import {
   PostgresRealtimeFanout,
   secretStoreOptionsFromEnv,
   unwrapEnvFromKeyManager,
-} from "@rakazo/adapters";
-import { resolveEncryptionKey } from "@rakazo/core";
-import { loadRootEnv } from "@rakazo/core/node/load-root-env";
-import { createDb, runAsSystem } from "@rakazo/db";
+} from "@forion/orbit-adapters";
+import { resolveEncryptionKey } from "@forion/orbit-core";
+import { loadRootEnv } from "@forion/orbit-core/node/load-root-env";
+import { createDb, runAsSystem } from "@forion/orbit-db";
 import { createSecretMigrationRepository } from "../secret-migration.js";
 
 loadRootEnv();

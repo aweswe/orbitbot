@@ -8,14 +8,14 @@ import type {
   McpSourcePreset,
   PluginMarketplaceEntry,
   RpcOutput,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   CONNECTION_LABEL_MAX_LENGTH,
   mcpServerConnection,
   mcpServerNeedsSignIn,
   SUBMIT_PLUGIN_URL,
-} from "@rakazo/contracts";
-import type { PluginCategory } from "@rakazo/core";
+} from "@forion/orbit-contracts";
+import type { PluginCategory } from "@forion/orbit-core";
 import {
   buildFeaturedConnectorTiles,
   CONNECTION_CATALOG_PAGE_SIZE,
@@ -30,7 +30,7 @@ import {
   matchesWordPrefixes,
   newClientId,
   OTHER_PLUGINS,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import type { NativeStackNavigationOptions } from "expo-router";
 import { useFocusEffect, useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";

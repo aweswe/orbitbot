@@ -1,11 +1,11 @@
-import { AppLocaleSchema } from "@rakazo/contracts";
-import { matchUiLocale } from "@rakazo/core";
+import { AppLocaleSchema } from "@forion/orbit-contracts";
+import { matchUiLocale } from "@forion/orbit-core";
 
 export const UI_LOCALES = AppLocaleSchema.options;
 
 export type UiLocale = (typeof UI_LOCALES)[number];
 
-export const UI_LOCALE_STORAGE_KEY = "rakazo.uiLocale";
+export const UI_LOCALE_STORAGE_KEY = "orbit.uiLocale";
 
 /** Normalize BCP-47 tags (`de-DE`, `ko-KR`, `pt-BR`, `zh-CN`, `es-ES`) to a supported UI locale, else `en`. */
 export function normalizeUiLocale(raw: string | null | undefined): UiLocale {

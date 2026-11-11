@@ -1,7 +1,7 @@
+import type { PaymentWalletStatus } from "@forion/orbit-contracts";
+import { writeSaved } from "@forion/orbit-core/query";
+import { Button } from "@forion/orbit-ui-web";
 import { Trans, useLingui } from "@lingui/react/macro";
-import type { PaymentWalletStatus } from "@rakazo/contracts";
-import { writeSaved } from "@rakazo/core/query";
-import { Button } from "@rakazo/ui-web";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ExternalLink } from "lucide-react";
 import { useState } from "react";

@@ -1,4 +1,4 @@
-import { canonicalPiProviderId, storedPiProviderIds, usableModelId } from "@rakazo/contracts";
+import { canonicalPiProviderId, storedPiProviderIds, usableModelId } from "@forion/orbit-contracts";
 import type { PrismaClient } from "./client.js";
 
 export const newestCredentialOrder = [

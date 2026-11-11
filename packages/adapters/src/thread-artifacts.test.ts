@@ -3,10 +3,10 @@ import type {
   ArtifactStore,
   ComputerRef,
   SandboxProvider,
-} from "@rakazo/adapter-kit";
-import type { MessageBlock } from "@rakazo/contracts";
-import { ATTACHMENT_MAX_COUNT } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-adapter-kit";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { ATTACHMENT_MAX_COUNT } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
 import { describe, expect, it, vi } from "vitest";
 import {
   attachWorkspaceFileToThread,

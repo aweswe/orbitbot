@@ -1,12 +1,12 @@
+import { randomUUID } from "node:crypto";
 import { setImmediate } from "node:timers/promises";
-import type { JobPublisher, NotificationProvider } from "@rakazo/adapter-kit";
-import { messagingDeliverJob, routineWakeupJob, runContinueJob } from "@rakazo/adapter-kit";
-import type { MessageBlock } from "@rakazo/contracts";
-import { stuckWorkStatusMessages } from "@rakazo/core";
-import type { Pool, PrismaClient, ThreadEvents } from "@rakazo/db";
-import { reconcileComputerRuns } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
-import type { PoolClient } from "pg";
+import type { JobPublisher, NotificationProvider } from "@forion/orbit-adapter-kit";
+import { messagingDeliverJob, routineWakeupJob, runContinueJob } from "@forion/orbit-adapter-kit";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { stuckWorkStatusMessages } from "@forion/orbit-core";
+import type { Pool, PrismaClient, ThreadEvents } from "@forion/orbit-db";
+import { reconcileComputerRuns } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { returnBotMessageOutcome } from "./bot-messages.js";
 import { reconcileCallRequests } from "./call-request.js";
 import { scheduleComputerControlExpiry } from "./computer-control.js";
@@ -24,10 +24,9 @@ const CONTROL_LOOKAHEAD_MS = 60_000;
  * finishing a failed attempt holds it for seconds before Graphile unlocks it.
  */
 const ABANDONED_QUEUED_LOCK_MS = 5 * 60_000;
-// Two keys give Rakazo's lock a namespace without relying on a hash that might collide
-// with an application using the one-key advisory-lock API.
-const RECONCILIATION_LOCK_NAMESPACE = 1_380_019_075;
-const RECONCILIATION_LOCK_ID = 1;
+/** A lease survives a missed heartbeat and expires after a crash. */
+const RECONCILIATION_LEASE_MS = 120_000;
+const RECONCILIATION_HEARTBEAT_MIN_MS = 50;
 
 type Cursor = { at: Date; id: string };
 type ControlCursor = { at: Date | null; id: string };
@@ -38,69 +37,107 @@ export interface ReconciliationLeadership {
 }
 
 /**
- * Holds a session advisory lock for the lifetime of the elected reconciler. Followers
- * retry on every reconciliation interval, so a disconnected or stopped leader is
- * replaced without coordinating through application state.
+ * A database row lease, not a session advisory lock. PostgreSQL advisory locks are
+ * session-scoped, so a transaction pooler cannot guarantee that the same server
+ * connection stays behind a client. The lease row survives connections, expires
+ * after a crash, and is renewed by a heartbeat while the reconciler works.
+ *
+ * Followers retry on every reconciliation interval. Only the owner can renew or
+ * release; a row that expired cannot be renewed, so a leader that lost the
+ * database stops claiming leadership until it can acquire again.
  */
 export function createPostgresReconciliationLeadership(
-  pool: Pick<Pool, "connect">,
-  options: { lockId?: number } = {},
+  pool: Pick<Pool, "query">,
+  options: { lockId?: number | string; leaseMs?: number; heartbeatMs?: number } = {},
 ): ReconciliationLeadership {
-  const lockId = options.lockId ?? RECONCILIATION_LOCK_ID;
-  let leaderClient: PoolClient | undefined;
-  let leaderErrorListener: (() => void) | undefined;
+  const name = `reconciliation:${options.lockId ?? 1}`;
+  const leaseMs = Math.max(1, options.leaseMs ?? RECONCILIATION_LEASE_MS);
+  const heartbeatMs = Math.max(
+    RECONCILIATION_HEARTBEAT_MIN_MS,
+    options.heartbeatMs ?? Math.floor(leaseMs / 3),
+  );
+  const ownerId = randomUUID();
+  let leader = false;
+  let heartbeat: ReturnType<typeof setInterval> | undefined;
 
-  const loseClient = (client: PoolClient) => {
-    if (leaderClient !== client) return;
-    leaderClient = undefined;
-    leaderErrorListener = undefined;
-    client.release(true);
+  const stopHeartbeat = () => {
+    if (heartbeat) clearInterval(heartbeat);
+    heartbeat = undefined;
+  };
+
+  const loseLeadership = (error?: unknown) => {
+    leader = false;
+    stopHeartbeat();
+    if (error) getLogger().warn("reconciliation leadership renewal failed", { error });
+  };
+
+  const renew = async (): Promise<boolean> => {
+    if (!leader) return false;
+    try {
+      const result = await pool.query(
+        `UPDATE orbit_bot.reconciler_leases
+           SET expires_at = now() + ($3::int * interval '1 millisecond'), updated_at = now()
+         WHERE name = $1 AND owner_id = $2 AND expires_at > now()`,
+        [name, ownerId, leaseMs],
+      );
+      if (result.rowCount === 0) {
+        loseLeadership();
+        return false;
+      }
+      return true;
+    } catch (error) {
+      // Fail closed: stop claiming leadership; the row expires and another replica
+      // can take over. Do not keep renewing in the background after a lost lease.
+      loseLeadership(error);
+      return false;
+    }
+  };
+
+  const startHeartbeat = () => {
+    stopHeartbeat();
+    heartbeat = setInterval(() => void renew(), heartbeatMs);
+    heartbeat.unref?.();
   };
 
   return {
     async tryAcquire() {
-      if (leaderClient) return true;
-
-      const candidate = await pool.connect();
+      if (leader) return renew();
       try {
-        const result = await candidate.query<{ acquired: boolean }>(
-          "SELECT pg_try_advisory_lock($1::integer, $2::integer) AS acquired",
-          [RECONCILIATION_LOCK_NAMESPACE, lockId],
+        const result = await pool.query<{ owner_id: string }>(
+          `INSERT INTO orbit_bot.reconciler_leases AS lease
+             (name, owner_id, expires_at, acquired_at, updated_at)
+           VALUES ($1, $2, now() + ($3::int * interval '1 millisecond'), now(), now())
+           ON CONFLICT (name) DO UPDATE
+             SET owner_id = EXCLUDED.owner_id,
+                 expires_at = EXCLUDED.expires_at,
+                 acquired_at = now(),
+                 updated_at = now()
+             WHERE lease.expires_at <= now()
+           RETURNING owner_id`,
+          [name, ownerId, leaseMs],
         );
-        if (!result.rows[0]?.acquired) {
-          candidate.release();
-          return false;
-        }
-
-        leaderClient = candidate;
-        leaderErrorListener = () => loseClient(candidate);
-        candidate.once("error", leaderErrorListener);
+        if (result.rows[0]?.owner_id !== ownerId) return false;
+        leader = true;
+        startHeartbeat();
         return true;
       } catch (error) {
-        candidate.release(true);
-        throw error;
+        getLogger().error("reconciliation leadership acquisition failed", error, { name });
+        return false;
       }
     },
 
     async release() {
-      const client = leaderClient;
-      if (!client) return;
-      leaderClient = undefined;
-      if (leaderErrorListener) client.removeListener("error", leaderErrorListener);
-      leaderErrorListener = undefined;
-
-      let destroy = false;
+      stopHeartbeat();
+      if (!leader) return;
+      leader = false;
       try {
-        const result = await client.query<{ released: boolean }>(
-          "SELECT pg_advisory_unlock($1::integer, $2::integer) AS released",
-          [RECONCILIATION_LOCK_NAMESPACE, lockId],
+        await pool.query(
+          "DELETE FROM orbit_bot.reconciler_leases WHERE name = $1 AND owner_id = $2",
+          [name, ownerId],
         );
-        destroy = result.rows[0]?.released !== true;
-      } catch {
-        // Never return a connection with an uncertain session lock to the pool.
-        destroy = true;
-      } finally {
-        client.release(destroy);
+      } catch (error) {
+        // The row expires; never throw from shutdown cleanup.
+        getLogger().error("reconciliation leadership release failed", error, { name });
       }
     },
   };

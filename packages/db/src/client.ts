@@ -1,7 +1,7 @@
+import type { KeyProvider } from "@forion/orbit-adapter-kit";
+import { resolveContentEncryption } from "@forion/orbit-core";
+import { getLogger } from "@forion/orbit-logging";
 import { PrismaPg } from "@prisma/adapter-pg";
-import type { KeyProvider } from "@rakazo/adapter-kit";
-import { resolveContentEncryption } from "@rakazo/core";
-import { getLogger } from "@rakazo/logging";
 import type { PoolClient } from "pg";
 import { Pool } from "pg";
 import { withContentEncryption } from "./content-encryption.js";
@@ -13,7 +13,13 @@ import {
   PgSpaceKeyStore,
 } from "./content-keys.js";
 import { PrismaClient } from "./generated/prisma/client.js";
-import { installDbContext, rlsBypassKey, withRowLevelSecurity } from "./row-security.js";
+import {
+  createScopedQuery,
+  installDbContext,
+  installTransactionContext,
+  rlsBypassKey,
+  withRowLevelSecurity,
+} from "./row-security.js";
 import { withTextSanitization } from "./text-sanitization.js";
 
 export type Db = PrismaClient;
@@ -25,6 +31,8 @@ export interface DbClientOptions {
   keyProvider?: KeyProvider;
   /** Encrypt new content. Defaults to CONTENT_ENCRYPTION (see resolveContentEncryption). */
   encryptContent?: boolean;
+  /** Reject a URL with no ?schema= so the app cannot silently target public. */
+  requireSchema?: boolean;
 }
 
 /**
@@ -72,7 +80,7 @@ export function createPool(connectionString: string, options: DbClientOptions = 
     client.on("error", () => undefined);
   });
   installConnectRetry(pool);
-  installDbContext(pool);
+  installDbContext(pool, { schema });
   installSaturationReport(pool, options.applicationName);
   return pool;
 }
@@ -92,9 +100,13 @@ export function createDb(
   // master keys held on this host.
   if (!options.keyProvider && (process.env.MASTER_KEY_PROVIDER?.trim() || "local") !== "local")
     throw new Error(
-      "MASTER_KEY_PROVIDER needs createDb(url, { keyProvider }) from @rakazo/adapters",
+      "MASTER_KEY_PROVIDER needs createDb(url, { keyProvider }) from @forion/orbit-adapters",
     );
   const schema = schemaFromConnectionString(connectionString);
+  if (options.requireSchema && !schema)
+    throw new Error(
+      "DATABASE_URL must include ?schema=<orbit_bot>; refusing to fall back to public",
+    );
   const pool = createPool(connectionString, options);
   const keyPool = new Pool({
     connectionString,
@@ -106,7 +118,7 @@ export function createDb(
     keepAlive: true,
   });
   keyPool.on("error", () => undefined);
-  installDbContext(keyPool);
+  installDbContext(keyPool, { schema });
   installSaturationReport(keyPool, keyPool.options.application_name);
   const end = pool.end.bind(pool) as () => Promise<void>;
   pool.end = (async () => {
@@ -115,7 +127,7 @@ export function createDb(
   }) as Pool["end"];
   const contentKeys = new ContentKeyRing(
     options.keyProvider ?? lazyKeyProvider(() => new LocalKeyProvider(masterKeysFromEnv())),
-    new PgSpaceKeyStore(keyPool),
+    new PgSpaceKeyStore(createScopedQuery(keyPool, { schema })),
     { encryptWrites },
   );
   const adapter = new PrismaPg(pool, schema ? { schema } : undefined);
@@ -125,14 +137,18 @@ export function createDb(
     adapter,
     transactionOptions: { maxWait: CHECKOUT_TIMEOUT_MS },
   });
-  // Row-level security wraps everything else, so its findUnique rewrite still runs
-  // through content encryption. Text is cleaned for Postgres before any of them see it.
+  // Row-level security wraps content encryption, so a findUnique rewrite still
+  // runs through it. Text is cleaned for Postgres before any of them see it.
   const prisma = withTextSanitization(
     withRowLevelSecurity(
       withContentEncryption(client, contentKeys),
       rlsBypassKey(connectionString),
+      schema ?? "",
     ),
   );
+  // Later extensions return their own client, so the final one gets the
+  // transaction-context wrapper.
+  installTransactionContext(prisma, rlsBypassKey(connectionString), schema ?? "");
   return { prisma, pool, contentKeys };
 }
 

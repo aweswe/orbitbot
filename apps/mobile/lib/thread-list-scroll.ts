@@ -1,5 +1,5 @@
-import type { ThreadItem } from "@rakazo/core";
-import { reconcileThreadScrollState } from "@rakazo/core";
+import type { ThreadItem } from "@forion/orbit-core";
+import { reconcileThreadScrollState } from "@forion/orbit-core";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type {
   FlatList,

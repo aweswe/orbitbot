@@ -1,5 +1,5 @@
-import { MODEL_KEY_FORMAT_ERROR, ModelConnectInputSchema } from "@rakazo/contracts";
-import { canUseCompatibleModelAsDefault } from "@rakazo/core";
+import { MODEL_KEY_FORMAT_ERROR, ModelConnectInputSchema } from "@forion/orbit-contracts";
+import { canUseCompatibleModelAsDefault } from "@forion/orbit-core";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   CLOUDFLARE_AI_GATEWAY_CONFIG_MESSAGE,

@@ -1,12 +1,12 @@
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
-import type { BotAvatarSet } from "@rakazo/contracts";
-import { resolveBotAvatarSet } from "@rakazo/contracts";
-import { SHIPPED_BOT_AVATAR_SHAPE_KEYS } from "@rakazo/core";
+import type { BotAvatarSet } from "@forion/orbit-contracts";
+import { resolveBotAvatarSet } from "@forion/orbit-contracts";
+import { SHIPPED_BOT_AVATAR_SHAPE_KEYS } from "@forion/orbit-core";
 import {
   BOT_AVATAR_COLORS,
   BotAvatar,
   BotShapePreview,
+  COSMIC_CREATURES,
+  CosmicCreatureAvatar,
   DEFAULT_BOT_AVATAR_COLOR,
   Dialog,
   DialogContent,
@@ -15,17 +15,17 @@ import {
   DialogHeader,
   DialogTitle,
   defaultBotAvatarValue,
+  OrbitPlanetAvatar,
   parseBotAvatar,
   resolvePersonaColorDef,
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-  COSMIC_CREATURES,
-  CosmicCreatureAvatar,
-  OrbitPlanetAvatar,
-} from "@rakazo/ui-web";
-import { Button } from "@rakazo/ui-web/components/ui/button";
+} from "@forion/orbit-ui-web";
+import { Button } from "@forion/orbit-ui-web/components/ui/button";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Check, Pencil, Upload, X } from "lucide-react";
 import type { ClipboardEvent, DragEvent } from "react";
 import { useRef, useState } from "react";

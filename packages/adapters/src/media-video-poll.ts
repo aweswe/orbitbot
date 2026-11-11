@@ -3,10 +3,10 @@ import type {
   ArtifactStore,
   JobPublisher,
   MediaGenerationProvider,
-} from "@rakazo/adapter-kit";
-import { mediaPollJob, runContinueJob } from "@rakazo/adapter-kit";
-import type { Prisma, PrismaClient, ThreadEvents } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import { mediaPollJob, runContinueJob } from "@forion/orbit-adapter-kit";
+import type { Prisma, PrismaClient, ThreadEvents } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { generateMediaFromTool, MEDIA_JOB_KIND } from "./media-generation-tools.js";
 import { persistMessageInTransaction } from "./run-messages.js";
 import { attachWorkspaceFileToThread } from "./thread-artifacts.js";

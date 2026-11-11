@@ -1,5 +1,5 @@
-import type { MessageAuthor, MessageBlock, ReplyPreview } from "@rakazo/contracts";
-import { MessageAuthorSchema, ReplyPreviewSchema } from "@rakazo/contracts";
+import type { MessageAuthor, MessageBlock, ReplyPreview } from "@forion/orbit-contracts";
+import { MessageAuthorSchema, ReplyPreviewSchema } from "@forion/orbit-contracts";
 import { displayName } from "./display-name.js";
 import { plainTextFromMarkdown } from "./markdown-plain.js";
 

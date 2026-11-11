@@ -9,20 +9,20 @@ import type {
   BillingProvider,
   BillingSubscriptionSnapshot,
   BillingSubscriptionStatus,
-} from "@rakazo/adapter-kit";
+} from "@forion/orbit-adapter-kit";
 import {
   BillingCheckoutCompletedError,
   BillingCustomerNotFoundError,
   BillingNoMonthlyCreditsError,
-} from "@rakazo/adapter-kit";
-import type { BillingCancellationReason, ByokTier } from "@rakazo/contracts";
+} from "@forion/orbit-adapter-kit";
+import type { BillingCancellationReason, ByokTier } from "@forion/orbit-contracts";
 import {
   BILLING_CANCELLATION_REASONS,
   BYOK_TIERS,
   ByokTierSchema,
   ModelCreditAmountSchema,
-} from "@rakazo/contracts";
-import { readBoundedJsonResponse } from "@rakazo/core";
+} from "@forion/orbit-contracts";
+import { readBoundedJsonResponse } from "@forion/orbit-core";
 import { z } from "zod";
 
 export const STRIPE_API_VERSION = "2026-09-30.endive";
@@ -221,7 +221,7 @@ export class StripeBillingProvider implements BillingProvider {
                 price: await this.recurringPrice(
                   `rakazo_monthly_credits_${input.amountCents}`,
                   input.amountCents,
-                  "Rakazo monthly model credits",
+                  "Orbit monthly model credits",
                 ),
               }
             : {
@@ -229,7 +229,7 @@ export class StripeBillingProvider implements BillingProvider {
                 price_data: {
                   currency: "usd",
                   unit_amount: input.amountCents,
-                  product_data: { name: "Rakazo model credits" },
+                  product_data: { name: "Orbit model credits" },
                 },
               },
         ],
@@ -263,7 +263,7 @@ export class StripeBillingProvider implements BillingProvider {
           price: await this.recurringPrice(
             `rakazo_monthly_credits_${amountCents}`,
             amountCents,
-            "Rakazo monthly model credits",
+            "Orbit monthly model credits",
           ),
           quantity: 1,
         },
@@ -362,9 +362,7 @@ export class StripeBillingProvider implements BillingProvider {
         ? `${BYOK_PRICE_KEY_PREFIX}${period}_${amountCents}`
         : `${BYOK_PRICE_KEY_PREFIX}${tier}_${period}_${amountCents}`,
       amountCents,
-      tier === "standard"
-        ? "Rakazo own-key plan"
-        : `Rakazo own-key plan (${BYOK_TIERS[tier].name})`,
+      tier === "standard" ? "Orbit own-key plan" : `Orbit own-key plan (${BYOK_TIERS[tier].name})`,
       interval,
     );
   }

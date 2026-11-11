@@ -13,11 +13,11 @@
   "iconLibrary": "lucide",
   "rtl": false,
   "aliases": {
-    "components": "@rakazo/ui-web/components",
-    "utils": "@rakazo/ui-web/lib/utils",
-    "ui": "@rakazo/ui-web/components/ui",
-    "lib": "@rakazo/ui-web/lib",
-    "hooks": "@rakazo/ui-web/hooks"
+    "components": "@forion/orbit-ui-web/components",
+    "utils": "@forion/orbit-ui-web/lib/utils",
+    "ui": "@forion/orbit-ui-web/components/ui",
+    "lib": "@forion/orbit-ui-web/lib",
+    "hooks": "@forion/orbit-ui-web/hooks"
   },
   "menuColor": "default",
   "menuAccent": "subtle",

@@ -1,5 +1,9 @@
-import type { AuthCapabilities } from "@rakazo/contracts";
-import { hostMatchesPasskeyRpId, passkeyOfferDismissedKey, shouldOfferPasskey } from "@rakazo/core";
+import type { AuthCapabilities } from "@forion/orbit-contracts";
+import {
+  hostMatchesPasskeyRpId,
+  passkeyOfferDismissedKey,
+  shouldOfferPasskey,
+} from "@forion/orbit-core";
 import Constants from "expo-constants";
 import * as SecureStore from "expo-secure-store";
 import { Alert, Platform } from "react-native";

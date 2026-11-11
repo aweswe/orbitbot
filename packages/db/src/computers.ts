@@ -1,12 +1,12 @@
 import { createHash, randomUUID } from "node:crypto";
-import type { ComputerMode } from "@rakazo/contracts";
-import { isTerminal } from "@rakazo/core";
+import type { ComputerMode } from "@forion/orbit-contracts";
+import { isTerminal } from "@forion/orbit-core";
 import type { PrismaClient } from "./client.js";
 import { Prisma } from "./client.js";
 import { runAsSystem, runAsSystemInTransaction } from "./row-security.js";
 import { withTransactionRetry } from "./transaction-retry.js";
 
-export type { ComputerMode } from "@rakazo/contracts";
+export type { ComputerMode } from "@forion/orbit-contracts";
 
 /**
  * Whether this person may act on a computer's user control. Members of a Space share its
@@ -374,7 +374,13 @@ async function ensureComputerRecordWithQuota(
 }
 
 function isTransactionClient(prisma: ComputerClient): prisma is ComputerTx {
-  return typeof prisma.$queryRaw === "function" && typeof prisma.$transaction !== "function";
+  // Prisma's transaction client still exposes $transaction; what it lacks is the
+  // connection lifecycle. Using it as a root client would open a second transaction
+  // and commit part of a restore that then fails.
+  return (
+    typeof prisma.$queryRaw === "function" &&
+    typeof (prisma as { $connect?: unknown }).$connect !== "function"
+  );
 }
 
 export async function ensureComputerRecord(

@@ -1,9 +1,9 @@
-import type { SignupSurvey } from "@rakazo/contracts";
+import type { SignupSurvey } from "@forion/orbit-contracts";
 import {
   SIGNUP_SURVEY_TEAM_SIZES,
   signupSurveyAsksTeamSize,
   signupSurveyTeamSizeLabel,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 
 export type SignupSurveyTeamSize = (typeof SIGNUP_SURVEY_TEAM_SIZES)[number];
 

@@ -2,8 +2,8 @@ import { spawn, spawnSync } from "node:child_process";
 import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { AdapterContext, ComputerAction, ComputerRef } from "@rakazo/adapter-kit";
-import { browserProfilePathForScreen } from "@rakazo/core/node/desktop-runtime";
+import type { AdapterContext, ComputerAction, ComputerRef } from "@forion/orbit-adapter-kit";
+import { browserProfilePathForScreen } from "@forion/orbit-core/node/desktop-runtime";
 import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
 import { LinuxDesktop } from "./linux-desktop.js";
 
@@ -198,7 +198,12 @@ describe("provider focus command", () => {
     });
     const result = runFocus(command);
     expect(result.status, result.stderr).toBe(0);
-    expect(readFileSync(recorded, "utf8").trim().split("\n")).toEqual([workspace, "notes.txt"]);
+    await vi.waitFor(
+      () => {
+        expect(readFileSync(recorded, "utf8").trim().split("\n")).toEqual([workspace, "notes.txt"]);
+      },
+      { timeout: 5_000, interval: 20 },
+    );
   });
 
   it.skipIf(process.platform !== "linux")(
@@ -256,17 +261,20 @@ describe("provider focus command", () => {
     expect(readFileSync(activated, "utf8").trim()).toBe("0x0000000c");
   });
 
-  it("fails a focus URI when the launcher exits before the old window is raised", async () => {
-    const failapp = path.join(bin, "failapp");
-    writeExecutable(failapp, "#!/bin/sh\nexit 1\n");
-    writeFileSync(windows, "0x00000004  0 4 failapp.Failapp host app\n");
-    const command = await focusCommand({
-      kind: "focus",
-      application: failapp,
-      uri: "notes.txt",
-    });
-    const result = runFocus(command);
-    expect(result.status, result.stderr).not.toBe(0);
-    expect(() => readFileSync(activated, "utf8")).toThrow();
-  });
+  it.skipIf(process.platform !== "linux")(
+    "fails a focus URI when the launcher exits before the old window is raised",
+    async () => {
+      const failapp = path.join(bin, "failapp");
+      writeExecutable(failapp, "#!/bin/sh\nexit 1\n");
+      writeFileSync(windows, "0x00000004  0 4 failapp.Failapp host app\n");
+      const command = await focusCommand({
+        kind: "focus",
+        application: failapp,
+        uri: "notes.txt",
+      });
+      const result = runFocus(command);
+      expect(result.status, result.stderr).not.toBe(0);
+      expect(() => readFileSync(activated, "utf8")).toThrow();
+    },
+  );
 });

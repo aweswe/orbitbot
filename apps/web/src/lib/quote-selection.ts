@@ -1,5 +1,5 @@
-import type { ThreadMessage } from "@rakazo/contracts";
-import { truncateReplyQuote } from "@rakazo/contracts";
+import type { ThreadMessage } from "@forion/orbit-contracts";
+import { truncateReplyQuote } from "@forion/orbit-contracts";
 
 /**
  * Resolves a text selection to the message it quotes. A quote stays scoped to

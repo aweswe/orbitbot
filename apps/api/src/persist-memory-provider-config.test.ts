@@ -1,5 +1,5 @@
-import { MemoryProviderPrivateEndpointRequiredError } from "@rakazo/adapters";
-import type { PrismaClient } from "@rakazo/db";
+import { MemoryProviderPrivateEndpointRequiredError } from "@forion/orbit-adapters";
+import type { PrismaClient } from "@forion/orbit-db";
 import { describe, expect, it, vi } from "vitest";
 import {
   disconnectMemoryProvider,

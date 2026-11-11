@@ -1,4 +1,3 @@
-import { Trans, useLingui } from "@lingui/react/macro";
 import type {
   AgentSkillCatalogEntry,
   Bot,
@@ -7,7 +6,7 @@ import type {
   ModelCatalogEntry,
   ReplyMode,
   ThinkingLevel,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   BOT_COMPUTER_MODES,
   BOT_DESCRIPTION_MAX_LENGTH,
@@ -15,7 +14,7 @@ import {
   BUILTIN_TOOL_NAMES,
   isBuiltinToolName,
   resolveBotAvatarSet,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   chatModelChoices,
   connectedModelChoices,
@@ -23,7 +22,7 @@ import {
   modelOptionKey,
   parseModelOptionKey,
   resolveSelectableModelId,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import {
   Button,
   Input,
@@ -37,7 +36,8 @@ import {
   TabsTrigger,
   Textarea,
   Toggle,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useQuery } from "@tanstack/react-query";
 import { Download, Mail, Settings, X } from "lucide-react";
 import type { ReactNode } from "react";

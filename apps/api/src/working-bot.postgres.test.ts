@@ -1,6 +1,6 @@
-import type { SandboxProvider } from "@rakazo/adapter-kit";
-import type { Actor } from "@rakazo/contracts";
-import type { ThreadEvents } from "@rakazo/db";
+import type { SandboxProvider } from "@forion/orbit-adapter-kit";
+import type { Actor } from "@forion/orbit-contracts";
+import type { ThreadEvents } from "@forion/orbit-db";
 import {
   appendEventInTransaction,
   createDb,
@@ -9,7 +9,7 @@ import {
   provisionMessagingIdentity,
   runAsSystem,
   runAsTenant,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
 import { describe, expect, it, vi } from "vitest";
 import {
   cancelThreadRuns,

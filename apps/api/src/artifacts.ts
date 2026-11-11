@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
-import type { ArtifactStore, MessagingInboundAttachment } from "@rakazo/adapter-kit";
-import { createAdapterContext } from "@rakazo/adapter-kit";
-import type { Actor } from "@rakazo/contracts";
+import type { ArtifactStore, MessagingInboundAttachment } from "@forion/orbit-adapter-kit";
+import { createAdapterContext } from "@forion/orbit-adapter-kit";
+import type { Actor } from "@forion/orbit-contracts";
 import {
   ARTIFACT_NAME_MAX_LENGTH,
   ATTACHMENT_MAX_BYTES,
@@ -9,7 +9,7 @@ import {
   attachmentSizeLabel,
   isAttachmentAudioMimeType,
   MCP_APP_MIME_TYPE,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   AttachmentValidationError,
   decodeAttachmentBase64,
@@ -17,9 +17,14 @@ import {
   messageBlockForArtifact,
   promptTextForAttachments,
   validateAttachmentMimeType,
-} from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
-import { IsolationError, isRecordNotFound, Prisma, withResolvedArtifactVersion } from "@rakazo/db";
+} from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
+import {
+  IsolationError,
+  isRecordNotFound,
+  Prisma,
+  withResolvedArtifactVersion,
+} from "@forion/orbit-db";
 
 export async function createOwnedArtifact(
   deps: {

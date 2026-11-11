@@ -1,5 +1,5 @@
-import type { ModelHeaderRow } from "@rakazo/contracts";
-import { serverHeadersFromRows } from "@rakazo/contracts";
+import type { ModelHeaderRow } from "@forion/orbit-contracts";
+import { serverHeadersFromRows } from "@forion/orbit-contracts";
 import { Stack, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TextInput } from "react-native";

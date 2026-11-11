@@ -1,9 +1,9 @@
 import { createHmac } from "node:crypto";
 
-const secret =
-  process.env.FORION_ORBIT_INTERNAL_SECRET ||
-  "***REMOVED***";
-const userId = process.env.DEV_API_USER_ID || "xsviuWUARjywMLDk0bcI6";
+const secret = process.env.FORION_ORBIT_INTERNAL_SECRET;
+if (!secret) throw new Error("FORION_ORBIT_INTERNAL_SECRET is required");
+const userId = process.env.DEV_API_USER_ID;
+if (!userId) throw new Error("DEV_API_USER_ID is required");
 const serverUrl = process.env.FORION_SERVER_URL || "http://localhost:3001";
 
 function sign(method, path) {

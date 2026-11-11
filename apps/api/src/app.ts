@@ -1,8 +1,6 @@
 import { AsyncLocalStorage } from "node:async_hooks";
 import { createHmac, randomUUID } from "node:crypto";
 import { hostname } from "node:os";
-import { ORPCError, onError } from "@orpc/server";
-import { RPCHandler } from "@orpc/server/fetch";
 import type {
   AgentContextStrategy,
   AgentRuntime,
@@ -16,7 +14,7 @@ import type {
   RealtimeFanout,
   SandboxProvider,
   TransactionalEmailProvider,
-} from "@rakazo/adapter-kit";
+} from "@forion/orbit-adapter-kit";
 import {
   SandboxAllowanceUsedError,
   SandboxDamagedError,
@@ -24,7 +22,7 @@ import {
   SandboxUnavailableError,
   SandboxUnresponsiveError,
   VoiceAccountError,
-} from "@rakazo/adapter-kit";
+} from "@forion/orbit-adapter-kit";
 import type {
   ComposioProvider,
   ConnectorRegistry,
@@ -32,7 +30,7 @@ import type {
   PluginTextReader,
   RemoteConnectorDependencies,
   UserDeviceGateway,
-} from "@rakazo/adapters";
+} from "@forion/orbit-adapters";
 import {
   applyMessagingOutboundStatus,
   auditLogConfig,
@@ -66,8 +64,8 @@ import {
   deploymentModelUsageLookup,
   EmailEmulator,
   ExpoPushProvider,
-  getOrbitControlPlaneClient,
   GraphileJobPublisher,
+  getOrbitControlPlaneClient,
   InMemoryJobQueue,
   InMemoryRealtimeFanout,
   InstalledConnectorProvider,
@@ -106,23 +104,23 @@ import {
   userDeviceInternalAddress,
   verifyModelServesAgents,
   withSecretPersistence,
-} from "@rakazo/adapters";
-import type { DirectoryAccountChange } from "@rakazo/auth";
+} from "@forion/orbit-adapters";
+import type { DirectoryAccountChange } from "@forion/orbit-auth";
 import {
   CLIENT_IP_HEADER,
   createAuth,
   createDirectory,
   isBlockedAuthPath,
   loopbackTwinOrigins,
-} from "@rakazo/auth";
-import type { Actor, AuthCapabilities } from "@rakazo/contracts";
+} from "@forion/orbit-auth";
+import type { Actor, AuthCapabilities } from "@forion/orbit-contracts";
 import {
   isLocalhostOrLoopbackIp,
   PLUGIN_SUBMISSIONS_PATH,
   SERVER_BUILD_HEADER,
-} from "@rakazo/contracts";
-import { encryptionKeyWarning, signupPolicyFromEnv } from "@rakazo/core";
-import type { Pool, PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-contracts";
+import { encryptionKeyWarning, signupPolicyFromEnv } from "@forion/orbit-core";
+import type { Pool, PrismaClient } from "@forion/orbit-db";
 import {
   bootstrapUserSpace,
   configureProviderTransactionPool,
@@ -146,17 +144,19 @@ import {
   SpaceOwnerRequiredError,
   securityEventRetentionDays,
   verifyContentKeys,
-} from "@rakazo/db";
-import type { Logger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import type { Logger } from "@forion/orbit-logging";
 import {
   createServiceLogger,
   enrichLogContext,
   getLogger,
   installLogger,
   SERVICE_NAMES,
-} from "@rakazo/logging";
-import { markExpectedFailure, requestLogging } from "@rakazo/logging/hono";
-import { MarkdownMemoryStore } from "@rakazo/memory";
+} from "@forion/orbit-logging";
+import { markExpectedFailure, requestLogging } from "@forion/orbit-logging/hono";
+import { MarkdownMemoryStore } from "@forion/orbit-memory";
+import { ORPCError, onError } from "@orpc/server";
+import { RPCHandler } from "@orpc/server/fetch";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { deleteAccountContent, finishStalledOrganizationDeletions } from "./account-deletion.js";
@@ -192,13 +192,13 @@ import { createMessagingInboundHandler } from "./messaging-inbound.js";
 import { createMessagingReceipts } from "./messaging-receipts.js";
 import { mountMessagingWebhookRoutes } from "./messaging-webhook.js";
 import { monitoringRoutes } from "./monitoring.js";
+import { syncOrbitUser } from "./orbit-user-sync.js";
 import { pluginSubmissionRoutes } from "./plugin-submissions.js";
 import { sendReferralEmails } from "./referral-email.js";
 import { mountApiRequestBodyLimits, rpcBodyLimit } from "./request-body-limit.js";
 import { createRouter } from "./router.js";
 import { mountScreenTarget } from "./screen-proxy.js";
 import { mountScriptAssets } from "./script-assets.js";
-import { syncOrbitUser } from "./orbit-user-sync.js";
 import { createAuthResponseAudit } from "./security-audit.js";
 import { mountSharedPages } from "./shared-pages.js";
 import { afterSpaceDeparture } from "./space-departure.js";
@@ -316,9 +316,10 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
     ? { prisma: prismaOverride, pool: undefined }
     : createDb(env.databaseUrl, {
         poolMax,
-        applicationName: "rakazo-api",
+        applicationName: "orbit-api",
         keyProvider: contentKeyProviderFromEnv(),
         encryptContent: env.contentEncryption,
+        requireSchema: true,
       });
   let { prisma } = created;
   // Built before anything listens, so a bad TRUSTED_PROXIES entry stops startup.
@@ -383,7 +384,7 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
   if (!inMemoryJobs && !created.pool) {
     ownedJobPool = createPool(env.databaseUrl, {
       poolMax: parsePositiveInteger(process.env.DB_POOL_MAX, 4),
-      applicationName: "rakazo-api-jobs",
+      applicationName: "orbit-api-jobs",
     });
   }
   const jobPool = created.pool ?? ownedJobPool;
@@ -953,7 +954,7 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
   app.get("/api/auth/capabilities", (c) => {
     const isOrbitForion =
       process.env.ORBIT_AUTH_MODE === "forion" || Boolean(process.env.FORION_SERVER_URL);
-    // Orion signs in with Google. Password auth stays available only when
+    // Orbit signs in with Google. Password auth stays available only when
     // Google is not configured, so a missing client id is never a lockout.
     const googleOnly = isOrbitForion && Boolean(env.google);
     return c.json({
@@ -963,9 +964,11 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
           ? { name: env.oidc.name, availability: auth.ssoAvailability() ?? "checking" }
           : null,
       passwordAuth: googleOnly ? false : env.passwordAuth !== false,
-      passwordReset: isOrbitForion ? false : (env.passwordAuth !== false && Boolean(email)),
+      passwordReset: isOrbitForion ? false : env.passwordAuth !== false && Boolean(email),
       resetUrl:
-        !isOrbitForion && env.passwordAuth !== false && email ? new URL("/reset-password", env.webOrigin).href : null,
+        !isOrbitForion && env.passwordAuth !== false && email
+          ? new URL("/reset-password", env.webOrigin).href
+          : null,
       emailCode: isOrbitForion ? false : auth.emailCodeSignIn,
       billing: Boolean(billing),
       passkeyRpId: isOrbitForion ? undefined : auth.passkeyRpId,
@@ -1026,7 +1029,7 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Orion — Android App</title>
+<title>Orbit — Android App</title>
 <style>
   body{font-family:system-ui,sans-serif;background:#050508;color:#e2e8f0;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:1rem;}
   .card{max-width:360px;text-align:center;padding:2rem 1.5rem;}
@@ -1051,7 +1054,7 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
   app.get("/api/orbit/status", (c) => {
     // Public status surface: no infrastructure hosts, no database URLs, no secrets.
     return c.json({
-      brand: "Orion",
+      brand: "Orbit",
       billingEnabled: process.env.ORBIT_BILLING_ENABLED === "true",
       signIn: env.google ? "google" : "password",
     });

@@ -1,13 +1,17 @@
-import type { AgentRunRequest, ComputerRef, SemanticMemoryProvider } from "@rakazo/adapter-kit";
+import type {
+  AgentRunRequest,
+  ComputerRef,
+  SemanticMemoryProvider,
+} from "@forion/orbit-adapter-kit";
 import {
   DEFAULT_CONTEXT_STRATEGY,
   isModelCredentialRejected,
   runContinueJob,
   SandboxUnavailableError,
   SandboxUnresponsiveError,
-} from "@rakazo/adapter-kit";
-import type { MessageBlock, ModelRoleChoice, RunStatus } from "@rakazo/contracts";
-import { disabledBuiltinToolSet } from "@rakazo/contracts";
+} from "@forion/orbit-adapter-kit";
+import type { MessageBlock, ModelRoleChoice, RunStatus } from "@forion/orbit-contracts";
+import { disabledBuiltinToolSet } from "@forion/orbit-contracts";
 import {
   assertTransition,
   botMessageAllowsSilence,
@@ -31,8 +35,8 @@ import {
   renderBotDirectory,
   userRunError,
   userTurnMessageForRun,
-} from "@rakazo/core";
-import type { ThreadEvents } from "@rakazo/db";
+} from "@forion/orbit-core";
+import type { ThreadEvents } from "@forion/orbit-db";
 import {
   accountDeactivated,
   appendEventInTransaction,
@@ -53,9 +57,9 @@ import {
   settleReleasedTakeoverCards,
   spaceTakesWork,
   teamChatRunFromOwner,
-} from "@rakazo/db";
-import { enrichLogContext, getLogger } from "@rakazo/logging";
-import { sanitizedError } from "@rakazo/logging/monitoring";
+} from "@forion/orbit-db";
+import { enrichLogContext, getLogger } from "@forion/orbit-logging";
+import { sanitizedError } from "@forion/orbit-logging/monitoring";
 import { formatAgentEnvironmentInstruction } from "./agent-environment.js";
 import { createApprovedEffectReplayQueue } from "./approval-effect.js";
 import { PARTIAL_REPLY_NOTE } from "./automated-messages.js";
@@ -2144,7 +2148,7 @@ export function createRunExecutor(executorDeps: ExecutorDeps) {
           redactSecrets(text, runSecrets),
         );
         // An outage at the computer provider is retried like any setup failure, but is not a
-        // Rakazo bug to report.
+        // Orbit bug to report.
         const providerOutage =
           setupError instanceof SandboxUnavailableError ||
           setupError instanceof SandboxUnresponsiveError;

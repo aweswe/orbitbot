@@ -17,6 +17,7 @@
 // Tailscale daemon forwards to it, so only devices signed in to your tailnet can reach it.
 import { execFileSync, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
+import { setDefaultResultOrder } from "node:dns";
 import {
   constants,
   cpSync,
@@ -40,6 +41,11 @@ const dotenv = require("dotenv");
 
 const DEFAULT_PORTS = { web: 5173, api: 3100, supervisor: 7091 };
 const PORT_STEP = 10;
+// Keep every local URL and bind on the same hostname so cookies, auth origins, and the Vite
+// proxy agree. Use localhost rather than a mix of localhost and 127.0.0.1. Prefer IPv4 for
+// localhost so macOS's IPv6-first resolution cannot bind the API where the proxy cannot reach it.
+const LOCAL_HOST = "localhost";
+setDefaultResultOrder("ipv4first");
 const MANAGED = {
   container: "rakazo-dev-postgres",
   image: "postgres:18",
@@ -49,7 +55,12 @@ const MANAGED = {
   database: "rakazo",
 };
 const TAILSCALE_APP_CLI = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
-const SERVICES = ["@rakazo/api", "@rakazo/worker", "@rakazo/web", "@rakazo/sandbox-supervisor"];
+const SERVICES = [
+  "@forion/orbit-api",
+  "@forion/orbit-worker",
+  "@forion/orbit-web",
+  "@forion/orbit-sandbox-supervisor",
+];
 
 const fileEnv = existsSync(path.join(root, ".env"))
   ? dotenv.parse(readFileSync(path.join(root, ".env")))
@@ -84,12 +95,21 @@ function run(command, args, options = {}) {
   return execFileSync(command, args, { encoding: "utf8", stdio: "pipe", ...options }).trim();
 }
 
-function portFree(port) {
+function portFreeOn(port, host) {
   return new Promise((resolve) => {
     const server = net.createServer();
-    server.once("error", () => resolve(false));
-    server.listen(port, "127.0.0.1", () => server.close(() => resolve(true)));
+    server.once("error", (error) =>
+      resolve(error.code === "EADDRNOTAVAIL" || error.code === "EAFNOSUPPORT"),
+    );
+    server.listen(port, host, () => server.close(() => resolve(true)));
   });
+}
+
+async function portFree(port) {
+  // A service bound to localhost may use either loopback family. Check both so a port
+  // already occupied on IPv6 is not selected for an IPv4 listener, or vice versa.
+  const [ipv4, ipv6] = await Promise.all([portFreeOn(port, "127.0.0.1"), portFreeOn(port, "::1")]);
+  return ipv4 && ipv6;
 }
 
 async function choosePorts() {
@@ -104,17 +124,20 @@ async function choosePorts() {
 }
 
 function portEnv({ web, api, supervisor }) {
-  const webUrl = `http://127.0.0.1:${web}`;
-  const apiUrl = `http://127.0.0.1:${api}`;
+  const webUrl = `http://${LOCAL_HOST}:${web}`;
+  const apiUrl = `http://${LOCAL_HOST}:${api}`;
   return {
     WEB_PORT: String(web),
     WEB_ORIGIN: webUrl,
     BETTER_AUTH_URL: webUrl,
     API_PORT: String(api),
+    API_HOST: LOCAL_HOST,
     API_URL: apiUrl,
     API_PROXY_TARGET: apiUrl,
     SUPERVISOR_PORT: String(supervisor),
-    SANDBOX_SUPERVISOR_URL: `http://127.0.0.1:${supervisor}`,
+    SUPERVISOR_HOST: LOCAL_HOST,
+    SANDBOX_SUPERVISOR_URL: `http://${LOCAL_HOST}:${supervisor}`,
+    RAKAZO_DEV_HOST: LOCAL_HOST,
   };
 }
 
@@ -184,16 +207,42 @@ async function startManagedPostgres() {
       await new Promise((resolve) => setTimeout(resolve, 500));
     }
   }
-  const server = `127.0.0.1:${MANAGED.port}`;
+  const server = `${LOCAL_HOST}:${MANAGED.port}`;
+  const ownerUrl = `postgres://${MANAGED.owner}:${MANAGED.owner}@${server}/${MANAGED.database}?schema=orbit_bot`;
+  // initdb briefly starts a server during bootstrap, then stops and starts it again.
+  // pg_isready can succeed in that window, so require a real connection too.
+  let ready = false;
+  for (let attempt = 0; attempt < 120; attempt += 1) {
+    if (await connects(ownerUrl)) {
+      ready = true;
+      break;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+  if (!ready) throw new Error(`Postgres at ${server} did not accept a connection`);
   return {
-    url: `postgres://${MANAGED.runtime}:${MANAGED.runtime}@${server}/${MANAGED.database}`,
-    migrationUrl: `postgres://${MANAGED.owner}:${MANAGED.owner}@${server}/${MANAGED.database}`,
+    url: `postgres://${MANAGED.runtime}:${MANAGED.runtime}@${server}/${MANAGED.database}?schema=orbit_bot`,
+    migrationUrl: ownerUrl,
   };
+}
+
+function loginOf(url) {
+  try {
+    return new URL(url).username;
+  } catch {
+    return "";
+  }
 }
 
 async function sharedDatabase() {
   const url = setting("DATABASE_URL");
   const migrationUrl = setting("DATABASE_MIGRATION_URL") || url;
+  if (url && loginOf(url) === loginOf(migrationUrl)) {
+    log(
+      "DATABASE_URL and DATABASE_MIGRATION_URL use the same login; using the local container so migrations run with a separate owner",
+    );
+    return startManagedPostgres();
+  }
   if (url && (await connects(migrationUrl))) return { url, migrationUrl };
   if (url) log("DATABASE_URL in .env does not accept a connection; using the local container");
   return startManagedPostgres();
@@ -395,7 +444,7 @@ function shareOnTailnet(webPort) {
   const host = JSON.parse(run(cli, ["status", "--json"])).Self?.DNSName?.replace(/\.$/, "");
   if (!host) throw new Error("Tailscale is not connected. Sign in to Tailscale and try again.");
   // Inherit stdio: the first run may print a link to turn on HTTPS for the tailnet and wait.
-  execFileSync(cli, ["serve", "--bg", `--https=${webPort}`, `http://127.0.0.1:${webPort}`], {
+  execFileSync(cli, ["serve", "--bg", `--https=${webPort}`, `http://${LOCAL_HOST}:${webPort}`], {
     stdio: "inherit",
   });
   return {
@@ -416,7 +465,7 @@ function generateClientIfStale(env) {
   const schema = path.join(dbPackage, "prisma/schema.prisma");
   if (existsSync(client) && statSync(client).mtimeMs >= statSync(schema).mtimeMs) return;
   log("Generating the Prisma client");
-  runPnpm(["--filter", "@rakazo/db", "generate"], {
+  runPnpm(["--filter", "@forion/orbit-db", "generate"], {
     cwd: root,
     env,
     stdio: "inherit",
@@ -424,6 +473,9 @@ function generateClientIfStale(env) {
 }
 
 const env = { ...process.env, COREPACK_ENABLE_DOWNLOAD_PROMPT: "0" };
+if (!/(^|\s)--dns-result-order=/.test(env.NODE_OPTIONS ?? "")) {
+  env.NODE_OPTIONS = `${env.NODE_OPTIONS ?? ""} --dns-result-order=ipv4first`.trim();
+}
 
 let ports = null;
 if (!setting("WEB_PORT") && !setting("API_PORT")) {
@@ -487,7 +539,7 @@ if (/^(1|true)$/i.test(setting("RAKAZO_DEV_TAILNET") ?? "")) {
 }
 
 if (tailnet) log(`Open ${tailnet.origin} from any device on your tailnet`);
-else if (ports) log(`Open http://127.0.0.1:${ports.web}`);
+else if (ports) log(`Open http://${LOCAL_HOST}:${ports.web}`);
 const turbo = spawnPnpm(
   ["exec", "turbo", "dev", "--env-mode=loose", ...SERVICES.map((name) => `--filter=${name}`)],
   { cwd: root, env, stdio: "inherit" },

@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { schemaScopedDatabaseUrl } from "./cli/postgres.js";
 
 const developerUrl = "postgres://owner:fixture@127.0.0.1:5433/developer_fixture";
 const disposableUrl = "postgres://test:fixture@127.0.0.1:55432/disposable_fixture";
+const scopedUrl = schemaScopedDatabaseUrl(disposableUrl);
 
 // The Prisma config loads `.env` files into the process; drop whatever they added.
 const keysBefore = new Set(Object.keys(process.env));
@@ -23,7 +25,7 @@ describe("mobile screenshot environment", () => {
 
     const { default: prismaConfig } = await import("../../db/prisma.config.js");
 
-    expect(prismaConfig.datasource?.url).toBe(disposableUrl);
+    expect(prismaConfig.datasource?.url).toBe(scopedUrl);
   });
 
   it("replaces a migration URL the shell already exported", async () => {
@@ -34,6 +36,6 @@ describe("mobile screenshot environment", () => {
 
     const { default: prismaConfig } = await import("../../db/prisma.config.js");
 
-    expect(prismaConfig.datasource?.url).toBe(disposableUrl);
+    expect(prismaConfig.datasource?.url).toBe(scopedUrl);
   });
 });

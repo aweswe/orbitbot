@@ -1,4 +1,4 @@
-import type { RpcInput, RpcPath, SpaceBot, SpaceGroup } from "@rakazo/contracts";
+import type { RpcInput, RpcPath, SpaceBot, SpaceGroup } from "@forion/orbit-contracts";
 import type { Dispatch, SetStateAction } from "react";
 import { useCallback, useState } from "react";
 import { Alert } from "react-native";

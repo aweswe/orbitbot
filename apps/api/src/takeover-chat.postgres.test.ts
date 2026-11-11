@@ -1,9 +1,8 @@
 import { randomUUID } from "node:crypto";
 import { mkdtemp, rm } from "node:fs/promises";
 import { join } from "node:path";
-import { RPCHandler } from "@orpc/server/fetch";
-import type { AgentRunRequest, JobPublisher } from "@rakazo/adapter-kit";
-import { computerControlExpireJobKey, runJobKey } from "@rakazo/adapter-kit";
+import type { AgentRunRequest, JobPublisher } from "@forion/orbit-adapter-kit";
+import { computerControlExpireJobKey, runJobKey } from "@forion/orbit-adapter-kit";
 import {
   acquireComputerExecutionLease,
   ComputerBusyError,
@@ -16,15 +15,15 @@ import {
   ScriptedAgentRuntime,
   screenLeaseIdForRun,
   updateFleetGroup,
-} from "@rakazo/adapters";
-import type { Actor } from "@rakazo/contracts";
+} from "@forion/orbit-adapters";
+import type { Actor } from "@forion/orbit-contracts";
 import {
   stuckWorkStatusMessage,
   TAKEOVER_COMPUTER_PENDING_STATE,
   TAKEOVER_COMPUTER_SKIPPED_STATE,
   TAKEOVER_WAIT_EXPIRE_AFTER_MS,
-} from "@rakazo/core";
-import type { Prisma, PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-core";
+import type { Prisma, PrismaClient } from "@forion/orbit-db";
 import {
   asSystem,
   createDb,
@@ -33,8 +32,9 @@ import {
   expireStuckRun,
   runAsSystem,
   runAsTenant,
-} from "@rakazo/db";
-import { MarkdownMemoryStore } from "@rakazo/memory";
+} from "@forion/orbit-db";
+import { MarkdownMemoryStore } from "@forion/orbit-memory";
+import { RPCHandler } from "@orpc/server/fetch";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import type { RouterDeps } from "./router.js";
 import { createRouter } from "./router.js";

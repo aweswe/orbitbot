@@ -1,8 +1,8 @@
-import type { BotSecretDestination } from "@rakazo/contracts";
-import { BOT_SECRET_ORIGIN_MISSING_MESSAGE, encodeLoginSecret } from "@rakazo/contracts";
-import { redactSecrets } from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
-import * as Logging from "@rakazo/logging";
+import type { BotSecretDestination } from "@forion/orbit-contracts";
+import { BOT_SECRET_ORIGIN_MISSING_MESSAGE, encodeLoginSecret } from "@forion/orbit-contracts";
+import { redactSecrets } from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
+import * as Logging from "@forion/orbit-logging";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   credentialArgument,

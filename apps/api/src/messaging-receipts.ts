@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
-import type { MessagingReceipt, MessagingSurface } from "@rakazo/adapter-kit";
-import { providerOfThreadId } from "@rakazo/adapters";
-import { getLogger } from "@rakazo/logging";
+import type { MessagingReceipt, MessagingSurface } from "@forion/orbit-adapter-kit";
+import { providerOfThreadId } from "@forion/orbit-adapters";
+import { getLogger } from "@forion/orbit-logging";
 
 // A reaction stays on the message, so it only goes on a late one: a fast reply
 // is its own acknowledgement.

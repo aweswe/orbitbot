@@ -1,7 +1,7 @@
-import { SecretStoreUnavailableError } from "@rakazo/adapter-kit";
-import type { Actor } from "@rakazo/contracts";
-import { credentialForModel } from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
+import { SecretStoreUnavailableError } from "@forion/orbit-adapter-kit";
+import type { Actor } from "@forion/orbit-contracts";
+import { credentialForModel } from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
 import { describe, expect, it, vi } from "vitest";
 import { selectConfiguredModel } from "./model-roles.js";
 import {

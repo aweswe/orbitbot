@@ -1,5 +1,5 @@
-import type { Routine } from "@rakazo/contracts";
-import { defaultCronPreset, draftFromRoutine, emptyRoutineDraft } from "@rakazo/core";
+import type { Routine } from "@forion/orbit-contracts";
+import { defaultCronPreset, draftFromRoutine, emptyRoutineDraft } from "@forion/orbit-core";
 import { describe, expect, it, vi } from "vitest";
 import { routineDraftChanged, routineSaveRequest } from "./routine-draft";
 

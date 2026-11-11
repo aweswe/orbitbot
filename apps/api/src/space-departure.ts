@@ -1,8 +1,8 @@
-import type { JobPublisher, SandboxProvider } from "@rakazo/adapter-kit";
-import { runContinueJob } from "@rakazo/adapter-kit";
-import { expireComputerControl, stopCancelledGroupRuns } from "@rakazo/adapters";
-import type { PrismaClient, SpaceDeparture, ThreadEvents } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+import type { JobPublisher, SandboxProvider } from "@forion/orbit-adapter-kit";
+import { runContinueJob } from "@forion/orbit-adapter-kit";
+import { expireComputerControl, stopCancelledGroupRuns } from "@forion/orbit-adapters";
+import type { PrismaClient, SpaceDeparture, ThreadEvents } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 
 /**
  * After someone leaves a Space, is removed, or deletes their account: tell clients their runs

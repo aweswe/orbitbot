@@ -1,14 +1,14 @@
 import type { Socket } from "node:net";
-import { unwrapEnvFromKeyManager } from "@rakazo/adapters";
-import { loadRootEnv } from "@rakazo/core/node/load-root-env";
-import { stopOnShutdownSignals } from "@rakazo/core/node/shutdown-signals";
+import { unwrapEnvFromKeyManager } from "@forion/orbit-adapters";
+import { loadRootEnv } from "@forion/orbit-core/node/load-root-env";
+import { stopOnShutdownSignals } from "@forion/orbit-core/node/shutdown-signals";
 
 loadRootEnv();
 await unwrapEnvFromKeyManager();
 
+import { SERVICE_NAMES } from "@forion/orbit-logging";
+import { createRootLogger } from "@forion/orbit-logging/axiom";
 import { serve } from "@hono/node-server";
-import { SERVICE_NAMES } from "@rakazo/logging";
-import { createRootLogger } from "@rakazo/logging/axiom";
 import { createApp } from "./app.js";
 import { loadEnv } from "./env.js";
 

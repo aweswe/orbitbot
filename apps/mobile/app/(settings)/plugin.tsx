@@ -5,14 +5,18 @@ import type {
   McpServer,
   PluginPart,
   PluginPreview,
-} from "@rakazo/contracts";
-import { mcpServerConnection, mcpServerNeedsSignIn, PluginPreviewSchema } from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
+import {
+  mcpServerConnection,
+  mcpServerNeedsSignIn,
+  PluginPreviewSchema,
+} from "@forion/orbit-contracts";
 import {
   catalogItemKey,
   connectCatalogItem,
   installedPluginParts,
   isCatalogItemConnected,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import type { NativeStackNavigationOptions } from "expo-router";
 import {
   Redirect,

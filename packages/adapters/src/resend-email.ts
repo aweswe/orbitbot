@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { setTimeout as sleep } from "node:timers/promises";
-import type { TransactionalEmail, TransactionalEmailProvider } from "@rakazo/adapter-kit";
-import { cancelResponseBody, readBoundedJsonResponse } from "@rakazo/core";
+import type { TransactionalEmail, TransactionalEmailProvider } from "@forion/orbit-adapter-kit";
+import { cancelResponseBody, readBoundedJsonResponse } from "@forion/orbit-core";
 
 const MAX_RESPONSE_BYTES = 4_096;
 

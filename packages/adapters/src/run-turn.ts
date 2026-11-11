@@ -1,4 +1,4 @@
-import type { AgentRuntimeEvent } from "@rakazo/adapter-kit";
+import type { AgentRuntimeEvent } from "@forion/orbit-adapter-kit";
 import {
   DEFAULT_CONTEXT_STRATEGY,
   historyCompactJob,
@@ -9,7 +9,7 @@ import {
   SandboxProviderAccountError,
   SandboxRateLimitError,
   TransientModelError,
-} from "@rakazo/adapter-kit";
+} from "@forion/orbit-adapter-kit";
 import {
   containsSecret,
   displayName,
@@ -21,10 +21,10 @@ import {
   TAKEOVER_COMPUTER_PENDING_STATE,
   userRunError,
   withoutLastToolStepNotes,
-} from "@rakazo/core";
-import { RunHistoryWriteError, recordUsage } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
-import { sanitizedError } from "@rakazo/logging/monitoring";
+} from "@forion/orbit-core";
+import { RunHistoryWriteError, recordUsage } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
+import { sanitizedError } from "@forion/orbit-logging/monitoring";
 import { MAX_APPROVAL_DETAIL_LENGTH, truncate } from "./approval-ask.js";
 import { isToolPauseResult } from "./approval-effect.js";
 import { returnBotMessageOutcome } from "./bot-messages.js";

@@ -1,7 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { rm } from "node:fs/promises";
 import type { Server } from "node:http";
-import { serve } from "@hono/node-server";
 import {
   BillingEmulator,
   ComposioConnector,
@@ -10,8 +9,9 @@ import {
   listPiCatalog,
   MessagingTeamChatEmulator,
   ThirdPartyConnectorEmulator,
-} from "@rakazo/adapters";
-import { createDb } from "@rakazo/db";
+} from "@forion/orbit-adapters";
+import { createDb } from "@forion/orbit-db";
+import { serve } from "@hono/node-server";
 import { createModelConnectionFixtureFetch } from "../model-connection-fixture.js";
 import { PluginMarketplaceFixture } from "../plugin-marketplace-fixture.js";
 import { disposableDatabaseEnv } from "./postgres.js";
@@ -56,7 +56,7 @@ export async function startIosScreenshotBackend(input: {
 
   execFileSync("pnpm", ["db:migrate"], { cwd: input.root, env: process.env, stdio: "inherit" });
 
-  const { createApp } = await import("@rakazo/api/app");
+  const { createApp } = await import("@forion/orbit-api/app");
   // The same offline marketplace, app catalog, and model list the web end-to-end tests use.
   const thirdParties = new ThirdPartyConnectorEmulator();
   const marketplace = new PluginMarketplaceFixture(thirdParties.fetch);

@@ -1,4 +1,4 @@
-import type { Pool, QueryResult } from "pg";
+import type { Pool } from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { PrismaClient } from "./client.js";
 import { createDb } from "./client.js";
@@ -6,38 +6,22 @@ import { provisionMessagingIdentity } from "./messaging.js";
 import { createRepos } from "./repos.js";
 import { asSystem, runAsSystem, runAsTenant } from "./row-security.js";
 import { createSpaceForMember } from "./spaces.js";
+import type { SqlRead } from "./sql-read-tracker.js";
+import { trackPoolReads } from "./sql-read-tracker.js";
 
 const databaseUrl = process.env.DATABASE_URL;
 const describePostgres =
   process.env.VERIFY_DATABASE && databaseUrl ? describe.sequential : describe.skip;
 
 /** Count rows Postgres sends, before Prisma applies a nested take in memory. */
-function trackRunReads(pool: Pool) {
-  const reads: number[] = [];
-  const original = pool.query.bind(pool);
-  pool.query = ((...args: unknown[]) => {
-    const result = (original as (...args: unknown[]) => unknown)(...args);
-    if (!result || typeof (result as Promise<unknown>).then !== "function") return result;
-    return (result as Promise<QueryResult>).then((result) => {
-      const input = args[0];
-      const text =
-        typeof input === "string"
-          ? input
-          : input && typeof input === "object" && "text" in input
-            ? String(input.text)
-            : "";
-      if (/^\s*select\b/i.test(text) && /\bfrom\s+(?:"public"\s*\.\s*)?"?runs"?\b/i.test(text))
-        reads.push(result.rowCount ?? 0);
-      return result;
-    });
-  }) as Pool["query"];
-  return reads;
+function trackRunReads(pool: Pool): SqlRead[] {
+  return trackPoolReads(pool, (text) => /\bfrom\s+(?:"[^"]+"\s*\.\s*)?"?runs"?\b/i.test(text));
 }
 
 describePostgres("bounded latest bot roster runs (PostgreSQL)", () => {
   let prisma: PrismaClient;
   let close: () => Promise<void>;
-  let reads: number[];
+  let reads: SqlRead[];
   let owner: { userId: string; spaceId: string };
   let otherSpace = "";
   const address = `+1559${String(Date.now()).slice(-7)}`;
@@ -181,7 +165,7 @@ describePostgres("bounded latest bot roster runs (PostgreSQL)", () => {
       expected,
     );
     // Three latest runs plus the Waiting bot's one foreground active run.
-    expect(reads.slice(start).reduce((a, b) => a + b, 0)).toBe(4);
+    expect(reads.slice(start).reduce((sum, read) => sum + read.rowCount, 0)).toBe(4);
   });
   it("bounds cross-space rows and never includes another user's bots", async () => {
     const start = reads.length;
@@ -195,7 +179,7 @@ describePostgres("bounded latest bot roster runs (PostgreSQL)", () => {
     expect(
       bots.filter((bot) => bot.name !== "Failed").every((bot) => bot.runErrorId === null),
     ).toBe(true);
-    expect(reads.slice(start).reduce((a, b) => a + b, 0)).toBe(4);
+    expect(reads.slice(start).reduce((sum, read) => sum + read.rowCount, 0)).toBe(4);
     await expect(
       runAsTenant(owner, () => createRepos(prisma).listSpaceBotsForSpaces([otherSpace])),
     ).resolves.toEqual([]);

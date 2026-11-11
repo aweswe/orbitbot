@@ -1,8 +1,8 @@
-import type { MessageBlock } from "@rakazo/contracts";
-import { truncateReplyQuote } from "@rakazo/contracts";
-import { blocksToAgentHistoryText, messageReaction } from "@rakazo/core";
-import { isPageCardMessage } from "@rakazo/core/message-quote";
-import type { PrismaClient } from "@rakazo/db";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { truncateReplyQuote } from "@forion/orbit-contracts";
+import { blocksToAgentHistoryText, messageReaction } from "@forion/orbit-core";
+import { isPageCardMessage } from "@forion/orbit-core/message-quote";
+import type { PrismaClient } from "@forion/orbit-db";
 
 type QuotedMessage = {
   id: string;

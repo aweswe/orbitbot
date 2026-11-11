@@ -1,13 +1,13 @@
-import type { MessageBlock } from "@rakazo/contracts";
-import { callIdFromClientNonce, isBackgroundRunTrigger, redactSecrets } from "@rakazo/core";
-import type { Prisma, RunLease } from "@rakazo/db";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { callIdFromClientNonce, isBackgroundRunTrigger, redactSecrets } from "@forion/orbit-core";
+import type { Prisma, RunLease } from "@forion/orbit-db";
 import {
   appendEventInTransaction,
   createThreadMessageInTransaction,
   THREAD_LOCK_TRANSACTION_OPTIONS,
   withTransactionRetry,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import type { ExecutorDeps } from "./executor-deps.js";
 
 /** Deps for one attempt: its run's history writes carry the lease, so a superseded attempt cannot write. */

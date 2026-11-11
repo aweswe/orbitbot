@@ -1,6 +1,6 @@
-import type { AdapterContext, MemoryStore } from "@rakazo/adapter-kit";
-import type { MemoryPromptBudget, MemoryPromptDocumentUse } from "@rakazo/contracts";
-import { BOT_MEMORY_MAX_BYTES, MEMORY_INDEX_PATH } from "@rakazo/contracts";
+import type { AdapterContext, MemoryStore } from "@forion/orbit-adapter-kit";
+import type { MemoryPromptBudget, MemoryPromptDocumentUse } from "@forion/orbit-contracts";
+import { BOT_MEMORY_MAX_BYTES, MEMORY_INDEX_PATH } from "@forion/orbit-contracts";
 import { byteLength, truncateUtf8 } from "./utf8.js";
 
 /** How much durable memory a prompt carries before the rest is left out. */

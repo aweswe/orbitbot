@@ -1,19 +1,19 @@
-import type { SecretStore } from "@rakazo/adapter-kit";
-import { SecretStoreUnavailableError } from "@rakazo/adapter-kit";
-import type { Actor } from "@rakazo/contracts";
+import type { SecretStore } from "@forion/orbit-adapter-kit";
+import { SecretStoreUnavailableError } from "@forion/orbit-adapter-kit";
+import type { Actor } from "@forion/orbit-contracts";
 import {
   canonicalPiProviderId,
   selectCompatibleModelCredential,
   usableModelId,
-} from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
 import {
   chooseModelCredential,
   findModelCredential,
   findModelCredentialById,
   GUEST_ROLE,
   organizationForMember,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
 import { resolveDeploymentModel } from "./deployment-model.js";
 import { modelCredentialDto } from "./model-connect.js";
 import { compatibleModelSeesImages, modelAcceptsImageInput } from "./model-vision.js";
@@ -627,7 +627,7 @@ export async function validateBotModelChange(
       ? null
       : await findConnectedModelCredential(deps.prisma, deps.secretStore, scope, provider, model);
     if (!credential) {
-      if (hosted || provider === "requesty" || provider === "orbit" || isCatalogModelChoice(provider, model)) {
+      if (hosted || provider === "requesty" || provider === "orbit") {
         return { ok: true, provider, model, thinkingLevel: input.thinkingLevel ?? null };
       }
       return { ok: false, error: PINNED_PROVIDER_NOT_CONNECTED };
@@ -925,7 +925,7 @@ export async function hasHostedModelCredits(
   scope: { userId: string; spaceId: string },
   provider: string,
 ): Promise<boolean> {
-  if (process.env.ORBIT_BILLING_ENABLED === "true" || Boolean(process.env.REQUESTY_API_KEY)) {
+  if (process.env.ORBIT_BILLING_ENABLED === "true" || process.env.REQUESTY_API_KEY) {
     return true;
   }
   const deployment = resolveDeploymentModel();

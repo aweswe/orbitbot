@@ -1,7 +1,4 @@
-import { i18n } from "@lingui/core";
-import { t } from "@lingui/core/macro";
-import { Trans, useLingui } from "@lingui/react/macro";
-import type { Bot, BotSection, Group, Me, Space, ThreadSnapshot } from "@rakazo/contracts";
+import type { Bot, BotSection, Group, Me, Space, ThreadSnapshot } from "@forion/orbit-contracts";
 import {
   BotAvatar,
   Button,
@@ -13,7 +10,10 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
   GroupAvatar,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { i18n } from "@lingui/core";
+import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ChevronDown,
   CircleAlert,
@@ -116,7 +116,10 @@ export function SidebarRoster({
     return (
       <div className="flex flex-col gap-1 px-1 py-1" aria-label={t`Loading bots`}>
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="flex items-center gap-2.5 h-[38px] px-2.5 rounded-lg bg-card/40 border border-border/30 animate-pulse">
+          <div
+            key={i}
+            className="flex items-center gap-2.5 h-[38px] px-2.5 rounded-lg bg-card/40 border border-border/30 animate-pulse"
+          >
             <div className="size-6 rounded-md bg-muted/60 shrink-0" />
             <div className="flex-1 space-y-1 overflow-hidden">
               <div className="h-3 w-20 rounded bg-muted/70" />
@@ -462,7 +465,7 @@ export function SidebarRoster({
                           event.preventDefault();
                           const allRows = Array.from(
                             document.querySelectorAll<HTMLButtonElement>(
-                              '[data-roster-bot-id], [data-roster-group-id]',
+                              "[data-roster-bot-id], [data-roster-group-id]",
                             ),
                           );
                           const idx = allRows.indexOf(

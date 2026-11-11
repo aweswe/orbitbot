@@ -5,17 +5,17 @@ import type { Server } from "node:http";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { serve } from "@hono/node-server";
 import {
   ComposioConnector,
   EmailEmulator,
   FakeComposioClient,
   PipedreamConnector,
   ThirdPartyConnectorEmulator,
-} from "@rakazo/adapters";
-import { callRequestClientNonce } from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
-import { createThreadMessage } from "@rakazo/db";
+} from "@forion/orbit-adapters";
+import { callRequestClientNonce } from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
+import { createThreadMessage } from "@forion/orbit-db";
+import { serve } from "@hono/node-server";
 import { sessionCookieHeader } from "../index.js";
 import { disposableDatabaseEnv } from "./postgres.js";
 import { runProcess } from "./process.js";
@@ -61,7 +61,7 @@ async function main() {
   await mkdir(REPORT_DIR, { recursive: true });
   await mkdir(DATA_DIR, { recursive: true });
 
-  execFileSync("pnpm", ["--filter", "@rakazo/db", "exec", "prisma", "migrate", "deploy"], {
+  execFileSync("pnpm", ["--filter", "@forion/orbit-db", "exec", "prisma", "migrate", "deploy"], {
     cwd: path.join(ROOT, "packages", "db"),
     env: process.env,
     stdio: "inherit",
@@ -77,7 +77,7 @@ async function main() {
     },
     { fetch: thirdParties.fetch, resolveHostname: thirdParties.resolveHostname },
   );
-  const { createApp } = await import("@rakazo/api/app");
+  const { createApp } = await import("@forion/orbit-api/app");
   const handles = await createApp({
     databaseUrl: process.env.DATABASE_URL!,
     dataDir: DATA_DIR,
@@ -286,7 +286,7 @@ async function pushPickerFiles() {
     "base64",
   );
   await writeFile(path.join(dir, PICKER_FILES.image), png);
-  await writeFile(path.join(dir, PICKER_FILES.pdf), onePagePdf("Rakazo fixture PDF"));
+  await writeFile(path.join(dir, PICKER_FILES.pdf), onePagePdf("Orbit fixture PDF"));
   const targets = [
     [PICKER_FILES.image, "/sdcard/Pictures"],
     [PICKER_FILES.pdf, "/sdcard/Download"],

@@ -1,5 +1,5 @@
-import type { MessageBlock } from "@rakazo/contracts";
-import { speechFromBlocks } from "@rakazo/core";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { speechFromBlocks } from "@forion/orbit-core";
 
 const IN_PROGRESS_RUN_STATUSES = new Set(["running", "queued", "leased"]);
 

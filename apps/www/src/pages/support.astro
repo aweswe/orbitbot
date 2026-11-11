@@ -1,16 +1,13 @@
 ---
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
-import { githubStarsLabel } from "../github";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { GITHUB_URL, SELF_HOST_GUIDE_PATH } from "../site";
-
-const starsLabel = await githubStarsLabel();
+import { DOCS_URL, GITHUB_URL } from "../site";
 ---
 
-<BaseLayout title="Support · Rakazo" description="Get help with the Rakazo app and self-hosted Rakazo.">
+<BaseLayout title="Support · Orbit" description="Get help with the Orbit app and self-hosted deployments.">
   <div class="container">
-    <Header starsLabel={starsLabel} />
+    <Header />
     <main id="main" class="privacy-copy">
       <h1>Orbit support</h1>
       <p>
@@ -21,7 +18,7 @@ const starsLabel = await githubStarsLabel();
       </p>
       <h2>Self-hosted Orbit</h2>
       <p>
-        Start with the <a href={SELF_HOST_GUIDE_PATH}>self-hosting guide</a>. For reproducible bugs or feature requests,
+        Start with the <a href={DOCS_URL}>documentation</a>. For reproducible bugs or feature requests,
         open an issue in the <a href={`${GITHUB_URL}/issues`}>GitHub repository</a>.
       </p>
       <h2 id="account-deletion">Account deletion</h2>

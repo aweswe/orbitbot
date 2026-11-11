@@ -1,5 +1,5 @@
-import type { BotAvatarSet } from "@rakazo/contracts";
-import type { CallExchange } from "@rakazo/core";
+import type { BotAvatarSet } from "@forion/orbit-contracts";
+import type { CallExchange } from "@forion/orbit-core";
 import {
   ACTIVE_RUN_STATUSES,
   AiConsentBlocked,
@@ -18,7 +18,7 @@ import {
   reduceThreadSnapshot,
   retryDelayMs,
   spokenMemory,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import type { AudioRecorder } from "expo-audio";
 import { File } from "expo-file-system";
 import { useSyncExternalStore } from "react";

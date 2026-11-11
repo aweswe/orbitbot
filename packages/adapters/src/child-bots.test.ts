@@ -20,11 +20,11 @@ import type {
   CommandRequest,
   JobPublisher,
   SandboxProvider,
-} from "@rakazo/adapter-kit";
-import { SandboxDamagedError } from "@rakazo/adapter-kit";
-import { browserProfilePathForScreen } from "@rakazo/core/node/desktop-runtime";
-import type { createRepos, PrismaClient } from "@rakazo/db";
-import { createLogger, createTestSink, installLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import { SandboxDamagedError } from "@forion/orbit-adapter-kit";
+import { browserProfilePathForScreen } from "@forion/orbit-core/node/desktop-runtime";
+import type { createRepos, PrismaClient } from "@forion/orbit-db";
+import { createLogger, createTestSink, installLogger } from "@forion/orbit-logging";
 import { describe, expect, it, vi } from "vitest";
 import {
   archiveBot,
@@ -138,9 +138,11 @@ describe("spawned bot creation", () => {
       name: "Painter",
       threadId: "thread-2",
     });
-    const createReposSpy = vi.spyOn(await import("@rakazo/db"), "createRepos").mockReturnValue({
-      createBot,
-    } as unknown as ReturnType<typeof createRepos>);
+    const createReposSpy = vi
+      .spyOn(await import("@forion/orbit-db"), "createRepos")
+      .mockReturnValue({
+        createBot,
+      } as unknown as ReturnType<typeof createRepos>);
 
     const result = await spawnBot(
       {
@@ -1545,7 +1547,7 @@ describe("destroyBot", () => {
 
     async function deleteWithBusyProfile(busyAttempts: number) {
       const sink = createTestSink();
-      installLogger(createLogger({ service: "rakazo-api", sinks: [sink] }));
+      installLogger(createLogger({ service: "orbit-api", sinks: [sink] }));
       vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
       let profileAttempts = 0;
       const execute = vi.fn(async function* (_computer: unknown, request: CommandRequest) {
@@ -1586,7 +1588,7 @@ describe("destroyBot", () => {
         return { profileAttempts, events: sink.events };
       } finally {
         vi.useRealTimers();
-        installLogger(createLogger({ service: "rakazo-api", level: "off", sinks: [] }));
+        installLogger(createLogger({ service: "orbit-api", level: "off", sinks: [] }));
       }
     }
 

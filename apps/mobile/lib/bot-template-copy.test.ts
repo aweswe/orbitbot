@@ -1,4 +1,4 @@
-import { BOT_TEMPLATES } from "@rakazo/core";
+import { BOT_TEMPLATES } from "@forion/orbit-core";
 import { afterEach, describe, expect, it } from "vitest";
 import { botTemplateCopy } from "./bot-template-copy";
 import { resetI18nForTests } from "./i18n";

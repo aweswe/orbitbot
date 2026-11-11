@@ -30,7 +30,7 @@ import type {
   StreamedPortableFile,
   TerminalRequest,
   WorkspaceExportLimits,
-} from "@rakazo/adapter-kit";
+} from "@forion/orbit-adapter-kit";
 import {
   SandboxDamagedError,
   SandboxRateLimitError,
@@ -38,10 +38,10 @@ import {
   SandboxUnavailableError,
   SandboxUnresponsiveError,
   WorkspaceTooLargeError,
-} from "@rakazo/adapter-kit";
-import type { ComputerSize } from "@rakazo/contracts";
-import { boundedSandboxCommandTimeoutMs } from "@rakazo/core";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import type { ComputerSize } from "@forion/orbit-contracts";
+import { boundedSandboxCommandTimeoutMs } from "@forion/orbit-core";
+import { getLogger } from "@forion/orbit-logging";
 import {
   BoatApiError,
   BoatRequestGate,

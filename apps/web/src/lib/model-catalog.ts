@@ -1,9 +1,9 @@
+import type { ModelCatalogEntry, ModelCredential, ThinkingLevel } from "@forion/orbit-contracts";
+import type { ConnectedModelChoice } from "@forion/orbit-core";
+import { connectedModelChoices } from "@forion/orbit-core";
 import { i18n } from "@lingui/core";
-import type { ModelCatalogEntry, ModelCredential, ThinkingLevel } from "@rakazo/contracts";
-import type { ConnectedModelChoice } from "@rakazo/core";
-import { connectedModelChoices } from "@rakazo/core";
 
-export { modelOptionKey, parseModelOptionKey } from "@rakazo/core";
+export { modelOptionKey, parseModelOptionKey } from "@forion/orbit-core";
 
 /** The models the connected credentials can run, as one list for a picker. */
 export function connectedModelOptions(

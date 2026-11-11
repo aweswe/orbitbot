@@ -11,10 +11,18 @@ export type DisposablePostgres = {
 /**
  * Every database URL the app and Prisma read, pointed at one disposable database.
  * Prisma migrates DATABASE_MIGRATION_URL first and reloads `.env`, so an inherited
- * one must be overwritten, not deleted.
+ * one must be overwritten, not deleted. The app is schema-scoped, so every URL
+ * carries `?schema=orbit_bot` even when a container URL does not.
  */
+export function schemaScopedDatabaseUrl(url: string, schema = "orbit_bot"): string {
+  const parsed = new URL(url);
+  if (!parsed.searchParams.has("schema")) parsed.searchParams.set("schema", schema);
+  return parsed.toString();
+}
+
 export function disposableDatabaseEnv(url: string) {
-  return { DATABASE_URL: url, DATABASE_MIGRATION_URL: url, REALTIME_DATABASE_URL: url };
+  const scoped = schemaScopedDatabaseUrl(url);
+  return { DATABASE_URL: scoped, DATABASE_MIGRATION_URL: scoped, REALTIME_DATABASE_URL: scoped };
 }
 
 /**

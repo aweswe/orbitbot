@@ -1,4 +1,4 @@
-import { passkeyOfferDismissedKey } from "@rakazo/core";
+import { passkeyOfferDismissedKey } from "@forion/orbit-core";
 import * as SecureStore from "expo-secure-store";
 import { Alert } from "react-native";
 import { create, get, isSupported } from "react-native-passkeys";
@@ -21,7 +21,7 @@ import {
 import { currentSessionGeneration, replaceSessionTokenIfCurrent } from "./session";
 
 const constants = vi.hoisted(() => ({
-  expoConfig: { extra: { passkeyRpIds: ["rakazo.example.test"] } },
+  expoConfig: { extra: { passkeyRpIds: ["orbit.example.test"] } },
 }));
 
 vi.mock("expo-constants", () => ({ default: constants }));
@@ -32,7 +32,7 @@ vi.mock("react-native-passkeys", () => ({ isSupported: vi.fn(), get: vi.fn(), cr
 vi.mock("./api", () => ({
   authHeaders: vi.fn(async () => ({ authorization: "Bearer current-session" })),
   clearSpace: vi.fn(async () => true),
-  currentApiBase: vi.fn(() => "https://rakazo.example.test"),
+  currentApiBase: vi.fn(() => "https://orbit.example.test"),
   fetchMobileJson: vi.fn(),
   passwordResetCapabilities: vi.fn(),
 }));
@@ -46,9 +46,7 @@ vi.mock("./session", () => ({
 const CHALLENGE = "__Secure-better-auth.better-auth-passkey=token.c2lnbmF0dXJl%3D";
 const credential = { id: "cred", rawId: "cred", type: "public-key", response: {} };
 
-function challengeResponse(
-  body: unknown = { challenge: "challenge", rpId: "rakazo.example.test" },
-) {
+function challengeResponse(body: unknown = { challenge: "challenge", rpId: "orbit.example.test" }) {
   return {
     response: new Response(null, {
       headers: { "set-cookie": `${CHALLENGE}; Path=/; HttpOnly; Secure; SameSite=Lax` },
@@ -76,10 +74,10 @@ function requests() {
 beforeEach(() => {
   vi.clearAllMocks();
   resetPasskeysForTests();
-  constants.expoConfig.extra.passkeyRpIds = ["rakazo.example.test"];
+  constants.expoConfig.extra.passkeyRpIds = ["orbit.example.test"];
   platform.OS = "ios";
   vi.mocked(isSupported).mockReturnValue(true);
-  vi.mocked(currentApiBase).mockReturnValue("https://rakazo.example.test");
+  vi.mocked(currentApiBase).mockReturnValue("https://orbit.example.test");
   vi.mocked(currentSessionGeneration).mockReturnValue(1);
   vi.mocked(clearSpace).mockResolvedValue(true);
   vi.mocked(replaceSessionTokenIfCurrent).mockResolvedValue(true);
@@ -91,48 +89,48 @@ afterEach(() => vi.restoreAllMocks());
 
 describe("passkey availability", () => {
   it("needs a server this binary is associated with and a supporting device", async () => {
-    await expect(passkeysAvailable(server("rakazo.example.test"))).resolves.toBe(true);
-    await expect(passkeysAvailable(server("RAKAZO.example.test"))).resolves.toBe(true);
+    await expect(passkeysAvailable(server("orbit.example.test"))).resolves.toBe(true);
+    await expect(passkeysAvailable(server("ORBIT.example.test"))).resolves.toBe(true);
     await expect(passkeysAvailable(server("self-hosted.example.test"))).resolves.toBe(false);
     await expect(passkeysAvailable(server(null))).resolves.toBe(false);
     await expect(passkeysAvailable(undefined)).resolves.toBe(false);
   });
 
   it("hides passkeys on a platform the server's domain does not vouch for", async () => {
-    const iosOnly = server("rakazo.example.test", { ios: true, android: false });
+    const iosOnly = server("orbit.example.test", { ios: true, android: false });
     await expect(passkeysAvailable(iosOnly)).resolves.toBe(true);
     platform.OS = "android";
     await expect(passkeysAvailable(iosOnly)).resolves.toBe(false);
     await expect(
-      passkeysAvailable(server("rakazo.example.test", { ios: false, android: true })),
+      passkeysAvailable(server("orbit.example.test", { ios: false, android: true })),
     ).resolves.toBe(true);
   });
 
   it("hides passkeys when an older server does not say which apps it vouches for", async () => {
-    await expect(passkeysAvailable({ passkeyRpId: "rakazo.example.test" })).resolves.toBe(false);
+    await expect(passkeysAvailable({ passkeyRpId: "orbit.example.test" })).resolves.toBe(false);
   });
 
   it("hides passkeys when the device does not support them", async () => {
     vi.mocked(isSupported).mockReturnValue(false);
-    await expect(passkeysAvailable(server("rakazo.example.test"))).resolves.toBe(false);
+    await expect(passkeysAvailable(server("orbit.example.test"))).resolves.toBe(false);
   });
 
   it("hides passkeys on a binary built without associated domains", async () => {
     constants.expoConfig.extra.passkeyRpIds = [];
-    await expect(passkeysAvailable(server("rakazo.example.test"))).resolves.toBe(false);
+    await expect(passkeysAvailable(server("orbit.example.test"))).resolves.toBe(false);
   });
 
-  it.each(["https://attacker.example.test", "http://rakazo.example.test"])(
+  it.each(["https://attacker.example.test", "http://orbit.example.test"])(
     "does not trust a server at %s advertising an associated RP",
     async (apiBase) => {
       vi.mocked(currentApiBase).mockReturnValue(apiBase);
-      await expect(passkeysAvailable(server("rakazo.example.test"))).resolves.toBe(false);
+      await expect(passkeysAvailable(server("orbit.example.test"))).resolves.toBe(false);
     },
   );
 
   it("allows an HTTPS subdomain of an associated RP", async () => {
-    vi.mocked(currentApiBase).mockReturnValue("https://api.rakazo.example.test");
-    await expect(passkeysAvailable(server("rakazo.example.test"))).resolves.toBe(true);
+    vi.mocked(currentApiBase).mockReturnValue("https://api.orbit.example.test");
+    await expect(passkeysAvailable(server("orbit.example.test"))).resolves.toBe(true);
   });
 });
 
@@ -151,7 +149,7 @@ describe("passkey sign-in", () => {
     await expect(signInWithPasskey()).resolves.toBe(true);
     const [options, verify] = requests();
     expect(options?.path).toBe("/api/auth/passkey/generate-authenticate-options");
-    expect(get).toHaveBeenCalledWith({ challenge: "challenge", rpId: "rakazo.example.test" });
+    expect(get).toHaveBeenCalledWith({ challenge: "challenge", rpId: "orbit.example.test" });
     expect(verify?.path).toBe("/api/auth/passkey/verify-authentication");
     expect(verify?.headers).toMatchObject({ origin: "rakazo://", cookie: CHALLENGE });
     expect(verify?.headers).not.toHaveProperty("authorization");
@@ -202,7 +200,7 @@ describe("passkey sign-in", () => {
       .mockReset()
       .mockResolvedValueOnce({
         response: Response.json({}),
-        body: { challenge: "challenge", rpId: "rakazo.example.test" },
+        body: { challenge: "challenge", rpId: "orbit.example.test" },
       });
     await expect(signInWithPasskey()).rejects.toThrow("Could not continue");
     expect(get).not.toHaveBeenCalled();
@@ -247,7 +245,7 @@ describe("passkey registration", () => {
       .mockResolvedValueOnce(
         challengeResponse({
           challenge: "register",
-          rp: { id: "rakazo.example.test", name: "Rakazo" },
+          rp: { id: "orbit.example.test", name: "Orbit" },
         }),
       )
       .mockResolvedValueOnce({ response: Response.json({}), body: { id: "passkey-1" } });
@@ -258,7 +256,7 @@ describe("passkey registration", () => {
     expect(options?.headers).toMatchObject({ authorization: "Bearer current-session" });
     expect(create).toHaveBeenCalledWith({
       challenge: "register",
-      rp: { id: "rakazo.example.test", name: "Rakazo" },
+      rp: { id: "orbit.example.test", name: "Orbit" },
     });
     expect(verify?.path).toBe("/api/auth/passkey/verify-registration");
     expect(verify?.headers).toMatchObject({
@@ -284,7 +282,7 @@ describe("passkey registration", () => {
     vi.mocked(fetchMobileJson).mockResolvedValueOnce(
       challengeResponse({
         challenge: "register",
-        rp: { id: "rakazo.example.test", name: "Rakazo" },
+        rp: { id: "orbit.example.test", name: "Orbit" },
       }),
     );
     vi.mocked(create).mockRejectedValue({ code: "ERR_USER_CANCELLED" });
@@ -352,7 +350,7 @@ describe("one-time passkey offer", () => {
       passwordAuth: true,
       passwordReset: false,
       resetUrl: null,
-      passkeyRpId: "rakazo.example.test",
+      passkeyRpId: "orbit.example.test",
       nativePasskeys: { ios: true, android: true },
     });
   });
@@ -389,7 +387,7 @@ describe("one-time passkey offer", () => {
       .mockResolvedValueOnce(
         challengeResponse({
           challenge: "register",
-          rp: { id: "rakazo.example.test", name: "Rakazo" },
+          rp: { id: "orbit.example.test", name: "Orbit" },
         }),
       )
       .mockResolvedValueOnce({ response: Response.json({}), body: {} });
@@ -456,5 +454,5 @@ it("hides passkeys when the native module is missing from the binary", async () 
     throw new Error("Cannot find native module 'ReactNativePasskeys'");
   });
   const fresh = await import("./passkey");
-  await expect(fresh.passkeysAvailable(server("rakazo.example.test"))).resolves.toBe(false);
+  await expect(fresh.passkeysAvailable(server("orbit.example.test"))).resolves.toBe(false);
 });

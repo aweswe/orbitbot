@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
-import { contentKeyProviderFromEnv, unwrapEnvFromKeyManager } from "@rakazo/adapters";
-import { createAuth } from "@rakazo/auth";
-import { bootstrapUserSpace, createDb, runAsSystem } from "@rakazo/db";
+import { contentKeyProviderFromEnv, unwrapEnvFromKeyManager } from "@forion/orbit-adapters";
+import { createAuth } from "@forion/orbit-auth";
+import { bootstrapUserSpace, createDb, runAsSystem } from "@forion/orbit-db";
 
 function required(name: string): string {
   const value = process.env[name];

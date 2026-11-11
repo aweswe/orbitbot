@@ -1,13 +1,13 @@
 import { randomInt } from "node:crypto";
-import type { BotAvatarSet } from "@rakazo/contracts";
-import { BOT_COLORS, parseBotAvatarValue } from "@rakazo/contracts";
+import type { BotAvatarSet } from "@forion/orbit-contracts";
+import { BOT_COLORS, parseBotAvatarValue } from "@forion/orbit-contracts";
 import {
   ORGANIC_AVATAR_HEART_FAMILY,
   ORGANIC_AVATAR_LOOKS,
   organicAvatarFamily,
   organicAvatarLook,
   seededLogoAvatarColor,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 
 /** A uniform number in [0, 1). */
 export type Random = () => number;

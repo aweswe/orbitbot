@@ -3,7 +3,7 @@ import type {
   ModelHeaderRow,
   ModelOAuthBegin,
   ThinkingLevel,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   compatibleEndpointPresets,
   connectionDisplayName,
@@ -17,7 +17,7 @@ import {
   OPENAI_COMPATIBLE_BASE_URL_HINT,
   OPENAI_COMPATIBLE_PROVIDER_ID,
   savedCompatibleEndpointMatches,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   clampCatalogThinkingLevel,
   compatibleConnectionReady,
@@ -31,7 +31,7 @@ import {
   modelConnectRequest,
   savedCompatibleModelIds,
   toggleEnabledModelId,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import * as Clipboard from "expo-clipboard";
 import { useFocusEffect, useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
@@ -1135,7 +1135,7 @@ export default function ModelConnection() {
         {selected.auth === "oauth" && !subscriptionSignIn ? (
           <Text style={styles.secondary}>
             {t(
-              "This subscription sign-in is not available in Rakazo yet. Use a deployment credential or choose another provider.",
+              "This subscription sign-in is not available in Orbit yet. Use a deployment credential or choose another provider.",
             )}
           </Text>
         ) : null}

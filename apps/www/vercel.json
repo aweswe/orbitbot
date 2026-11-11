@@ -10,6 +10,186 @@
       "source": "/github",
       "destination": "https://github.com/forion-ai/orbit",
       "permanent": false
+    },
+    {
+      "source": "/docs",
+      "destination": "https://docs.forion.dev",
+      "statusCode": 301
+    },
+    {
+      "source": "/docs/:path*",
+      "destination": "https://docs.forion.dev",
+      "statusCode": 301
+    },
+    {
+      "source": "/self-hosted-ai-agent",
+      "destination": "https://docs.forion.dev",
+      "statusCode": 301
+    },
+    {
+      "source": "/self-hosted-ai-agent.md",
+      "destination": "https://docs.forion.dev",
+      "statusCode": 301
+    },
+    {
+      "source": "/alternatives",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/alternatives/:path*",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/alternatives.md",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/grok-bot-alternative",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/grok-bot-alternative.md",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/openclaw-alternative",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/openclaw-alternative.md",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/integrations",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/integrations/:path*",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/integrations.md",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/integration-platforms",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/integration-platforms/:path*",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/integration-platforms.md",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/sandboxes",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/sandboxes/:path*",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/sandboxes.md",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/voice-providers",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/voice-providers/:path*",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/voice-providers.md",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/plugins/:path*",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/claude-duet-alternative",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/claude-duet-alternative.md",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/dots-alternative",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/dots-alternative.md",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/hark-alternative",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/hark-alternative.md",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/hermes-alternative",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/hermes-alternative.md",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/instinct-alternative",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/instinct-alternative.md",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/muse-alternative",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/muse-alternative.md",
+      "destination": "/",
+      "statusCode": 301
     }
   ],
   "headers": [

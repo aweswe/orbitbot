@@ -48,6 +48,7 @@ vi.mock("@earendil-works/pi-agent-core", () => ({
 
 vi.mock("@earendil-works/pi-ai/providers/all", () => ({
   builtinModels: () => ({
+    setProvider: (provider: unknown) => provider,
     getModel: (provider: string, id: string) =>
       provider === "test" && id === "vision-test-model"
         ? {

@@ -1,22 +1,22 @@
-import { ORPCError } from "@orpc/server";
-import type { AdapterContext, ConnectorCatalogItem } from "@rakazo/adapter-kit";
-import { ConnectorAuthUnavailableError } from "@rakazo/adapter-kit";
+import type { AdapterContext, ConnectorCatalogItem } from "@forion/orbit-adapter-kit";
+import { ConnectorAuthUnavailableError } from "@forion/orbit-adapter-kit";
 import {
   pickReusableConnection,
   planLiveConnectionSync,
   prepareManagedConnectorForTransaction,
   sanitizeIntegrationError,
-} from "@rakazo/adapters";
-import type { Actor } from "@rakazo/contracts";
-import { isIntegrationProviderId } from "@rakazo/contracts";
-import type { Prisma, PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-adapters";
+import type { Actor } from "@forion/orbit-contracts";
+import { isIntegrationProviderId } from "@forion/orbit-contracts";
+import type { Prisma, PrismaClient } from "@forion/orbit-db";
 import {
   IsolationError,
   ProviderTransactionBusyError,
   recordSecurityEvent,
   runProviderTransaction,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
+import { ORPCError } from "@orpc/server";
 import { connectionCreatedEvent } from "../security-audit.js";
 import type { RouterContext } from "./context.js";
 

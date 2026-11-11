@@ -1,9 +1,13 @@
-import type { JobPublisher, MessagingInboundMessage, SandboxProvider } from "@rakazo/adapter-kit";
-import { messagingDeliverJob, runContinueJob } from "@rakazo/adapter-kit";
-import { insertOutboundRows } from "@rakazo/adapters";
-import type { MessageBlock } from "@rakazo/contracts";
-import { ATTACHMENT_MAX_COUNT, isAttachmentAudioMimeType } from "@rakazo/contracts";
-import type { MessagingCommand } from "@rakazo/core";
+import type {
+  JobPublisher,
+  MessagingInboundMessage,
+  SandboxProvider,
+} from "@forion/orbit-adapter-kit";
+import { messagingDeliverJob, runContinueJob } from "@forion/orbit-adapter-kit";
+import { insertOutboundRows } from "@forion/orbit-adapters";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { ATTACHMENT_MAX_COUNT, isAttachmentAudioMimeType } from "@forion/orbit-contracts";
+import type { MessagingCommand } from "@forion/orbit-core";
 import {
   displayName,
   messageBlockForArtifact,
@@ -11,7 +15,7 @@ import {
   parseMessagingCommand,
   promptTextForAttachments,
   sanitizeMessagingLabel,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import type {
   MessagingIdentityRequest,
   Prisma,
@@ -19,7 +23,7 @@ import type {
   ProvisionedMessagingIdentity,
   SignupPolicyEnv,
   ThreadEvents,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
 import {
   accountDeactivated,
   createThreadMessage,
@@ -28,8 +32,8 @@ import {
   redeemMessagingLinkCode,
   SpaceDeletionInProgressError,
   THREAD_LOCK_TRANSACTION_OPTIONS,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import type { InboundAttachmentStore } from "./inbound-attachments.js";
 import { storeInboundAttachments } from "./inbound-attachments.js";
 import type { MessagingReceipts } from "./messaging-receipts.js";

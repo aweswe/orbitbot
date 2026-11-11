@@ -1,8 +1,8 @@
-import type { AgentToolCompletion } from "@rakazo/adapter-kit";
-import { redactSecrets } from "@rakazo/core";
-import type { ThreadEvents } from "@rakazo/db";
-import { RunHistoryWriteError } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+import type { AgentToolCompletion } from "@forion/orbit-adapter-kit";
+import { redactSecrets } from "@forion/orbit-core";
+import type { ThreadEvents } from "@forion/orbit-db";
+import { RunHistoryWriteError } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { isToolPauseResult } from "./approval-effect.js";
 import { sanitizeConnectorError } from "./connector-safety.js";
 import { isFailedToolResult, toolResultError } from "./tool-result-error.js";

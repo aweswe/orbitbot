@@ -1,5 +1,5 @@
-import type { AgentUsage, ModelUsageLookup } from "@rakazo/adapter-kit";
-import { readBoundedJsonResponse } from "@rakazo/core";
+import type { AgentUsage, ModelUsageLookup } from "@forion/orbit-adapter-kit";
+import { readBoundedJsonResponse } from "@forion/orbit-core";
 import { z } from "zod";
 
 /** Attribution is restricted to OpenRouter inference endpoints, never compatible/custom hosts. */

@@ -1,7 +1,7 @@
-import { runJobKey } from "@rakazo/adapter-kit";
-import type { RunStatus } from "@rakazo/contracts";
-import { isActive } from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
+import { runJobKey } from "@forion/orbit-adapter-kit";
+import type { RunStatus } from "@forion/orbit-contracts";
+import { isActive } from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
 import { asSystem } from "./system-db.js";
 
 type App = { request: (input: string, init?: RequestInit) => Response | Promise<Response> };

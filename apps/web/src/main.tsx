@@ -1,6 +1,6 @@
 import "./zod-config";
 import "./monitoring-bootstrap";
-import { BotAvatarActivityProvider, Toaster, TooltipProvider } from "@rakazo/ui-web";
+import { BotAvatarActivityProvider, Toaster, TooltipProvider } from "@forion/orbit-ui-web";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode, useEffect, useLayoutEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
@@ -10,6 +10,7 @@ import { DesktopUpdatesProvider } from "./components/DesktopUpdates";
 import { I18nBootstrap } from "./components/I18nBootstrap";
 import { applyUiDirection } from "./lib/apply-ui-direction";
 import { clientUpdates } from "./lib/client-update";
+import { migrateBrowserStorage } from "./lib/legacy-storage";
 import { webLogoAvatarActivity } from "./lib/logo-avatar-activity";
 import { reportCaughtReactError } from "./lib/monitoring";
 import { markAfterPaint, markOnce } from "./lib/performance";
@@ -22,6 +23,7 @@ import { registerServiceWorker } from "./pwa/register";
 import { lockStandaloneZoom } from "./pwa/standalone";
 import "./styles.css";
 
+migrateBrowserStorage();
 markOnce("rk:renderer:module-evaluated");
 installPreloadRecovery();
 clientUpdates().install();

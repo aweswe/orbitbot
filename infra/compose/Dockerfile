@@ -37,9 +37,10 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store pnpm install --frozen-lo
 # Normalize modes: a restrictive host umask (e.g. 077 on hardened hosts) would otherwise
 # leave the copied tree unreadable to USER node at runtime.
 COPY --chmod=755 . .
-RUN pnpm --filter @rakazo/db generate
-RUN pnpm --filter @rakazo/api --filter @rakazo/worker build
-RUN RAKAZO_ALLOW_DEV_SECRETS=1 pnpm --filter @rakazo/web build
+RUN pnpm --filter @forion/orbit-db generate
+RUN pnpm --filter @forion/orbit-api --filter @forion/orbit-worker build
+RUN RAKAZO_ALLOW_DEV_SECRETS=1 pnpm --filter @forion/orbit-web build
+RUN install -d -m 755 /usr/share/doc/orbit && cp LICENSE NOTICE ATTRIBUTION.md THIRD_PARTY_NOTICES.md compliance/modified-files.md /usr/share/doc/orbit/ && cp -r compliance/licenses /usr/share/doc/orbit/licenses
 RUN install -d -m 750 -o node -g node /data /app/apps/web/node_modules/.vite-temp /app/apps/web/asset-archive
 # Last root step, so a cached earlier layer cannot be the filesystem that ships.
 RUN /tmp/apt-security.sh --check && rm -f /tmp/apt-security.sh
@@ -48,4 +49,4 @@ ENV NODE_ENV=production
 ENV GIT_SHA=$GIT_SHA
 EXPOSE 3100 5173 7091
 USER node
-CMD ["pnpm", "--filter", "@rakazo/api", "start"]
+CMD ["pnpm", "--filter", "@forion/orbit-api", "start"]

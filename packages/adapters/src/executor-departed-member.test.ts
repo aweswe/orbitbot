@@ -1,11 +1,11 @@
-import type * as Db from "@rakazo/db";
+import type * as Db from "@forion/orbit-db";
 import { describe, expect, it, vi } from "vitest";
 import { createRunExecutor } from "./executor.js";
 
 const appendEventInTransaction = vi.hoisted(() => vi.fn(async () => ({ seq: 9 })));
 const createPendingSteeringRun = vi.hoisted(() => vi.fn(async () => "run-2"));
 
-vi.mock("@rakazo/db", async (importOriginal) => ({
+vi.mock("@forion/orbit-db", async (importOriginal) => ({
   ...(await importOriginal<typeof Db>()),
   appendEventInTransaction,
   createPendingSteeringRun,

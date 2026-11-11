@@ -1,5 +1,6 @@
 import { Trans } from "@lingui/react/macro";
 import { Link } from "react-router-dom";
+import { OrbitLogoMark } from "../components/OrbitLogoMark";
 import { WindowChrome } from "./WindowChrome";
 
 export function NotFoundPage() {
@@ -9,10 +10,7 @@ export function NotFoundPage() {
         <WindowChrome />
       </div>
       <main className="flex flex-1 flex-col items-center justify-center gap-8 px-5 pb-[90px] text-center">
-        <div className="flex size-20 items-center justify-center gap-3 rounded-full bg-primary sm:size-24">
-          <span className="h-5 w-2.5 translate-x-1.5 -translate-y-1 rounded-full bg-primary-foreground sm:h-6 sm:w-[11px]" />
-          <span className="h-5 w-2.5 translate-x-1.5 -translate-y-1 rounded-full bg-primary-foreground sm:h-6 sm:w-[11px]" />
-        </div>
+        <OrbitLogoMark className="size-20 sm:size-24" />
         <div className="flex flex-col items-center gap-3">
           <p className="text-body-lg tracking-[0.2em] text-muted-foreground">404</p>
           {/* off-scale: 404 hero display title */}
@@ -22,7 +20,7 @@ export function NotFoundPage() {
         </div>
         <Link
           to="/"
-          className="app-no-drag rounded-full bg-accent px-[30px] py-[13px] text-heading3 text-foreground transition hover:scale-[1.04]"
+          className="app-no-drag rounded-full bg-primary px-[30px] py-[13px] text-heading3 text-primary-foreground transition hover:scale-[1.04]"
         >
           <Trans>Go home</Trans>
         </Link>

@@ -3,8 +3,8 @@ import {
   ATTACHMENT_IMAGE_QUALITY,
   ATTACHMENT_MAX_BYTES,
   ATTACHMENT_MAX_COUNT,
-} from "@rakazo/contracts";
-import { inferAttachmentMimeType } from "@rakazo/core";
+} from "@forion/orbit-contracts";
+import { inferAttachmentMimeType } from "@forion/orbit-core";
 import * as DocumentPicker from "expo-document-picker";
 import { File } from "expo-file-system";
 import type * as ImageManipulatorModule from "expo-image-manipulator";

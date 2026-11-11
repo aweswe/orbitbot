@@ -1,6 +1,6 @@
-import type { AdapterContext, MessagingSurface } from "@rakazo/adapter-kit";
-import type { PrismaClient } from "@rakazo/db";
-import { SpaceDeletionInProgressError } from "@rakazo/db";
+import type { AdapterContext, MessagingSurface } from "@forion/orbit-adapter-kit";
+import type { PrismaClient } from "@forion/orbit-db";
+import { SpaceDeletionInProgressError } from "@forion/orbit-db";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ChatSdkMessagingSurface, MessagingSendError } from "./chat-sdk-surface.js";
 import type { MessagingDeliveryDeps } from "./messaging-delivery.js";

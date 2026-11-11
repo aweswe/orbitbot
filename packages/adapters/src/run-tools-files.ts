@@ -1,6 +1,6 @@
-import type { MessageBlock } from "@rakazo/contracts";
-import { ATTACHMENT_MAX_BYTES } from "@rakazo/contracts";
-import { inferAttachmentMimeType, isBackgroundRunTrigger } from "@rakazo/core";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { ATTACHMENT_MAX_BYTES } from "@forion/orbit-contracts";
+import { inferAttachmentMimeType, isBackgroundRunTrigger } from "@forion/orbit-core";
 import { resolveBotWorkspacePath } from "./computer-support.js";
 import { desktopGuardApplies, desktopProtectionGuardMessage } from "./desktop-command-guard.js";
 import { protectedActivateScriptWriteRefusal } from "./desktop-guard-words.js";

@@ -1,5 +1,5 @@
-import { escapePromptData } from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
+import { escapePromptData } from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
 import type { ScratchpadToolDeps } from "./scratchpad-tools.js";
 import { listScratchpadItems } from "./scratchpad-tools.js";
 import { byteLength, truncateUtf8 } from "./utf8.js";

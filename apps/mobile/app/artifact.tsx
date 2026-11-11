@@ -1,6 +1,6 @@
-import { ChatMarkdown } from "@rakazo/chat-ui/native";
-import type { ArtifactVersion, ArtifactWithContent } from "@rakazo/contracts";
-import { artifactPreviewKind } from "@rakazo/contracts";
+import { ChatMarkdown } from "@forion/orbit-chat-ui/native";
+import type { ArtifactVersion, ArtifactWithContent } from "@forion/orbit-contracts";
+import { artifactPreviewKind } from "@forion/orbit-contracts";
 import type { File } from "expo-file-system";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import type { ReactNode } from "react";

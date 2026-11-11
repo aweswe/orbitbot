@@ -1,5 +1,4 @@
-import { Plural, Trans, useLingui } from "@lingui/react/macro";
-import type { ThinkingLevel } from "@rakazo/contracts";
+import type { ThinkingLevel } from "@forion/orbit-contracts";
 import {
   compatibleEndpointPresets,
   MAX_MODEL_CONTEXT_WINDOW,
@@ -12,14 +11,14 @@ import {
   parseModelContextWindow,
   parseModelMaxImagesPerPrompt,
   parseModelMaxTokens,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   clampCatalogThinkingLevel,
   compatibleThinkingLevels,
   connectionFormFields,
   pickCatalogModelId,
   popularModelProvidersFirst,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import {
   Button,
   Input,
@@ -31,7 +30,8 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { Check, Copy } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -55,7 +55,7 @@ import { CompatibleKeyField } from "./model-settings/compatible-key-field";
 import { useModelConnectionForm } from "./model-settings/use-model-connection-form";
 
 const CUSTOM_MODEL_OPTION = "__rakazo_custom_model__";
-/** Rakazo credits sit among the providers as the one choice that needs no account of its own. */
+/** Orbit credits sit among the providers as the one choice that needs no account of its own. */
 const CREDITS_OPTION = "__rakazo_credits__";
 /** Select value for a hosted compatible service; the rest of the value is its base URL. */
 const ENDPOINT_PRESET_OPTION = "endpoint-preset:";
@@ -76,7 +76,7 @@ function providerOptionValue(provider: string, auth?: ProviderAuth): string {
 }
 const FIRST_BOT_NAME = "Chief";
 const FIRST_BOT_SPAWN_KEY = "onboarding:first";
-const FIRST_BOT_LOCK = "rakazo:onboarding-first-bot";
+const FIRST_BOT_LOCK = "orbit:onboarding-first-bot";
 
 /** Survives StrictMode remounts; concurrent first-bot creates share one in-flight attempt. */
 let firstBotEnsure: Promise<{ id: string }> | null = null;

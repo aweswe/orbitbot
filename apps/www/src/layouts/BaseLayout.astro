@@ -28,6 +28,8 @@ type Props = {
   ogType?: string;
   /** False on the not-found page: noindex, and no canonical URL. */
   index?: boolean;
+  /** Canonical path to use when a page is intentionally noindexed. */
+  canonicalPath?: string;
   /** For prerendered pages the edge middleware does not know about. */
   markdownAlternate?: string;
 };
@@ -39,7 +41,7 @@ const {
   skipLabel = "Skip to content",
   homeAlternates = false,
   localeAlternates = true,
-  ogImageAlt = "Rakazo. AI teammates you actually own. Your keys, your model, your machine.",
+  ogImageAlt = "Orbit Bot — autonomous agents with their own computers.",
   ogImage = "/og-image.png",
   ogType = "website",
   index = true,
@@ -49,7 +51,9 @@ const locale: Locale = isLocale(Astro.currentLocale)
   ? Astro.currentLocale
   : (Astro.props.locale ?? DEFAULT_LOCALE);
 
-const canonical = index ? new URL(Astro.url.pathname, SITE_URL).toString() : undefined;
+const canonical = index || Astro.props.canonicalPath
+  ? new URL(Astro.props.canonicalPath ?? Astro.url.pathname, SITE_URL).toString()
+  : undefined;
 const robots = index ? "index, follow, max-image-preview:large" : "noindex";
 const socialImage = new URL(ogImage, SITE_URL).toString();
 const structuredDataJson = structuredData
@@ -108,10 +112,11 @@ const homeUrls = Object.fromEntries(
     {markdownAlternate && (
       <link rel="alternate" type="text/markdown" href={markdownAlternate} />
     )}
-    <link rel="alternate" type="application/rss+xml" title="Rakazo blog" href="/blog/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Orbit blog" href="/blog/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="describedby" type="text/plain" href="/llms.txt" />
     <link rel="ai-catalog" type="application/ai-catalog+json" href="/.well-known/ai-catalog.json" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.png" type="image/png" sizes="128x128" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -119,7 +124,7 @@ const homeUrls = Object.fromEntries(
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap"
       rel="stylesheet"
     />
     {structuredDataJson && <script is:inline type="application/ld+json" set:html={structuredDataJson} />}

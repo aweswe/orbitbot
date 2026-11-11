@@ -1,5 +1,5 @@
-import type { LogoAvatarActivity } from "@rakazo/core";
-import { logoAvatarStatusActivity } from "@rakazo/core";
+import type { LogoAvatarActivity } from "@forion/orbit-core";
+import { logoAvatarStatusActivity } from "@forion/orbit-core";
 import type { ReactNode } from "react";
 import { createContext, startTransition, useContext, useEffect, useRef, useState } from "react";
 

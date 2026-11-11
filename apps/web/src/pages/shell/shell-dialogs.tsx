@@ -1,12 +1,12 @@
-import { Trans, useLingui } from "@lingui/react/macro";
-import type { Bot, BotAvatarSet, BotSection, Group, Space } from "@rakazo/contracts";
+import type { Bot, BotAvatarSet, BotSection, Group, Space } from "@forion/orbit-contracts";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
   toast,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Settings, Trash2 } from "lucide-react";
 import type { ComponentProps, RefObject } from "react";

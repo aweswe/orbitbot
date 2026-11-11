@@ -1,4 +1,4 @@
-import type { ThreadItem } from "@rakazo/core";
+import type { ThreadItem } from "@forion/orbit-core";
 import {
   answerableAskMessageIds,
   dismissableAskMessageIds,
@@ -8,7 +8,7 @@ import {
   timeSeparatorIds,
   unreadDividerMessageId,
   voiceChatHoldsMessage,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import { useCallback, useLayoutEffect, useMemo, useRef } from "react";
 import type { ListRenderItemInfo } from "react-native";
 import { StyleSheet, View } from "react-native";

@@ -105,6 +105,15 @@ x-app-environment: &app-environment
   PI_SESSION_RECORDING:
   RAKAZO_LIVE_MODEL_CATALOG:
   OPENROUTER_API_KEY:
+  REQUESTY_API_KEY:
+  REQUESTY_BASE_URL:
+  RQSTY_API_KEY:
+  DEV_API_USER_ID:
+  FORION_SERVER_URL:
+  ORBIT_CONTROL_PLANE_URL:
+  FORION_API_KEY:
+  FORION_ORBIT_INTERNAL_SECRET:
+  ORBIT_BILLING_ENABLED:
   ANTHROPIC_API_KEY:
   TYPESAFE_API_KEY:
   MAX_TOOL_CALLS_PER_TURN:
@@ -337,7 +346,7 @@ services:
   supervisor:
     image: ${RAKAZO_IMAGE:-ghcr.io/forion-ai/orbit/app}:${RAKAZO_IMAGE_TAG:-edge}
     restart: unless-stopped
-    command: ["pnpm", "--filter", "@rakazo/sandbox-supervisor", "start"]
+    command: ["pnpm", "--filter", "@forion/orbit-sandbox-supervisor", "start"]
     init: true
     user: root
     security_opt:
@@ -437,6 +446,9 @@ services:
       BETTER_AUTH_SECRET:
       BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://127.0.0.1:5173}
       WEB_ORIGIN: ${WEB_ORIGIN:-http://127.0.0.1:5173}
+      ORBIT_AUTH_MODE:
+      GOOGLE_CLIENT_ID:
+      GOOGLE_CLIENT_SECRET:
       AUTH_PASSWORD_ENABLED: ${AUTH_PASSWORD_ENABLED:-true}
       AUTH_BREACHED_PASSWORD_CHECK_ENABLED: ${AUTH_BREACHED_PASSWORD_CHECK_ENABLED:-false}
       PASSKEY_APPLE_APP_IDS:

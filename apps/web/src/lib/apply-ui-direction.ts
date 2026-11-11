@@ -1,4 +1,4 @@
-import { textDirectionForLocale } from "@rakazo/core";
+import { textDirectionForLocale } from "@forion/orbit-core";
 import { resolveUiLocale } from "./ui-locale";
 
 export function applyUiDirection(locale: string = resolveUiLocale()) {

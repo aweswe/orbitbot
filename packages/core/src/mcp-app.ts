@@ -1,11 +1,11 @@
-import type { McpAppCsp } from "@rakazo/contracts";
+import type { McpAppCsp } from "@forion/orbit-contracts";
 import {
   ipVersion,
   isCloudMetadataHost,
   isInternalHostname,
   MCP_APP_DOMAINS_MAX,
   MCP_APP_PROTOCOL_VERSION,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 
 /**
  * MCP Apps (SEP-1865) on the host side: the content policy an app runs under, the document the
@@ -24,7 +24,7 @@ const SOURCE = /^(https|wss):\/\/(\*\.)?([^/:]+)(?::(\d{1,5}))?\/?$/;
  * The declared origins an app may reach, as CSP sources. Only public names over https (or wss
  * for connections): no IP literals, local or internal names, single-label hosts, bare wildcards,
  * or any host in `excludeHosts` (the app's own), so a declaration cannot point the view at the
- * person's network or at Rakazo itself.
+ * person's network or at Orbit itself.
  */
 export function mcpAppDomains(
   values: unknown,

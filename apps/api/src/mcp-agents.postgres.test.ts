@@ -1,9 +1,9 @@
 import { randomUUID } from "node:crypto";
+import { EncryptedSecretStore, withSecretPersistence } from "@forion/orbit-adapters";
+import type { Actor } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
+import { createDb, runAsSystem, runAsTenant } from "@forion/orbit-db";
 import { createRouterClient } from "@orpc/server";
-import { EncryptedSecretStore, withSecretPersistence } from "@rakazo/adapters";
-import type { Actor } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
-import { createDb, runAsSystem, runAsTenant } from "@rakazo/db";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import type { RouterDeps } from "./router.js";
 import { createRouter } from "./router.js";

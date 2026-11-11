@@ -1,4 +1,8 @@
-import type { AdapterContext, ManagedConnectorProvider, SecretStore } from "@rakazo/adapter-kit";
+import type {
+  AdapterContext,
+  ManagedConnectorProvider,
+  SecretStore,
+} from "@forion/orbit-adapter-kit";
 import {
   BOT_SECRET_VALUE_MAX_LENGTH,
   encodeLoginSecret,
@@ -6,10 +10,10 @@ import {
   MessageBlock as MessageBlockSchema,
   normalizeOneTimeCode,
   SecretAskPurpose,
-} from "@rakazo/contracts";
-import { isSecretAskBlock } from "@rakazo/core";
-import type { PrismaClient, RunSecretWriter } from "@rakazo/db";
-import { runCodeKind, runLoginKind, runSecretKind, withTransactionRetry } from "@rakazo/db";
+} from "@forion/orbit-contracts";
+import { isSecretAskBlock } from "@forion/orbit-core";
+import type { PrismaClient, RunSecretWriter } from "@forion/orbit-db";
+import { runCodeKind, runLoginKind, runSecretKind, withTransactionRetry } from "@forion/orbit-db";
 import type { ApprovalPausedToolResult } from "./approval-effect.js";
 import { internalTerminatingResult, resolveDuplicateEffectGate } from "./approval-effect.js";
 import { encodeRunCode, encodeRunLogin, prepareBotSecret } from "./bot-secrets.js";

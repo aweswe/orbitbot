@@ -1,3 +1,5 @@
+import { isLocalhostOrLoopbackIp, MCP_APP_READ_TIMEOUT_MS } from "@forion/orbit-contracts";
+import { cancelResponseBody } from "@forion/orbit-core";
 import type { OAuthClientProvider } from "@modelcontextprotocol/sdk/client/auth.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
@@ -6,8 +8,6 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import type { CallToolResult, ListToolsResult } from "@modelcontextprotocol/sdk/types.js";
-import { isLocalhostOrLoopbackIp, MCP_APP_READ_TIMEOUT_MS } from "@rakazo/contracts";
-import { cancelResponseBody } from "@rakazo/core";
 import { combineSignals } from "./connector-safety.js";
 import { MCP_APP_CLIENT_CAPABILITIES } from "./mcp-app.js";
 import { closeMcpResource } from "./mcp-close.js";
@@ -320,10 +320,10 @@ function stdioParams(options: McpStdioOptions): StdioServerParameters {
   }
   if (isPackageRunnerCommand(options.command)) throw new Error(PACKAGE_RUNNER_REFUSAL);
   if (options.installedBin !== undefined && !isInstalledMcpBin(options.installedBin)) {
-    throw new Error("MCP stdio bin was not installed by Rakazo");
+    throw new Error("MCP stdio bin was not installed by Orbit");
   }
   if (options.installedBin === undefined && isNpxCommand(options.command)) {
-    throw new Error("npx only launches a package bin Rakazo installed");
+    throw new Error("npx only launches a package bin Orbit installed");
   }
   const command = options.installedBin?.binPath ?? options.command.trim();
   const env: Record<string, string> = {};

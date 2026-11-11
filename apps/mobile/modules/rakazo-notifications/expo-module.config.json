@@ -1,7 +1,7 @@
 {
   "platforms": ["android", "apple"],
   "android": {
-    "modules": ["com.rakazo.notifications.RakazoNotificationsModule"]
+    "modules": ["com.rakazo.notifications.OrbitNotificationsModule"]
   },
   "apple": {
     "modules": ["RakazoNotificationsModule"],

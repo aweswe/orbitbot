@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-import type { DesktopUpdateState } from "@rakazo/contracts";
-import { Toaster } from "@rakazo/ui-web";
+import type { DesktopUpdateState } from "@forion/orbit-contracts";
+import { Toaster } from "@forion/orbit-ui-web";
 import type { ReactNode } from "react";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
@@ -34,7 +34,7 @@ async function render(
   onIntegrations = vi.fn(),
   onBoard?: () => void,
 ) {
-  const email = "account@rakazo.test";
+  const email = "account@orbit.test";
   await act(async () =>
     root.render(
       <DesktopUpdatesProvider>
@@ -139,7 +139,7 @@ it("opens integrations and keeps the existing account actions and links", async 
     "Skills",
     "Artifacts",
     "Board",
-    "Download Orion for Android",
+    "Download Orbit for Android",
     "Log out",
   ]);
   expect(host.querySelector('[data-testid="user-menu-trigger"]')?.getAttribute("aria-label")).toBe(
@@ -157,7 +157,7 @@ it("offers the Android download on Android", async () => {
   vi.spyOn(navigator, "userAgent", "get").mockReturnValue("Android");
   await render();
   const mobile = [...document.querySelectorAll("a")].find(
-    (link) => link.textContent === "Download Orion for Android",
+    (link) => link.textContent === "Download Orbit for Android",
   )!;
   expect(mobile.getAttribute("href")).toBe("/download/orbit-bot.apk");
 });
@@ -221,7 +221,7 @@ async function renderOrganizations(
         <SidebarFooter
           name="Demo User"
           initials="DU"
-          email="account@rakazo.test"
+          email="account@orbit.test"
           open
           onOpenChange={() => {}}
           onIntegrations={() => {}}

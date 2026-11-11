@@ -625,7 +625,7 @@ msgstr "{name} için hesap menüsü"
 
 #. placeholder {0}: bot.name
 #. placeholder {0}: group.spaceName
-#. placeholder {0}: page.title
+#. placeholder {0}: item.chat.name
 #: src/components/pages/PagesList.tsx
 #: src/pages/BotContextMenu.tsx
 #: src/pages/McpServersOverlay.tsx
@@ -641,14 +641,11 @@ msgstr ""
 msgid "Actions for space"
 msgstr "Alan işlemleri"
 
+#: src/components/OrbitCosmicThemePicker.tsx
 #: src/pages/BillingSettingsPanel.tsx
 #: src/pages/RoutineEditor.tsx
 msgid "Active"
 msgstr "Etkin"
-
-#: src/pages/shell/sidebar-header.tsx
-msgid "Activity"
-msgstr "Etkinlik"
 
 #: src/components/integrations/plugin-marketplace.tsx
 #: src/components/SecretAskCard.tsx
@@ -805,6 +802,10 @@ msgstr "Adres satırı 2"
 msgid "Adds"
 msgstr "Eklenecekler"
 
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Adjust compact or spacious list density in the agent sidebar"
+msgstr ""
+
 #: src/pages/McpServersOverlay.tsx
 #: src/pages/model-settings/compatible-model-fields.tsx
 #: src/pages/ModelSettingsOverlay.tsx
@@ -814,6 +815,10 @@ msgstr "Eklenecekler"
 #: src/pages/shell/bot-panel.tsx
 msgid "Advanced"
 msgstr "Gelişmiş"
+
+#: src/pages/VoiceSettingsOverlay.tsx
+msgid "Advanced: Custom Voice Endpoint"
+msgstr ""
 
 #: src/pages/RoutineEditor.tsx
 msgid "Advanced..."
@@ -871,8 +876,8 @@ msgid "Allow once"
 msgstr "Bir kez izin ver"
 
 #: src/lib/dictation.ts
-msgid "Allow Rakazo to use Speech Recognition and the microphone in System Settings."
-msgstr "Rakazo'nun Konuşma Tanıma ve mikrofonu kullanmasına Sistem Ayarları'ndan izin ver."
+msgid "Allow Orbit to use Speech Recognition and the microphone in System Settings."
+msgstr "Orbit'nun Konuşma Tanıma ve mikrofonu kullanmasına Sistem Ayarları'ndan izin ver."
 
 #: src/pages/memory-providers/SerenitySettingsForm.tsx
 msgid "Allow writing"
@@ -1020,6 +1025,7 @@ msgid "API URL"
 msgstr "API URL'si"
 
 #: src/pages/AccountSettingsOverlay.tsx
+#: src/pages/settings-nav.ts
 msgid "Appearance"
 msgstr "Görünüm"
 
@@ -1356,10 +1362,6 @@ msgstr "Yerleşik"
 msgid "Button “{button}” · read from the page, not checked"
 msgstr "“{button}” düğmesi · sayfadan okundu, kontrol edilmedi"
 
-#: src/pages/shell/chat-header.tsx
-msgid "Call"
-msgstr "Ara"
-
 #: src/components/call/VoiceChatCard.tsx
 msgid "Call back"
 msgstr "Geri ara"
@@ -1390,8 +1392,8 @@ msgid "Can view without signing in"
 msgstr "Oturum açmadan görüntüleyebilir"
 
 #: src/App.tsx
-msgid "Can't reach the server."
-msgstr "Sunucuya ulaşılamıyor."
+msgid "Can't reach the server. Attempting to re-establish your workspace link..."
+msgstr ""
 
 #: src/components/TextOnlyMark.tsx
 #: src/pages/shell/chat-model-picker.tsx
@@ -1606,6 +1608,10 @@ msgstr "Yeni bir parola seçin"
 msgid "Choose a provider"
 msgstr "Sağlayıcı seç"
 
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Choose a signature celestial aesthetic. Your theme automatically synchronizes across the application shell, chat workspace, and deck computer."
+msgstr ""
+
 #: src/pages/shell/agent-import.tsx
 msgid "Choose backup"
 msgstr "Yedek seç"
@@ -1621,8 +1627,8 @@ msgstr "Klasör seç"
 
 #: src/components/ModelCredits.tsx
 #: src/components/SubscriptionGate.tsx
-msgid "Choose how to use Rakazo"
-msgstr "Rakazo'yu nasıl kullanacağını seç"
+msgid "Choose how to use Orbit"
+msgstr "Orbit'yu nasıl kullanacağını seç"
 
 #: src/components/vault/VaultItemEditor.tsx
 msgid "City"
@@ -1695,6 +1701,10 @@ msgstr "Bilgisayarı kapat"
 msgid "Close image preview"
 msgstr "Görsel önizlemesini kapat"
 
+#: src/pages/shell/chat-header.tsx
+msgid "Close Inspector"
+msgstr ""
+
 #: src/pages/PluginsOverlay.tsx
 msgid "Close integrations"
 msgstr "Entegrasyonları kapat"
@@ -1729,6 +1739,10 @@ msgstr "Paneli kapat"
 #: src/components/ArtifactFileCard.tsx
 msgid "Close preview"
 msgstr "Önizlemeyi kapat"
+
+#: src/pages/shell/sidebar-header.tsx
+msgid "Close search"
+msgstr ""
 
 #: src/components/integrations/skills-dialog.tsx
 msgid "Close skills"
@@ -1779,6 +1793,7 @@ msgid "column {index}"
 msgstr "sütun {index}"
 
 #: src/pages/AccountSettingsOverlay.tsx
+#: src/pages/AppearanceSettingsPanel.tsx
 msgid "Comfortable"
 msgstr "Rahat"
 
@@ -1805,6 +1820,7 @@ msgid "Communication"
 msgstr "İletişim"
 
 #: src/pages/AccountSettingsOverlay.tsx
+#: src/pages/AppearanceSettingsPanel.tsx
 msgid "Compact"
 msgstr "Sıkı"
 
@@ -1957,8 +1973,8 @@ msgstr "Önce bu modelin sağlayıcısını bağla."
 
 #. js-lingui-explicit-id
 #: src/lib/run-error.ts
-msgid "Connect your own API key in Models or choose Rakazo credits in Billing."
-msgstr "Modeller bölümünde kendi API anahtarınızı bağlayın veya Faturalandırma'da Rakazo kredilerini seçin."
+msgid "Connect your own API key in Models or choose Orbit credits in Billing."
+msgstr "Modeller bölümünde kendi API anahtarınızı bağlayın veya Faturalandırma'da Orbit kredilerini seçin."
 
 #: src/components/bot-templates/bot-templates-dialog.tsx
 #: src/components/ComputerDeviceSettings.tsx
@@ -1976,6 +1992,10 @@ msgstr "Bağlandı"
 #: src/pages/VoiceSettingsOverlay.tsx
 msgid "Connected {0}."
 msgstr "{0} bağlandı."
+
+#: src/pages/shell/chat-header.tsx
+msgid "Connected apps"
+msgstr ""
 
 #: src/components/integrations/plugin-marketplace.tsx
 #: src/pages/McpServersOverlay.tsx
@@ -2102,6 +2122,10 @@ msgstr "İstemi kopyala"
 #: src/components/markdown-copy.tsx
 msgid "Copy rows"
 msgstr "Satırları kopyala"
+
+#: src/pages/shell/avatar-studio-popover.tsx
+msgid "Cosmic Space Companions"
+msgstr ""
 
 #: src/pages/AccountSettingsOverlay.tsx
 msgid "Cost"
@@ -2735,7 +2759,7 @@ msgstr "Ülke"
 #: src/pages/shell/agent-import.tsx
 #: src/pages/shell/create-bot-dialog.tsx
 #: src/pages/shell/dialogs.tsx
-#: src/pages/shell/sidebar-header.tsx
+#: src/pages/shell/shell-sidebar.tsx
 msgid "Create"
 msgstr "Oluştur"
 
@@ -2749,6 +2773,8 @@ msgid "Create account"
 msgstr "Hesap oluştur"
 
 #: src/components/bot-templates/bot-templates-dialog.tsx
+#: src/pages/Shell.tsx
+#: src/pages/shell/sidebar-roster.tsx
 msgid "Create bot"
 msgstr "Bot oluştur"
 
@@ -2771,8 +2797,8 @@ msgid "Create space"
 msgstr "Alan oluştur"
 
 #: src/pages/Auth.tsx
-msgid "Create your Rakazo"
-msgstr "Rakazo hesabını oluştur"
+msgid "Create your Orbit"
+msgstr "Orbit hesabını oluştur"
 
 #: src/components/AskCard.tsx
 msgid "Created"
@@ -2825,6 +2851,10 @@ msgstr "Para birimi"
 #: src/pages/AccountSettingsOverlay.tsx
 msgid "Current password"
 msgstr "Mevcut parola"
+
+#: src/pages/shell/create-bot-dialog.tsx
+msgid "Custom Agent"
+msgstr ""
 
 #: src/components/vault/VaultItemEditor.tsx
 msgid "Custom header"
@@ -2982,6 +3012,10 @@ msgstr "Bu alanın kimlik bilgileri silinsin mi?"
 msgid "deleted"
 msgstr "silindi"
 
+#: src/pages/shell/shell-dialogs.tsx
+msgid "Deleted {botName}"
+msgstr ""
+
 #: src/components/PasskeySettings.tsx
 #: src/pages/Artifacts.tsx
 #: src/pages/OrganizationSettingsPanel.tsx
@@ -3130,10 +3164,6 @@ msgstr "Docker"
 msgid "Docker limits access to your computer for added security. Using {hostLabel} lets bots work with your local files and tools."
 msgstr "Docker, ek güvenlik için bilgisayarına erişimi sınırlar. {hostLabel} kullanıldığında botlar yerel dosyaların ve araçlarınla çalışabilir."
 
-#: src/components/SidebarFooter.tsx
-msgid "Docs"
-msgstr "Belgeler"
-
 #: src/pages/KnowledgeSection.tsx
 msgid "Document changed. Reopen to edit the latest version."
 msgstr "Belge değişti. Son sürümü düzenlemek için yeniden açın."
@@ -3173,6 +3203,10 @@ msgstr "{name} indir"
 #: src/components/markdown-copy.tsx
 msgid "Download CSV"
 msgstr "CSV indir"
+
+#: src/components/SidebarFooter.tsx
+msgid "Download Orbit for Android"
+msgstr ""
 
 #: src/components/pages/DownloadPdfButton.tsx
 msgid "Download PDF"
@@ -3251,6 +3285,10 @@ msgstr "E-posta doğrulaması gerekiyor"
 msgid "Enable {0}"
 msgstr "{0} etkinleştir"
 
+#: src/pages/shell/chat-header.tsx
+msgid "End call"
+msgstr ""
+
 #: src/components/ComputerProviderSettings.tsx
 msgid "End user ID"
 msgstr "Son kullanıcı kimliği"
@@ -3258,10 +3296,6 @@ msgstr "Son kullanıcı kimliği"
 #: src/lib/billing.ts
 msgid "Ends {day}"
 msgstr "{day} tarihinde sona eriyor"
-
-#: src/components/GitHubStarPrompt.tsx
-msgid "Enjoying Rakazo?"
-msgstr "Rakazo'yu beğendin mi?"
 
 #: src/lib/user-error.ts
 msgid "Enter a password"
@@ -3378,6 +3412,10 @@ msgstr ""
 msgid "Everyone in this bot's space can read the chats it gets from {linkApp}."
 msgstr ""
 
+#: src/pages/shell/chat-header.tsx
+msgid "Executing tools…"
+msgstr ""
+
 #: src/pages/shell/message-cards.tsx
 msgid "Expand"
 msgstr "Genişlet"
@@ -3386,6 +3424,14 @@ msgstr "Genişlet"
 #: src/pages/shell/sidebar-roster.tsx
 msgid "Expand {0}"
 msgstr "{0} bölümünü genişlet"
+
+#: src/pages/shell/chat-header.tsx
+msgid "Expand Sidebar"
+msgstr ""
+
+#: src/pages/shell/chat-header.tsx
+msgid "Expand Sidebar (Cmd+B)"
+msgstr ""
 
 #: src/components/markdown-copy.tsx
 msgid "Expand table"
@@ -3443,6 +3489,10 @@ msgstr "başarısız"
 #: src/pages/ActivityList.tsx
 msgid "Failed"
 msgstr "Başarısız"
+
+#: src/pages/shell/sidebar-roster.tsx
+msgid "Failed to load bots"
+msgstr ""
 
 #: src/pages/shell/use-composer-actions.ts
 msgid "Failed to send message"
@@ -3518,6 +3568,14 @@ msgstr "Sayfa bul"
 #: src/pages/shell/keyboard-shortcuts-dialog.tsx
 msgid "Find in chat"
 msgstr "Sohbette bul"
+
+#: src/pages/shell/chat-header.tsx
+msgid "Find in thread"
+msgstr ""
+
+#: src/pages/shell/chat-header.tsx
+msgid "Find in thread (Cmd+F)"
+msgstr ""
 
 #: src/pages/model-settings/compatible-model-fields.tsx
 #: src/pages/Onboarding.tsx
@@ -3623,10 +3681,6 @@ msgstr "Genel"
 msgid "Get an email address"
 msgstr "E-posta adresi al"
 
-#: src/components/SidebarFooter.tsx
-msgid "Get the mobile app"
-msgstr "Mobil uygulamayı indir"
-
 #: src/components/ComputerUpdateProgress.tsx
 msgid "Getting ready"
 msgstr "Hazırlanıyor"
@@ -3657,11 +3711,14 @@ msgstr "Yetki veriliyor…"
 
 #: src/lib/identity-display.ts
 #: src/pages/MessagingSettingsPanel.tsx
-#: src/pages/shell/chat-header.tsx
 #: src/pages/shell/side-panel.tsx
 #: src/pages/SpaceSearch.tsx
 msgid "Group"
 msgstr "Grup"
+
+#: src/pages/shell/chat-header.tsx
+msgid "Group Chat"
+msgstr ""
 
 #: src/pages/GroupPanel.tsx
 msgid "Group settings"
@@ -3784,8 +3841,8 @@ msgid "How to check"
 msgstr "Nasıl kontrol edilir"
 
 #: src/components/SignupSurvey.tsx
-msgid "How will you use Rakazo?"
-msgstr "Rakazo'yu nasıl kullanacaksın?"
+msgid "How will you use Orbit?"
+msgstr "Orbit'yu nasıl kullanacaksın?"
 
 #: src/pages/shell/computer-release-actions.tsx
 msgid "I’m done"
@@ -3873,6 +3930,10 @@ msgstr "Girdi"
 msgid "Inputs"
 msgstr "Girdiler"
 
+#: src/pages/shell/chat-header.tsx
+msgid "Inspect {title}"
+msgstr ""
+
 #: src/components/SidebarFooter.tsx
 msgid "Install update"
 msgstr "Güncellemeyi yükle"
@@ -3945,10 +4006,6 @@ msgstr "Geçersiz kod"
 #: src/components/SpaceMembersSettings.tsx
 msgid "Invite"
 msgstr ""
-
-#: src/pages/shell/chat-header.tsx
-msgid "Invite a friend"
-msgstr "Bir arkadaşını davet et"
 
 #: src/components/SidebarFooter.tsx
 msgid "Invite friends"
@@ -4128,6 +4185,10 @@ msgstr "Web görsellerini otomatik yükle"
 msgid "Loading activity…"
 msgstr "Etkinlik yükleniyor…"
 
+#: src/pages/shell/sidebar-roster.tsx
+msgid "Loading bots"
+msgstr ""
+
 #: src/pages/PluginsOverlay.tsx
 msgid "Loading integrations…"
 msgstr "Entegrasyonlar yükleniyor…"
@@ -4156,7 +4217,6 @@ msgstr "Ses sağlayıcıları yükleniyor…"
 #: src/components/bot-templates/bot-templates-dialog.tsx
 #: src/components/integrations/plugin-marketplace.tsx
 #: src/components/integrations/skills-dialog.tsx
-#: src/components/PageLoading.tsx
 #: src/components/SpaceMembersSettings.tsx
 #: src/pages/AdminAccessPage.tsx
 #: src/pages/Artifacts.tsx
@@ -4197,6 +4257,10 @@ msgstr ""
 #: src/pages/shell/agent-import.tsx
 msgid "Looks like it contains a key"
 msgstr "Bir anahtar içeriyor gibi görünüyor"
+
+#: src/App.tsx
+msgid "Lost connection to Orbit"
+msgstr ""
 
 #: src/lib/ticket-priority.ts
 #: src/pages/model-settings/compatible-model-fields.tsx
@@ -4398,8 +4462,8 @@ msgid "Message from another agent"
 msgstr "Başka bir Agent'tan mesaj"
 
 #: src/pages/shell/composer.tsx
-msgid "Message…"
-msgstr "Mesaj…"
+msgid "Message Orbit…"
+msgstr ""
 
 #: src/pages/shell/message-view.tsx
 msgid "Messaged {peer}"
@@ -4608,8 +4672,8 @@ msgid "Name this routine"
 msgstr "Bu rutine isim ver"
 
 #: src/pages/shell/create-bot-dialog.tsx
-msgid "Name your Bot"
-msgstr "Botuna isim ver"
+msgid "Name your Orbit"
+msgstr ""
 
 #: src/lib/roster-status.ts
 msgid "Needs an answer"
@@ -4622,6 +4686,7 @@ msgid "Needs an OAuth client ID"
 msgstr "OAuth istemci kimliği gerekli"
 
 #: src/pages/ActivityList.tsx
+#: src/pages/shell/chat-header.tsx
 msgid "Needs attention"
 msgstr "İlgi gerekiyor"
 
@@ -4647,6 +4712,10 @@ msgstr "Seni bekliyor"
 msgid "Needs: {names}"
 msgstr "Gerekenler: {names}"
 
+#: src/pages/VoiceSettingsOverlay.tsx
+msgid "Neural voice synthesis is pre-configured. Bot messages can be read aloud at any time by clicking the speaker icon on any message bubble."
+msgstr ""
+
 #: src/components/ApprovalRulesSettings.tsx
 msgid "Never ask"
 msgstr "Asla sorma"
@@ -4663,9 +4732,12 @@ msgstr "Yeni API anahtarı"
 
 #: src/pages/Shell.tsx
 #: src/pages/shell/bot-picker.tsx
-#: src/pages/shell/create-bot-dialog.tsx
 msgid "New bot"
 msgstr "Yeni bot"
+
+#: src/pages/shell/shell-sidebar.tsx
+msgid "New Bot"
+msgstr ""
 
 #: src/components/VaultSettings.tsx
 msgid "New card"
@@ -4760,6 +4832,10 @@ msgstr "Henüz çıktı yok"
 msgid "No authentication"
 msgstr "Kimlik doğrulaması yok"
 
+#: src/pages/Shell.tsx
+msgid "No bot selected"
+msgstr ""
+
 #: src/components/integrations/agent-access.tsx
 msgid "No bots"
 msgstr "Bot yok"
@@ -4768,6 +4844,10 @@ msgstr "Bot yok"
 #: src/pages/shell/bot-picker.tsx
 msgid "No bots match"
 msgstr "Eşleşen bot yok"
+
+#: src/pages/shell/sidebar-roster.tsx
+msgid "No bots yet"
+msgstr ""
 
 #: src/components/AskCard.tsx
 #: src/components/SecretAskCard.tsx
@@ -4895,26 +4975,25 @@ msgid "Not imported"
 msgstr "İçe aktarılmadı"
 
 #: src/pages/shell/import-status.ts
-msgid "Not in Rakazo's catalog"
-msgstr "Rakazo kataloğunda yok"
+msgid "Not in Orbit's catalog"
+msgstr "Orbit kataloğunda yok"
 
 #: src/pages/PluginsOverlay.tsx
 msgid "Not in the plugin catalog"
 msgstr "Eklenti kataloğunda yok"
 
-#: src/components/GitHubStarPrompt.tsx
 #: src/pages/shell/message-cards.tsx
 msgid "Not now"
 msgstr "Şimdi değil"
 
 #: src/pages/shell/agent-import.tsx
 #: src/pages/shell/import-status.ts
-msgid "Not supported in Rakazo"
-msgstr "Rakazo'da desteklenmiyor"
+msgid "Not supported in Orbit"
+msgstr "Orbit'da desteklenmiyor"
 
 #: src/pages/shell/agent-import.tsx
-msgid "Not used by Rakazo"
-msgstr "Rakazo tarafından kullanılmıyor"
+msgid "Not used by Orbit"
+msgstr "Orbit tarafından kullanılmıyor"
 
 #: src/components/McpServerHealthLine.tsx
 #: src/pages/PluginsOverlay.tsx
@@ -5019,10 +5098,6 @@ msgstr "{title} aç"
 msgid "Open <0>{0}</0> and enter this code:"
 msgstr "<0>{0}</0> adresini aç ve bu kodu gir:"
 
-#: src/pages/shell/chat-header.tsx
-msgid "Open call"
-msgstr "Aramayı aç"
-
 #. placeholder {0}: call.botName
 #: src/components/call/CallCard.tsx
 msgid "Open chat with {0}"
@@ -5040,6 +5115,10 @@ msgstr "Harici bağlantı açılsın mı?"
 msgid "Open in full window"
 msgstr "Tam pencerede aç"
 
+#: src/pages/shell/chat-header.tsx
+msgid "Open Inspector"
+msgstr ""
+
 #: src/components/pages/SharePopover.tsx
 msgid "Open link"
 msgstr "Bağlantıyı aç"
@@ -5051,8 +5130,8 @@ msgstr "Gezinmeyi aç"
 #: src/components/pages/PublicPageShell.tsx
 #: src/pages/Invite.tsx
 #: src/pages/SharedPage.tsx
-msgid "Open Rakazo"
-msgstr "Rakazo'yu aç"
+msgid "Open Orbit"
+msgstr "Orbit'yu aç"
 
 #: src/pages/ScratchpadSection.tsx
 msgid "Open work"
@@ -5090,6 +5169,81 @@ msgstr "İsteğe bağlı üstbilgi değeri"
 #: src/pages/Onboarding.tsx
 msgid "Or paste an API key"
 msgstr "Veya bir API anahtarı yapıştır"
+
+#: src/App.tsx
+msgid "Or reload window"
+msgstr ""
+
+#: src/components/PageLoading.tsx
+#: src/pages/AccountSettingsOverlay.tsx
+#: src/pages/shell/avatar-studio-popover.tsx
+msgid "Orbit"
+msgstr "Orbit"
+
+#: src/pages/shell/create-bot-dialog.tsx
+msgid "Orbit Agent Studio"
+msgstr ""
+
+#: src/pages/shell/chat-header.tsx
+msgid "Orbit Assistant"
+msgstr ""
+
+#: src/pages/shell/create-bot-dialog.tsx
+msgid "Orbit Blueprints"
+msgstr ""
+
+#: src/components/ComputersUnavailableHint.tsx
+msgid "Orbit Cloud"
+msgstr ""
+
+#: src/pages/AccountSettingsOverlay.tsx
+msgid "Orbit Cosmic Theme"
+msgstr ""
+
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Orbit Cosmic Themes"
+msgstr ""
+
+#: src/pages/settings-nav.ts
+msgid "Orbit Cosmic Themes, custom typography, and visual density."
+msgstr ""
+
+#: src/pages/Onboarding.tsx
+msgid "Orbit credits"
+msgstr "Orbit kredileri"
+
+#: src/App.tsx
+msgid "Orbit encountered an unexpected state. Refreshing will reload the interface cleanly."
+msgstr ""
+
+#: src/pages/shell/avatar-studio-popover.tsx
+msgid "Orbit Official Planet Bot"
+msgstr ""
+
+#: src/components/SidebarFooter.tsx
+msgid "Orbit Platform"
+msgstr ""
+
+#. placeholder {0}: activeTheme.name
+#: src/components/OrbitThemeSwitcher.tsx
+msgid "Orbit Theme: {0}"
+msgstr ""
+
+#: src/components/OrbitThemeSwitcher.tsx
+msgid "Orbit Themes"
+msgstr ""
+
+#: src/pages/Auth.tsx
+msgid "Orbit uses your Forion account. You’ll be back here in a moment."
+msgstr ""
+
+#: src/pages/memory-providers/HonchoSettingsForm.tsx
+msgid "orbit-shared and IDs starting with bot- are reserved for Orbit."
+msgstr ""
+
+#: src/pages/shell/chat-header.tsx
+msgid "Orbital Command Bar"
+msgstr ""
 
 #: src/components/ComputerProviderSettings.tsx
 #: src/pages/settings-nav.ts
@@ -5230,8 +5384,8 @@ msgid "Paste a replacement key"
 msgstr "Yeni bir anahtar yapıştır"
 
 #: src/pages/model-settings/compatible-model-fields.tsx
-msgid "Paste the OpenAI-compatible address from your server. Rakazo adds /v1 if needed."
-msgstr "Sunucundaki OpenAI uyumlu adresi yapıştır. Gerekirse Rakazo /v1 ekler."
+msgid "Paste the OpenAI-compatible address from your server. Orbit adds /v1 if needed."
+msgstr "Sunucundaki OpenAI uyumlu adresi yapıştır. Gerekirse Orbit /v1 ekler."
 
 #: src/pages/shell/agent-import.tsx
 msgid "Paste the reply"
@@ -5294,6 +5448,10 @@ msgstr "Katalogdan bir model seç."
 msgid "Pick a model from the list or enter a model id served by this endpoint."
 msgstr "Listeden bir model seç veya bu uç noktanın sunduğu bir model kimliği gir."
 
+#: src/pages/AccountSettingsOverlay.tsx
+msgid "Pick a signature cosmic color palette across Orbit"
+msgstr ""
+
 #: src/pages/RoutineEditor.tsx
 msgid "Pick a tool to check"
 msgstr "Kontrol edilecek bir araç seçin"
@@ -5315,6 +5473,10 @@ msgstr "Plan"
 #: src/components/ArtifactFileCard.tsx
 msgid "Play {name}"
 msgstr "{name} dosyasını oynat"
+
+#: src/pages/VoiceSettingsOverlay.tsx
+msgid "Playing sample…"
+msgstr ""
 
 #: src/pages/VoiceSettingsOverlay.tsx
 msgid "Playing…"
@@ -5425,19 +5587,6 @@ msgstr "Çekme isteği"
 msgid "Queued"
 msgstr "Kuyrukta"
 
-#: src/pages/AccountSettingsOverlay.tsx
-#: src/pages/shell/avatar-studio-popover.tsx
-msgid "Rakazo"
-msgstr "Rakazo"
-
-#: src/pages/Onboarding.tsx
-msgid "Rakazo credits"
-msgstr "Rakazo kredileri"
-
-#: src/pages/memory-providers/HonchoSettingsForm.tsx
-msgid "rakazo-shared and IDs starting with bot- are reserved for Rakazo."
-msgstr "rakazo-shared ve bot- ile başlayan kimlikler Rakazo için ayrılmıştır."
-
 #: src/pages/shell/message-hover-actions.tsx
 msgid "React"
 msgstr "Tepki ver"
@@ -5445,6 +5594,10 @@ msgstr "Tepki ver"
 #: src/pages/shell/message-hover-actions.tsx
 msgid "Reactions"
 msgstr "Tepkiler"
+
+#: src/pages/shell/message-hover-actions.tsx
+msgid "Read aloud"
+msgstr ""
 
 #: src/components/AskCard.tsx
 msgid "Read from the page, not checked"
@@ -5454,7 +5607,9 @@ msgstr "Sayfadan okundu, kontrol edilmedi"
 msgid "Read replies aloud"
 msgstr "Yanıtları sesli oku"
 
+#: src/pages/shell/chat-header.tsx
 #: src/pages/shell/import-status.ts
+#: src/pages/VoiceSettingsOverlay.tsx
 msgid "Ready"
 msgstr "Hazır"
 
@@ -5472,8 +5627,8 @@ msgid "Recall and write"
 msgstr "Hatırla ve yaz"
 
 #: src/pages/memory-providers/HonchoSettingsForm.tsx
-msgid "Recall from this peer; save to Rakazo’s own peers."
-msgstr "Bu eşten hatırla; Rakazo’nun kendi eşlerine kaydet."
+msgid "Recall from this peer; save to Orbit’s own peers."
+msgstr "Bu eşten hatırla; Orbit’nun kendi eşlerine kaydet."
 
 #: src/pages/memory-providers/SerenitySettingsForm.tsx
 msgid "Recall only"
@@ -5484,6 +5639,7 @@ msgid "Received"
 msgstr "Alındı"
 
 #: src/pages/ActivityList.tsx
+#: src/pages/Shell.tsx
 msgid "Recent"
 msgstr "Son"
 
@@ -5875,6 +6031,7 @@ msgstr "Çalışma alanın geri yükleniyor"
 #: src/pages/ModelRoleSettings.tsx
 #: src/pages/PluginsOverlay.tsx
 #: src/pages/PluginSubmissionsPanel.tsx
+#: src/pages/shell/sidebar-roster.tsx
 #: src/pages/SpaceSettingOverrides.tsx
 msgid "Retry"
 msgstr "Yeniden dene"
@@ -5895,8 +6052,8 @@ msgstr "{0} aramasına dön"
 
 #: src/pages/McpOAuthCallback.tsx
 #: src/pages/SlackInstallCallback.tsx
-msgid "Return to Rakazo"
-msgstr "Rakazo'ya dön"
+msgid "Return to Orbit"
+msgstr "Orbit'ya dön"
 
 #: src/lib/model-connection-preflight.ts
 msgid "Review provider settings and test again."
@@ -6181,9 +6338,17 @@ msgstr "Güvenlik ve Operasyon"
 msgid "Security code"
 msgstr "Güvenlik kodu"
 
-#: src/pages/shell/chat-header.tsx
-msgid "Select a bot"
-msgstr "Bir bot seç"
+#: src/pages/Shell.tsx
+msgid "Select a bot from the sidebar or create a new companion to begin."
+msgstr ""
+
+#: src/pages/shell/create-bot-dialog.tsx
+msgid "Select a pre-configured Orbit Agent blueprint to get started:"
+msgstr ""
+
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Select your preferred typeface family. Orbit hot-reloads fonts in real-time across all headings, code blocks, and chat transcripts."
+msgstr ""
 
 #: src/pages/memory-providers/ConnectionModeFields.tsx
 msgid "Self-hosted"
@@ -6289,7 +6454,6 @@ msgstr "Ayarlar: Kullanım"
 msgid "Setup complete"
 msgstr "Kurulum tamamlandı"
 
-#: src/components/ComputersUnavailableHint.tsx
 #: src/pages/model-settings/compatible-model-fields.tsx
 msgid "Setup help"
 msgstr "Kurulum yardımı"
@@ -6372,6 +6536,10 @@ msgstr "Dökümü göster"
 msgid "Sidebar density"
 msgstr "Kenar çubuğu yoğunluğu"
 
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Sidebar Density"
+msgstr ""
+
 #: src/components/integrations/plugin-marketplace.tsx
 #: src/lib/localized-provider-hint.ts
 #: src/pages/Auth.tsx
@@ -6397,12 +6565,17 @@ msgid "Sign in at <0>{0}</0>, then paste the code here."
 msgstr "<0>{0}</0> adresinde oturum açın, ardından kodu buraya yapıştırın."
 
 #: src/pages/Auth.tsx
-msgid "Sign in to Rakazo"
-msgstr "Rakazo'da oturum aç"
+msgid "Sign in to Orbit"
+msgstr "Orbit'da oturum aç"
 
 #: src/lib/user-error.ts
 msgid "Sign in to your existing account to link SSO"
 msgstr "SSO bağlamak için mevcut hesabınıza giriş yapın"
+
+#. placeholder {0}: reset.sso.name
+#: src/pages/Auth.tsx
+msgid "Sign in with {0}"
+msgstr ""
 
 #: src/components/PasskeySignIn.tsx
 msgid "Sign in with passkey"
@@ -6419,6 +6592,10 @@ msgstr "Kaydol"
 #: src/components/integrations/plugin-marketplace.tsx
 msgid "Sign-in cancelled. Try again."
 msgstr "Oturum açma iptal edildi. Tekrar dene."
+
+#: src/pages/Auth.tsx
+msgid "Signing in…"
+msgstr ""
 
 #: src/components/vault/VaultItemDetail.tsx
 #: src/components/vault/VaultItemEditor.tsx
@@ -6493,6 +6670,9 @@ msgid "Some settings are not imported"
 msgstr "Bazı ayarlar içe aktarılmaz"
 
 #: src/App.tsx
+msgid "Something went wrong"
+msgstr ""
+
 #: src/lib/user-error.ts
 msgid "Something went wrong. Try again."
 msgstr "Bir şeyler ters gitti. Tekrar deneyin."
@@ -6566,10 +6746,6 @@ msgstr "SSO"
 msgid "SSO is temporarily unavailable. Try again."
 msgstr "SSO geçici olarak kullanılamıyor. Yeniden deneyin."
 
-#: src/components/GitHubStarPrompt.tsx
-msgid "Star on GitHub"
-msgstr "GitHub'da yıldızla"
-
 #: src/pages/shell/computer-overlay.tsx
 msgid "Start"
 msgstr "Başlat"
@@ -6642,6 +6818,7 @@ msgstr "Durdur"
 msgid "Stop computer"
 msgstr "Bilgisayarı durdur"
 
+#: src/pages/shell/message-hover-actions.tsx
 #: src/pages/shell/message-view.tsx
 msgid "Stop speaking"
 msgstr "Seslendirmeyi durdur"
@@ -6743,6 +6920,10 @@ msgstr "Geçiliyor…"
 #: src/pages/Shell.tsx
 msgid "System"
 msgstr "Sistem"
+
+#: src/App.tsx
+msgid "System Interruption"
+msgstr ""
 
 #: src/components/markdown-copy.tsx
 msgid "Table"
@@ -6880,6 +7061,11 @@ msgstr "Paylaşılan bağlantı çalışmayı durdurur"
 #: src/components/ModelCredits.tsx
 msgid "The unused difference is credited to your next invoice."
 msgstr "Kullanılmayan fark bir sonraki faturanıza alacak olarak yansıtılır."
+
+#. placeholder {0}: activeTheme.name
+#: src/components/OrbitThemeSwitcher.tsx
+msgid "Theme: {0}"
+msgstr ""
 
 #: src/pages/shell/agent-import.tsx
 msgid "These files are too large to import."
@@ -7064,8 +7250,8 @@ msgid "This server's tool result does not fit the model. Turn off Keep tool resu
 msgstr "Bu sunucunun araç sonucu modele sığmıyor. O sunucu için \"Araç sonuçlarını bütün tut\" ayarını kapat veya başka bir model seç."
 
 #: src/pages/model-settings/connection-controls.tsx
-msgid "This subscription sign-in is not available in Rakazo yet. Use a deployment credential or choose another provider."
-msgstr "Bu abonelik girişi Rakazo'da henüz kullanılamıyor. Bir dağıtım kimlik bilgisi kullan veya başka bir sağlayıcı seç."
+msgid "This subscription sign-in is not available in Orbit yet. Use a deployment credential or choose another provider."
+msgstr "Bu abonelik girişi Orbit'da henüz kullanılamıyor. Bir dağıtım kimlik bilgisi kullan veya başka bir sağlayıcı seç."
 
 #: src/components/bot-templates/bot-templates-dialog.tsx
 msgid "This template was just updated. Check it again."
@@ -7241,12 +7427,20 @@ msgstr "Kayıt yapmadan yaz"
 msgid "Type your answer"
 msgstr "Yanıtını yaz"
 
+#: src/pages/AccountSettingsOverlay.tsx
+msgid "Typography"
+msgstr ""
+
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Typography Engine"
+msgstr ""
+
 #: src/pages/BotContextMenu.tsx
-#: src/pages/Shell.tsx
 msgid "Unassigned"
 msgstr "Atanmamış"
 
 #: src/components/AskCard.tsx
+#: src/pages/shell/shell-dialogs.tsx
 msgid "Undo"
 msgstr "Geri al"
 
@@ -7401,13 +7595,13 @@ msgstr ""
 msgid "Use my subscription or API key"
 msgstr "Aboneliğimi veya API anahtarımı kullan"
 
+#: src/components/ModelCredits.tsx
+msgid "Use Orbit credits"
+msgstr "Orbit kredilerini kullan"
+
 #: src/components/teach/TeachRecordingChrome.tsx
 msgid "Use Protected input for passwords."
 msgstr "Parolalar için Korumalı giriş'i kullan."
-
-#: src/components/ModelCredits.tsx
-msgid "Use Rakazo credits"
-msgstr "Rakazo kredilerini kullan"
 
 #: src/pages/memory-providers/HonchoSettingsForm.tsx
 msgid "Use up to 512 letters, digits, _ or -."
@@ -7495,6 +7689,10 @@ msgstr "Kaynağı görüntüle"
 msgid "Voice"
 msgstr "Ses"
 
+#: src/pages/shell/chat-header.tsx
+msgid "Voice Call"
+msgstr ""
+
 #: src/lib/tts.ts
 msgid "Voice request timed out."
 msgstr "Ses isteği zaman aşımına uğradı."
@@ -7554,8 +7752,8 @@ msgid "Weekly"
 msgstr "Haftalık"
 
 #: src/components/SignupSurvey.tsx
-msgid "Welcome to Rakazo"
-msgstr "Rakazo'ya hoş geldin"
+msgid "Welcome to Orbit"
+msgstr "Orbit'ya hoş geldin"
 
 #: src/pages/shell/dialogs.tsx
 msgid "What about its memories?"
@@ -7566,8 +7764,8 @@ msgid "What can this space use?"
 msgstr "Bu alan neleri kullanabilir?"
 
 #: src/components/SignupSurvey.tsx
-msgid "What do you most want Rakazo to help with?"
-msgstr "Rakazo'nun en çok neye yardım etmesini istiyorsun?"
+msgid "What do you most want Orbit to help with?"
+msgstr "Orbit'nun en çok neye yardım etmesini istiyorsun?"
 
 #: src/pages/shell/message-cards.tsx
 msgid "What do you want me on first?"
@@ -7679,8 +7877,13 @@ msgid "Works with your ChatGPT or Claude plan."
 msgstr "ChatGPT veya Claude aboneliğinle çalışır."
 
 #: src/pages/memory-providers/HonchoSettingsForm.tsx
+#: src/pages/shell/chat-header.tsx
 msgid "Workspace"
 msgstr "Çalışma alanı"
+
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Workspace Density"
+msgstr ""
 
 #: src/lib/billing.ts
 msgid "year"

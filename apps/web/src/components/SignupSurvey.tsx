@@ -1,10 +1,9 @@
-import { Trans, useLingui } from "@lingui/react/macro";
-import type { SignupSurvey as SignupSurveyAnswers } from "@rakazo/contracts";
+import type { SignupSurvey as SignupSurveyAnswers } from "@forion/orbit-contracts";
 import {
   SIGNUP_SURVEY_TEAM_SIZES,
   signupSurveyAsksTeamSize,
   signupSurveyTeamSizeLabel,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   Button,
   Input,
@@ -12,7 +11,8 @@ import {
   Textarea,
   ToggleGroup,
   ToggleGroupItem,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useId, useState } from "react";
 import { rpc } from "../lib/rpc";
 

@@ -1,8 +1,7 @@
 import { randomUUID } from "node:crypto";
-import { ORPCError } from "@orpc/server";
-import type { AdapterContext, SandboxProvider } from "@rakazo/adapter-kit";
-import { computerControlExpireJobKey } from "@rakazo/adapter-kit";
-import type { ComputerExecutionLease } from "@rakazo/adapters";
+import type { AdapterContext, SandboxProvider } from "@forion/orbit-adapter-kit";
+import { computerControlExpireJobKey } from "@forion/orbit-adapter-kit";
+import type { ComputerExecutionLease } from "@forion/orbit-adapters";
 import {
   acquireComputerExecutionLease,
   anotherPersonHoldsControl,
@@ -39,17 +38,17 @@ import {
   takeoverLeaseMs,
   toComputerRef,
   touchRunningComputer,
-} from "@rakazo/adapters";
-import type { Actor, ComputerReleaseReason, ComputerStatus } from "@rakazo/contracts";
+} from "@forion/orbit-adapters";
+import type { Actor, ComputerReleaseReason, ComputerStatus } from "@forion/orbit-contracts";
 import {
   attachmentMaxBytes,
   attachmentSizeLabel,
   ComputerCommandSchema,
   foldComputerCommands,
-} from "@rakazo/contracts";
-import { ACTIVE_RUN_STATUSES, scrollDirection } from "@rakazo/core";
-import { addScreenProxyCapability } from "@rakazo/core/node/screen-capability";
-import type { ComputerRunEnd, PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-contracts";
+import { ACTIVE_RUN_STATUSES, scrollDirection } from "@forion/orbit-core";
+import { addScreenProxyCapability } from "@forion/orbit-core/node/screen-capability";
+import type { ComputerRunEnd, PrismaClient } from "@forion/orbit-db";
 import {
   createRepos,
   expireComputerExecutionLeases,
@@ -58,8 +57,9 @@ import {
   parseComputerMode,
   recordComputerRunEnd,
   spaceIsShared,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
+import { ORPCError } from "@orpc/server";
 import { scrollPoint } from "../computer-input.js";
 import {
   executionBlocksUserTakeover,

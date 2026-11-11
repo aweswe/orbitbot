@@ -1,6 +1,6 @@
+import type { Bot } from "@forion/orbit-contracts";
+import { Button } from "@forion/orbit-ui-web";
 import { Trans, useLingui } from "@lingui/react/macro";
-import type { Bot } from "@rakazo/contracts";
-import { Button } from "@rakazo/ui-web";
 import { PanelLeftClose, PanelLeftOpen, Plus, Search } from "lucide-react";
 import { IconTooltip } from "../../components/IconTooltip";
 import { OrbitLogoMark } from "../../components/OrbitLogoMark";
@@ -65,9 +65,11 @@ export function SidebarHeader({
               <OrbitLogoMark className="h-4.5 w-4.5 text-foreground" />
             </div>
             <div className="flex items-center leading-none">
-              <span className="orbit-brand-text text-body-lg font-bold tracking-[0.18em] text-foreground">
-                ORION
-              </span>
+              <img
+                src="/assets/imgs/logo/orbit-wordmark.svg"
+                alt="Orbit"
+                className="h-4 w-auto"
+              />
             </div>
           </div>
 

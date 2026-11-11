@@ -1,4 +1,4 @@
-import type { AgentRunRequest } from "@rakazo/adapter-kit";
+import type { AgentRunRequest } from "@forion/orbit-adapter-kit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { builtinAgentTools } from "./builtin-tools.js";
 
@@ -61,6 +61,7 @@ const fake = vi.hoisted(() => {
 vi.mock("@earendil-works/pi-agent-core", () => ({ Agent: fake.Agent }));
 vi.mock("@earendil-works/pi-ai/providers/all", () => ({
   builtinModels: () => ({
+    setProvider: (provider: unknown) => provider,
     getModel: () => ({ provider: "test", id: "fake-model" }),
     streamSimple: () => {
       throw new Error("No model requests are allowed");

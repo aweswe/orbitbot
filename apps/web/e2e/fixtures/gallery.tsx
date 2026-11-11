@@ -1,8 +1,8 @@
+import type { MessageBlock, ThreadMessage } from "@forion/orbit-contracts";
+import { BOT_COLOR_LIST, instructionUpdateDiff } from "@forion/orbit-core";
+import type { GroupAvatarMember } from "@forion/orbit-ui-web";
+import { Button } from "@forion/orbit-ui-web";
 import { I18nProvider } from "@lingui/react";
-import type { MessageBlock, ThreadMessage } from "@rakazo/contracts";
-import { BOT_COLOR_LIST, instructionUpdateDiff } from "@rakazo/core";
-import type { GroupAvatarMember } from "@rakazo/ui-web";
-import { Button } from "@rakazo/ui-web";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";

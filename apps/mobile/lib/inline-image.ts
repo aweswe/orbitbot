@@ -1,4 +1,4 @@
-import type { MessageBlock } from "@rakazo/contracts";
+import type { MessageBlock } from "@forion/orbit-contracts";
 
 export type ImageSize = { width: number; height: number };
 

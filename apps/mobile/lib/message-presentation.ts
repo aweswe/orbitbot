@@ -1,6 +1,9 @@
-import type { MessageBlock } from "@rakazo/contracts";
-import { isRetiredImportSetup, isToolActivityBlock } from "@rakazo/core";
-import { MAX_QUOTABLE_SOURCE_LENGTH, visibleTextFromMarkdown } from "@rakazo/core/message-quote";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { isRetiredImportSetup, isToolActivityBlock } from "@forion/orbit-core";
+import {
+  MAX_QUOTABLE_SOURCE_LENGTH,
+  visibleTextFromMarkdown,
+} from "@forion/orbit-core/message-quote";
 
 export function isCenteredAgentEvent(blocks: readonly MessageBlock[]): boolean {
   return blocks.some(

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { BOT_COLORS, BOT_SETTINGS_SECTIONS } from "@rakazo/contracts";
+import { BOT_COLORS, BOT_SETTINGS_SECTIONS } from "@forion/orbit-contracts";
 import * as Notifications from "expo-notifications";
 import type { ComponentProps, ReactNode } from "react";
 import { act, createElement, useEffect } from "react";
@@ -561,7 +561,7 @@ describe("bot settings device voice menu", () => {
       )!;
     expect(option("Original").dataset.state).toBe("on");
     expect(mocks.rpc).not.toHaveBeenCalled();
-    await act(async () => option("Rakazo").click());
+    await act(async () => option("Orbit").click());
     mocks.rpc.mockResolvedValueOnce({ avatarSet: "rakazo" });
     await act(async () =>
       [...container.querySelectorAll<HTMLButtonElement>("button")]
@@ -579,7 +579,7 @@ describe("bot settings device voice menu", () => {
     await act(async () =>
       container.querySelector<HTMLButtonElement>('[aria-label="Edit avatar"]')!.click(),
     );
-    expect(option("Rakazo").dataset.state).toBe("on");
+    expect(option("Orbit").dataset.state).toBe("on");
     await act(async () => option("Original").click());
     mocks.rpc.mockResolvedValueOnce({ avatarSet: "organic" });
     await act(async () =>

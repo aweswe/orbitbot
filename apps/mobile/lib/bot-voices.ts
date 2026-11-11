@@ -1,5 +1,5 @@
-import type { SpeechLocale } from "@rakazo/core";
-import { speechLocaleTag } from "@rakazo/core";
+import type { SpeechLocale } from "@forion/orbit-core";
+import { speechLocaleTag } from "@forion/orbit-core";
 import { File, Paths } from "expo-file-system";
 import { getLocales } from "expo-localization";
 import type * as ExpoSpeech from "expo-speech";

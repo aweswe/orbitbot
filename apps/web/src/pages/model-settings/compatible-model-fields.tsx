@@ -1,6 +1,5 @@
-import { Plural, Trans, useLingui } from "@lingui/react/macro";
-import type { ThinkingLevel } from "@rakazo/contracts";
-import { compatibleThinkingLevels, toggleEnabledModelId } from "@rakazo/core";
+import type { ThinkingLevel } from "@forion/orbit-contracts";
+import { compatibleThinkingLevels, toggleEnabledModelId } from "@forion/orbit-core";
 import {
   Button,
   Checkbox,
@@ -11,7 +10,8 @@ import {
   ModelThinkingOptions,
   NativeSelect,
   NativeSelectOption,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { ModelPreflightFeedback } from "../../components/ModelConnectionPreflightNotice";
 import { ModelHeadersEditor } from "../../components/ModelHeadersEditor";
 import { useListSearch } from "../../lib/use-list-search";

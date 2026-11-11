@@ -1,8 +1,8 @@
+import type { BotEmailAddress, BotEmailAddresses } from "@forion/orbit-contracts";
+import { BOT_EMAIL_NAME_TAKEN } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
+import { claimBotEmailName } from "@forion/orbit-db";
 import { ORPCError } from "@orpc/server";
-import type { BotEmailAddress, BotEmailAddresses } from "@rakazo/contracts";
-import { BOT_EMAIL_NAME_TAKEN } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
-import { claimBotEmailName } from "@rakazo/db";
 
 export const EMAIL_NOT_RECEIVED = "This server doesn't receive email.";
 

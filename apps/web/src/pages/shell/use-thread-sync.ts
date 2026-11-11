@@ -6,7 +6,7 @@ import type {
   ProductEvent,
   RoutineHistory,
   ThreadSnapshot,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   activeThreadRuns,
   anySignal,
@@ -18,8 +18,8 @@ import {
   reduceThreadSnapshot,
   rememberTerminalRun,
   runThreadSubscription,
-} from "@rakazo/core";
-import { fetchFresh } from "@rakazo/core/query";
+} from "@forion/orbit-core";
+import { fetchFresh } from "@forion/orbit-core/query";
 import type { RefObject } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {

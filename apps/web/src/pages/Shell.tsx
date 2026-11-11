@@ -1,12 +1,11 @@
-import { Trans, useLingui } from "@lingui/react/macro";
 import type {
   AgentSkillCatalogEntry,
   Bot,
   SpaceMemoryConfig,
   ThreadMessage,
   VoiceStatus,
-} from "@rakazo/contracts";
-import { DEFAULT_NEW_BOT_AVATAR_SET } from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
+import { DEFAULT_NEW_BOT_AVATAR_SET } from "@forion/orbit-contracts";
 import {
   activeThreadRuns,
   answerableAskMessageIds,
@@ -21,11 +20,12 @@ import {
   newClientId,
   otherAuthor,
   workingRoutineName,
-} from "@rakazo/core";
-import { fetchFresh, writeSaved } from "@rakazo/core/query";
-import type { GroupAvatarMember } from "@rakazo/ui-web";
-import { Button } from "@rakazo/ui-web";
-import { useIsMobile } from "@rakazo/ui-web/hooks/use-mobile";
+} from "@forion/orbit-core";
+import { fetchFresh, writeSaved } from "@forion/orbit-core/query";
+import type { GroupAvatarMember } from "@forion/orbit-ui-web";
+import { Button } from "@forion/orbit-ui-web";
+import { useIsMobile } from "@forion/orbit-ui-web/hooks/use-mobile";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useQuery } from "@tanstack/react-query";
 import {
   Keyboard,
@@ -50,9 +50,9 @@ import {
 } from "react";
 import { useParams } from "react-router-dom";
 import { ComputerUpdateProgress } from "../components/ComputerUpdateProgress";
-import { OrbitLogoMark } from "../components/OrbitLogoMark";
 import { CallCard, CallReturnBar } from "../components/call/CallCard";
 import { IncomingCall } from "../components/call/IncomingCall";
+import { OrbitLogoMark } from "../components/OrbitLogoMark";
 import { PageLoading } from "../components/PageLoading";
 import { PageViewHost } from "../components/pages/PageViewHost";
 import type { ArtifactTarget } from "../lib/artifact-open";

@@ -1,9 +1,9 @@
-import type { AdapterContext, SecretStore } from "@rakazo/adapter-kit";
-import { VoiceAccountError } from "@rakazo/adapter-kit";
-import type { Actor, BotSettingsValues, VoiceInfo } from "@rakazo/contracts";
-import { ThinkingLevelSchema } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
-import { findDefaultVoiceCredential } from "@rakazo/db";
+import type { AdapterContext, SecretStore } from "@forion/orbit-adapter-kit";
+import { VoiceAccountError } from "@forion/orbit-adapter-kit";
+import type { Actor, BotSettingsValues, VoiceInfo } from "@forion/orbit-contracts";
+import { ThinkingLevelSchema } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
+import { findDefaultVoiceCredential } from "@forion/orbit-db";
 import type { FleetPrepareDeps } from "./fleet-tools.js";
 import { botModelLabel } from "./fleet-tools.js";
 import { connectedModelChoices, echoedQuery, resolveModelChoice, words } from "./model-choice.js";

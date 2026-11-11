@@ -1,7 +1,7 @@
 import type { ConnectedAccountStatus } from "@composio/core";
-import type { AdapterContext, ConnectorEvent } from "@rakazo/adapter-kit";
-import { ConnectorAuthUnavailableError } from "@rakazo/adapter-kit";
-import { CONNECTOR_AUTH_UNAVAILABLE } from "@rakazo/contracts";
+import type { AdapterContext, ConnectorEvent } from "@forion/orbit-adapter-kit";
+import { ConnectorAuthUnavailableError } from "@forion/orbit-adapter-kit";
+import { CONNECTOR_AUTH_UNAVAILABLE } from "@forion/orbit-contracts";
 import { describe, expect, it } from "vitest";
 import { ComposioConnector, createConnectorStack } from "./composio-connector.js";
 import { FakeComposioClient } from "./composio-fake.js";

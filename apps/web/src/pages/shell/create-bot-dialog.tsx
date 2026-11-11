@@ -1,13 +1,12 @@
-import { Trans, useLingui } from "@lingui/react/macro";
-import type { BotAvatarSet } from "@rakazo/contracts";
-import { BOT_NAME_MAX_LENGTH } from "@rakazo/contracts";
+import type { BotAvatarSet } from "@forion/orbit-contracts";
+import { BOT_NAME_MAX_LENGTH } from "@forion/orbit-contracts";
 import {
   newClientId,
   ORGANIC_AVATAR_HEART_FAMILY,
   ORGANIC_AVATAR_LOOKS,
   organicAvatarFamily,
   organicAvatarSampleIdentity,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import {
   BOT_AVATAR_COLORS,
   BotAvatar,
@@ -19,7 +18,8 @@ import {
   DialogTitle,
   Input,
   parseBotAvatar,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Code2, Compass, Sparkles, Sun, Terminal } from "lucide-react";
 import { useRef, useState } from "react";
 import { errorText } from "../../lib/user-error";
@@ -198,7 +198,7 @@ export function CreateBotDialog({
               <Input
                 ref={nameRef}
                 aria-label={t`Name`}
-                placeholder={t`Name your Orion`}
+                placeholder={t`Name your Orbit`}
                 value={name}
                 maxLength={BOT_NAME_MAX_LENGTH}
                 onChange={(event) => setName(event.target.value)}
@@ -238,7 +238,9 @@ export function CreateBotDialog({
                       onClick={() => selectBlueprint(blueprint)}
                       className="flex items-start gap-3 p-3 rounded-xl border border-border/60 bg-card/60 hover:bg-card hover:border-primary/40 transition-all text-start group active:scale-[0.99]"
                     >
-                      <div className={`size-9 rounded-lg border flex items-center justify-center shrink-0 ${blueprint.accent}`}>
+                      <div
+                        className={`size-9 rounded-lg border flex items-center justify-center shrink-0 ${blueprint.accent}`}
+                      >
                         <Icon size={18} />
                       </div>
                       <div className="min-w-0 flex-1">

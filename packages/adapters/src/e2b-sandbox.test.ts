@@ -11,7 +11,7 @@ import {
   SandboxNotFoundError,
   TimeoutError,
 } from "@e2b/desktop";
-import type { CommandRequest, ComputerRef, ProcessEvent } from "@rakazo/adapter-kit";
+import type { CommandRequest, ComputerRef, ProcessEvent } from "@forion/orbit-adapter-kit";
 import { describe, expect, it, vi } from "vitest";
 import { sandboxIdleMs } from "./computer-idle.js";
 import { shouldSkipPortableWorkspaceFile } from "./computer-workspace.js";
@@ -290,7 +290,7 @@ describe("E2B computer backend", () => {
     }
   });
 
-  it("creates new computers from the Rakazo computer template", async () => {
+  it("creates new computers from the Orbit computer template", async () => {
     const sdk: E2BSandboxSdk = {
       create: vi.fn().mockResolvedValue({ sandboxId: "fresh" }),
       connect: vi.fn(),
@@ -410,9 +410,11 @@ describe("E2B computer backend", () => {
         else if (outcome === "rejects")
           await expect(result).rejects.toMatchObject({ statusCode: status });
         else await expect(result).rejects.toSatisfy(isSandboxGoneError);
-        expect(requests).toEqual([
-          method === "destroy" ? "DELETE /sandboxes/paused" : "POST /sandboxes/paused/pause",
-        ]);
+        const expected =
+          method === "destroy" ? "DELETE /sandboxes/paused" : "POST /sandboxes/paused/pause";
+        // The SDK may retry a transient status; every attempt must be the same operation.
+        expect(requests.length).toBeGreaterThan(0);
+        expect(new Set(requests)).toEqual(new Set([expected]));
       } finally {
         vi.unstubAllEnvs();
         server.closeAllConnections();

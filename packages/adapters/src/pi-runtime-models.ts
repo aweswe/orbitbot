@@ -7,8 +7,8 @@ import type {
 } from "@earendil-works/pi-ai";
 import { clampThinkingLevel } from "@earendil-works/pi-ai";
 import { builtinModels } from "@earendil-works/pi-ai/providers/all";
-import type { AgentRunRequest } from "@rakazo/adapter-kit";
-import { canonicalPiProviderId, usableModelId } from "@rakazo/contracts";
+import type { AgentRunRequest } from "@forion/orbit-adapter-kit";
+import { canonicalPiProviderId, usableModelId } from "@forion/orbit-contracts";
 import { DEFAULT_OPENROUTER_MODEL_ID } from "./deployment-model.js";
 import { PiRuntimeCredentialStore, toOAuthCredential } from "./pi-credentials.js";
 import { liveModelSibling, withLiveImageInput } from "./pi-live-model.js";
@@ -27,8 +27,8 @@ import {
 } from "./pi-runtime-limits.js";
 import {
   createRequestyModel,
-  registerRequestyCatalog,
   REQUESTY_PROVIDER_ID,
+  registerRequestyCatalog,
 } from "./requesty-provider.js";
 
 // Built on first use, not at module load: entry points call loadRootEnv() after

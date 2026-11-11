@@ -1,4 +1,4 @@
-import { BotTemplateSchema } from "@rakazo/contracts";
+import { BotTemplateSchema } from "@forion/orbit-contracts";
 import { describe, expect, it } from "vitest";
 import { looksLikeCredential } from "./agent-import/index.js";
 import { extractRoutineSkillMentions } from "./agent-skill.js";

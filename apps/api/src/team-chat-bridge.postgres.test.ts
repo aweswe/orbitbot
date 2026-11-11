@@ -1,12 +1,12 @@
 import { randomUUID } from "node:crypto";
-import type { PrismaClient } from "@rakazo/db";
+import type { PrismaClient } from "@forion/orbit-db";
 import {
   asSystem,
   createDb,
   provisionMessagingIdentity,
   runAsSystem,
   sendUserMessage as sendUserMessageTo,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { TeamChatBridge } from "./team-chat-bridge.js";
 

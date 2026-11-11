@@ -1,6 +1,6 @@
+import type { ComputerReleaseReason } from "@forion/orbit-contracts";
+import { Button } from "@forion/orbit-ui-web";
 import { Trans } from "@lingui/react/macro";
-import type { ComputerReleaseReason } from "@rakazo/contracts";
-import { Button } from "@rakazo/ui-web";
 
 export function ComputerReleaseActions({
   takeoverRequested,

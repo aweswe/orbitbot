@@ -1,8 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { disposableDatabaseEnv } from "./cli/postgres.js";
+import { disposableDatabaseEnv, schemaScopedDatabaseUrl } from "./cli/postgres.js";
 
 const developerUrl = "postgres://owner:fixture@127.0.0.1:5433/developer_fixture";
 const disposableUrl = "postgres://test:fixture@127.0.0.1:55432/disposable_fixture";
+const scopedUrl = schemaScopedDatabaseUrl(disposableUrl);
 
 // The Prisma config loads `.env` files into the process; drop whatever they added.
 const keysBefore = new Set(Object.keys(process.env));
@@ -26,11 +27,11 @@ describe("disposable database env", () => {
     // The Prisma config reads the environment when it loads, so it is imported after stubbing.
     const { default: prismaConfig } = await import("../../db/prisma.config.js");
 
-    expect(prismaConfig.datasource?.url).toBe(disposableUrl);
+    expect(prismaConfig.datasource?.url).toBe(scopedUrl);
     expect(env).toEqual({
-      DATABASE_URL: disposableUrl,
-      DATABASE_MIGRATION_URL: disposableUrl,
-      REALTIME_DATABASE_URL: disposableUrl,
+      DATABASE_URL: scopedUrl,
+      DATABASE_MIGRATION_URL: scopedUrl,
+      REALTIME_DATABASE_URL: scopedUrl,
     });
   });
 });

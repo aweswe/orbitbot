@@ -1,6 +1,5 @@
-import { Trans, useLingui } from "@lingui/react/macro";
-import type { Bot, Group, NavLink } from "@rakazo/contracts";
-import { accountDisplay } from "@rakazo/core";
+import type { Bot, Group, NavLink } from "@forion/orbit-contracts";
+import { accountDisplay } from "@forion/orbit-core";
 import {
   Button,
   InputGroup,
@@ -11,7 +10,8 @@ import {
   PopoverContent,
   PopoverTrigger,
   Sidebar,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { MoreHorizontal, Plus, Search, SlidersHorizontal } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
@@ -29,8 +29,8 @@ import { useSignOut } from "../../lib/sign-out";
 import { ActivityList } from "../ActivityList";
 import { SpaceSearchResults } from "../SpaceSearch";
 import type { SettingsSection } from "../shell-overlay";
-import { SidebarHeader } from "./sidebar-header";
 import { BotCreatePicker } from "./bot-picker";
+import { SidebarHeader } from "./sidebar-header";
 import type { SidebarSearch } from "./use-sidebar-search";
 
 /** Focuses the search box once it renders, its text selected so typing replaces it. */

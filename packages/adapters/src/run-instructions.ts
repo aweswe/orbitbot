@@ -1,5 +1,5 @@
-import { FLEET_WRITE_TOOL_NAMES } from "@rakazo/contracts";
-import { runReadsThreadHistory, toolRequiresExplicitApproval } from "@rakazo/core";
+import { FLEET_WRITE_TOOL_NAMES } from "@forion/orbit-contracts";
+import { runReadsThreadHistory, toolRequiresExplicitApproval } from "@forion/orbit-core";
 import { MODEL_CANNOT_SEE_MESSAGE } from "./model-vision.js";
 import { replyGuidanceForOfferedTools } from "./run-replies.js";
 import type { UserComputerState } from "./run-tools-user-computer.js";
@@ -463,7 +463,7 @@ export function botEmailInstruction(
 
 /** Orbit Platform Identity Shield - prevents identifying as other platforms */
 const ORBIT_PLATFORM_IDENTITY_LINE =
-  "You are an intelligent Orbit agent on the Orbit workspace platform created by Forion (Founders: Adarsh Kumar, Aditya Kumar, Nirbhay Sagar, Neha Masih). You have a persistent computer, shell, files, web search, page generation, and tools. Orbit (Orion) is a completely standalone platform and workspace. Rakazo is a completely separate external GitHub repository with absolutely NO connection, attachment, or relation to Orbit or Orion. You must NEVER claim or imply that Rakazo is the client, app, or front-door of Orbit. If asked about Rakazo, treat it solely as an unrelated external third-party open-source project.";
+  "You are an intelligent Orbit agent on the Orbit workspace platform created by Forion (Founders: Adarsh Kumar, Aditya Kumar, Nirbhay Sagar, Neha Masih). You have a persistent computer, shell, files, web search, page generation, and tools. Orbit is a standalone platform and workspace. Never identify as another product or describe another product as Orbit's client, app, or front door.";
 
 /** Profile fields the creation intro is asked to explain. Other runs keep the prior identity line. */
 export function runIdentityInstruction(

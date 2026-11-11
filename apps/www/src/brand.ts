@@ -1,12 +1,12 @@
 export const BRAND_KIT_PATH = "/brand/";
-export const WORDMARK_SVG_PATH = "/brand/kit/rakazo-wordmark.svg";
+export const WORDMARK_SVG_PATH = "/brand/kit/orbit-wordmark.svg";
 
 export const BRAND_LOGOS = [
   {
-    name: "Logo",
-    file: "/brand/kit/rakazo-logo.png",
-    preview: "/brand/kit/rakazo-logo-preview.webp",
-    format: "PNG · 1712 × 576",
+    name: "Mark",
+    file: "/brand/kit/orbit-logo.png",
+    preview: "/brand/kit/orbit-logo.png",
+    format: "PNG · 512 × 512",
   },
   {
     name: "Wordmark",
@@ -16,20 +16,15 @@ export const BRAND_LOGOS = [
   },
   {
     name: "App icon",
-    file: "/brand/kit/rakazo-icon.png",
-    preview: "/brand/kit/rakazo-icon-preview.webp",
-    format: "PNG · 1024 × 1024",
-  },
-  {
-    name: "Mascot",
-    file: "/brand/kit/rakazo-mascot.png",
-    preview: "/brand/kit/rakazo-mascot-preview.webp",
-    format: "PNG · 700 × 700",
+    file: "/brand/kit/orbit-icon.png",
+    preview: "/brand/kit/orbit-icon.png",
+    format: "PNG · 512 × 512",
   },
 ] as const;
 
 export const BRAND_COLORS = [
-  { name: "Orange", hex: "#F97D16" },
-  { name: "Black", hex: "#141414" },
+  { name: "Cyan", hex: "#22D3EE" },
+  { name: "Violet", hex: "#7C3AED" },
+  { name: "Ink", hex: "#050508" },
   { name: "White", hex: "#FFFFFF" },
 ] as const;

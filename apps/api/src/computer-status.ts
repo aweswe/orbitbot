@@ -4,10 +4,10 @@ import {
   DISK_WARNING_PERCENT,
   diskUsedPercent,
   holdsUserControl,
-} from "@rakazo/adapters";
-import type { ComputerStatus } from "@rakazo/contracts";
-import { ACTIVE_RUN_STATUSES, computerScreenSize } from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-adapters";
+import type { ComputerStatus } from "@forion/orbit-contracts";
+import { ACTIVE_RUN_STATUSES, computerScreenSize } from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
 
 /** Mirrors computer.takeover: an execution lease blocks user control unless a takeover is pending. */
 export function executionBlocksUserTakeover(input: {

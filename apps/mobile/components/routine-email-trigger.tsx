@@ -1,4 +1,4 @@
-import type { RoutineEmailSenders } from "@rakazo/contracts";
+import type { RoutineEmailSenders } from "@forion/orbit-contracts";
 import { useI18n } from "../lib/i18n";
 import type { BotEmail } from "./bot-email";
 import { useBotEmailRows } from "./bot-email";

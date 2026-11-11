@@ -2,8 +2,14 @@ packages:
   - "apps/web"
   - "apps/api"
   - "apps/worker"
+  # Native and marketing apps are release artifacts and CI installs them through
+  # root pnpm filters, so they must be workspace projects.
+  - "apps/desktop"
+  - "apps/mobile"
+  - "apps/www"
   - "packages/*"
   - "infra/sandboxes/supervisor"
+  - "infra/updater"
 
 engineStrict: false
 strictPeerDependencies: false

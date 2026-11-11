@@ -1,8 +1,8 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { EmailEmulator, FakeSandboxProvider } from "@rakazo/adapters";
-import { runAsSystem } from "@rakazo/db";
+import { EmailEmulator, FakeSandboxProvider } from "@forion/orbit-adapters";
+import { runAsSystem } from "@forion/orbit-db";
 import { expect, it, vi } from "vitest";
 import { createApp } from "./app.js";
 
@@ -36,7 +36,7 @@ it.skipIf(!databaseUrl)(
         headers: { "content-type": "application/json", origin: webOrigin },
         body: JSON.stringify(body),
       });
-    const welcomes = () => email.sent.filter((message) => message.subject === "Welcome to Rakazo");
+    const welcomes = () => email.sent.filter((message) => message.subject === "Welcome to Orbit");
     try {
       expect((await post("/api/auth/sign-up/email", { ...credentials, name: "New" })).status).toBe(
         200,

@@ -6,16 +6,16 @@ import type {
   JobPublisher,
   SandboxProvider,
   SecretStore,
-} from "@rakazo/adapter-kit";
-import { routineJobKey, runContinueJob, runJobKey } from "@rakazo/adapter-kit";
-import type { Actor, Bot, ComputerMode } from "@rakazo/contracts";
+} from "@forion/orbit-adapter-kit";
+import { routineJobKey, runContinueJob, runJobKey } from "@forion/orbit-adapter-kit";
+import type { Actor, Bot, ComputerMode } from "@forion/orbit-contracts";
 import {
   BOT_DESCRIPTION_MAX_LENGTH,
   BOT_INSTRUCTIONS_MAX_LENGTH,
   GROUP_MEMBER_MIN,
-} from "@rakazo/contracts";
-import { ACTIVE_RUN_STATUSES } from "@rakazo/core";
-import type { Prisma, PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-contracts";
+import { ACTIVE_RUN_STATUSES } from "@forion/orbit-core";
+import type { Prisma, PrismaClient } from "@forion/orbit-db";
 import {
   cancelRunsInTransaction,
   clearEndedRunState,
@@ -28,8 +28,8 @@ import {
   recordComputerRunEnd,
   teamComputerUserId,
   withTransactionRetry,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { BrowserStoppedReleaseError } from "./computer-screens.js";
 import { toComputerRef } from "./computer-support.js";
 import {

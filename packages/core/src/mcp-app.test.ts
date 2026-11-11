@@ -10,7 +10,7 @@ import {
 } from "./mcp-app.js";
 
 describe("MCP app domains", () => {
-  it("keeps public https origins and drops what could reach the person's network or Rakazo", () => {
+  it("keeps public https origins and drops what could reach the person's network or Orbit", () => {
     expect(
       mcpAppDomains(
         [
@@ -27,14 +27,14 @@ describe("MCP app domains", () => {
           "https://[::1]",
           "https://intranet",
           "https://cdn.example.com/path",
-          "https://app.rakazo.example",
-          "https://*.rakazo.example",
+          "https://app.orbit.example",
+          "https://*.orbit.example",
           "javascript:alert(1)",
           "'unsafe-eval'",
           42,
         ],
         "resource",
-        ["app.rakazo.example"],
+        ["app.orbit.example"],
       ),
     ).toEqual([
       "https://api.weather.example",

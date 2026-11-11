@@ -1,4 +1,4 @@
-import type { AppBootstrap } from "@rakazo/contracts";
+import type { AppBootstrap } from "@forion/orbit-contracts";
 
 export function initialBootstrapTarget(path: string, desktop: boolean) {
   const pathname = path.split(/[?#]/)[0] ?? "";

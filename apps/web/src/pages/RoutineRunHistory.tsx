@@ -1,5 +1,4 @@
-import { Trans, useLingui } from "@lingui/react/macro";
-import type { RoutineRun, RoutineRunCursor } from "@rakazo/contracts";
+import type { RoutineRun, RoutineRunCursor } from "@forion/orbit-contracts";
 import {
   formatRoutineRunAt,
   isRetryableError,
@@ -8,8 +7,9 @@ import {
   routineHistoryPage,
   routineRunAt,
   routineRunLateness,
-} from "@rakazo/core";
-import { Button, SectionHeading, Spinner } from "@rakazo/ui-web";
+} from "@forion/orbit-core";
+import { Button, SectionHeading, Spinner } from "@forion/orbit-ui-web";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";

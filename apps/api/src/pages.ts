@@ -1,11 +1,17 @@
 import { createHash, randomBytes } from "node:crypto";
-import type { SecretStore } from "@rakazo/adapter-kit";
-import { forgetPageShareSecrets } from "@rakazo/adapters";
-import type { Actor, PageDetail, PageSummary, PageVisibility, SharedPage } from "@rakazo/contracts";
-import { pageShareTokenFromSlug, pageShareUrl } from "@rakazo/contracts";
-import type { PageShareSecret, Prisma, PrismaClient } from "@rakazo/db";
-import { IsolationError, isRecordNotFound, runAsSystem } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+import type { SecretStore } from "@forion/orbit-adapter-kit";
+import { forgetPageShareSecrets } from "@forion/orbit-adapters";
+import type {
+  Actor,
+  PageDetail,
+  PageSummary,
+  PageVisibility,
+  SharedPage,
+} from "@forion/orbit-contracts";
+import { pageShareTokenFromSlug, pageShareUrl } from "@forion/orbit-contracts";
+import type { PageShareSecret, Prisma, PrismaClient } from "@forion/orbit-db";
+import { IsolationError, isRecordNotFound, runAsSystem } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 
 const PAGE_SHARE_SECRET_KIND = "page_share";
 const DEFAULT_LIST_LIMIT = 30;

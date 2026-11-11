@@ -1,4 +1,4 @@
-import type { Bot } from "@rakazo/contracts";
+import type { Bot } from "@forion/orbit-contracts";
 import { describe, expect, it } from "vitest";
 import type { MobileBot } from "./api";
 import { retainUnchangedBotRoster } from "./bot-roster";

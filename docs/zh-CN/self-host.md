@@ -1,9 +1,9 @@
-# 自托管 Rakazo
+# 自托管 Orbit
 
 [English](../self-host.md) | 简体中文
 
 在自己掌控的机器上运行 API、后台任务、网页应用、数据库和机器人计算机。
-Rakazo 需要持续运行的后端服务，不是静态网站；`apps/www` 中的官网可以单独托管。
+Orbit 需要持续运行的后端服务，不是静态网站；`apps/www` 中的官网可以单独托管。
 
 ## 准备条件
 
@@ -84,7 +84,7 @@ pnpm dev
 ```
 
 打开终端打印的地址，默认是 `http://127.0.0.1:5173`。`pnpm dev` 会先准备数据库并应用迁移。
-开发服务运行时，可用 `pnpm --filter @rakazo/desktop dev` 启动桌面端，并选择“已有实例”。
+开发服务运行时，可用 `pnpm --filter @forion/orbit-desktop dev` 启动桌面端，并选择“已有实例”。
 桌面端的“本机”选项会自行安装镜像版服务，默认使用 `45173` 端口，与开发服务不同。
 
 在 WSL 中开发时，将仓库和 `data` 放在 Linux 文件系统中，例如 `~/rakazo`，并以普通用户运行。
@@ -124,4 +124,4 @@ docker compose -f docker-compose.images.yml exec api node dist/cli/diagnostics.j
 
 源码版改用 `-f infra/compose/docker-compose.yml`，生产部署使用对应的生产文件。
 报告包含版本、功能开关、迁移状态、MCP 健康状态与最近运行情况；不会输出密钥、设置值、姓名、地址、路径或消息内容。
-用户让机器人报告问题时，反馈只保存在本服务器的 `feedback_reports` 表中，不会自动发送给 Rakazo 项目。
+用户让机器人报告问题时，反馈只保存在本服务器的 `feedback_reports` 表中，不会自动发送给 Orbit 项目。

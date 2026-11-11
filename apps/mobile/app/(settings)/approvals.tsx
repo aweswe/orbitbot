@@ -1,12 +1,12 @@
 import { MenuView } from "@expo/ui/community/menu";
-import type { ActionApprovalRule } from "@rakazo/contracts";
-import type { ApprovalMode } from "@rakazo/core";
+import type { ActionApprovalRule } from "@forion/orbit-contracts";
+import type { ApprovalMode } from "@forion/orbit-core";
 import {
   APPROVAL_RULE_EFFECTS,
   approvalRuleApplies,
   approvalRuleEffectChoices,
   approvalRuleLabel,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import { useFocusEffect, useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";

@@ -1,13 +1,16 @@
-import { existsSync } from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import { config } from "dotenv";
 import { defineConfig } from "prisma/config";
+import {
+  INERT_DATABASE_URL,
+  prismaCommandNeedsDatabase,
+  redactedTarget,
+  requireMigrationUrl,
+} from "./src/migration-config.js";
 
-const here = path.dirname(fileURLToPath(import.meta.url));
-const rootEnv = path.resolve(here, "../../.env");
-if (existsSync(rootEnv)) config({ path: rootEnv });
-config();
+const needsDatabase = prismaCommandNeedsDatabase();
+const databaseUrl = needsDatabase
+  ? requireMigrationUrl(process.env)
+  : process.env.DATABASE_MIGRATION_URL || INERT_DATABASE_URL;
+if (needsDatabase) console.log(`[prisma] target ${redactedTarget(databaseUrl)}`);
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
@@ -16,10 +19,8 @@ export default defineConfig({
     path: process.env.RAKAZO_MIGRATIONS_PATH || "prisma/migrations",
   },
   datasource: {
-    // Migrations run as the owner role; DATABASE_URL may be the app's runtime login.
-    url:
-      process.env.DATABASE_MIGRATION_URL ||
-      process.env.DATABASE_URL ||
-      "postgres://rakazo:rakazo@127.0.0.1:5433/rakazo",
+    // Migration commands require an explicit ?schema=orbit_bot owner URL. There
+    // is no DATABASE_URL/.env/localhost fallback; generate/validate use an inert URL.
+    url: databaseUrl,
   },
 });

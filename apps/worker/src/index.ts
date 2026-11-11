@@ -1,14 +1,14 @@
 import { hostname } from "node:os";
 import { setTimeout as sleep } from "node:timers/promises";
-import type { JobPublisher, JobWorkerHost } from "@rakazo/adapter-kit";
+import type { JobPublisher, JobWorkerHost } from "@forion/orbit-adapter-kit";
 import {
   ComposioConnector,
   IntegrationProviderSettings,
   unwrapEnvFromKeyManager,
-} from "@rakazo/adapters";
-import { phoneCallSettings } from "@rakazo/core";
-import { loadRootEnv } from "@rakazo/core/node/load-root-env";
-import { stopOnShutdownSignals } from "@rakazo/core/node/shutdown-signals";
+} from "@forion/orbit-adapters";
+import { phoneCallSettings } from "@forion/orbit-core";
+import { loadRootEnv } from "@forion/orbit-core/node/load-root-env";
+import { stopOnShutdownSignals } from "@forion/orbit-core/node/shutdown-signals";
 import { startWorkerHealth, watchEventLoopStalls } from "./health.js";
 import { createWorkerSecretStore } from "./secret-store.js";
 
@@ -85,8 +85,12 @@ import {
   userDeviceForwardSecret,
   withRunWorker,
   withSecretPersistence,
-} from "@rakazo/adapters";
-import { resolveEncryptionKey, resolveSupervisorToken, uploadSizeFromEnv } from "@rakazo/core";
+} from "@forion/orbit-adapters";
+import {
+  resolveEncryptionKey,
+  resolveSupervisorToken,
+  uploadSizeFromEnv,
+} from "@forion/orbit-core";
 import {
   createBoardEvents,
   createDb,
@@ -103,10 +107,10 @@ import {
   runAsSystem,
   securityEventRetentionDays,
   verifyContentKeys,
-} from "@rakazo/db";
-import { SERVICE_NAMES } from "@rakazo/logging";
-import { createRootLogger } from "@rakazo/logging/axiom";
-import { MarkdownMemoryStore } from "@rakazo/memory";
+} from "@forion/orbit-db";
+import { SERVICE_NAMES } from "@forion/orbit-logging";
+import { createRootLogger } from "@forion/orbit-logging/axiom";
+import { MarkdownMemoryStore } from "@forion/orbit-memory";
 
 const logger = await createRootLogger(SERVICE_NAMES.worker);
 
@@ -124,8 +128,9 @@ async function main() {
   // A larger max competes for Postgres max_connections (53300).
   const created = createDb(databaseUrl, {
     poolMax,
-    applicationName: "rakazo-worker",
+    applicationName: "orbit-worker",
     keyProvider: contentKeyProviderFromEnv(),
+    requireSchema: true,
   });
   const { pool } = created;
   let { prisma } = created;

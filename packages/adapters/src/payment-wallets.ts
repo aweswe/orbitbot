@@ -3,11 +3,11 @@ import type {
   PaymentWalletCredential,
   PaymentWalletProvider,
   SecretStore,
-} from "@rakazo/adapter-kit";
-import { PaymentWalletDisconnected, SecretStoreUnavailableError } from "@rakazo/adapter-kit";
-import type { PaymentWalletStatus } from "@rakazo/contracts";
-import type { PaymentWallet, Prisma, PrismaClient } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import { PaymentWalletDisconnected, SecretStoreUnavailableError } from "@forion/orbit-adapter-kit";
+import type { PaymentWalletStatus } from "@forion/orbit-contracts";
+import type { PaymentWallet, Prisma, PrismaClient } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { withRefreshLock } from "./refresh-lock.js";
 import { deleteSecretBestEffort, holdSecretNotifications } from "./secret-store-factory.js";
 
@@ -271,7 +271,7 @@ export async function connectPaymentWallet(
   const provider = deps.paymentWallet;
   if (!provider) throw new Error("No payment wallet is configured");
   const start = await provider.beginConnect(
-    { clientName: "Rakazo" },
+    { clientName: "Orbit" },
     providerContext(actor, "connect"),
   );
   const ciphertext = await storeMaterial(deps, actor, {

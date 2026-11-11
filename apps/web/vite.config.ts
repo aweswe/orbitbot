@@ -1,4 +1,5 @@
 import { randomUUID, timingSafeEqual } from "node:crypto";
+import { setDefaultResultOrder } from "node:dns";
 import { readFileSync } from "node:fs";
 import type { ClientRequest, IncomingMessage, ServerResponse } from "node:http";
 import http from "node:http";
@@ -6,9 +7,8 @@ import https from "node:https";
 import net from "node:net";
 import path from "node:path";
 import tls from "node:tls";
-import { lingui } from "@lingui/vite-plugin";
-import type { DesktopStackProbeResponse } from "@rakazo/contracts";
-import { buildIdAt } from "@rakazo/contracts/client-build";
+import type { DesktopStackProbeResponse } from "@forion/orbit-contracts";
+import { buildIdAt } from "@forion/orbit-contracts/client-build";
 import {
   appContentSecurityPolicy,
   COMPUTER_SCREEN_PREFIX,
@@ -17,11 +17,12 @@ import {
   contentSecurityPolicyFor,
   parseContentSecuritySources,
   parseCrispWebsiteId,
-} from "@rakazo/contracts/content-security-policy";
+} from "@forion/orbit-contracts/content-security-policy";
 import {
   safeScreenProxyResponseHeaders,
   stripSensitiveHandshakeHeaders,
-} from "@rakazo/core/node/screen-proxy-response";
+} from "@forion/orbit-core/node/screen-proxy-response";
+import { lingui } from "@lingui/vite-plugin";
 import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
@@ -67,7 +68,7 @@ const webPort = Number(process.env.WEB_PORT ?? 5173);
 const DESKTOP_STACK_PROBE_PATH = "/.well-known/rakazo-desktop-stack";
 const DESKTOP_STACK_TOKEN_HEADER = "x-rakazo-desktop-stack-token";
 const SCREEN_UPSTREAM_TIMEOUT_MS = 20_000;
-const screenLog = createServiceLogger({ service: "rakazo-web" });
+const screenLog = createServiceLogger({ service: "orbit-web" });
 
 function screenPolicy(url: string | undefined) {
   return url?.startsWith("/novnc/session/control/") ? "control" : "view";
@@ -475,11 +476,13 @@ function attachNovncProxy(server: ViteDevServer | PreviewServer, secret: string,
   });
 }
 
+setDefaultResultOrder("ipv4first");
+
 export default defineConfig(({ command, mode }) => {
   // Names this build in every API request; the dev server has none, so the handshake stays off.
   const buildId = command === "build" ? buildIdAt(new Date()) : "";
   const rootEnv = loadEnv(mode, path.resolve(import.meta.dirname, "../.."), "");
-  const api = process.env.API_PROXY_TARGET ?? rootEnv.API_PROXY_TARGET ?? "http://127.0.0.1:3100";
+  const api = process.env.API_PROXY_TARGET ?? rootEnv.API_PROXY_TARGET ?? "http://localhost:3100";
   const previewHost = process.env.RAKAZO_HOST ?? rootEnv.RAKAZO_HOST ?? "localhost";
   const allowedHostsRaw = process.env.RAKAZO_ALLOWED_HOSTS ?? rootEnv.RAKAZO_ALLOWED_HOSTS;
   const allowedHosts: readonly string[] | true =
@@ -670,7 +673,7 @@ export default defineConfig(({ command, mode }) => {
       },
       {
         // The hosts the running server allows, as Vite resolved them, for proxied upgrades.
-        name: "rakazo-api-proxy-hosts",
+        name: "orbit-api-proxy-hosts",
         configureServer: (server) => {
           proxyHosts = server.config.server.allowedHosts;
         },
@@ -685,7 +688,7 @@ export default defineConfig(({ command, mode }) => {
       },
     ],
     server: {
-      host: process.env.RAKAZO_DEV_HOST ?? rootEnv.RAKAZO_DEV_HOST ?? "127.0.0.1",
+      host: process.env.RAKAZO_DEV_HOST ?? rootEnv.RAKAZO_DEV_HOST ?? "localhost",
       port: webPort,
       strictPort: true,
       allowedHosts,

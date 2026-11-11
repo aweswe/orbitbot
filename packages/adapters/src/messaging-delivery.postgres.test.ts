@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
-import type { AdapterContext, MessagingSurface } from "@rakazo/adapter-kit";
-import type { PrismaClient } from "@rakazo/db";
-import { asSystem, createDb, provisionMessagingIdentity, runAsSystem } from "@rakazo/db";
+import type { AdapterContext, MessagingSurface } from "@forion/orbit-adapter-kit";
+import type { PrismaClient } from "@forion/orbit-db";
+import { asSystem, createDb, provisionMessagingIdentity, runAsSystem } from "@forion/orbit-db";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { deliverMessagingOutbound, mirrorMessagingOutbound } from "./messaging-delivery.js";
 

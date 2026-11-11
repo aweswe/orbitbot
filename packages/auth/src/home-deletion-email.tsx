@@ -1,5 +1,5 @@
 /** @jsxRuntime automatic */
-import type { TransactionalEmail } from "@rakazo/adapter-kit";
+import type { TransactionalEmail } from "@forion/orbit-adapter-kit";
 import { Link, Text } from "react-email";
 import { emailText, greeting, linkStyle, message } from "./email.js";
 

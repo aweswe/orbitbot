@@ -19,7 +19,7 @@ vi.mock("@lingui/react/macro", () => ({
   }),
   Trans: ({ children }: { children: ReactNode }) => children,
 }));
-vi.mock("@rakazo/ui-web", () => ({
+vi.mock("@forion/orbit-ui-web", () => ({
   cn: (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" "),
   Button: ({
     children,
@@ -131,6 +131,13 @@ it.each(["in", "up"] as const)("offers SSO and hides credentials on %s", async (
   const sso = host.querySelector("button")!;
   expect(sso.dataset.variant).toBe("default");
   expect(sso.className).toContain("w-full");
+});
+it("renders an SSO sign-in error once", async () => {
+  vi.mocked(fetchAuthCapabilities).mockResolvedValue(capabilities);
+  await render("in", "/sign-in?error=ACCOUNT_DEACTIVATED");
+  const alerts = host.querySelectorAll('[role="alert"]');
+  expect(alerts).toHaveLength(1);
+  expect(alerts[0]?.textContent).toBe("This account is deactivated");
 });
 it("retries failed capabilities without exposing a password form", async () => {
   vi.mocked(fetchAuthCapabilities)

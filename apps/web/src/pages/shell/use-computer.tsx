@@ -1,4 +1,3 @@
-import { Trans, useLingui } from "@lingui/react/macro";
 import type {
   Bot,
   ComputerReleaseReason,
@@ -6,15 +5,16 @@ import type {
   Me,
   Run,
   ThreadSnapshot,
-} from "@rakazo/contracts";
-import { isComputerAllowanceUsed } from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
+import { isComputerAllowanceUsed } from "@forion/orbit-contracts";
 import {
   createScreenReconnects,
   isRetryableError,
   screenProbeUrl,
   waitForScreenPage,
-} from "@rakazo/core";
-import { Button, Spinner } from "@rakazo/ui-web";
+} from "@forion/orbit-core";
+import { Button, Spinner } from "@forion/orbit-ui-web";
+import { Trans, useLingui } from "@lingui/react/macro";
 import type { RefObject } from "react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ComputerMaintenanceActions } from "../../components/ComputerMaintenanceActions";

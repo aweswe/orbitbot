@@ -1,57 +1,23 @@
-import type { Pool, QueryResult } from "pg";
+import type { Pool } from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { PrismaClient } from "./client.js";
 import { createDb } from "./client.js";
 import { sendUserMessage } from "./events.js";
 import { provisionMessagingIdentity } from "./messaging.js";
 import { asSystem, runAsSystem, runAsTenant } from "./row-security.js";
+import type { SqlRead } from "./sql-read-tracker.js";
+import { trackPoolReads } from "./sql-read-tracker.js";
 
 const databaseUrl = process.env.DATABASE_URL;
 const migrationUrl = process.env.DATABASE_MIGRATION_URL ?? databaseUrl;
 const describePostgres =
   process.env.VERIFY_DATABASE && databaseUrl ? describe.sequential : describe.skip;
 
-interface SqlRead {
-  text: string;
-  values: unknown[];
-  rowCount: number;
-}
-
-const RUN_FROM = /\bfrom\s+(?:"public"\s*\.\s*)?"?runs"?\b/i;
-
-function sqlText(input: unknown): string {
-  if (typeof input === "string") return input;
-  if (input && typeof input === "object" && "text" in input && typeof input.text === "string") {
-    return input.text;
-  }
-  return "";
-}
-
-function sqlValues(args: unknown[]): unknown[] {
-  const [first, second] = args;
-  if (Array.isArray(second)) return second;
-  if (first && typeof first === "object" && "values" in first && Array.isArray(first.values)) {
-    return first.values;
-  }
-  return [];
-}
+const RUN_FROM = /\bfrom\s+(?:"[^"]+"\s*\.\s*)?"?runs"?\b/i;
 
 /** Source-run reads only: other run statements during the send are not the replay lookup. */
 function trackSourceRunReads(pool: Pool): SqlRead[] {
-  const reads: SqlRead[] = [];
-  const original = pool.query.bind(pool);
-  pool.query = ((...args: unknown[]) => {
-    const result = (original as (...inner: unknown[]) => unknown)(...args);
-    if (!result || typeof (result as Promise<unknown>).then !== "function") return result;
-    return (result as Promise<QueryResult>).then((queryResult) => {
-      const text = sqlText(args[0]);
-      if (/^\s*select\b/i.test(text) && RUN_FROM.test(text) && text.includes('"sourceMessageId"')) {
-        reads.push({ text, values: sqlValues(args), rowCount: queryResult.rowCount ?? 0 });
-      }
-      return queryResult;
-    });
-  }) as Pool["query"];
-  return reads;
+  return trackPoolReads(pool, (text) => RUN_FROM.test(text) && text.includes('"sourceMessageId"'));
 }
 
 describePostgres("replaying a sent message reads its first run (PostgreSQL)", () => {

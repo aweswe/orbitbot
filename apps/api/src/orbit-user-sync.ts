@@ -1,7 +1,7 @@
-import type { PrismaClient } from "@rakazo/db";
+import type { PrismaClient } from "@forion/orbit-db";
 
 /**
- * Provisions a signed-in Orion user in the Forion control plane.
+ * Provisions a signed-in Orbit user in the Forion control plane.
  *
  * Forion owns the wallet, so a user it has never seen cannot lock credits.
  * `POST /api/internal/orbit/sync-user` is idempotent, and it is the supported

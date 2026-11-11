@@ -1,8 +1,5 @@
 import type { APIRoute } from "astro";
-import { markdownResponse } from "../agent-content";
-import { PRICING_MARKDOWN } from "../pricing";
-
-// Served here, not through agent-content: the edge middleware bundles that file and cannot resolve workspace packages.
+import { markdownResponse, PRICING_MARKDOWN } from "../agent-content";
 
 export const GET: APIRoute = ({ request }) =>
   markdownResponse(PRICING_MARKDOWN, request.method);

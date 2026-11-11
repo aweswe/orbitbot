@@ -1,7 +1,7 @@
+import type { Bot, Group } from "@forion/orbit-contracts";
+import { GROUP_MEMBER_MAX, GROUP_MEMBER_MIN, GROUP_NAME_MAX_LENGTH } from "@forion/orbit-contracts";
+import { BotAvatar, Button, Checkbox, Input, SectionHeading } from "@forion/orbit-ui-web";
 import { Trans, useLingui } from "@lingui/react/macro";
-import type { Bot, Group } from "@rakazo/contracts";
-import { GROUP_MEMBER_MAX, GROUP_MEMBER_MIN, GROUP_NAME_MAX_LENGTH } from "@rakazo/contracts";
-import { BotAvatar, Button, Checkbox, Input, SectionHeading } from "@rakazo/ui-web";
 import { X } from "lucide-react";
 import type { ReactNode } from "react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";

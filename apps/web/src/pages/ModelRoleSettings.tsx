@@ -1,4 +1,3 @@
-import { Trans, useLingui } from "@lingui/react/macro";
 import type {
   ModelBackupChoice,
   ModelCredential,
@@ -7,14 +6,14 @@ import type {
   ModelRoleSettings as ModelRoleSettingsValue,
   SettingsScope,
   ThinkingLevel,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   canonicalPiProviderId,
   connectedBackupOptions,
   MAX_MODEL_BACKUPS,
   modelRoleChoiceKey,
-} from "@rakazo/contracts";
-import { createModelRoleSettings, modelRoleListPatch } from "@rakazo/core";
+} from "@forion/orbit-contracts";
+import { createModelRoleSettings, modelRoleListPatch } from "@forion/orbit-core";
 import {
   Button,
   DropdownMenu,
@@ -28,7 +27,8 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
   Spinner,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GripVertical, MoreHorizontal, Plus } from "lucide-react";
 import type { ReactNode } from "react";

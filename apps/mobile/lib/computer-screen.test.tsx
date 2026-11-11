@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
-import type { ComputerStatus } from "@rakazo/contracts";
-import { COMPUTER_ALLOWANCE_USED_ERROR } from "@rakazo/contracts";
+import type { ComputerStatus } from "@forion/orbit-contracts";
+import { COMPUTER_ALLOWANCE_USED_ERROR } from "@forion/orbit-contracts";
 import type { ReactNode } from "react";
 import { act, createElement, Fragment, useEffect } from "react";
 import type { Root } from "react-dom/client";

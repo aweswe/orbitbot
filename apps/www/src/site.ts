@@ -1,7 +1,7 @@
 export const SITE_NAME = "Orbit";
 export const SITE_URL = "https://orbit.forion.dev";
 export const SITE_DESCRIPTION =
-  "Orbit by Forion — Autonomous AI operating environment and multi-agent swarm.";
+  "Orbit Bot — autonomous AI agents with persistent computers, real tools, and multi-agent workspaces.";
 
 export const APP_URL = "https://orbit.forion.dev";
 export const PLUGIN_SUBMISSIONS_URL = `${APP_URL}/api/v1/plugin-submissions`;
@@ -22,5 +22,5 @@ export const PLUGIN_SUBMIT_PATH = "/plugins/submit/";
 export const OPENCLAW_ALTERNATIVE_PATH = "/openclaw-alternative/";
 export const CHANGELOG_URL = "https://github.com/forion-ai/orbit/releases";
 export const LATEST_RELEASE_URL = `${CHANGELOG_URL}/latest`;
-export const INBOX_ZERO_URL =
+export const FORION_URL =
   "https://forion.dev";

@@ -1,7 +1,7 @@
-import { ChatMarkdown } from "@rakazo/chat-ui/native";
-import type { MessageBlock } from "@rakazo/contracts";
-import { cloudAgentHttpsUrl, displayName as safeDisplayName } from "@rakazo/core";
-import { typeScale } from "@rakazo/ui-tokens";
+import { ChatMarkdown } from "@forion/orbit-chat-ui/native";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { cloudAgentHttpsUrl, displayName as safeDisplayName } from "@forion/orbit-core";
+import { typeScale } from "@forion/orbit-ui-tokens";
 import { useEffect, useRef, useState } from "react";
 import { Linking, Pressable, Text, View } from "react-native";
 import Animated, {

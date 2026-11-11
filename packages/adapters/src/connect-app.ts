@@ -1,12 +1,12 @@
-import type { AdapterContext, ManagedConnectorProvider } from "@rakazo/adapter-kit";
-import type { MessageBlock } from "@rakazo/contracts";
-import { appConnectCard, matchAppCatalog, matchesAppConnection } from "@rakazo/core";
-import type { PrismaClient, ThreadEvents } from "@rakazo/db";
+import type { AdapterContext, ManagedConnectorProvider } from "@forion/orbit-adapter-kit";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { appConnectCard, matchAppCatalog, matchesAppConnection } from "@forion/orbit-core";
+import type { PrismaClient, ThreadEvents } from "@forion/orbit-db";
 import {
   appendEventInTransaction,
   createThreadMessageInTransaction,
   THREAD_LOCK_TRANSACTION_OPTIONS,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
 
 const RECENT_MESSAGES = 50;
 

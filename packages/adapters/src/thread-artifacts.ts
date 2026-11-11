@@ -5,8 +5,8 @@ import type {
   ArtifactStore,
   ComputerRef,
   SandboxProvider,
-} from "@rakazo/adapter-kit";
-import type { ComputerMode, MessageBlock } from "@rakazo/contracts";
+} from "@forion/orbit-adapter-kit";
+import type { ComputerMode, MessageBlock } from "@forion/orbit-contracts";
 import {
   ARTIFACT_DESCRIPTION_MAX_LENGTH,
   ARTIFACT_NAME_MAX_LENGTH,
@@ -15,16 +15,16 @@ import {
   attachmentSizeLabel,
   HISTORY_ATTACHMENTS_PER_RESPONSE,
   MCP_APP_MIME_TYPE,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   attachmentComputerPath,
   inferAttachmentMimeType,
   messageBlockForArtifact,
   validateAttachmentMimeType,
-} from "@rakazo/core";
-import type { Artifact, Prisma, PrismaClient } from "@rakazo/db";
-import { withResolvedArtifactVersion } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-core";
+import type { Artifact, Prisma, PrismaClient } from "@forion/orbit-db";
+import { withResolvedArtifactVersion } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { resolveBotWorkspacePath } from "./computer-support.js";
 
 export type MaterializedThreadFile = {

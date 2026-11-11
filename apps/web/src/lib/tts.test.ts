@@ -1,4 +1,4 @@
-import { MAX_VOICE_AUDIO_BYTES, VOICE_RESPONSE_TIMEOUT_MS } from "@rakazo/core";
+import { MAX_VOICE_AUDIO_BYTES, VOICE_RESPONSE_TIMEOUT_MS } from "@forion/orbit-core";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Speaker } from "./tts.js";
 
@@ -9,7 +9,7 @@ afterEach(() => {
 });
 
 function stubSelectedSpace(id: string) {
-  const store = new Map<string, string>([["rakazo:space-id", id]]);
+  const store = new Map<string, string>([["orbit:space-id", id]]);
   const localStorage = {
     getItem: (key: string) => store.get(key) ?? null,
     setItem: (key: string, value: string) => {
@@ -21,7 +21,7 @@ function stubSelectedSpace(id: string) {
   };
   vi.stubGlobal("window", { localStorage });
   vi.stubGlobal("localStorage", localStorage);
-  return (next: string) => store.set("rakazo:space-id", next);
+  return (next: string) => store.set("orbit:space-id", next);
 }
 
 describe("Speaker", () => {

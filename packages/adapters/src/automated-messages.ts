@@ -1,5 +1,5 @@
 /**
- * Messages that Rakazo, or its model library, adds to a conversation in the user's role
+ * Messages that Orbit, or its model library, adds to a conversation in the user's role
  * are not from the user: screenshots moved out of tool results, nudges to continue,
  * finished background shell output, a helper's task. Models (local ones especially)
  * took them for the user replying, kept going instead of asking, and confused their

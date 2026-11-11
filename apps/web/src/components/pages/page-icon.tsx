@@ -1,4 +1,4 @@
-import { pageTileBars } from "@rakazo/ui-tokens";
+import { pageTileBars } from "@forion/orbit-ui-tokens";
 
 /** The page tile shown in a page card's footer. */
 export function PageTileIcon() {

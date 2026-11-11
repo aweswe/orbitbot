@@ -1,14 +1,7 @@
+import type { Bot, Group, ThreadSnapshot } from "@forion/orbit-contracts";
+import { AppMarkStack, BotAvatar, Button, GroupAvatar } from "@forion/orbit-ui-web";
 import { Trans, useLingui } from "@lingui/react/macro";
-import type { Bot, Group, ThreadSnapshot } from "@rakazo/contracts";
-import { AppMarkStack, BotAvatar, Button, GroupAvatar } from "@rakazo/ui-web";
-import {
-  Menu,
-  PanelLeftOpen,
-  Phone,
-  Puzzle,
-  Search,
-  SlidersHorizontal,
-} from "lucide-react";
+import { Menu, PanelLeftOpen, Phone, Puzzle, Search, SlidersHorizontal } from "lucide-react";
 import { IconTooltip } from "../../components/IconTooltip";
 import { OrbitLogoMark } from "../../components/OrbitLogoMark";
 
@@ -119,7 +112,10 @@ export function ChatHeader({
           {/* Avatar with deterministic clean status ring */}
           <div className="relative size-5.5 shrink-0 flex items-center justify-center">
             {inGroup ? (
-              <GroupAvatar members={activeSnapshot?.members ?? activeGroup?.members ?? []} size={22} />
+              <GroupAvatar
+                members={activeSnapshot?.members ?? activeGroup?.members ?? []}
+                size={22}
+              />
             ) : active ? (
               <BotAvatar
                 avatarSet={active.avatarSet}
@@ -145,7 +141,10 @@ export function ChatHeader({
           </div>
 
           <div className="flex flex-col min-w-0 overflow-hidden">
-            <span className="block truncate text-label font-semibold leading-tight text-foreground tracking-tight" dir="auto">
+            <span
+              className="block truncate text-label font-semibold leading-tight text-foreground tracking-tight"
+              dir="auto"
+            >
               {title}
             </span>
             <span className="hidden sm:block truncate text-caption leading-tight text-muted-foreground font-mono">
@@ -173,7 +172,11 @@ export function ChatHeader({
               className="app-no-drag h-8 rounded-lg gap-1 px-2 text-muted-foreground hover:text-foreground hover:bg-accent"
             >
               {appMarks.length ? (
-                <AppMarkStack marks={appMarks.slice(0, 3)} size={18} ringClassName="ring-background" />
+                <AppMarkStack
+                  marks={appMarks.slice(0, 3)}
+                  size={18}
+                  ringClassName="ring-background"
+                />
               ) : (
                 <Puzzle strokeWidth={1.5} className="size-4" />
               )}

@@ -4,14 +4,17 @@ import type {
   BrowserProvider,
   ConnectorCall,
   ConnectorTool,
-} from "@rakazo/adapter-kit";
-import { MEMORY_REVISION_CONFLICT_ERROR } from "@rakazo/adapter-kit";
-import type { ModelRoleSettings, SpendingLimit } from "@rakazo/contracts";
-import type { ActionApprovalRule } from "@rakazo/core";
-import { inboundRoutineBlock } from "@rakazo/core";
-import { approvalEffectKey, toolEffectIdempotencyKey } from "@rakazo/core/node/approval-effect-key";
-import type { PrismaClient } from "@rakazo/db";
-import { createPendingSteeringRun, sendUserMessage } from "@rakazo/db";
+} from "@forion/orbit-adapter-kit";
+import { MEMORY_REVISION_CONFLICT_ERROR } from "@forion/orbit-adapter-kit";
+import type { ModelRoleSettings, SpendingLimit } from "@forion/orbit-contracts";
+import type { ActionApprovalRule } from "@forion/orbit-core";
+import { inboundRoutineBlock } from "@forion/orbit-core";
+import {
+  approvalEffectKey,
+  toolEffectIdempotencyKey,
+} from "@forion/orbit-core/node/approval-effect-key";
+import type { PrismaClient } from "@forion/orbit-db";
+import { createPendingSteeringRun, sendUserMessage } from "@forion/orbit-db";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DENIED_ACTION_ERROR, isApprovalPausedResult } from "./approval-effect.js";
 import { MAX_SHARED_MEMORY_CHARS } from "./builtin-tools.js";
@@ -2746,13 +2749,17 @@ describe("outbound destinations", () => {
     f.setCalls([
       {
         name: "web_fetch",
-        args: { url: "https://rakazo.com/docs/routines.md" },
+        args: { url: "https://docs.orbit.forion.dev/docs/routines.md" },
         executionId: "call-1",
       },
-      { name: "web_fetch", args: { url: "https://rakazo.com/?q=secret" }, executionId: "call-2" },
+      {
+        name: "web_fetch",
+        args: { url: "https://docs.orbit.forion.dev/?q=secret" },
+        executionId: "call-2",
+      },
     ]);
     await f.run();
-    expect(f.fetchedUrls).toEqual(["https://rakazo.com/docs/routines.md"]);
+    expect(f.fetchedUrls).toEqual(["https://docs.orbit.forion.dev/docs/routines.md"]);
     expect(isApprovalPausedResult(f.results[1])).toBe(true);
   });
 

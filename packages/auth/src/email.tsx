@@ -1,7 +1,7 @@
 /** @jsxRuntime automatic */
-import type { TransactionalEmail } from "@rakazo/adapter-kit";
-import { displayName, matchUiLocale, textDirectionForLocale, translate } from "@rakazo/core";
-import { webLightTokens as lightTokens, webDarkTokens } from "@rakazo/ui-tokens";
+import type { TransactionalEmail } from "@forion/orbit-adapter-kit";
+import { displayName, matchUiLocale, textDirectionForLocale, translate } from "@forion/orbit-core";
+import { webLightTokens as lightTokens, webDarkTokens } from "@forion/orbit-ui-tokens";
 import type { ReactNode } from "react";
 import {
   Body,

@@ -1,4 +1,4 @@
-import type { MessageBlock, ThreadMessage } from "@rakazo/contracts";
+import type { MessageBlock, ThreadMessage } from "@forion/orbit-contracts";
 import { cloudAgentBlockFromPayload } from "./cloud-agent.js";
 import { preserveIdentitySource } from "./identity-source.js";
 import { payloadAuthor } from "./message-replies.js";

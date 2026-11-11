@@ -1,11 +1,11 @@
-import type { AdapterContext, PurchaseSnapshot, PurchaseStatus } from "@rakazo/adapter-kit";
+import type { AdapterContext, PurchaseSnapshot, PurchaseStatus } from "@forion/orbit-adapter-kit";
 import {
   PaymentWalletDisconnected,
   PaymentWalletRequestRejected,
   runContinueJob,
-} from "@rakazo/adapter-kit";
-import type { Purchase } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import type { Purchase } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import type { PurchaseDeps } from "./purchase-service.js";
 import {
   enqueuePurchasePoll,

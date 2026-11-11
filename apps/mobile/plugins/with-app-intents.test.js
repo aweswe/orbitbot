@@ -8,10 +8,10 @@ const mobile = join(import.meta.dirname, "..");
 const read = (file) => readFileSync(join(mobile, file), "utf8");
 const constant = (file, name) => read(file).match(new RegExp(`${name} = "([^"]+)"`))?.[1];
 
-describe("RakazoIntents", () => {
+describe("OrbitIntents", () => {
   // The intents read what the app saved; renaming a key on one side would break them silently.
   it("reads the secure-store keys the app writes", () => {
-    const swift = read("ios-intents/RakazoIntents.swift");
+    const swift = read("ios-intents/OrbitIntents.swift");
     for (const [file, name] of [
       ["lib/session.ts", "SESSION_KEY"],
       ["lib/server-config.ts", "API_BASE_STORAGE_KEY"],
@@ -26,7 +26,7 @@ describe("RakazoIntents", () => {
   });
 
   it("hands a voice chat to the module that reads it", () => {
-    const swift = read("ios-intents/RakazoIntents.swift");
+    const swift = read("ios-intents/OrbitIntents.swift");
     const module = read("modules/rakazo-voice-chat/ios/RakazoVoiceChatModule.swift");
     expect(swift).toContain('"rakazo.pending_voice_chat"');
     expect(module).toContain('"rakazo.pending_voice_chat"');
@@ -46,14 +46,14 @@ describe("withAppIntents prebuild", () => {
     const files = new Set();
     const copied = [];
     const added = [];
-    const widgetSettings = { PRODUCT_NAME: '"RakazoWidgets"' };
+    const widgetSettings = { PRODUCT_NAME: '"OrbitWidgets"' };
     const config = {
       version: "2.0.0",
       ios: { bundleIdentifier: "com.example.app", buildNumber: "7" },
       modRequest: { projectRoot: "/project", platformProjectRoot: "/project/ios" },
       modResults: {
         hasFile: (file) => files.has(file),
-        pbxTargetByName: (name) => (name === "RakazoWidgets" ? {} : undefined),
+        pbxTargetByName: (name) => (name === "OrbitWidgets" ? {} : undefined),
         pbxXCBuildConfigurationSection: () => ({ widget: { buildSettings: widgetSettings } }),
       },
     };
@@ -80,7 +80,7 @@ describe("withAppIntents prebuild", () => {
             withXcodeProject: (value, mod) => mod(value),
             IOSConfig: {
               XcodeUtils: {
-                getProjectName: () => "Rakazo",
+                getProjectName: () => "Orbit",
                 addBuildSourceFileToGroup: (input) => {
                   added.push(input);
                   files.add(input.filepath);
@@ -93,16 +93,16 @@ describe("withAppIntents prebuild", () => {
     });
     module.exports(config);
     module.exports(config);
-    expect(plist.modResults.RakazoDefaultApiBase).toBe("https://api.example.test");
+    expect(plist.modResults.OrbitDefaultApiBase).toBe("https://api.example.test");
     expect(plist.modResults.UIBackgroundModes).toEqual(["audio"]);
     expect(copied).toContainEqual([
-      join(mobile, "ios-intents/RakazoIntents.swift"),
-      "/project/ios/Rakazo/RakazoIntents.swift",
+      join(mobile, "ios-intents/OrbitIntents.swift"),
+      "/project/ios/Orbit/OrbitIntents.swift",
     ]);
     expect(added.map((input) => input.filepath)).toEqual([
-      "Rakazo/RakazoIntents.swift",
-      "Rakazo/VoiceMessageRecorder.swift",
-      "Rakazo/VoiceMessageActivity.swift",
+      "Orbit/OrbitIntents.swift",
+      "Orbit/VoiceMessageRecorder.swift",
+      "Orbit/VoiceMessageActivity.swift",
     ]);
     expect(widgetSettings).toMatchObject({
       CURRENT_PROJECT_VERSION: "7",

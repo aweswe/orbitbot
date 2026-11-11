@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
 
-import type { BillingStatus, Bot } from "@rakazo/contracts";
-import { BOT_COLORS } from "@rakazo/contracts";
-import type * as UiWeb from "@rakazo/ui-web";
+import type { BillingStatus, Bot } from "@forion/orbit-contracts";
+import { BOT_COLORS } from "@forion/orbit-contracts";
+import type * as UiWeb from "@forion/orbit-ui-web";
 import type { ComponentProps, ReactNode } from "react";
 import { act } from "react";
 import type { Root } from "react-dom/client";
@@ -20,7 +20,7 @@ vi.mock("@lingui/react/macro", () => ({
   Plural: ({ value, one, other }: { value: number; one: string; other: string }) =>
     (value === 1 ? one : other).replace("#", String(value)),
 }));
-vi.mock("@rakazo/ui-web", async (importOriginal) => {
+vi.mock("@forion/orbit-ui-web", async (importOriginal) => {
   const { useCopyText } = await importOriginal<typeof UiWeb>();
   const Plain = ({ children }: { children?: ReactNode }) => <>{children}</>;
   return {
@@ -69,7 +69,10 @@ afterEach(() => {
 function renderHeader({
   inGroup = false,
   onOpenConnections,
-}: { inGroup?: boolean; onOpenConnections?: () => void } = {}) {
+}: {
+  inGroup?: boolean;
+  onOpenConnections?: () => void;
+} = {}) {
   act(() =>
     root.render(
       <ChatHeader
@@ -91,7 +94,6 @@ function renderHeader({
     ),
   );
 }
-
 
 it("opens connected apps from the header", () => {
   const onOpenConnections = vi.fn();

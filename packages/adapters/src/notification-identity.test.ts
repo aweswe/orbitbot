@@ -1,4 +1,4 @@
-import { notificationAvatarSource } from "@rakazo/core";
+import { notificationAvatarSource } from "@forion/orbit-core";
 import { expect, it, vi } from "vitest";
 import { notificationIdentity } from "./notification-identity.js";
 

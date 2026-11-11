@@ -1,8 +1,8 @@
-import type { TransactionalEmailProvider } from "@rakazo/adapter-kit";
-import { emailLocale, referralEmail } from "@rakazo/auth";
-import { ActorSchema } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
-import { isForeignKeyViolation } from "@rakazo/db";
+import type { TransactionalEmailProvider } from "@forion/orbit-adapter-kit";
+import { emailLocale, referralEmail } from "@forion/orbit-auth";
+import { ActorSchema } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
+import { isForeignKeyViolation } from "@forion/orbit-db";
 import { unsubscribeUrl } from "./marketing-email.js";
 
 const HOUR_MS = 60 * 60 * 1000;

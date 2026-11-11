@@ -1,5 +1,5 @@
+import type { ComputerUpdate } from "@forion/orbit-contracts";
 import { expect, test } from "@playwright/test";
-import type { ComputerUpdate } from "@rakazo/contracts";
 import {
   activeBotId,
   captureScreenshot,
@@ -12,7 +12,7 @@ test("computer maintenance shows durable background progress and failure recover
   page,
 }, testInfo) => {
   await page.addInitScript(() => localStorage.setItem("rakazo.uiAppearance", "dark"));
-  await signup(page, `computer-update-${Date.now()}@rakazo.test`, "password12", "Computer Update");
+  await signup(page, `computer-update-${Date.now()}@orbit.test`, "password12", "Computer Update");
   await completeOnboarding(page);
   const botId = activeBotId(page);
   let updates: ComputerUpdate[] = [];

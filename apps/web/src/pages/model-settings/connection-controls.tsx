@@ -1,5 +1,5 @@
+import { Button, Disclosure, Input } from "@forion/orbit-ui-web";
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
-import { Button, Disclosure, Input } from "@rakazo/ui-web";
 import { Check, Copy } from "lucide-react";
 import { useEffect, useState } from "react";
 import {

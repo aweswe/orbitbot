@@ -1,5 +1,5 @@
-import type { MessageBlock, MessageReaction } from "@rakazo/contracts";
-import { MessageReactionSchema } from "@rakazo/contracts";
+import type { MessageBlock, MessageReaction } from "@forion/orbit-contracts";
+import { MessageReactionSchema } from "@forion/orbit-contracts";
 
 type ReactionMessage = {
   id: string;
@@ -47,7 +47,9 @@ export function detectMessageReaction(text: string | null | undefined): MessageR
 
   // Affection / Love (❤️)
   if (
-    /\b(i\s+love\s+(you|u)|love\s+(you|u)|ily|love\s+ya|luv\s+u|love\s+this|adore\s+you)\b/i.test(lower) ||
+    /\b(i\s+love\s+(you|u)|love\s+(you|u)|ily|love\s+ya|luv\s+u|love\s+this|adore\s+you)\b/i.test(
+      lower,
+    ) ||
     lower === "<3" ||
     lower === "❤️" ||
     lower === "💖" ||
@@ -62,7 +64,9 @@ export function detectMessageReaction(text: string | null | undefined): MessageR
       lower,
     ) ||
     /\b(good\s+job|well\s+done|great\s+job|nice\s+work|awesome\s+work|perfect)\b/i.test(lower) ||
-    /^(looks\s+good|sounds\s+good|that's\s+good|thats\s+good|so\s+good|very\s+good)[!.]*$/i.test(lower)
+    /^(looks\s+good|sounds\s+good|that's\s+good|thats\s+good|so\s+good|very\s+good)[!.]*$/i.test(
+      lower,
+    )
   ) {
     return "👍";
   }

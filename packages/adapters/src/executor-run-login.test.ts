@@ -1,6 +1,6 @@
-import type { ComputerRef } from "@rakazo/adapter-kit";
-import { encodeLoginSecret } from "@rakazo/contracts";
-import { runLoginKind } from "@rakazo/db";
+import type { ComputerRef } from "@forion/orbit-adapter-kit";
+import { encodeLoginSecret } from "@forion/orbit-contracts";
+import { runLoginKind } from "@forion/orbit-db";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { encodeRunLogin } from "./bot-secrets.js";
 import { builtinAgentTools } from "./builtin-tools.js";

@@ -1,8 +1,8 @@
+import type { SearchHit } from "@forion/orbit-contracts";
+import { searchHitListKey } from "@forion/orbit-core";
+import { Button } from "@forion/orbit-ui-web";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import type { SearchHit } from "@rakazo/contracts";
-import { searchHitListKey } from "@rakazo/core";
-import { Button } from "@rakazo/ui-web";
 
 export function SpaceSearchResults({
   hits,

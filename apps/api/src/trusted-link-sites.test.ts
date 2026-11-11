@@ -1,6 +1,6 @@
+import type { Actor } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
 import { createRouterClient } from "@orpc/server";
-import type { Actor } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
 import { describe, expect, it } from "vitest";
 import type { RouterDeps } from "./router.js";
 import { createRouter } from "./router.js";
@@ -57,7 +57,7 @@ function setup() {
         actor: {
           userId,
           spaceId,
-          email: `${userId}@rakazo.test`,
+          email: `${userId}@orbit.test`,
           isDeploymentOwner: false,
         } satisfies Actor,
       } as never,

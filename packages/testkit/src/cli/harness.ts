@@ -2,12 +2,12 @@ import { execSync } from "node:child_process";
 import { globSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import type { createApp } from "@rakazo/api/app";
-import { loadRootEnv } from "@rakazo/core/node/load-root-env";
-import type { runAsSystem as RunAsSystem } from "@rakazo/db";
+import type { createApp } from "@forion/orbit-api/app";
+import { loadRootEnv } from "@forion/orbit-core/node/load-root-env";
+import type { runAsSystem as RunAsSystem } from "@forion/orbit-db";
 import { createModelConnectionFixtureFetch } from "../model-connection-fixture.js";
 import { PluginMarketplaceFixture } from "../plugin-marketplace-fixture.js";
-import { startPostgres } from "./postgres.js";
+import { schemaScopedDatabaseUrl, startPostgres } from "./postgres.js";
 import { runProcess } from "./process.js";
 
 loadRootEnv();
@@ -62,7 +62,7 @@ async function main() {
     // Migrations run as the container superuser and the e2e API connects as the
     // runtime login, so row-level security is enforced as in a deployment.
     // Test code that seeds or inspects rows directly connects as the owner.
-    const migrationUrl = container.getConnectionUri();
+    const migrationUrl = schemaScopedDatabaseUrl(container.getConnectionUri());
     const runtimeUrl = new URL(migrationUrl);
     runtimeUrl.username = "rakazo_app";
     runtimeUrl.password = "rakazo-test-runtime";
@@ -117,7 +117,7 @@ async function main() {
     }
     process.env.CI = "1";
 
-    execSync("pnpm --filter @rakazo/db generate", { stdio: "inherit", env: process.env });
+    execSync("pnpm --filter @forion/orbit-db generate", { stdio: "inherit", env: process.env });
     execSync("pnpm db:migrate", { stdio: "inherit", env: process.env });
 
     if (integration) {
@@ -146,6 +146,13 @@ async function main() {
           COPY_TEST_DATABASE: "1",
           OPENROUTER_API_KEY: "",
           MODEL_API_KEY: "",
+          REQUESTY_API_KEY: "",
+          RQSTY_API_KEY: "",
+          GEMINI_API_KEY: "",
+          E2B_API_KEY: "",
+          PI_DEFAULT_PROVIDER: "",
+          PI_DEFAULT_MODEL: "",
+          PI_DEFAULT_CREDENTIALS: "",
           // A developer .env may say development, which changes defaults such as encryption.
           NODE_ENV: "test",
         },
@@ -173,9 +180,9 @@ async function main() {
       { createApp },
       { drainUnscopedDatabaseAccess, runAsSystem },
     ] = await Promise.all([
-      import("@rakazo/adapters"),
-      import("@rakazo/api/app"),
-      import("@rakazo/db"),
+      import("@forion/orbit-adapters"),
+      import("@forion/orbit-api/app"),
+      import("@forion/orbit-db"),
     ]);
     const { serve } = await import("@hono/node-server");
     const thirdParties = new ThirdPartyConnectorEmulator();
@@ -244,7 +251,7 @@ async function main() {
           "pnpm",
           [
             "--filter",
-            "@rakazo/web",
+            "@forion/orbit-web",
             "exec",
             "playwright",
             "test",

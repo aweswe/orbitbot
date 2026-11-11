@@ -1,7 +1,7 @@
+import type { Bot } from "@forion/orbit-contracts";
+import { botsWithOwnModel } from "@forion/orbit-core";
+import { Button, Popover, PopoverContent, PopoverTrigger, toast } from "@forion/orbit-ui-web";
 import { useLingui } from "@lingui/react/macro";
-import type { Bot } from "@rakazo/contracts";
-import { botsWithOwnModel } from "@rakazo/core";
-import { Button, Popover, PopoverContent, PopoverTrigger, toast } from "@rakazo/ui-web";
 import { Bot as BotIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSpaceRpc } from "../../lib/space-rpc";

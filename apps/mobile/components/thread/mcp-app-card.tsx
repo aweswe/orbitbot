@@ -1,7 +1,12 @@
-import { useNativeLinkConfirm } from "@rakazo/chat-ui/native";
-import type { MessageBlock } from "@rakazo/contracts";
-import { MCP_APP_MIME_TYPE } from "@rakazo/contracts";
-import { createMcpAppHost, mcpAppCsp, mcpAppDocument, mcpAppShellDocument } from "@rakazo/core";
+import { useNativeLinkConfirm } from "@forion/orbit-chat-ui/native";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { MCP_APP_MIME_TYPE } from "@forion/orbit-contracts";
+import {
+  createMcpAppHost,
+  mcpAppCsp,
+  mcpAppDocument,
+  mcpAppShellDocument,
+} from "@forion/orbit-core";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { currentApiBase } from "../../lib/api";

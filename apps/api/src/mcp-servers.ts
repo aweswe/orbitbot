@@ -1,5 +1,4 @@
-import { ORPCError } from "@orpc/server";
-import type { McpOAuthBroker, McpOAuthSummary, McpStdioPolicy } from "@rakazo/adapters";
+import type { McpOAuthBroker, McpOAuthSummary, McpStdioPolicy } from "@forion/orbit-adapters";
 import {
   assertNoMcpEndpointCredential,
   assertSafeRemoteUrl,
@@ -7,12 +6,13 @@ import {
   mcpServerHealthDto,
   mcpStdioRefusal,
   recordMcpServerHealth,
-} from "@rakazo/adapters";
-import type { Actor, McpServer, McpServerConfigInput } from "@rakazo/contracts";
-import { mcpOAuthEnvReferences } from "@rakazo/contracts";
-import type { McpServer as McpServerRow, Prisma } from "@rakazo/db";
-import { itemSecretIn, spaceAvailability } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapters";
+import type { Actor, McpServer, McpServerConfigInput } from "@forion/orbit-contracts";
+import { mcpOAuthEnvReferences } from "@forion/orbit-contracts";
+import type { McpServer as McpServerRow, Prisma } from "@forion/orbit-db";
+import { itemSecretIn, spaceAvailability } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
+import { ORPCError } from "@orpc/server";
 import { isAdmin } from "./admins.js";
 import { assertNameFreeWhereAvailable, userAddedAvailability } from "./availability.js";
 import { dismissMcpServerApprovals } from "./mcp-approval.js";

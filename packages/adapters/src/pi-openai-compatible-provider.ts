@@ -6,7 +6,7 @@ import { anthropicMessagesApi } from "@earendil-works/pi-ai/api/anthropic-messag
 import { openAICompletionsApi } from "@earendil-works/pi-ai/api/openai-completions.lazy";
 import { openAIResponsesApi } from "@earendil-works/pi-ai/api/openai-responses.lazy";
 import { builtinModels } from "@earendil-works/pi-ai/providers/all";
-import type { ModelApiProtocol } from "@rakazo/contracts";
+import type { ModelApiProtocol } from "@forion/orbit-contracts";
 import {
   DEFAULT_MODEL_CONTEXT_WINDOW,
   DEFAULT_MODEL_MAX_TOKENS,
@@ -16,7 +16,7 @@ import {
   isNonPublicAddress,
   MODEL_KEY_REJECTED_ERROR,
   parseModelHeaders,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import { Agent } from "undici";
 import { declaredVisionModelIds, inputModalities } from "./model-modalities.js";
 import type { ResolveHostname } from "./network-address.js";

@@ -1,7 +1,7 @@
+import type { SpaceInvitePreview } from "@forion/orbit-contracts";
+import { Button, cn } from "@forion/orbit-ui-web";
 import { Trans } from "@lingui/react/macro";
 import { ORPCError } from "@orpc/client";
-import type { SpaceInvitePreview } from "@rakazo/contracts";
-import { Button, cn } from "@rakazo/ui-web";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { SharedSpaceRules } from "../components/SharedSpaceRules";

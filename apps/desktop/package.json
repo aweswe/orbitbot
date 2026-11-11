@@ -1,5 +1,5 @@
 {
-  "name": "@rakazo/desktop",
+  "name": "@forion/orbit-desktop",
   "productName": "Orbit",
   "version": "0.8.0",
   "author": {
@@ -11,25 +11,25 @@
   "scripts": {
     "dev": "pnpm build && electron .",
     "build": "node scripts/build.mjs && node scripts/copy-static.mjs && node scripts/build-speech.mjs",
-    "pack": "pnpm --filter @rakazo/web build && pnpm build && electron-builder --mac --win --linux",
-    "pack:dir": "pnpm --filter @rakazo/web build && pnpm build && electron-builder --dir",
+    "pack": "pnpm --filter @forion/orbit-web build && pnpm build && electron-builder --mac --win --linux",
+    "pack:dir": "pnpm --filter @forion/orbit-web build && pnpm build && electron-builder --dir",
     "check": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.jsdom.json && tsc --noEmit -p e2e/tsconfig.json && tsc --noEmit -p scripts/tsconfig.json",
     "test": "vitest run --root ../.. apps/desktop/src",
     "test:e2e": "pnpm build && playwright test --config e2e/playwright.config.ts",
-    "release": "pnpm --filter @rakazo/web build && pnpm build && electron-builder --publish never"
+    "release": "pnpm --filter @forion/orbit-web build && pnpm build && electron-builder --publish never"
   },
   "dependencies": {
-    "@rakazo/contracts": "workspace:*",
-    "@rakazo/logging": "workspace:*",
+    "@forion/orbit-contracts": "workspace:*",
+    "@forion/orbit-logging": "workspace:*",
     "@sentry/electron": "8.3.0",
     "electron-updater": "6.8.11",
     "koffi": "3.3.6"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",
-    "@rakazo/adapters": "workspace:*",
-    "@rakazo/core": "workspace:*",
-    "@rakazo/ui-tokens": "workspace:*",
+    "@forion/orbit-adapters": "workspace:*",
+    "@forion/orbit-core": "workspace:*",
+    "@forion/orbit-ui-tokens": "workspace:*",
     "electron": "45.2.2",
     "electron-builder": "26.15.3",
     "esbuild": "0.28.2",
@@ -53,12 +53,36 @@
         "to": "web"
       },
       {
+        "from": "../../LICENSE",
+        "to": "LICENSE"
+      },
+      {
+        "from": "../../NOTICE",
+        "to": "NOTICE"
+      },
+      {
+        "from": "../../ATTRIBUTION.md",
+        "to": "ATTRIBUTION.md"
+      },
+      {
+        "from": "../../THIRD_PARTY_NOTICES.md",
+        "to": "THIRD_PARTY_NOTICES.md"
+      },
+      {
+        "from": "../../compliance/licenses",
+        "to": "licenses"
+      },
+      {
         "from": "../../infra/compose/docker-compose.images.yml",
         "to": "stack/docker-compose.images.yml"
       },
       {
         "from": "../../infra/compose/.env.images.example",
         "to": "stack/.env.images.example"
+      },
+      {
+        "from": "../../compliance/modified-files.md",
+        "to": "compliance/modified-files.md"
       }
     ],
     "extraMetadata": {
@@ -66,14 +90,14 @@
       "main": "dist/main.js"
     },
     "mac": {
-      "icon": "../../packages/ui-tokens/assets/Rakazo.icon",
+      "icon": "assets/icon-macos.png",
       "category": "public.app-category.productivity",
       "x64ArchFiles": "{**/node_modules/@koromix/koffi-darwin-*/darwin_*/koffi.node,**/node_modules/@oxc-parser/binding-darwin-*/parser.darwin-*.node}",
       "entitlements": "assets/entitlements.mac.plist",
       "entitlementsInherit": "assets/entitlements.mac.plist",
       "extendInfo": {
-        "NSMicrophoneUsageDescription": "Rakazo uses the microphone for dictation and voice calls with your bots.",
-        "NSSpeechRecognitionUsageDescription": "Rakazo turns what you say into text for dictation and voice calls with your bots."
+        "NSMicrophoneUsageDescription": "Orbit uses the microphone for dictation and voice calls with your bots.",
+        "NSSpeechRecognitionUsageDescription": "Orbit turns what you say into text for dictation and voice calls with your bots."
       },
       "extraResources": [
         {

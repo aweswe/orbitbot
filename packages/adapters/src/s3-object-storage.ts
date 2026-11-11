@@ -3,7 +3,7 @@ import { Agent as HttpsAgent } from "node:https";
 import type { Socket } from "node:net";
 import type { Duplex, Readable } from "node:stream";
 import type * as S3Sdk from "@aws-sdk/client-s3";
-import type { ObjectStorage } from "@rakazo/adapter-kit";
+import type { ObjectStorage } from "@forion/orbit-adapter-kit";
 
 /** Upload part size: large enough that most homes are one request, small enough to hold in memory. */
 const PART_BYTES = 16 * 1024 * 1024;

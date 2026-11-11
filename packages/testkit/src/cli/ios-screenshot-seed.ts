@@ -1,8 +1,8 @@
 import { readFile } from "node:fs/promises";
-import type { BotSecretDestination, MessageBlock } from "@rakazo/contracts";
-import { encodeCardSecret, encodeContactSecret, encodeLoginSecret } from "@rakazo/contracts";
-import { allocateTicketNumber, createDb, createThreadMessage, ensureBoard } from "@rakazo/db";
-import { pageViewerCode } from "@rakazo/page-kit/compile";
+import type { BotSecretDestination, MessageBlock } from "@forion/orbit-contracts";
+import { encodeCardSecret, encodeContactSecret, encodeLoginSecret } from "@forion/orbit-contracts";
+import { allocateTicketNumber, createDb, createThreadMessage, ensureBoard } from "@forion/orbit-db";
+import { pageViewerCode } from "@forion/orbit-page-kit/compile";
 import { PNG } from "pngjs";
 import { sessionCookieHeader } from "../index.js";
 

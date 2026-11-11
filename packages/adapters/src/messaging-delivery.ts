@@ -5,11 +5,11 @@ import type {
   MessagingOutboundAttachment,
   MessagingOutboundStatus,
   MessagingSurface,
-} from "@rakazo/adapter-kit";
-import { messagingDeliverJob, runContinueJob } from "@rakazo/adapter-kit";
-import type { MessageBlock } from "@rakazo/contracts";
-import { botMessageHopExhausted, nextBotMessageHop, pageLinksAsTitles } from "@rakazo/core";
-import type { Prisma, PrismaClient, ThreadEvents } from "@rakazo/db";
+} from "@forion/orbit-adapter-kit";
+import { messagingDeliverJob, runContinueJob } from "@forion/orbit-adapter-kit";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { botMessageHopExhausted, nextBotMessageHop, pageLinksAsTitles } from "@forion/orbit-core";
+import type { Prisma, PrismaClient, ThreadEvents } from "@forion/orbit-db";
 import {
   accountDeactivated,
   appendEventInTransaction,
@@ -19,8 +19,8 @@ import {
   runAsSystem,
   SpaceDeletionInProgressError,
   THREAD_LOCK_TRANSACTION_OPTIONS,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { MessagingSendError } from "./chat-sdk-surface.js";
 import { splitOutboundBody } from "./messaging-platforms.js";
 import { isUserProgressClientNonce } from "./user-progress.js";

@@ -3,8 +3,8 @@ import type {
   ConnectorCall,
   ConnectorEvent,
   ConnectorTool,
-} from "@rakazo/adapter-kit";
-import { ComposioConnector, FakeComposioClient } from "@rakazo/adapters";
+} from "@forion/orbit-adapter-kit";
+import { ComposioConnector, FakeComposioClient } from "@forion/orbit-adapters";
 import { CUSTOMER_SUPPORT_PROVIDERS, CUSTOMER_SUPPORT_TOOLS } from "./service-contract.js";
 
 export const INBOX = [

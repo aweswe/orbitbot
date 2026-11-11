@@ -1,12 +1,12 @@
 import { randomBytes } from "node:crypto";
 import { Readable } from "node:stream";
-import { unwrapEnv } from "@rakazo/adapters";
-import { LocalKeyProvider } from "@rakazo/db";
+import { unwrapEnv } from "@forion/orbit-adapters";
+import { LocalKeyProvider } from "@forion/orbit-db";
 import { afterEach, expect, it, vi } from "vitest";
 
 const provider = vi.hoisted(() => ({ current: undefined as unknown }));
-vi.mock("@rakazo/core/node/load-root-env", () => ({ loadRootEnv: () => {} }));
-vi.mock("@rakazo/adapters", async (importOriginal) => ({
+vi.mock("@forion/orbit-core/node/load-root-env", () => ({ loadRootEnv: () => {} }));
+vi.mock("@forion/orbit-adapters", async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   keyManagerFromEnv: () => provider.current,
 }));

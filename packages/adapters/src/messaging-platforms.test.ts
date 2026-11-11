@@ -1,6 +1,6 @@
 import { splitMessage, WhatsAppApiError } from "@chat-adapter/whatsapp";
-import type { AdapterContext } from "@rakazo/adapter-kit";
-import { getLogger } from "@rakazo/logging";
+import type { AdapterContext } from "@forion/orbit-adapter-kit";
+import { getLogger } from "@forion/orbit-logging";
 import { SendblueAdapter } from "chat-adapter-sendblue";
 import { describe, expect, it, vi } from "vitest";
 import { ChatSdkMessagingSurface } from "./chat-sdk-surface.js";

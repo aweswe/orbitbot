@@ -62,7 +62,11 @@ const hotQueries = [
 postgres("hot query indexes (PostgreSQL)", () => {
   let pool: Pool;
   beforeAll(() => {
-    pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    const schema = new URL(process.env.DATABASE_URL!).searchParams.get("schema") || "public";
+    pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      options: `-c search_path=${schema}`,
+    });
   });
   afterAll(async () => {
     await pool.end();

@@ -22,7 +22,7 @@ export function blogPostStructuredData(input: {
         datePublished: input.published,
         dateModified: input.updated,
         author: {
-          "@type": "Person",
+          "@type": "Organization",
           name: BLOG_AUTHOR,
         },
         publisher: {
@@ -31,7 +31,7 @@ export function blogPostStructuredData(input: {
           url: `${SITE_URL}/`,
           logo: {
             "@type": "ImageObject",
-            url: `${SITE_URL}/brand/rakazo-mark.png`,
+            url: `${SITE_URL}/brand/orbit-mark.png`,
           },
         },
         image: [input.image],

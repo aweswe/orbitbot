@@ -5,8 +5,8 @@ import type {
   PortableFile,
   StreamedPortableFile,
   WorkspaceExportLimits,
-} from "@rakazo/adapter-kit";
-import { WorkspaceTooLargeError } from "@rakazo/adapter-kit";
+} from "@forion/orbit-adapter-kit";
+import { WorkspaceTooLargeError } from "@forion/orbit-adapter-kit";
 import { normalizeWorkspacePath } from "./computer-support.js";
 
 const BLOCK = 512;

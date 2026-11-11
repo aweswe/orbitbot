@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import type * as TimersPromises from "node:timers/promises";
 import type { FileUrlResponse, SandboxStateEnum } from "@boatdev/sdk";
 import { FetchError, ResponseError } from "@boatdev/sdk";
-import type { ComputerRef, PortableFile, StreamedPortableFile } from "@rakazo/adapter-kit";
+import type { ComputerRef, PortableFile, StreamedPortableFile } from "@forion/orbit-adapter-kit";
 import {
   SandboxDamagedError,
   SandboxRateLimitError,
@@ -10,9 +10,9 @@ import {
   SandboxUnavailableError,
   SandboxUnresponsiveError,
   WorkspaceTooLargeError,
-} from "@rakazo/adapter-kit";
-import { screenDisplayArgv, shellQuote } from "@rakazo/core/node/desktop-runtime";
-import { createLogger, createTestSink, installLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import { screenDisplayArgv, shellQuote } from "@forion/orbit-core/node/desktop-runtime";
+import { createLogger, createTestSink, installLogger } from "@forion/orbit-logging";
 import { parse } from "shell-quote";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {

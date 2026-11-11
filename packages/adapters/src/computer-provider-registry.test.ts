@@ -1,4 +1,4 @@
-import { ComputerProviderDescriptorSchema } from "@rakazo/contracts";
+import { ComputerProviderDescriptorSchema } from "@forion/orbit-contracts";
 import { describe, expect, it } from "vitest";
 import {
   computerProviderDescriptor,

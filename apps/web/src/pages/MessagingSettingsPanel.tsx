@@ -1,7 +1,9 @@
-import { Trans, useLingui } from "@lingui/react/macro";
-import type { MessagingChannelMembership, MessagingInstallationsStatus } from "@rakazo/contracts";
-import { isRetryableError, messagingConnectOptions } from "@rakazo/core";
-import { fetchFresh, writeSaved } from "@rakazo/core/query";
+import type {
+  MessagingChannelMembership,
+  MessagingInstallationsStatus,
+} from "@forion/orbit-contracts";
+import { isRetryableError, messagingConnectOptions } from "@forion/orbit-core";
+import { fetchFresh, writeSaved } from "@forion/orbit-core/query";
 import {
   Button,
   DropdownMenu,
@@ -11,7 +13,8 @@ import {
   NativeSelect,
   NativeSelectOption,
   SectionHeading,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronDownIcon, PlusIcon } from "lucide-react";
 import type { ReactNode } from "react";

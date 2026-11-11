@@ -1,4 +1,4 @@
-import { MCP_OAUTH_REDIRECT_MISMATCH } from "@rakazo/contracts";
+import { MCP_OAUTH_REDIRECT_MISMATCH } from "@forion/orbit-contracts";
 
 /** Only reviewed, public documentation links belong here; never use URLs from an error body. */
 const ERROR_GUIDES: Readonly<Record<string, string>> = {

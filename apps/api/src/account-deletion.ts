@@ -1,13 +1,13 @@
-import type { AdapterContext } from "@rakazo/adapter-kit";
+import type { AdapterContext } from "@forion/orbit-adapter-kit";
 import {
   destroyBot,
   forgetPageShareSecrets,
   removeAgentHome,
   removeDeletedBotsFromLegacyTeamHome,
   toComputerRef,
-} from "@rakazo/adapters";
-import { anySignal, requestDeadline, withAbort } from "@rakazo/core";
-import type { Prisma, ThreadEvents } from "@rakazo/db";
+} from "@forion/orbit-adapters";
+import { anySignal, requestDeadline, withAbort } from "@forion/orbit-core";
+import type { Prisma, ThreadEvents } from "@forion/orbit-db";
 import {
   claimOrganizationForDeletion,
   claimSpacesLeavingWithAccount,
@@ -25,8 +25,8 @@ import {
   runAsSystem,
   SPACE_DELETION_CLAIM_TIMEOUT_MS,
   setOrganizationDeletionLease,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import type { BillingService } from "./billing.js";
 import type { SpaceDeletionDeps } from "./space-deletion.js";
 import { afterSpaceDeparture } from "./space-departure.js";

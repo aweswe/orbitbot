@@ -1,9 +1,9 @@
+import { useExternalLinkOpener } from "@forion/orbit-chat-ui/web";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { MCP_APP_VIEWER_PATH } from "@forion/orbit-contracts/content-security-policy";
+import { createMcpAppHost, mcpAppCsp, mcpAppDocument } from "@forion/orbit-core";
+import { cn } from "@forion/orbit-ui-web";
 import { useLingui } from "@lingui/react/macro";
-import { useExternalLinkOpener } from "@rakazo/chat-ui/web";
-import type { MessageBlock } from "@rakazo/contracts";
-import { MCP_APP_VIEWER_PATH } from "@rakazo/contracts/content-security-policy";
-import { createMcpAppHost, mcpAppCsp, mcpAppDocument } from "@rakazo/core";
-import { cn } from "@rakazo/ui-web";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ArtifactTarget } from "../lib/artifact-open";

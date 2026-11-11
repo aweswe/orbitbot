@@ -7,8 +7,8 @@ import type {
   ProcessEvent,
   SandboxProvider,
   WorkspaceDirectoryRequest,
-} from "@rakazo/adapter-kit";
-import { boundedSandboxCommandTimeoutMs } from "@rakazo/core";
+} from "@forion/orbit-adapter-kit";
+import { boundedSandboxCommandTimeoutMs } from "@forion/orbit-core";
 import { describeDesktopSandbox } from "./desktop-sandbox.js";
 import type {
   HostComputerEnvironment,

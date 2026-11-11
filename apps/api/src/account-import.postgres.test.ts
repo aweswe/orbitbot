@@ -7,12 +7,12 @@ import type {
   ArtifactStore,
   JobPublisher,
   SandboxProvider,
-} from "@rakazo/adapter-kit";
-import { LocalAgentHomeStore } from "@rakazo/adapters";
-import type { AccountExportRecord, Actor } from "@rakazo/contracts";
-import { PAGE_SOURCE_MAX_BYTES } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
-import { asSystem, createDb, createOrganizationForUser } from "@rakazo/db";
+} from "@forion/orbit-adapter-kit";
+import { LocalAgentHomeStore } from "@forion/orbit-adapters";
+import type { AccountExportRecord, Actor } from "@forion/orbit-contracts";
+import { PAGE_SOURCE_MAX_BYTES } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
+import { asSystem, createDb, createOrganizationForUser } from "@forion/orbit-db";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { AccountImportError, importAccount } from "./account-import.js";
 import {
@@ -291,7 +291,7 @@ describePostgres("account import (PostgreSQL)", () => {
   const actor: Actor = {
     userId,
     spaceId: baseSpaceId,
-    email: `${userId}@rakazo.test`,
+    email: `${userId}@orbit.test`,
     isDeploymentOwner: false,
   };
   const stored = new Map<string, Uint8Array>();

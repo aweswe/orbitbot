@@ -3,20 +3,23 @@
 // then connect with DATABASE_URL and only get the runtime grants.
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { migrateJobQueue, unwrapEnvFromKeyManager } from "@rakazo/adapters";
-import { loadRootEnv } from "@rakazo/core/node/load-root-env";
+import { migrateJobQueue, unwrapEnvFromKeyManager } from "@forion/orbit-adapters";
+import { loadRootEnv } from "@forion/orbit-core/node/load-root-env";
 import {
   databaseUrls,
   deployMigrations,
   provisionRuntimeRole,
   RUNTIME_ROLE,
   SINGLE_DATABASE_URL_WARNING,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
 
 loadRootEnv();
 await unwrapEnvFromKeyManager();
 const urls = databaseUrls(process.env);
-const dbPackageDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../../packages/db");
+const dbPackageDir = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../../../../packages/db",
+);
 await deployMigrations({
   migrationUrl: urls.migrationUrl,
   previousMigrations: process.env.RAKAZO_DEPLOYED_MIGRATIONS?.split(","),

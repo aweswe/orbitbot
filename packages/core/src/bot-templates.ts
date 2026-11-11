@@ -1,4 +1,4 @@
-import type { BotTemplate, ConnectionCatalogItem } from "@rakazo/contracts";
+import type { BotTemplate, ConnectionCatalogItem } from "@forion/orbit-contracts";
 import { matchConnectedAppCatalog } from "./app-connect.js";
 
 /**

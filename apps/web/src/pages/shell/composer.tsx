@@ -1,11 +1,10 @@
-import { useLingui } from "@lingui/react/macro";
-import type { AgentSkillCatalogEntry, ThreadMessage } from "@rakazo/contracts";
+import type { AgentSkillCatalogEntry, ThreadMessage } from "@forion/orbit-contracts";
 import type {
   ComposerMention,
   ComposerMentionBinding,
   ComposerMentionRange,
   SlashActionId,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import {
   bindComposerMention,
   clampMentionHighlightIndex,
@@ -21,8 +20,9 @@ import {
   serializeComposerPrompt,
   truncateSlashDescription,
   updateComposerMentionBindings,
-} from "@rakazo/core";
-import { Button } from "@rakazo/ui-web";
+} from "@forion/orbit-core";
+import { Button } from "@forion/orbit-ui-web";
+import { useLingui } from "@lingui/react/macro";
 import { ArrowUp, Box, Paperclip, Plus, Settings, Square, X } from "lucide-react";
 import type { ClipboardEvent, ComponentProps, CSSProperties, DragEvent, RefObject } from "react";
 import {
@@ -1087,7 +1087,7 @@ const ComposerBody = memo(function Composer({
                 showComposerPlaceholder
                   ? activeName
                     ? t`Message ${activeName}`
-                    : t`Message Orion…`
+                    : t`Message Orbit…`
                   : undefined
               }
               aria-label={activeName ? t`Message ${activeName}` : t`Message`}

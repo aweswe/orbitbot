@@ -1,5 +1,5 @@
-import type { ConnectorTool } from "@rakazo/adapter-kit";
-import { approvalEffectKey } from "@rakazo/core/node/approval-effect-key";
+import type { ConnectorTool } from "@forion/orbit-adapter-kit";
+import { approvalEffectKey } from "@forion/orbit-core/node/approval-effect-key";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   approvalPausedToolResult,
@@ -50,6 +50,7 @@ vi.mock("@earendil-works/pi-agent-core", () => ({
 
 vi.mock("@earendil-works/pi-ai/providers/all", () => ({
   builtinModels: () => ({
+    setProvider: (provider: unknown) => provider,
     getModel: (_provider: string, modelId: string) =>
       modelId === "approval-pi-model" ? { provider: "test", id: modelId } : undefined,
     streamSimple: () => {

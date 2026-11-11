@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
-import type { BackgroundJob, JobPublisher } from "@rakazo/adapter-kit";
-import { asSystem, createDb, provisionMessagingIdentity, runAsSystem } from "@rakazo/db";
+import type { BackgroundJob, JobPublisher } from "@forion/orbit-adapter-kit";
+import { asSystem, createDb, provisionMessagingIdentity, runAsSystem } from "@forion/orbit-db";
 import { Pool } from "pg";
 import { describe, expect, it } from "vitest";
 import { createJobReconciler, createPostgresReconciliationLeadership } from "./job-reconciler.js";
@@ -10,11 +10,14 @@ const describePostgres =
   process.env.VERIFY_DATABASE && databaseUrl ? describe.sequential : describe.skip;
 
 describePostgres("job reconciliation leadership (PostgreSQL contract)", () => {
-  it("elects one session and hands leadership to a follower after release", async () => {
-    const pool = new Pool({ connectionString: databaseUrl!, max: 2 });
-    const lockId = -Math.min(process.pid, 2_000_000_000);
-    const first = createPostgresReconciliationLeadership(pool, { lockId });
-    const second = createPostgresReconciliationLeadership(pool, { lockId });
+  const pool = () => new Pool({ connectionString: databaseUrl!, max: 4 });
+  const lockId = () => `test-${randomUUID()}`;
+
+  it("elects one lease owner and hands leadership to a follower after release", async () => {
+    const db = pool();
+    const id = lockId();
+    const first = createPostgresReconciliationLeadership(db, { lockId: id });
+    const second = createPostgresReconciliationLeadership(db, { lockId: id });
 
     try {
       await expect(first.tryAcquire()).resolves.toBe(true);
@@ -25,7 +28,82 @@ describePostgres("job reconciliation leadership (PostgreSQL contract)", () => {
     } finally {
       await first.release();
       await second.release();
-      await pool.end();
+      await db.end();
+    }
+  });
+
+  it("renews a live lease with its heartbeat", async () => {
+    const db = pool();
+    const id = lockId();
+    const first = createPostgresReconciliationLeadership(db, { lockId: id, leaseMs: 200 });
+    const second = createPostgresReconciliationLeadership(db, { lockId: id });
+
+    try {
+      await expect(first.tryAcquire()).resolves.toBe(true);
+      await new Promise((resolve) => setTimeout(resolve, 350));
+      await expect(second.tryAcquire()).resolves.toBe(false);
+    } finally {
+      await first.release();
+      await second.release();
+      await db.end();
+    }
+  });
+
+  it("lets a follower recover an expired lease after a crash", async () => {
+    const db = pool();
+    const id = lockId();
+    const crashed = createPostgresReconciliationLeadership(db, {
+      lockId: id,
+      leaseMs: 100,
+      heartbeatMs: 10_000,
+    });
+    const follower = createPostgresReconciliationLeadership(db, { lockId: id, leaseMs: 100 });
+
+    try {
+      await expect(crashed.tryAcquire()).resolves.toBe(true);
+      await new Promise((resolve) => setTimeout(resolve, 180));
+      await expect(follower.tryAcquire()).resolves.toBe(true);
+      // The old owner cannot renew or delete the new owner's row.
+      await expect(crashed.tryAcquire()).resolves.toBe(false);
+      await crashed.release();
+      await expect(follower.tryAcquire()).resolves.toBe(true);
+    } finally {
+      await crashed.release();
+      await follower.release();
+      await db.end();
+    }
+  });
+
+  it("elects exactly one of many concurrent contenders", async () => {
+    const db = pool();
+    const id = lockId();
+    const leaders = Array.from({ length: 8 }, () =>
+      createPostgresReconciliationLeadership(db, { lockId: id }),
+    );
+    try {
+      const results = await Promise.all(leaders.map((leader) => leader.tryAcquire()));
+      expect(results.filter(Boolean)).toHaveLength(1);
+    } finally {
+      await Promise.all(leaders.map((leader) => leader.release()));
+      await db.end();
+    }
+  });
+
+  it("fails closed when the database is unreachable", async () => {
+    const db = new Pool({
+      connectionString: databaseUrl!.replace(/:\d+\//, ":1/"),
+      max: 1,
+      connectionTimeoutMillis: 200,
+    });
+    const leader = createPostgresReconciliationLeadership(db, {
+      lockId: lockId(),
+      leaseMs: 100,
+    });
+    try {
+      await expect(leader.tryAcquire()).resolves.toBe(false);
+    } finally {
+      await leader.release();
+      await db.end().catch(() => undefined);
     }
   });
 });

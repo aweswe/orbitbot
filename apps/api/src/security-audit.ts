@@ -1,5 +1,5 @@
-import type { SecurityEventInput, SecurityEventType } from "@rakazo/db";
-import { recordSecurityEvent } from "@rakazo/db";
+import type { SecurityEventInput, SecurityEventType } from "@forion/orbit-db";
+import { recordSecurityEvent } from "@forion/orbit-db";
 
 type AuditedProcedure = {
   type: SecurityEventType;

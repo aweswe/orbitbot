@@ -1,4 +1,10 @@
-import type { Bot, BotAvatarSet, ComputerMode, ReplyMode, ThinkingLevel } from "@rakazo/contracts";
+import type {
+  Bot,
+  BotAvatarSet,
+  ComputerMode,
+  ReplyMode,
+  ThinkingLevel,
+} from "@forion/orbit-contracts";
 import {
   BOT_AVATAR_SHAPE_COUNT,
   BOT_COLORS,
@@ -6,15 +12,15 @@ import {
   BOT_INSTRUCTIONS_MAX_LENGTH,
   BOT_NAME_MAX_LENGTH,
   resolveBotAvatarSet,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   credentialForModel,
   MODEL_SEARCH_THRESHOLD,
   modelOptionKey,
   parseModelOptionKey,
   resolveSelectableModelId,
-} from "@rakazo/core";
-import { typeScale } from "@rakazo/ui-tokens";
+} from "@forion/orbit-core";
+import { typeScale } from "@forion/orbit-ui-tokens";
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import type { Voice } from "expo-speech";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -858,7 +864,7 @@ export default function BotSettingsScreen() {
               label={t("Icon set")}
               choices={[
                 { key: "organic", label: t("Original") },
-                { key: "rakazo", label: t("Rakazo") },
+                { key: "rakazo", label: t("Orbit") },
               ]}
               value={avatarSet}
               onChange={(next) => {

@@ -1,8 +1,5 @@
+import { ToggleGroup, ToggleGroupItem } from "@forion/orbit-ui-web";
 import { Trans, useLingui } from "@lingui/react/macro";
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@rakazo/ui-web";
 import { Sliders, Sparkles, Type } from "lucide-react";
 import { OrbitCosmicThemePicker } from "../components/OrbitCosmicThemePicker";
 import { OrbitFontPicker } from "../components/OrbitFontPicker";
@@ -29,14 +26,17 @@ export function AppearanceSettingsPanel() {
         title={
           <div className="flex items-center gap-2">
             <Sparkles className="size-4 text-primary" />
-            <span><Trans>Orbit Cosmic Themes</Trans></span>
+            <span>
+              <Trans>Orbit Cosmic Themes</Trans>
+            </span>
           </div>
         }
       >
         <div className="px-4 py-3 border-b border-border/40 bg-muted/20">
           <p className="text-body-sm text-muted-foreground">
             <Trans>
-              Choose a signature celestial aesthetic. Your theme automatically synchronizes across the application shell, chat workspace, and deck computer.
+              Choose a signature celestial aesthetic. Your theme automatically synchronizes across
+              the application shell, chat workspace, and deck computer.
             </Trans>
           </p>
         </div>
@@ -58,14 +58,17 @@ export function AppearanceSettingsPanel() {
         title={
           <div className="flex items-center gap-2">
             <Type className="size-4 text-primary" />
-            <span><Trans>Typography Engine</Trans></span>
+            <span>
+              <Trans>Typography Engine</Trans>
+            </span>
           </div>
         }
       >
         <div className="px-4 py-3 border-b border-border/40 bg-muted/20">
           <p className="text-body-sm text-muted-foreground">
             <Trans>
-              Select your preferred typeface family. Orbit hot-reloads fonts in real-time across all headings, code blocks, and chat transcripts.
+              Select your preferred typeface family. Orbit hot-reloads fonts in real-time across all
+              headings, code blocks, and chat transcripts.
             </Trans>
           </p>
         </div>
@@ -79,14 +82,18 @@ export function AppearanceSettingsPanel() {
         title={
           <div className="flex items-center gap-2">
             <Sliders className="size-4 text-primary" />
-            <span><Trans>Workspace Density</Trans></span>
+            <span>
+              <Trans>Workspace Density</Trans>
+            </span>
           </div>
         }
       >
         <SettingsRow
           label={
             <div>
-              <div className="font-medium text-foreground"><Trans>Sidebar Density</Trans></div>
+              <div className="font-medium text-foreground">
+                <Trans>Sidebar Density</Trans>
+              </div>
               <div className="text-body-sm text-muted-foreground">
                 <Trans>Adjust compact or spacious list density in the agent sidebar</Trans>
               </div>
@@ -100,10 +107,14 @@ export function AppearanceSettingsPanel() {
               className="rounded-lg bg-muted/40 p-0.5 border border-border"
             >
               <ToggleGroupItem value="spacious" className="px-3 py-1.5 text-caption font-medium">
-                <span><Trans>Comfortable</Trans></span>
+                <span>
+                  <Trans>Comfortable</Trans>
+                </span>
               </ToggleGroupItem>
               <ToggleGroupItem value="compact" className="px-3 py-1.5 text-caption font-medium">
-                <span><Trans>Compact</Trans></span>
+                <span>
+                  <Trans>Compact</Trans>
+                </span>
               </ToggleGroupItem>
             </ToggleGroup>
           }

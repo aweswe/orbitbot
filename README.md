@@ -1,10 +1,10 @@
 # Orbit Bot
 
-> The next-generation autonomous AI agent platform and persistent build environment by **Forion**.
+> An Orbit product powered by Forion.
 
 ![Orbit Bot Banner](apps/web/public/assets/imgs/logo/white-logo.png)
 
-**Orbit Bot** is an autonomous AI agent platform and unified digital ecosystem created by **Forion** (founded by Adarsh Kumar, Aditya Kumar, Nirbhay Sagar, and Neha Masih). It enables teams and builders to run intelligent, persistent bots with graphical sandbox computers, real filesystem & shell execution, visual diagram and SVG rendering, voice capabilities, and multi-agent group collaboration without context switching.
+**Orbit Bot** is an Orbit product built by **Forion** (founded by Adarsh Kumar, Aditya Kumar, Nirbhay Sagar, and Neha Masih) on the Forion platform. Orbit is the customer-facing product family; Forion is the company and underlying platform. Rakazo is acknowledged in the legal and attribution files. It enables teams and builders to run intelligent, persistent bots with graphical sandbox computers, real filesystem & shell execution, visual diagram and SVG rendering, voice capabilities, and multi-agent group collaboration without context switching.
 
 ## Features
 
@@ -54,7 +54,7 @@ curl -fsSLO https://raw.githubusercontent.com/forion-ai/orbit/main/infra/compose
 bash install-images.sh
 ```
 
-The installer downloads the Compose files, creates `.env` with random secrets, and starts Rakazo.
+The installer downloads the Compose files, creates `.env` with random secrets, and starts Orbit Bot.
 It preserves an existing `.env` when rerun.
 
 Open [http://127.0.0.1:5173](http://127.0.0.1:5173), create an account, and connect a model.
@@ -194,22 +194,22 @@ Workspace exports reject files above 64 MiB without truncating them. Set `RAILWA
 
 ## Desktop and mobile
 
-The Electron and Expo apps are clients of the same Rakazo API used by the web app.
+The Electron and Expo apps are clients of the same Orbit API used by the web app.
 
 With the development stack running, launch Electron with:
 
 ```bash
-pnpm --filter @rakazo/desktop dev
+pnpm --filter @forion/orbit-desktop dev
 ```
 
-On first run the desktop app asks whether to run Rakazo on this computer or connect to an existing
+On first run the desktop app asks whether to run Orbit on this computer or connect to an existing
 server. **This computer** installs and starts the published images with Docker Compose (the same
 files as `infra/compose/install-images.sh`) under the app's data directory, so Docker Desktop,
 OrbStack, or Docker Engine must be installed; the app links to them when it is not. Installed
 builds pin the image tag to their own version; unpackaged builds pull `edge`. Developers running
 `pnpm dev` should pick **Existing instance** with `http://127.0.0.1:5173` instead. Public servers
 must use HTTPS; HTTP is accepted only for loopback and private LAN addresses (not link-local). The
-app verifies Rakazo's health endpoint before saving, and later launches go straight to that
+app verifies Orbit's health endpoint before saving, and later launches go straight to that
 instance. The stack keeps running after the app quits; **Stop Local Stack** in the application
 menu turns it off.
 
@@ -220,15 +220,15 @@ that only include FUSE 3, such as Fedora Silverblue or Ubuntu 24.04, show
 FUSE:
 
 ```bash
-chmod +x Rakazo-*.AppImage
-./Rakazo-*.AppImage --appimage-extract-and-run
+chmod +x Orbit-*.AppImage
+./Orbit-*.AppImage --appimage-extract-and-run
 ```
 
 **This computer** looks for the `docker` CLI and does not detect Podman. To try another
 Docker-compatible CLI that supports the `compose` commands, set `RAKAZO_DOCKER_BINARY` to its path
 before starting the app.
 
-Use **Change Rakazo Server…** in the application menu to reconnect. Closing that window without
+Use **Change Orbit Server…** in the application menu to reconnect. Closing that window without
 saving returns to the previous instance. For development automation, set `RAKAZO_WEB_URL` to point
 the shell somewhere else without changing the saved instance, or `RAKAZO_FORCE_SETUP=1` to run
 setup again.
@@ -295,6 +295,11 @@ Chinese guides cover [self-hosting](./docs/zh-CN/self-host.md), [models](./docs/
 - [Mobile releases](./docs/mobile-release.md)
 - [Performance testing](./docs/performance.md)
 - [Bots that manage bots](./docs/fleet-management.md)
+
+## Lineage
+
+Orbit Bot is a derivative of the Rakazo project, licensed under Apache-2.0. See
+[ATTRIBUTION.md](./ATTRIBUTION.md) for the upstream project and license details.
 
 ## Contributing
 

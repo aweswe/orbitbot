@@ -107,7 +107,7 @@ export function OrbitCosmicThemePicker({
     setActiveTheme(themeId);
     try {
       localStorage.setItem("orbit-cosmic-theme", themeId);
-      localStorage.setItem("rakazo.uiAppearance", themeId === "cosmic-light" ? "light" : "dark");
+      localStorage.setItem("orbit.uiAppearance", themeId === "cosmic-light" ? "light" : "dark");
     } catch {}
 
     const mode = themeId === "cosmic-light" ? "light" : "dark";
@@ -221,4 +221,3 @@ export function OrbitCosmicThemePicker({
     </div>
   );
 }
-

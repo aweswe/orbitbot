@@ -1,5 +1,3 @@
-import { t } from "@lingui/core/macro";
-import { Trans, useLingui } from "@lingui/react/macro";
 import type {
   ModelCatalogEntry,
   ModelCredential,
@@ -7,9 +5,9 @@ import type {
   RoutineEmailSenders,
   RoutineWatch,
   RoutineWatchInput,
-} from "@rakazo/contracts";
-import { ROUTINE_WATCH_DEFAULT_MINUTES, ROUTINE_WATCH_MIN_MINUTES } from "@rakazo/contracts";
-import type { CronFreq, CronLabels, CronPreset, RoutineDraft } from "@rakazo/core";
+} from "@forion/orbit-contracts";
+import { ROUTINE_WATCH_DEFAULT_MINUTES, ROUTINE_WATCH_MIN_MINUTES } from "@forion/orbit-contracts";
+import type { CronFreq, CronLabels, CronPreset, RoutineDraft } from "@forion/orbit-core";
 import {
   credentialForModel,
   cronFromPreset,
@@ -19,7 +17,7 @@ import {
   emptyRoutineDraft,
   formatCron,
   isOneShotRoutineCrons,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import {
   Button,
   DropdownMenu,
@@ -37,7 +35,9 @@ import {
   PopoverTrigger,
   Switch,
   Textarea,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useQuery } from "@tanstack/react-query";
 import {
   ChevronLeft,

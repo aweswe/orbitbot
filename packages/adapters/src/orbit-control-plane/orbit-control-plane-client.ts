@@ -1,7 +1,7 @@
 import { createHmac } from 'node:crypto';
 
 /**
- * Orbit Control Plane Client for Orion
+ * Orbit Control Plane Client for Orbit
  *
  * Communicates with `forion-server` (Orbit Microservices Control Plane) for:
  * 1. Wallet balances & billing status
@@ -76,7 +76,7 @@ export class OrbitControlPlaneClient {
       process.env.FORION_ORBIT_INTERNAL_SECRET ||
       process.env.FORION_API_KEY;
     // No shipped fallback: a missing secret must stop billing, not fall back to
-    // a value every Orion checkout knows.
+    // a value every Orbit checkout knows.
     if (!secret) {
       throw new Error('FORION_ORBIT_INTERNAL_SECRET is required for Orbit billing');
     }

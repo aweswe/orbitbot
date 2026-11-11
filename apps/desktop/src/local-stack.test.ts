@@ -80,7 +80,7 @@ describe("renderStackEnv", () => {
     expect(lines.some((line) => line.startsWith("RAKAZO_IMAGE_TAG="))).toBe(false);
     expect(lines.some((line) => line.startsWith("RAKAZO_COMPUTER_IMAGE_TAG="))).toBe(false);
     // Everything else, including the image names and empty optional keys, stays verbatim.
-    expect(lines).toContain("RAKAZO_IMAGE=ghcr.io/elie222/rakazo/app");
+    expect(lines).toContain("RAKAZO_IMAGE=ghcr.io/forion-ai/orbit/app");
     expect(lines).toContain("SANDBOX_PROVIDER=docker");
     expect(lines).toContain("OPENROUTER_API_KEY=");
     expect(rendered.endsWith("\n")).toBe(template.endsWith("\n"));
@@ -358,7 +358,7 @@ const ok: Script = (args) => {
   if (args[0] === "info") return { stdout: "27.1.1\n" };
   const subcommand = args[7];
   if (subcommand === "pull") return { lines: ["app Pulled", "computer Pulled"] };
-  if (subcommand === "up") return { lines: ["Container rakazo-web-1 Started"] };
+  if (subcommand === "up") return { lines: ["Container orbit-web-1 Started"] };
   return {};
 };
 
@@ -455,7 +455,7 @@ describe("LocalStackController", () => {
     expect(state.output).toEqual([
       "app Pulled",
       "computer Pulled",
-      "Container rakazo-web-1 Started",
+      "Container orbit-web-1 Started",
     ]);
     expect(phases).toEqual([
       "checking-docker",

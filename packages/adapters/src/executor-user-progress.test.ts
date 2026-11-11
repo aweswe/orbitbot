@@ -1,13 +1,13 @@
-import type { AgentRunRequest, AgentRuntimeEvent, BackgroundJob } from "@rakazo/adapter-kit";
-import { messagingProgressJob } from "@rakazo/adapter-kit";
-import type { MessageBlock } from "@rakazo/contracts";
-import type { AppendEventInput, Prisma } from "@rakazo/db";
+import type { AgentRunRequest, AgentRuntimeEvent, BackgroundJob } from "@forion/orbit-adapter-kit";
+import { messagingProgressJob } from "@forion/orbit-adapter-kit";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import type { AppendEventInput, Prisma } from "@forion/orbit-db";
 import {
   appendEventInTransaction,
   createThreadMessageInTransaction,
   partialReplyClientNonce,
   RunHistoryWriteError,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
 import { describe, expect, it, vi } from "vitest";
 import { PARTIAL_REPLY_NOTE } from "./automated-messages.js";
 import { loadBotMessageContext, returnBotMessageOutcome } from "./bot-messages.js";

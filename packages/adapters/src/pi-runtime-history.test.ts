@@ -1,4 +1,4 @@
-import type { AgentRunRequest } from "@rakazo/adapter-kit";
+import type { AgentRunRequest } from "@forion/orbit-adapter-kit";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const captured = vi.hoisted(() => ({
@@ -32,6 +32,7 @@ vi.mock("@earendil-works/pi-agent-core", () => ({
 
 vi.mock("@earendil-works/pi-ai/providers/all", () => ({
   builtinModels: () => ({
+    setProvider: (provider: unknown) => provider,
     getModel: (_provider: string, modelId: string) => ({ provider: "test", id: modelId }),
     streamSimple: () => {
       throw new Error("provider should not be called");

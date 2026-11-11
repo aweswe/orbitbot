@@ -10,13 +10,13 @@ import type {
   StreamedPortableFile,
   WorkspaceDirectoryRequest,
   WorkspaceExportLimits,
-} from "@rakazo/adapter-kit";
-import { WorkspaceTooLargeError } from "@rakazo/adapter-kit";
-import type { ComputerMode } from "@rakazo/contracts";
-import { parseScreenLeaseId } from "@rakazo/core";
-import { browserProfilePathForScreen } from "@rakazo/core/node/desktop-runtime";
-import type { PrismaClient } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import { WorkspaceTooLargeError } from "@forion/orbit-adapter-kit";
+import type { ComputerMode } from "@forion/orbit-contracts";
+import { parseScreenLeaseId } from "@forion/orbit-core";
+import { browserProfilePathForScreen } from "@forion/orbit-core/node/desktop-runtime";
+import type { PrismaClient } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { normalizeWorkspacePath, teamBotWorkspaceDirectory } from "./computer-support.js";
 import { createStagingDirectory, LocalAgentHomeStore } from "./home.js";
 import { isSandboxDamagedError } from "./sandbox-errors.js";

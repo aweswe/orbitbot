@@ -1,7 +1,7 @@
-import type { MessagingInboundAttachment } from "@rakazo/adapter-kit";
-import { isAttachmentAudioMimeType } from "@rakazo/contracts";
-import { sanitizeMessagingLabel } from "@rakazo/core";
-import { getLogger } from "@rakazo/logging";
+import type { MessagingInboundAttachment } from "@forion/orbit-adapter-kit";
+import { isAttachmentAudioMimeType } from "@forion/orbit-contracts";
+import { sanitizeMessagingLabel } from "@forion/orbit-core";
+import { getLogger } from "@forion/orbit-logging";
 
 type InboundArtifact = { id: string; name: string; mimeType: string; size: number };
 

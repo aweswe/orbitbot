@@ -3,11 +3,11 @@ import type {
   AgentRuntime,
   JobPublisher,
   SemanticMemoryResponse,
-} from "@rakazo/adapter-kit";
-import { historyCompactJob } from "@rakazo/adapter-kit";
-import type { MessageBlock } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
-import { createLogger, createTestSink, installLogger, wrapJobPayload } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import { historyCompactJob } from "@forion/orbit-adapter-kit";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
+import { createLogger, createTestSink, installLogger, wrapJobPayload } from "@forion/orbit-logging";
 import { describe, expect, it, vi } from "vitest";
 import {
   COMPACTION_BATCH_SIZE,
@@ -181,7 +181,7 @@ describe("selectCompactedHistory", () => {
 describe("formatCompactedSummary", () => {
   it("labels the summary as data and records its coverage", () => {
     expect(formatCompactedSummary("facts", 49)).toContain(
-      "Rakazo-owned compacted context through message sequence 49",
+      "Orbit-owned compacted context through message sequence 49",
     );
     expect(formatCompactedSummary("facts", 49)).toContain("<compacted_thread_summary>");
   });
@@ -482,12 +482,12 @@ describe("summarizeTimeoutMs", () => {
 
 function installCompactionLogger() {
   const sink = createTestSink();
-  installLogger(createLogger({ service: "rakazo-worker", sinks: [sink] }));
+  installLogger(createLogger({ service: "orbit-worker", sinks: [sink] }));
   return sink;
 }
 
 function silenceLogger() {
-  installLogger(createLogger({ service: "rakazo-worker", level: "off", sinks: [] }));
+  installLogger(createLogger({ service: "orbit-worker", level: "off", sinks: [] }));
 }
 
 describe("recordHistoryCompactAttemptsExhausted", () => {
@@ -972,7 +972,7 @@ describe("compactHistory", () => {
     });
     harness.purgeHistory.mockRejectedValueOnce(new Error("provider unavailable"));
     const sink = createTestSink();
-    installLogger(createLogger({ service: "rakazo-worker", sinks: [sink] }));
+    installLogger(createLogger({ service: "orbit-worker", sinks: [sink] }));
 
     await expect(compactHistory(harness.deps, "thread-1")).resolves.toBeUndefined();
 
@@ -982,7 +982,7 @@ describe("compactHistory", () => {
         (event) => event.message === "history.compact could not purge stale semantic memory",
       ),
     ).toBe(true);
-    installLogger(createLogger({ service: "rakazo-worker", level: "off", sinks: [] }));
+    installLogger(createLogger({ service: "orbit-worker", level: "off", sinks: [] }));
   });
 
   it("falls back to the deployment's configured default model when no deployment key is available", async () => {

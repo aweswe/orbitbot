@@ -1,7 +1,7 @@
 import type { ModelHeaderRow } from "./model-headers.js";
 import { ModelHeaderRowsSchema, ModelHeadersSchema } from "./model-headers.js";
 
-/** Rakazo names its own request headers; a configured header must not replace them. */
+/** Orbit names its own request headers; a configured header must not replace them. */
 function allowedServerHeaderName(name: string): boolean {
   const lower = name.trim().toLowerCase();
   return (
@@ -15,7 +15,9 @@ function allowedServerHeaderName(name: string): boolean {
       "x-forwarded-for",
       "x-forwarded-host",
       "x-forwarded-proto",
-    ].includes(lower) && !lower.startsWith("x-rakazo-")
+    ].includes(lower) &&
+    !lower.startsWith("x-rakazo-") &&
+    !lower.startsWith("x-orbit-")
   );
 }
 

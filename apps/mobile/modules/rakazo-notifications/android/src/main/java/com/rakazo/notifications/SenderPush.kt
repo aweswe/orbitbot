@@ -60,7 +60,7 @@ internal object SenderPush {
       disposition(
         data,
         { NotificationStorage(context).token.isNotBlank() },
-        { RakazoNotificationService.isOpenThread(data.optString("botId"), data.optString("threadId")) },
+        { OrbitNotificationService.isOpenThread(data.optString("botId"), data.optString("threadId")) },
         { foreground },
       )
     ) {
@@ -112,7 +112,7 @@ internal object SenderPush {
       .addExtras(Bundle().apply {
         putString("rakazo.botId", botId)
         putString("rakazo.threadId", threadId)
-        data.optString("runId").takeIf(String::isNotBlank)?.let { putString(RakazoNotificationService.EXTRA_RUN_ID, it) }
+        data.optString("runId").takeIf(String::isNotBlank)?.let { putString(OrbitNotificationService.EXTRA_RUN_ID, it) }
         data.optString("groupId").takeIf(String::isNotBlank)?.let { putString("rakazo.groupId", it) }
       })
     runCatching { addSender(context, builder, data, title, body) }

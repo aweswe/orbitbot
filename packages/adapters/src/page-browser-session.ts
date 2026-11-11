@@ -4,8 +4,8 @@ import type {
   BrowserNavigateResult,
   BrowserSnapshotNode,
   BrowserSnapshotResult,
-} from "@rakazo/adapter-kit";
-import type { PurchaseCardField } from "@rakazo/contracts";
+} from "@forion/orbit-adapter-kit";
+import type { PurchaseCardField } from "@forion/orbit-contracts";
 import { JSDOM } from "jsdom";
 
 const INTERACTIVE_SELECTOR = [

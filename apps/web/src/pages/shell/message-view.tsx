@@ -1,15 +1,15 @@
-import { plural } from "@lingui/core/macro";
-import { Trans, useLingui } from "@lingui/react/macro";
-import { ChatMarkdown, LinkifiedText, withBlockMentions } from "@rakazo/chat-ui/web";
+import { ChatMarkdown, LinkifiedText, withBlockMentions } from "@forion/orbit-chat-ui/web";
 import type {
   BotAvatarSet,
   LoginFieldInput,
   MessageReaction,
   ThreadMessage,
-} from "@rakazo/contracts";
-import type { ChildBotBlock, PeerExchange } from "@rakazo/core";
-import { isPeerReceiptBlocks, isToolActivityBlock, otherAuthor } from "@rakazo/core";
-import { BotAvatar, Button, cn, resolvePersonaColorDef } from "@rakazo/ui-web";
+} from "@forion/orbit-contracts";
+import type { ChildBotBlock, PeerExchange } from "@forion/orbit-core";
+import { isPeerReceiptBlocks, isToolActivityBlock, otherAuthor } from "@forion/orbit-core";
+import { BotAvatar, Button, cn, resolvePersonaColorDef } from "@forion/orbit-ui-web";
+import { plural } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { UserRound, Volume2, VolumeX } from "lucide-react";
 import { memo, useCallback, useMemo } from "react";
 import { ArtifactFileCard } from "../../components/ArtifactFileCard";
@@ -615,7 +615,11 @@ export const MessageView = memo(function MessageView({
                     >
                       {speaking ? (
                         <>
-                          <VolumeX size={13} strokeWidth={1.5} className="text-primary animate-pulse" />
+                          <VolumeX
+                            size={13}
+                            strokeWidth={1.5}
+                            className="text-primary animate-pulse"
+                          />
                           <Trans>Stop</Trans>
                         </>
                       ) : (

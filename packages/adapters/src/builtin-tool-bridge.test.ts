@@ -37,6 +37,7 @@ describe("built-in tool bridge", () => {
       "find_tool",
       "list_files",
       "message_user",
+      "react_to_message",
       "read_file",
       "read_history",
       "remember",
@@ -57,8 +58,9 @@ describe("built-in tool bridge", () => {
     ]);
     // request_secret carries the card and contact kinds; update_bot carries instructions paging;
     // the history tools point at files from earlier messages; a watch says it takes no other timing;
-    // read_file takes a line range; ask_user carries the content being decided about.
-    expect(definitionBytes(listed)).toBeLessThanOrEqual(32_468);
+    // read_file takes a line range; ask_user carries the content being decided about; the pinned
+    // set also includes react_to_message, which adds about 0.7 KB.
+    expect(definitionBytes(listed)).toBeLessThanOrEqual(33_200);
     expect(deferred.map((tool) => tool.name)).toEqual(
       expect.arrayContaining(["render_plot", "create_space", "generate_secret", "scratchpad_add"]),
     );

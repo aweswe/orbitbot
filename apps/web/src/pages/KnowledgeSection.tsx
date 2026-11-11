@@ -1,10 +1,14 @@
+import type { AgentSkill, AgentSkillCatalogEntry, MemoryDocument } from "@forion/orbit-contracts";
+import { isDeletableMemoryDocument, isEmptyBotMemory } from "@forion/orbit-contracts";
+import { fetchFresh, writeSaved } from "@forion/orbit-core/query";
+import { Badge, Button, SectionHeading, Skeleton, Textarea } from "@forion/orbit-ui-web";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@forion/orbit-ui-web/components/ui/tooltip";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { ORPCError } from "@orpc/client";
-import type { AgentSkill, AgentSkillCatalogEntry, MemoryDocument } from "@rakazo/contracts";
-import { isDeletableMemoryDocument, isEmptyBotMemory } from "@rakazo/contracts";
-import { fetchFresh, writeSaved } from "@rakazo/core/query";
-import { Badge, Button, SectionHeading, Skeleton, Textarea } from "@rakazo/ui-web";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@rakazo/ui-web/components/ui/tooltip";
 import { skipToken, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Download, Plus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";

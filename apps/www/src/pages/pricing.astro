@@ -1,42 +1,29 @@
 ---
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
-import PlanCard from "../components/PlanCard.astro";
-import PricingComparison from "../components/PricingComparison.astro";
-import { githubStarsLabel } from "../github";
 import Button from "../components/Button.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { CREDITS_PLAN, PRICING_PLANS } from "../pricing";
-
-const starsLabel = await githubStarsLabel();
+import { APP_URL, DOCS_URL } from "../site";
 ---
 
 <BaseLayout
-  title="Pricing · Rakazo"
-  markdownAlternate="/pricing.md"
-  description="Self-host Rakazo for free, or let us host it with your own model or Rakazo credits."
+  title="Pricing · Orbit"
+  description="Orbit Bot plans and credits are managed in the app."
 >
   <div class="container">
-    <Header starsLabel={starsLabel} />
+    <Header />
     <main id="main" class="pricing">
       <h1 class="section-heading">Pricing</h1>
-      <div class="pricing__plans">
-        {
-          PRICING_PLANS.map((plan, index) => (
-            <PlanCard plan={plan} primary={index > 0} attr={`pricing-${index}`} />
-          ))
-        }
-      </div>
-      <section class="pricing__credits" aria-label={CREDITS_PLAN.name}>
-        <p>
-          <strong>{CREDITS_PLAN.name}</strong>
-          {CREDITS_PLAN.price} · {CREDITS_PLAN.note}
+      <div class="section-intro">
+        <p class="section-copy">
+          Orbit Bot plans, model credits, and computer hours are shown in the app, where they are tied to
+          your Forion account. Open Orbit to see the current plan and usage for your workspace.
         </p>
-        <Button href={CREDITS_PLAN.action.href} variant="secondary" data-attr="pricing-credits">
-          {CREDITS_PLAN.action.label}
-        </Button>
-      </section>
-      <PricingComparison />
+        <div class="hero__actions">
+          <Button href={APP_URL}>Open Orbit</Button>
+          <Button href={DOCS_URL} variant="secondary" external>Read the docs</Button>
+        </div>
+      </div>
     </main>
     <Footer />
   </div>

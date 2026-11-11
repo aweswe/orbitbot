@@ -1,7 +1,12 @@
-import { useNativeLinkConfirm } from "@rakazo/chat-ui/native";
-import type { PageDetail } from "@rakazo/contracts";
-import { pageCopyRequest, pageCopyResult, pageLinkRequest, pageReplyText } from "@rakazo/core";
-import { webTokensForAppearance } from "@rakazo/ui-tokens";
+import { useNativeLinkConfirm } from "@forion/orbit-chat-ui/native";
+import type { PageDetail } from "@forion/orbit-contracts";
+import {
+  pageCopyRequest,
+  pageCopyResult,
+  pageLinkRequest,
+  pageReplyText,
+} from "@forion/orbit-core";
+import { webTokensForAppearance } from "@forion/orbit-ui-tokens";
 import * as Clipboard from "expo-clipboard";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";

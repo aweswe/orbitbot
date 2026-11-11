@@ -4,7 +4,7 @@ import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { Client } from "pg";
+import { Client, escapeIdentifier } from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import {
   DEFERRED_MIGRATION_MARKER,
@@ -18,6 +18,11 @@ const dbTests = process.env.VERIFY_DATABASE && databaseUrl ? describe.sequential
 const dbPackageDir = fileURLToPath(new URL("..", import.meta.url));
 
 dbTests("deferred migrations", () => {
+  const schema = databaseUrl
+    ? new URL(databaseUrl).searchParams.get("schema") || "public"
+    : "public";
+  const ledger = `${escapeIdentifier(schema)}._prisma_migrations`;
+  const searchPath = { options: `-c search_path=${escapeIdentifier(schema)}` };
   const stamp = `${process.pid}_${Date.now()}`;
   const table = `deferred_probe_${stamp}`;
   const added = `29990101000000_add_${stamp}`;
@@ -54,7 +59,7 @@ dbTests("deferred migrations", () => {
     cpSync(path.join(dbPackageDir, "prisma/migrations"), dir, { recursive: true });
     migration(added, `CREATE TABLE "${table}" (id INT, gone INT);\n`);
     migration(dropped, `${DEFERRED_MIGRATION_MARKER}\nALTER TABLE "${table}" DROP COLUMN gone;\n`);
-    client = new Client({ connectionString: databaseUrl });
+    client = new Client({ connectionString: databaseUrl, ...searchPath });
     await client.connect();
     await client.query(`CREATE SCHEMA "${freshSchema}"`);
   });
@@ -65,7 +70,7 @@ dbTests("deferred migrations", () => {
     await client.query(`DROP TABLE IF EXISTS "${lockTable}"`);
     await client.query(`DROP TABLE IF EXISTS "${indexTable}"`);
     await client.query(`DROP TABLE IF EXISTS "${rolloutTable}"`);
-    await client.query("DELETE FROM _prisma_migrations WHERE migration_name = ANY($1)", [
+    await client.query(`DELETE FROM ${ledger} WHERE migration_name = ANY($1)`, [
       [
         added,
         dropped,
@@ -78,9 +83,10 @@ dbTests("deferred migrations", () => {
         rolloutDropped,
       ],
     ]);
-    await client.query('DELETE FROM "_deferred_migrations" WHERE name = ANY($1)', [
-      [dropped, laterDropped, rolloutDropped],
-    ]);
+    await client.query(
+      `DELETE FROM ${escapeIdentifier(schema)}."_deferred_migrations" WHERE name = ANY($1)`,
+      [[dropped, laterDropped, rolloutDropped]],
+    );
     await client.query(`DROP SCHEMA "${freshSchema}"`);
     await client.end();
     rmSync(dir, { recursive: true, force: true });
@@ -88,7 +94,8 @@ dbTests("deferred migrations", () => {
 
   it("holds nothing back on a database with no migrations applied", async () => {
     const fresh = new URL(databaseUrl!);
-    fresh.searchParams.set("options", `-c search_path=${freshSchema}`);
+    fresh.searchParams.set("schema", freshSchema);
+    fresh.searchParams.delete("options");
     await expect(heldBackMigrations(fresh.toString(), dir)).resolves.toEqual([]);
     await expect(heldBackMigrations(fresh.toString(), dir, [])).resolves.toEqual([]);
   });
@@ -142,10 +149,9 @@ dbTests("deferred migrations", () => {
     ).rejects.toThrow();
 
     // Recover the way an operator would: mark the failed migration rolled back and fix it.
-    await client.query(
-      "UPDATE _prisma_migrations SET rolled_back_at = now() WHERE migration_name = $1",
-      [broken],
-    );
+    await client.query(`UPDATE ${ledger} SET rolled_back_at = now() WHERE migration_name = $1`, [
+      broken,
+    ]);
     writeFileSync(path.join(dir, broken, "migration.sql"), "SELECT 1;\n");
     await deployMigrations({ migrationUrl: databaseUrl!, dbPackageDir, migrationsDir: dir });
     expect(await columns(laterTable)).toEqual(["gone", "id"]);
@@ -156,7 +162,7 @@ dbTests("deferred migrations", () => {
   it("retries a migration that lost a lock to a running query", async () => {
     await client.query(`CREATE TABLE "${lockTable}" (id INT)`);
     migration(lockAdded, `ALTER TABLE "${lockTable}" ADD COLUMN extra INT;\n`);
-    const reader = new Client({ connectionString: databaseUrl });
+    const reader = new Client({ connectionString: databaseUrl, ...searchPath });
     await reader.connect();
     await reader.query("BEGIN");
     await reader.query(`LOCK TABLE "${lockTable}" IN ACCESS SHARE MODE`);
@@ -189,7 +195,8 @@ dbTests("deferred migrations", () => {
         "--input-type=module",
         "-e",
         `import pg from "pg";
-const client = new pg.Client({ connectionString: process.argv[1] });
+const schema = new URL(process.argv[1]).searchParams.get("schema") || "public";
+const client = new pg.Client({ connectionString: process.argv[1], options: '-c search_path="' + schema + '"' });
 await client.connect();
 await client.query("BEGIN ISOLATION LEVEL REPEATABLE READ");
 await client.query("SELECT 1");

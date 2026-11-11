@@ -1,9 +1,9 @@
-import type { ComposerMentionBinding } from "@rakazo/core";
-import { createKeyedListeners, validateComposerMentionBindings } from "@rakazo/core";
+import type { ComposerMentionBinding } from "@forion/orbit-core";
+import { createKeyedListeners, validateComposerMentionBindings } from "@forion/orbit-core";
 
-export const COMPOSER_DRAFT_STORAGE_PREFIX = "rakazo.composerDraft.";
-const COMPOSER_BINDINGS_STORAGE_PREFIX = "rakazo.composerBindings.";
-const COMPOSER_NONCE_STORAGE_PREFIX = "rakazo.composerNonce.";
+export const COMPOSER_DRAFT_STORAGE_PREFIX = "orbit.composerDraft.";
+const COMPOSER_BINDINGS_STORAGE_PREFIX = "orbit.composerBindings.";
+const COMPOSER_NONCE_STORAGE_PREFIX = "orbit.composerNonce.";
 
 /** `appended`: words added from outside the composer while this send was in flight. */
 type ComposerDraftSubmission = { text: string; bindingRecord: string | null; appended?: string };

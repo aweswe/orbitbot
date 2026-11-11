@@ -3,18 +3,18 @@ import type {
   MessageBlock,
   ThreadMessage,
   ThreadMessagePage,
-} from "@rakazo/contracts";
-import { MessageBlock as MessageBlockSchema } from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
+import { MessageBlock as MessageBlockSchema } from "@forion/orbit-contracts";
 import {
   BACKGROUND_RUN_TRIGGERS,
   callIdFromClientNonce,
   isBackgroundInputBlock,
   isBackgroundRunTrigger,
   isPeerReceiptBlocks,
-} from "@rakazo/core";
-import { messageReplyPreview } from "@rakazo/core/message-quote";
-import type { Prisma, PrismaClient } from "@rakazo/db";
-import { loadMessageAuthors } from "@rakazo/db";
+} from "@forion/orbit-core";
+import { messageReplyPreview } from "@forion/orbit-core/message-quote";
+import type { Prisma, PrismaClient } from "@forion/orbit-db";
+import { loadMessageAuthors } from "@forion/orbit-db";
 
 type MessageDb = PrismaClient | Prisma.TransactionClient;
 

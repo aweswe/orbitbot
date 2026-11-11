@@ -1002,7 +1002,8 @@ export const INTEGRATION_CLAIMS_PATH = "/api/v1/integration-claims";
 /** Opened from the email that proves a claimant reads mail at the app's domain. */
 export const INTEGRATION_CLAIM_CONFIRM_PATH = "/api/v1/integration-claims/confirm";
 export const SUBMIT_PLUGIN_URL = "https://orbit.forion.dev/plugins/submit/";
-export const integrationPageUrl = (slug: string) => `https://orbit.forion.dev/integrations/${slug}/`;
+export const integrationPageUrl = (slug: string) =>
+  `https://orbit.forion.dev/integrations/${slug}/`;
 
 /** People type a bare domain like `acme.com`, so a URL without a scheme gets `https://`. */
 const HttpsUrlSchema = z
@@ -1173,7 +1174,7 @@ const McpOAuthClientFields = {
  * authorization server, so the client is bound to it on first use. */
 const McpOAuthClientInput = z.object(McpOAuthClientFields).nullable().optional();
 /** A stdio server has no URL to discover from, so its client names the
- * authorization server (its issuer, e.g. https://accounts.google.com). Rakazo
+ * authorization server (its issuer, e.g. https://accounts.google.com). Orbit
  * runs the OAuth flow and passes the grant through `{{oauth.*}}` env references. */
 const McpStdioOAuthClientInput = z
   .object({ ...McpOAuthClientFields, authorizationServer: McpRemoteEndpointSchema })
@@ -2334,13 +2335,13 @@ export function byokYearlySwitchSavings(status: BillingStatus): number | null {
 export function byokTierChangeOffered(status: BillingStatus): boolean {
   return Boolean(
     status.canManage &&
-    status.funding === "byok" &&
-    !status.byokFreeUntil &&
-    !status.monthlyAmountCents &&
-    !status.cancelAtPeriodEnd &&
-    (status.state === "active" || status.state === "trialing") &&
-    status.byokPriceCents &&
-    (status.byokTiers?.length ?? 0) > 1,
+      status.funding === "byok" &&
+      !status.byokFreeUntil &&
+      !status.monthlyAmountCents &&
+      !status.cancelAtPeriodEnd &&
+      (status.state === "active" || status.state === "trialing") &&
+      status.byokPriceCents &&
+      (status.byokTiers?.length ?? 0) > 1,
   );
 }
 

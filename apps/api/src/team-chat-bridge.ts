@@ -4,14 +4,18 @@ import type {
   TeamChatInboundMessage,
   TeamChatSendRequest,
   TeamChatSendResult,
-} from "@rakazo/adapter-kit";
-import { runContinueJob } from "@rakazo/adapter-kit";
-import type { MessageBlock } from "@rakazo/contracts";
-import { ATTACHMENT_MAX_COUNT, AutomatedSenderPoliciesSchema } from "@rakazo/contracts";
-import { botMessageMaxHops, messageBlockForArtifact, promptTextForAttachments } from "@rakazo/core";
-import type { PrismaClient, ThreadEvents } from "@rakazo/db";
-import { clearEndedRunState, teamChatRunClientNonce } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import { runContinueJob } from "@forion/orbit-adapter-kit";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { ATTACHMENT_MAX_COUNT, AutomatedSenderPoliciesSchema } from "@forion/orbit-contracts";
+import {
+  botMessageMaxHops,
+  messageBlockForArtifact,
+  promptTextForAttachments,
+} from "@forion/orbit-core";
+import type { PrismaClient, ThreadEvents } from "@forion/orbit-db";
+import { clearEndedRunState, teamChatRunClientNonce } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import type { InboundAttachmentStore } from "./inbound-attachments.js";
 import { storeInboundAttachments } from "./inbound-attachments.js";
 import type { MessagingReceipts } from "./messaging-receipts.js";

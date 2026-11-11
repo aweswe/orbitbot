@@ -5,9 +5,9 @@ import type {
   AuditEventMetadata,
   AuditEventPage,
   AuditOutcome,
-} from "@rakazo/contracts";
-import { AuditActorTypeSchema, AuditOutcomeSchema } from "@rakazo/contracts";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-contracts";
+import { AuditActorTypeSchema, AuditOutcomeSchema } from "@forion/orbit-contracts";
+import { getLogger } from "@forion/orbit-logging";
 import { GUEST_ROLE } from "./billing.js";
 import type { Prisma, PrismaClient } from "./client.js";
 import { parsePositiveInteger } from "./client.js";

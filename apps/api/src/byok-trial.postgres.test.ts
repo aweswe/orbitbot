@@ -1,7 +1,12 @@
-import { BillingEmulator } from "@rakazo/adapters";
-import type { Actor } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
-import { asSystem, billingAccountForOrganization, createDb, spaceHasModelAccess } from "@rakazo/db";
+import { BillingEmulator } from "@forion/orbit-adapters";
+import type { Actor } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
+import {
+  asSystem,
+  billingAccountForOrganization,
+  createDb,
+  spaceHasModelAccess,
+} from "@forion/orbit-db";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createBillingService, TRIAL_DAYS } from "./billing.js";
 
@@ -15,7 +20,7 @@ dbTests("own-key trial", () => {
   const actor: Actor = {
     userId,
     spaceId,
-    email: `trial-${stamp}@rakazo.test`,
+    email: `trial-${stamp}@orbit.test`,
     isDeploymentOwner: false,
   };
   const provider = new BillingEmulator({ modelCredits: true, namespace: `trial-${stamp}` });

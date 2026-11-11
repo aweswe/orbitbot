@@ -1,0 +1,9 @@
+{
+  "status": "pending-legal-review",
+  "reviewedBy": null,
+  "reviewDate": null,
+  "scope": "Every file classified as upstream-modified in compliance/provenance.json.",
+  "policy": "Apache-2.0 Section 4(b) requires modified files to carry prominent notices stating that they were changed when the work is redistributed. Source distributions must add a per-file notice or an equivalent per-file change manifest. Compiled client distributions must include ATTRIBUTION.md, THIRD_PARTY_NOTICES.md, and the generated change manifest with the modification statement. Release mode remains blocked until legal review approves the chosen distribution notice. A NOTICE file and a generated per-file change manifest accompany distributions; legal review must confirm they satisfy Section 4(b) for the chosen distribution form.",
+  "supportingManifest": "compliance/modified-files.md",
+  "noticeFile": "NOTICE"
+}

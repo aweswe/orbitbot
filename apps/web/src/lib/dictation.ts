@@ -1,11 +1,11 @@
-import { t } from "@lingui/core/macro";
 import {
   cancelResponseBody,
   readJsonObjectWithin,
   recognitionLocaleTag,
   speechLocaleTag,
   withAbort,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
+import { t } from "@lingui/core/macro";
 import { desktopBridge } from "./desktop.js";
 import { DesktopSpeechRecognition } from "./desktop-speech.js";
 import { getActiveUiLocale } from "./i18n.js";

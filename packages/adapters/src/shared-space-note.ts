@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@rakazo/db";
+import type { PrismaClient } from "@forion/orbit-db";
 import { personSpeakerName } from "./history-speakers.js";
 
 /**

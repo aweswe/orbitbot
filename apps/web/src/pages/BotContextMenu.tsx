@@ -1,5 +1,4 @@
-import { useLingui } from "@lingui/react/macro";
-import type { Bot, BotSection } from "@rakazo/contracts";
+import type { Bot, BotSection } from "@forion/orbit-contracts";
 import {
   ContextMenuContent,
   ContextMenuItem,
@@ -7,7 +6,8 @@ import {
   ContextMenuSub,
   ContextMenuSubContent,
   ContextMenuSubTrigger,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { useLingui } from "@lingui/react/macro";
 import {
   Archive,
   Bell,

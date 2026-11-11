@@ -11,7 +11,7 @@ import {
 
 test("bot creation, editing, and deletion persist", async ({ page }, testInfo) => {
   const stamp = Date.now();
-  await signup(page, `bot-crud-${stamp}@rakazo.test`, "password12", "Bot CRUD");
+  await signup(page, `bot-crud-${stamp}@orbit.test`, "password12", "Bot CRUD");
   await completeOnboarding(page);
   await page.goto("/app");
   await page.waitForURL(/\/app\/[^/]+$/);
@@ -31,7 +31,7 @@ test("bot creation, editing, and deletion persist", async ({ page }, testInfo) =
   });
   await openNewBot(page);
   const dialog = page.getByTestId("create-bot-dialog");
-  await dialog.getByPlaceholder("Name your Bot").fill("New Bot");
+  await dialog.getByPlaceholder("Name your Orbit").fill("New Bot");
   await dialog.getByRole("button", { name: "Create", exact: true }).click();
   await createAborted;
   await expect(page.getByPlaceholder("Message Chief")).toBeVisible();
@@ -56,7 +56,9 @@ test("bot creation, editing, and deletion persist", async ({ page }, testInfo) =
   await expect(page.getByPlaceholder("Message New Bot")).toBeVisible();
   await expect.poll(() => failedPostCreateRefresh).toBe(true);
   await page.unroute("**/rpc/spaces/list");
-  await expect(botList.getByRole("button", { name: /^New Bot/ })).toBeVisible();
+  const newBotRow = botList.locator("[data-roster-bot-id]").filter({ hasText: "New Bot" });
+  await expect(newBotRow).toHaveCount(1);
+  await expect(newBotRow).toBeVisible();
   await page.waitForURL(/\/app\/[^/]+$/);
   const deletedBotPath = new URL(page.url()).pathname;
   await page.evaluate(() => window.dispatchEvent(new Event("focus")));

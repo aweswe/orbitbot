@@ -2,10 +2,14 @@ import { randomBytes } from "node:crypto";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { AdapterContext } from "@rakazo/adapter-kit";
-import { EmailEmulator, ObjectAgentHomeStore, PrismaAgentHomeRecords } from "@rakazo/adapters";
-import type { PrismaClient, SpaceKeyRecord, SpaceKeyStore } from "@rakazo/db";
-import { asSystem, ContentKeyRing, createDb, LocalKeyProvider } from "@rakazo/db";
+import type { AdapterContext } from "@forion/orbit-adapter-kit";
+import {
+  EmailEmulator,
+  ObjectAgentHomeStore,
+  PrismaAgentHomeRecords,
+} from "@forion/orbit-adapters";
+import type { PrismaClient, SpaceKeyRecord, SpaceKeyStore } from "@forion/orbit-db";
+import { asSystem, ContentKeyRing, createDb, LocalKeyProvider } from "@forion/orbit-db";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { MemoryObjectStorage } from "../../../packages/adapters/src/object-storage.test-support.js";
 import { homeRetentionSweep } from "./home-retention.js";
@@ -53,7 +57,7 @@ describePostgres("saved home retention (PostgreSQL)", () => {
       .homeStorageId;
     return [...storage.objects.keys()].filter((key) => !key.includes(`/${storageId}/`));
   };
-  const sent = () => email.sent.filter((message) => message.to === `${id}@rakazo.test`);
+  const sent = () => email.sent.filter((message) => message.to === `${id}@orbit.test`);
 
   beforeAll(async () => {
     const db = createDb(databaseUrl!);
@@ -80,7 +84,7 @@ describePostgres("saved home retention (PostgreSQL)", () => {
     email = new EmailEmulator();
     errors = [];
     await system.user.create({
-      data: { id, name: "Alex", email: `${id}@rakazo.test`, emailVerified: true },
+      data: { id, name: "Alex", email: `${id}@orbit.test`, emailVerified: true },
     });
     await system.organization.create({ data: { id, name: id, slug: id, createdAt: new Date() } });
     await system.member.create({
@@ -194,7 +198,7 @@ describePostgres("saved home retention (PostgreSQL)", () => {
     async (_, paid, text) => {
       const owner = `${id}-owner`;
       await system.user.create({
-        data: { id: owner, name: "Sam", email: `${owner}@rakazo.test`, emailVerified: true },
+        data: { id: owner, name: "Sam", email: `${owner}@orbit.test`, emailVerified: true },
       });
       await system.member.update({ where: { id }, data: { role: "member" } });
       await system.member.create({
@@ -219,7 +223,7 @@ describePostgres("saved home retention (PostgreSQL)", () => {
       await sweep();
       expect(errors).toEqual([]);
       expect(sent()).toHaveLength(0);
-      expect(email.sent.map((message) => message.to)).toEqual([`${owner}@rakazo.test`]);
+      expect(email.sent.map((message) => message.to)).toEqual([`${owner}@orbit.test`]);
       expect(email.sent[0]!.text).toContain(text);
     },
   );

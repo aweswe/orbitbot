@@ -1,9 +1,9 @@
+import type { CodexLiveCatalog, parseModelSecret } from "@forion/orbit-adapters";
+import { findConnectedModelCredential, validateConnectedModelChoice } from "@forion/orbit-adapters";
+import type { Actor } from "@forion/orbit-contracts";
+import { OPENAI_COMPATIBLE_PROVIDER_ID, usableModelId } from "@forion/orbit-contracts";
+import { modelRoleTarget, runAsSystem } from "@forion/orbit-db";
 import { ORPCError } from "@orpc/server";
-import type { CodexLiveCatalog, parseModelSecret } from "@rakazo/adapters";
-import { findConnectedModelCredential, validateConnectedModelChoice } from "@rakazo/adapters";
-import type { Actor } from "@rakazo/contracts";
-import { OPENAI_COMPATIBLE_PROVIDER_ID, usableModelId } from "@rakazo/contracts";
-import { modelRoleTarget, runAsSystem } from "@rakazo/db";
 import type { RouterDeps } from "./router.js";
 
 /**

@@ -1,4 +1,4 @@
-import type { ConnectorTool } from "@rakazo/adapter-kit";
+import type { ConnectorTool } from "@forion/orbit-adapter-kit";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { isToolPauseResult } from "./approval-effect.js";
 import { secretPausedToolResult } from "./run-secret.js";
@@ -48,6 +48,7 @@ vi.mock("@earendil-works/pi-agent-core", () => ({
 
 vi.mock("@earendil-works/pi-ai/providers/all", () => ({
   builtinModels: () => ({
+    setProvider: (provider: unknown) => provider,
     getModel: (_provider: string, modelId: string) =>
       modelId === "secret-pi-model" ? { provider: "test", id: modelId } : undefined,
     streamSimple: () => {

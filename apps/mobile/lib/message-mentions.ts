@@ -1,7 +1,7 @@
-import { plainTextLinkParts } from "@rakazo/chat-ui/native";
-import type { BotAvatarSet } from "@rakazo/contracts";
-import type { MentionTextPart } from "@rakazo/core";
-import { displayName, splitMentionText } from "@rakazo/core";
+import { plainTextLinkParts } from "@forion/orbit-chat-ui/native";
+import type { BotAvatarSet } from "@forion/orbit-contracts";
+import type { MentionTextPart } from "@forion/orbit-core";
+import { displayName, splitMentionText } from "@forion/orbit-core";
 import type { ReactNode } from "react";
 import { createContext } from "react";
 

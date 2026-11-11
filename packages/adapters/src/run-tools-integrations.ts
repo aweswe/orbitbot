@@ -1,7 +1,7 @@
-import type { ConnectorApp } from "@rakazo/adapter-kit";
-import { isBackgroundRunTrigger, redactSecrets } from "@rakazo/core";
-import { normalizedHttpUrl } from "@rakazo/core/egress";
-import { getLogger } from "@rakazo/logging";
+import type { ConnectorApp } from "@forion/orbit-adapter-kit";
+import { isBackgroundRunTrigger, redactSecrets } from "@forion/orbit-core";
+import { normalizedHttpUrl } from "@forion/orbit-core/egress";
+import { getLogger } from "@forion/orbit-logging";
 import { executeCloudAgentTool } from "./cloud-agent-service.js";
 import { collectLogIds } from "./composio-connector.js";
 import { connectApp } from "./connect-app.js";

@@ -1,6 +1,6 @@
-import { ChatMarkdown, LinkifiedText } from "@rakazo/chat-ui/native";
-import { splitMentionText } from "@rakazo/core";
-import type { ColorTokens, ResolvedAppearance } from "@rakazo/ui-tokens";
+import { ChatMarkdown, LinkifiedText } from "@forion/orbit-chat-ui/native";
+import { splitMentionText } from "@forion/orbit-core";
+import type { ColorTokens, ResolvedAppearance } from "@forion/orbit-ui-tokens";
 import { useContext } from "react";
 import type { MobileMessage } from "../lib/api";
 import {

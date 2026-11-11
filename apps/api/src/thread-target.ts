@@ -1,7 +1,6 @@
-import { ORPCError } from "@orpc/server";
-import type { JobPublisher, ProductAnalytics, SandboxProvider } from "@rakazo/adapter-kit";
-import { runContinueJob } from "@rakazo/adapter-kit";
-import { cancelComputerRunWork, screenLeaseIdForRun, toComputerRef } from "@rakazo/adapters";
+import type { JobPublisher, ProductAnalytics, SandboxProvider } from "@forion/orbit-adapter-kit";
+import { runContinueJob } from "@forion/orbit-adapter-kit";
+import { cancelComputerRunWork, screenLeaseIdForRun, toComputerRef } from "@forion/orbit-adapters";
 import type {
   Actor,
   GroupMember,
@@ -9,12 +8,12 @@ import type {
   MessageReaction,
   ReplyPreview,
   ThreadSnapshot,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   GROUP_MEMBER_MIN,
   MessageBlock as MessageBlockSchema,
   resolveBotAvatarSet,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   ACTIVE_RUN_STATUSES,
   BACKGROUND_RUN_TRIGGERS,
@@ -31,9 +30,9 @@ import {
   resolveGroupTargetBotIds,
   runFailureError,
   runReadsThreadHistory,
-} from "@rakazo/core";
-import { deriveMessageQuote, messageReplyPreview } from "@rakazo/core/message-quote";
-import type { Prisma, PrismaClient, ThreadEvents } from "@rakazo/db";
+} from "@forion/orbit-core";
+import { deriveMessageQuote, messageReplyPreview } from "@forion/orbit-core/message-quote";
+import type { Prisma, PrismaClient, ThreadEvents } from "@forion/orbit-db";
 import {
   answerWaitingRunWithTextInTransaction,
   appendEventInTransaction,
@@ -55,8 +54,9 @@ import {
   touchGroupUpdatedAt,
   transientRunEventsWhere,
   withTransactionRetry,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
+import { ORPCError } from "@orpc/server";
 import {
   buildSendPrompt,
   buildUserMessageBlocks,
@@ -1099,7 +1099,13 @@ export async function sendThreadMessage(
           });
           if (stopping) {
             const stop = await cancelThreadRuns(actor, target, { botId: target.botId })(tx);
-            return { message, runs: [active], routineRuns, eventSeq: reactionEventSeq ?? event.seq, stop };
+            return {
+              message,
+              runs: [active],
+              routineRuns,
+              eventSeq: reactionEventSeq ?? event.seq,
+              stop,
+            };
           }
           return { message, runs: [active], routineRuns, eventSeq: reactionEventSeq ?? event.seq };
         }

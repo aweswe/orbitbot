@@ -13,7 +13,6 @@ import { blogPostStructuredData } from "../../blog/structured-data";
 import ComparisonTable from "../../components/ComparisonTable.astro";
 import FaqList from "../../components/FaqList.astro";
 import SiteFrame from "../../components/SiteFrame.astro";
-import { blogOgId, ogPublicPath } from "../../og-pages";
 import { SITE_URL } from "../../site";
 
 type Props =
@@ -22,8 +21,11 @@ type Props =
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
+  const activeCategories = BLOG_CATEGORIES.filter((category) =>
+    posts.some((post) => post.data.category === category),
+  );
   return [
-    ...BLOG_CATEGORIES.map((category) => ({
+    ...activeCategories.map((category) => ({
       params: { slug: category },
       props: { kind: "category" as const, category },
     })),
@@ -67,7 +69,7 @@ const toc = [
   { slug: "related", text: "Related" },
 ];
 const pageUrl = post ? new URL(`/blog/${post.id}/`, SITE_URL).toString() : "";
-const image = post ? new URL(ogPublicPath(blogOgId(post.id)), SITE_URL).toString() : "";
+const image = new URL("/og-image.png", SITE_URL).toString();
 const structuredData = post
   ? blogPostStructuredData({
       pageUrl,
@@ -85,10 +87,9 @@ const structuredData = post
 {
   post && Content ? (
     <SiteFrame
-      title={`${post.data.title} – Rakazo`}
+      title={`${post.data.title} – Orbit`}
       description={post.data.description}
       structuredData={structuredData}
-      ogImage={ogPublicPath(blogOgId(post.id))}
       ogType="article"
     >
       <p class="alt-crumb">
@@ -155,8 +156,8 @@ const structuredData = post
   ) : (
     category && (
       <SiteFrame
-        title={`${CATEGORY_LABEL[category]} – Rakazo blog`}
-        description={`${CATEGORY_LABEL[category]} from the Rakazo blog.`}
+        title={`${CATEGORY_LABEL[category]} – Orbit blog`}
+        description={`${CATEGORY_LABEL[category]} from the Orbit blog.`}
         index={indexed}
       >
         <p class="alt-crumb">

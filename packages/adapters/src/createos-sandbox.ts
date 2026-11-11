@@ -14,13 +14,13 @@ import type {
   SandboxProvider,
   ScreenRequest,
   ScreenSession,
-} from "@rakazo/adapter-kit";
-import { boundedSandboxCommandTimeoutMs } from "@rakazo/core";
+} from "@forion/orbit-adapter-kit";
+import { boundedSandboxCommandTimeoutMs } from "@forion/orbit-core";
 import {
   browserProfilePathForScreen,
   DEFAULT_DESKTOP_ENV,
   quiesceBrowserProfilesCommand,
-} from "@rakazo/core/node/desktop-runtime";
+} from "@forion/orbit-core/node/desktop-runtime";
 import { computerIdleSleepEnabled, sandboxIdleMs } from "./computer-idle.js";
 import { screenSessionKey } from "./computer-screens.js";
 import {

@@ -1,5 +1,5 @@
-import { runContinueJob } from "@rakazo/adapter-kit";
-import { MessageBlock } from "@rakazo/contracts";
+import { runContinueJob } from "@forion/orbit-adapter-kit";
+import { MessageBlock } from "@forion/orbit-contracts";
 import {
   BOT_MESSAGE_MAX_LENGTH,
   botMessageContext,
@@ -8,8 +8,8 @@ import {
   renderBotGroupDirectory,
   renderGroupMembersContext,
   resolveBotAddress,
-} from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
 import {
   appendEventInTransaction,
   createThreadMessageInTransaction,
@@ -17,8 +17,8 @@ import {
   lockSpaceGroup,
   THREAD_LOCK_TRANSACTION_OPTIONS,
   touchGroupUpdatedAt,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import type { ExecutorDeps } from "./executor-deps.js";
 import { runLeaseFor } from "./run-messages.js";
 

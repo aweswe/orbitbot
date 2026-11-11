@@ -1,14 +1,18 @@
-import { ChatMarkdown, MarkdownLongPressContext, withBlockMentions } from "@rakazo/chat-ui/native";
-import type { LoginFieldInput, MessageBlock } from "@rakazo/contracts";
-import { artifactPreviewKind, isAttachmentAudioMimeType } from "@rakazo/contracts";
-import type { ChildBotBlock, PeerExchange } from "@rakazo/core";
+import {
+  ChatMarkdown,
+  MarkdownLongPressContext,
+  withBlockMentions,
+} from "@forion/orbit-chat-ui/native";
+import type { LoginFieldInput, MessageBlock } from "@forion/orbit-contracts";
+import { artifactPreviewKind, isAttachmentAudioMimeType } from "@forion/orbit-contracts";
+import type { ChildBotBlock, PeerExchange } from "@forion/orbit-core";
 import {
   formatFileSize,
   isApprovalAskBlock,
   memberName,
   selectedAskActionLabel,
-} from "@rakazo/core";
-import { fontWeight, typeScale } from "@rakazo/ui-tokens";
+} from "@forion/orbit-core";
+import { fontWeight, typeScale } from "@forion/orbit-ui-tokens";
 import type { ComponentProps } from "react";
 import { memo, useContext, useMemo, useState } from "react";
 import type { TextProps } from "react-native";

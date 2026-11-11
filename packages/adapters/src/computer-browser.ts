@@ -15,9 +15,9 @@ import type {
   PageBrowserCommand,
   PageBrowserResult,
   SandboxProvider,
-} from "@rakazo/adapter-kit";
-import { SandboxRequestRejectedError } from "@rakazo/adapter-kit";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import { SandboxRequestRejectedError } from "@forion/orbit-adapter-kit";
+import { getLogger } from "@forion/orbit-logging";
 import type { FakeBrowserProviderOptions } from "./fake-browser.js";
 import { FakeBrowserProvider } from "./fake-browser.js";
 

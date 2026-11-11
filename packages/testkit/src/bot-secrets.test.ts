@@ -1,11 +1,11 @@
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { AgentRuntimeEvent } from "@rakazo/adapter-kit";
-import { EncryptedSecretStore, ScriptedAgentRuntime } from "@rakazo/adapters";
-import type { createApp } from "@rakazo/api/app";
-import { resolveEncryptionKey } from "@rakazo/core";
-import { answerRunInput, runAsSystem, runAsTenant } from "@rakazo/db";
+import type { AgentRuntimeEvent } from "@forion/orbit-adapter-kit";
+import { EncryptedSecretStore, ScriptedAgentRuntime } from "@forion/orbit-adapters";
+import type { createApp } from "@forion/orbit-api/app";
+import { resolveEncryptionKey } from "@forion/orbit-core";
+import { answerRunInput, runAsSystem, runAsTenant } from "@forion/orbit-db";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { discardBotIntroFromCreate } from "./discard-bot-intro.js";
 import { asSystem } from "./system-db.js";
@@ -33,7 +33,7 @@ describeIntegration("reusable credential lifecycle", () => {
   });
 
   beforeAll(async () => {
-    const { createApp } = await import("@rakazo/api/app");
+    const { createApp } = await import("@forion/orbit-api/app");
     handles = await createApp({
       databaseUrl: process.env.DATABASE_URL!,
       dataDir,
@@ -648,7 +648,7 @@ describeIntegration("reusable credential lifecycle", () => {
       completedAt?: Date;
     } = {},
   ) {
-    const cookie = await signup(`executor-${label}-${stamp}@rakazo.test`, `Executor ${label}`);
+    const cookie = await signup(`executor-${label}-${stamp}@orbit.test`, `Executor ${label}`);
     const me = await rpc<{ userId: string; spaceId: string }>(cookie, "me");
     const bot = await rpc<{ id: string }>(cookie, "bots/create", {
       name: `Executor ${label}`,
