@@ -106,7 +106,7 @@ import {
 } from "@rakazo/db";
 import { SERVICE_NAMES } from "@rakazo/logging";
 import { createRootLogger } from "@rakazo/logging/axiom";
-import { MarkdownMemoryStore } from "@rakazo/memory";
+import { ForionMemoryStore, MarkdownMemoryStore } from "@rakazo/memory";
 
 const logger = await createRootLogger(SERVICE_NAMES.worker);
 
@@ -290,7 +290,10 @@ async function main() {
     // Live per-account Codex catalog; never refreshes or writes credentials.
     codexCatalog: new CodexCatalogCache(),
     sandbox,
-    memory: new MarkdownMemoryStore(prisma),
+    memory:
+      process.env.ORBIT_BILLING_ENABLED === "true"
+        ? new ForionMemoryStore(prisma)
+        : new MarkdownMemoryStore(prisma),
     memoryProviders,
     home,
     artifacts,

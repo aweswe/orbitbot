@@ -144,6 +144,7 @@ export async function modelCreditBillingEnabled(
   deps: Pick<ExecutorDeps, "prisma" | "billingEnabled">,
 ): Promise<boolean> {
   if (deps.billingEnabled !== undefined) return deps.billingEnabled;
+  if (process.env.ORBIT_BILLING_ENABLED === "true") return true;
   return (
     (
       await deps.prisma.deploymentSettings.findUnique({
