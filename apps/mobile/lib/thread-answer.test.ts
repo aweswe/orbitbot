@@ -1,4 +1,4 @@
-import type { LoginFieldInput } from "@rakazo/contracts";
+import type { LoginFieldInput } from "@forion/orbit-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { hapticSuccess } from "./haptics";
 import type { ThreadAnswerContext } from "./thread-answer";

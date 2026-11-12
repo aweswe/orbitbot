@@ -1,12 +1,12 @@
 import { createCipheriv, createHash } from "node:crypto";
 import { Readable } from "node:stream";
-import type { HttpInstance } from "@larksuiteoapi/node-sdk";
 import type {
   AdapterContext,
   MessagingInboundEvent,
   MessagingInboundMessage,
-} from "@rakazo/adapter-kit";
-import { ATTACHMENT_MAX_BYTES, ATTACHMENT_MAX_COUNT } from "@rakazo/contracts";
+} from "@forion/orbit-adapter-kit";
+import { ATTACHMENT_MAX_BYTES, ATTACHMENT_MAX_COUNT } from "@forion/orbit-contracts";
+import type { HttpInstance } from "@larksuiteoapi/node-sdk";
 import { Message } from "chat";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ChatSdkMessagingSurface } from "./chat-sdk-surface.js";
@@ -97,7 +97,7 @@ function messageWith(messageType: string, content: unknown) {
 }
 
 function webhook(body: unknown, headers: Record<string, string> = {}) {
-  return new Request("https://rakazo.test/api/v1/messaging/webhook/lark", {
+  return new Request("https://orbit.test/api/v1/messaging/webhook/lark", {
     method: "POST",
     headers: { "content-type": "application/json", ...headers },
     body: JSON.stringify(body),
@@ -119,7 +119,7 @@ function encryptedWebhook(payload: unknown, validSignature = true, pretty = fals
   const signature = createHash("sha256")
     .update(timestamp + nonce + encryptKey + body)
     .digest("hex");
-  return new Request("https://rakazo.test/api/v1/messaging/webhook/lark", {
+  return new Request("https://orbit.test/api/v1/messaging/webhook/lark", {
     method: "POST",
     headers: {
       "content-type": "application/json",

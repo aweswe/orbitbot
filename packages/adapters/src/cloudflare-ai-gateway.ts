@@ -1,7 +1,7 @@
 import type { ModelsSimpleStreamOptions } from "@earendil-works/pi-ai";
-import type { AgentRunModel } from "@rakazo/adapter-kit";
-import type { ModelRoutingField } from "@rakazo/contracts";
-import { modelRoutingId } from "@rakazo/contracts";
+import type { AgentRunModel } from "@forion/orbit-adapter-kit";
+import type { ModelRoutingField } from "@forion/orbit-contracts";
+import { modelRoutingId } from "@forion/orbit-contracts";
 
 export const CLOUDFLARE_AI_GATEWAY_PROVIDER_ID = "cloudflare-ai-gateway";
 

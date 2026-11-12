@@ -43,6 +43,7 @@ import {
 const fake = vi.hoisted(() => ({ stream: vi.fn(), unavailable: new Set<string>() }));
 vi.mock("@earendil-works/pi-ai/providers/all", () => ({
   builtinModels: () => ({
+    setProvider: (provider: unknown) => provider,
     getModel: (provider: string, id: string) => ({
       provider,
       id,

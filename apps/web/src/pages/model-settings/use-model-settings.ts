@@ -1,5 +1,4 @@
-import { useLingui } from "@lingui/react/macro";
-import type { Me, SettingsScope, ThinkingLevel } from "@rakazo/contracts";
+import type { Me, SettingsScope, ThinkingLevel } from "@forion/orbit-contracts";
 import {
   compatibleEndpointPresets,
   connectionDisplayName,
@@ -7,7 +6,7 @@ import {
   MAX_MODEL_MAX_TOKENS,
   matchCompatibleEndpointPreset,
   savedCompatibleEndpointMatches,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   clampCatalogThinkingLevel,
   compatibleConnectionReady,
@@ -18,8 +17,9 @@ import {
   modelConnectRequest,
   popularModelProvidersFirst,
   savedCompatibleModelIds,
-} from "@rakazo/core";
-import { fetchFresh } from "@rakazo/core/query";
+} from "@forion/orbit-core";
+import { fetchFresh } from "@forion/orbit-core/query";
+import { useLingui } from "@lingui/react/macro";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useCopyText } from "../../lib/copy-text";

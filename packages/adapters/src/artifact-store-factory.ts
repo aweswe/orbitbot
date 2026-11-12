@@ -6,14 +6,14 @@ import type {
   ArtifactPut,
   ArtifactStore,
   ObjectStorage,
-} from "@rakazo/adapter-kit";
-import type { PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-adapter-kit";
+import type { PrismaClient } from "@forion/orbit-db";
 import {
   ContentDecryptionError,
   contentEncryptionOf,
   openArtifact,
   sealArtifact,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
 import type { ArtifactKeys } from "./artifacts.js";
 import { LocalArtifactStore } from "./artifacts.js";
 import { objectStorageConfigFromEnv, S3ObjectStorage } from "./s3-object-storage.js";

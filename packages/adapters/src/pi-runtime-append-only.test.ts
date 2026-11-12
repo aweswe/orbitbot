@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import type { AssistantMessage, Context, Model } from "@earendil-works/pi-ai";
 import { AssistantMessageEventStream } from "@earendil-works/pi-ai/utils/event-stream";
-import type { AgentRunRequest, AgentRuntimeEvent } from "@rakazo/adapter-kit";
+import type { AgentRunRequest, AgentRuntimeEvent } from "@forion/orbit-adapter-kit";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { providerContextPrefix } from "./context-selection.js";
 
@@ -12,6 +12,7 @@ const providerState = vi.hoisted(() => ({
 
 vi.mock("@earendil-works/pi-ai/providers/all", () => ({
   builtinModels: () => ({
+    setProvider: (provider: unknown) => provider,
     getModel: (provider: string, id: string) => providerState.models.get(`${provider}/${id}`),
     streamSimple: (...args: unknown[]) => providerState.stream(...args),
   }),

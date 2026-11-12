@@ -1,5 +1,5 @@
+import { Button } from "@forion/orbit-ui-web";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Button } from "@rakazo/ui-web";
 import { Download } from "lucide-react";
 
 /**

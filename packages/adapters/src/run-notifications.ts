@@ -1,15 +1,15 @@
-import type { NotificationMessage } from "@rakazo/adapter-kit";
-import type { MessageBlock } from "@rakazo/contracts";
+import type { NotificationMessage } from "@forion/orbit-adapter-kit";
+import type { MessageBlock } from "@forion/orbit-contracts";
 import {
   isBackgroundRunTrigger,
   plainTextFromMarkdown,
   redactSecrets,
   truncatedPlainText,
   truncatePlainText,
-} from "@rakazo/core";
-import type { PrismaClient, ThreadEvents } from "@rakazo/db";
-import { countUnreadInboxChats } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-core";
+import type { PrismaClient, ThreadEvents } from "@forion/orbit-db";
+import { countUnreadInboxChats } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import type { ExecutorDeps } from "./executor-deps.js";
 import { notificationIdentity } from "./notification-identity.js";
 

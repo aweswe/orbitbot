@@ -10,9 +10,9 @@ function run(scenario: string, args = ["migrate"]) {
   const dir = mkdtempSync(path.join(tmpdir(), "home-storage-test-"));
   try {
     const source = readFileSync(new URL("./home-storage.ts", import.meta.url), "utf8")
-      .replace('"@rakazo/adapters"', '"./stubs.mjs"')
-      .replace('"@rakazo/core/node/load-root-env"', '"./stubs.mjs"')
-      .replace('"@rakazo/db"', '"./stubs.mjs"');
+      .replace('"@forion/orbit-adapters"', '"./stubs.mjs"')
+      .replace('"@forion/orbit-core/node/load-root-env"', '"./stubs.mjs"')
+      .replace('"@forion/orbit-db"', '"./stubs.mjs"');
     writeFileSync(path.join(dir, "cli.mts"), source);
     writeFileSync(
       path.join(dir, "stubs.mjs"),

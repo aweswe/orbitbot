@@ -1,12 +1,11 @@
-import { Trans, useLingui } from "@lingui/react/macro";
-import type { AccountSecurity, BotAvatarSet, UsageSummary } from "@rakazo/contracts";
+import type { AccountSecurity, BotAvatarSet, UsageSummary } from "@forion/orbit-contracts";
 import {
   APP_LOCALE_LABELS,
   accountDisplay,
   displayName,
   MAX_PASSWORD_LENGTH,
   MIN_PASSWORD_LENGTH,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import {
   Button,
   Field,
@@ -19,7 +18,7 @@ import {
   Switch,
   ToggleGroup,
   ToggleGroupItem,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
 import {
   Table,
   TableBody,
@@ -27,7 +26,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@rakazo/ui-web/components/ui/table";
+} from "@forion/orbit-ui-web/components/ui/table";
+import { Trans, useLingui } from "@lingui/react/macro";
 import type { RefObject } from "react";
 import { useId, useRef, useState } from "react";
 import { AccountAccess, LinkSsoRow } from "../components/AccountAccess";
@@ -40,9 +40,9 @@ import {
   computersAreUnavailable,
 } from "../components/ComputersUnavailableHint";
 import { DesktopUpdateSection } from "../components/DesktopUpdates";
-import { PasskeySettings } from "../components/PasskeySettings";
 import { OrbitCosmicThemePicker } from "../components/OrbitCosmicThemePicker";
 import { OrbitFontPicker } from "../components/OrbitFontPicker";
+import { PasskeySettings } from "../components/PasskeySettings";
 import { SettingsGroup, SettingsRow } from "../components/SettingsRows";
 import { TrustedLinkSitesSettings } from "../components/TrustedLinkSitesSettings";
 import { authClient } from "../lib/auth";
@@ -282,9 +282,7 @@ export function GeneralSettingsPanels({
         <SettingsRow
           label={<Trans>Typography</Trans>}
           control={
-            <div className="text-body-sm text-muted-foreground">
-              Select Orbit font family
-            </div>
+            <div className="text-body-sm text-muted-foreground">Select Orbit font family</div>
           }
         >
           <div className="pt-2.5 pb-1">

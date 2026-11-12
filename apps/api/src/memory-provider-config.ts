@@ -1,15 +1,20 @@
-import { ORPCError } from "@orpc/server";
-import type { SecretStore } from "@rakazo/adapter-kit";
+import type { SecretStore } from "@forion/orbit-adapter-kit";
 import {
   classifyMemoryProviderSettings,
   MemoryProviderPrivateEndpointRequiredError,
   memoryProviderRequiresPrivateEndpoint,
   prepareMemoryProviderConnection,
   toStringRecord,
-} from "@rakazo/adapters";
-import type { Actor } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
-import { findSpaceMemoryConfig, Prisma, requireSpaceOwner, withTransactionRetry } from "@rakazo/db";
+} from "@forion/orbit-adapters";
+import type { Actor } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
+import {
+  findSpaceMemoryConfig,
+  Prisma,
+  requireSpaceOwner,
+  withTransactionRetry,
+} from "@forion/orbit-db";
+import { ORPCError } from "@orpc/server";
 
 export interface MemoryProviderConfigDeps {
   prisma: PrismaClient;

@@ -1,11 +1,11 @@
-import type { AdapterContext } from "@rakazo/adapter-kit";
-import { computerControlExpireJobKey, SandboxAllowanceUsedError } from "@rakazo/adapter-kit";
-import type { ComputerUpdate } from "@rakazo/contracts";
-import { ComputerUpdateSchema } from "@rakazo/contracts";
-import { ACTIVE_RUN_STATUSES } from "@rakazo/core";
-import type { Prisma, PrismaClient, ThreadEvents } from "@rakazo/db";
-import { spaceTakesWork } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+import type { AdapterContext } from "@forion/orbit-adapter-kit";
+import { computerControlExpireJobKey, SandboxAllowanceUsedError } from "@forion/orbit-adapter-kit";
+import type { ComputerUpdate } from "@forion/orbit-contracts";
+import { ComputerUpdateSchema } from "@forion/orbit-contracts";
+import { ACTIVE_RUN_STATUSES } from "@forion/orbit-core";
+import type { Prisma, PrismaClient, ThreadEvents } from "@forion/orbit-db";
+import { spaceTakesWork } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import {
   enqueueTakeoverContinuation,
   isIdleOwnComputerTakeover,

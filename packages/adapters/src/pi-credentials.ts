@@ -10,10 +10,10 @@ import type {
   AgentRunRequest,
   ModelCredentialFailedState,
   ModelCredentialRetireReason,
-} from "@rakazo/adapter-kit";
-import { canonicalPiProviderId } from "@rakazo/contracts";
-import { withAbort } from "@rakazo/core";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import { canonicalPiProviderId } from "@forion/orbit-contracts";
+import { withAbort } from "@forion/orbit-core";
+import { getLogger } from "@forion/orbit-logging";
 import {
   isRetiredModelCredentialError,
   OAUTH_ACCOUNT_CHANGED_ERROR,
@@ -29,7 +29,7 @@ export function toOAuthCredential(value: AgentModelOAuthCredential): OAuthCreden
 
 /**
  * Request-scoped Pi store for one already-authorized provider. Pi's default
- * in-memory store cannot see Rakazo's encrypted database; refreshes are
+ * in-memory store cannot see Orbit's encrypted database; refreshes are
  * serialized here and published back for encryption.
  */
 export class PiRuntimeCredentialStore implements CredentialStore {

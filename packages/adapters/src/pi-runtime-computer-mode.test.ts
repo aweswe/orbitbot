@@ -1,7 +1,7 @@
 import type { AssistantMessage, Model, TranscriptContext } from "@earendil-works/pi-ai";
 import { getCurrentTools } from "@earendil-works/pi-ai";
 import { AssistantMessageEventStream } from "@earendil-works/pi-ai/utils/event-stream";
-import type { AgentRunRequest } from "@rakazo/adapter-kit";
+import type { AgentRunRequest } from "@forion/orbit-adapter-kit";
 import { beforeEach, expect, it, vi } from "vitest";
 import { approvalPausedToolResult } from "./approval-effect.js";
 import { builtinAgentTools } from "./builtin-tools.js";
@@ -9,6 +9,7 @@ import { builtinAgentTools } from "./builtin-tools.js";
 const fake = vi.hoisted(() => ({ models: new Map<string, unknown>(), stream: vi.fn() }));
 vi.mock("@earendil-works/pi-ai/providers/all", () => ({
   builtinModels: () => ({
+    setProvider: (provider: unknown) => provider,
     getModel: (provider: string, id: string) => fake.models.get(`${provider}/${id}`),
     streamSimple: (...args: unknown[]) => fake.stream(...args),
   }),

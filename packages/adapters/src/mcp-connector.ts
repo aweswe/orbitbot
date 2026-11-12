@@ -1,6 +1,26 @@
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import type {
+  AdapterContext,
+  ConnectorCall,
+  ConnectorEvent,
+  ConnectorProvider,
+  ConnectorTool,
+  SecretStore,
+} from "@forion/orbit-adapter-kit";
+import { SecretStoreUnavailableError } from "@forion/orbit-adapter-kit";
+import type { McpOAuthEnvField } from "@forion/orbit-contracts";
+import {
+  isLocalhostOrLoopbackIp,
+  mcpOAuthEnvReferences,
+  resolveMcpOAuthEnv,
+  resolveMcpOAuthFileTemplate,
+} from "@forion/orbit-contracts";
+import type { McpServer, PrismaClient, ThreadEvents } from "@forion/orbit-db";
+import { availableInSpace, itemSecretIn } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
+import { sanitizedError } from "@forion/orbit-logging/monitoring";
 import { UnauthorizedError } from "@modelcontextprotocol/sdk/client/auth.js";
 import { StreamableHTTPError } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import {
@@ -10,26 +30,6 @@ import {
   TooManyRequestsError,
 } from "@modelcontextprotocol/sdk/server/auth/errors.js";
 import { McpError } from "@modelcontextprotocol/sdk/types.js";
-import type {
-  AdapterContext,
-  ConnectorCall,
-  ConnectorEvent,
-  ConnectorProvider,
-  ConnectorTool,
-  SecretStore,
-} from "@rakazo/adapter-kit";
-import { SecretStoreUnavailableError } from "@rakazo/adapter-kit";
-import type { McpOAuthEnvField } from "@rakazo/contracts";
-import {
-  isLocalhostOrLoopbackIp,
-  mcpOAuthEnvReferences,
-  resolveMcpOAuthEnv,
-  resolveMcpOAuthFileTemplate,
-} from "@rakazo/contracts";
-import type { McpServer, PrismaClient, ThreadEvents } from "@rakazo/db";
-import { availableInSpace, itemSecretIn } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
-import { sanitizedError } from "@rakazo/logging/monitoring";
 import { catalogToolPrefix } from "./approval-effect.js";
 import { composioToolBatch } from "./composio-batch.js";
 import {

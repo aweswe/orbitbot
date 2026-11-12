@@ -1,4 +1,4 @@
-import { buildSkillMd } from "@rakazo/core";
+import { buildSkillMd } from "@forion/orbit-core";
 
 const ORBIT_DOCS: ReadonlyArray<readonly [topics: string, url: string]> = [
   ["Getting started, first bot, what Orbit does", "https://docs.orbit.forion.dev/docs.md"],
@@ -6,14 +6,23 @@ const ORBIT_DOCS: ReadonlyArray<readonly [topics: string, url: string]> = [
     "Creating bots, chatting, bot settings, sidebar, search",
     "https://docs.orbit.forion.dev/docs/bots-and-chats.md",
   ],
-  ["Importing an Orbit, OpenClaw, Hermes or ChatGPT agent", "https://docs.orbit.forion.dev/docs/import-an-agent.md"],
+  [
+    "Importing an Orbit, OpenClaw, Hermes or ChatGPT agent",
+    "https://docs.orbit.forion.dev/docs/import-an-agent.md",
+  ],
   [
     "Connecting apps and integrations (Gmail, GitHub, MCP tools)",
     "https://docs.orbit.forion.dev/docs/integrations.md",
   ],
-  ["Slack, Telegram, WhatsApp and other chat apps", "https://docs.orbit.forion.dev/docs/messaging-apps.md"],
+  [
+    "Slack, Telegram, WhatsApp and other chat apps",
+    "https://docs.orbit.forion.dev/docs/messaging-apps.md",
+  ],
   ["Routines, schedules and triggers", "https://docs.orbit.forion.dev/docs/routines.md"],
-  ["The bot's persistent computer, files, using your own computer", "https://docs.orbit.forion.dev/docs/computer.md"],
+  [
+    "The bot's persistent computer, files, using your own computer",
+    "https://docs.orbit.forion.dev/docs/computer.md",
+  ],
   ["Memory", "https://docs.orbit.forion.dev/docs/memory.md"],
   ["Skills", "https://docs.orbit.forion.dev/docs/skills.md"],
   ["Approvals, Allow and Block lists", "https://docs.orbit.forion.dev/docs/approvals.md"],
@@ -31,7 +40,10 @@ const ORBIT_DOCS: ReadonlyArray<readonly [topics: string, url: string]> = [
   ["Bots that create and manage bots", "https://docs.orbit.forion.dev/docs/fleet-management.md"],
   ["Building a plugin", "https://docs.orbit.forion.dev/docs/build-a-plugin.md"],
   ["Self-hosting", "https://docs.orbit.forion.dev/docs/self-host.md"],
-  ["Self-hosted server configuration", "https://docs.orbit.forion.dev/docs/self-host-configuration.md"],
+  [
+    "Self-hosted server configuration",
+    "https://docs.orbit.forion.dev/docs/self-host-configuration.md",
+  ],
 ];
 
 /** Fixed URLs, so fetching one can't carry anything out of a run. */

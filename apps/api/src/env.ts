@@ -2,7 +2,7 @@ import type {
   ApnsVoipConfig,
   PhotonProjectCredentials,
   TelegramBotCredentials,
-} from "@rakazo/adapters";
+} from "@forion/orbit-adapters";
 import {
   apnsVoipConfig,
   boatApiKeyFromEnv,
@@ -14,11 +14,11 @@ import {
   resolveSandboxProvider,
   secretStoreOptionsFromEnv,
   telegramBotsFromEnv,
-} from "@rakazo/adapters";
-import type { OidcConfig } from "@rakazo/auth";
-import type { MinimumClientBuilds, NavLink } from "@rakazo/contracts";
-import { parseMinimumClientBuilds, parseNavLinks } from "@rakazo/contracts";
-import { parseCrispWebsiteId } from "@rakazo/contracts/content-security-policy";
+} from "@forion/orbit-adapters";
+import type { OidcConfig } from "@forion/orbit-auth";
+import type { MinimumClientBuilds, NavLink } from "@forion/orbit-contracts";
+import { parseMinimumClientBuilds, parseNavLinks } from "@forion/orbit-contracts";
+import { parseCrispWebsiteId } from "@forion/orbit-contracts/content-security-policy";
 import {
   attachmentCountFromEnv,
   phoneCallSettings,
@@ -28,10 +28,10 @@ import {
   resolveScreenProxySecret,
   resolveSupervisorToken,
   uploadSizeFromEnv,
-} from "@rakazo/core";
-import { monitoringPseudonymSecret } from "@rakazo/logging";
+} from "@forion/orbit-core";
+import { monitoringPseudonymSecret } from "@forion/orbit-logging";
 
-export { resolveCloudAgentProvider, resolveSandboxProvider } from "@rakazo/adapters";
+export { resolveCloudAgentProvider, resolveSandboxProvider } from "@forion/orbit-adapters";
 
 /** Where a local development stack serves the web client. */
 const DEFAULT_WEB_ORIGIN = "http://127.0.0.1:5173";

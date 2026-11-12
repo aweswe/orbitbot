@@ -1,7 +1,7 @@
-import type { McpServerHealth } from "@rakazo/contracts";
-import { MCP_OAUTH_CLIENT_REQUIRED } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+import type { McpServerHealth } from "@forion/orbit-contracts";
+import { MCP_OAUTH_CLIENT_REQUIRED } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 
 const HEALTH_MESSAGE_MAX = 2000;
 

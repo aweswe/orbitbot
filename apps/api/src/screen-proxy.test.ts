@@ -2,8 +2,8 @@ import {
   addScreenProxyCapability,
   resetRemoteScreenCapabilityReuse,
   SCREEN_TARGET_ENDPOINT,
-} from "@rakazo/core/node/screen-capability";
-import type { PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-core/node/screen-capability";
+import type { PrismaClient } from "@forion/orbit-db";
 import { Hono } from "hono";
 import { describe, expect, it, vi } from "vitest";
 import { mountScreenTarget } from "./screen-proxy.js";

@@ -4,21 +4,21 @@ import { mkdir, mkdtemp, readdir, readFile, rename, rm, writeFile } from "node:f
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 import { promisify } from "node:util";
-import type { AgentDesktopHostScreenOptions } from "@rakazo/adapters/agent-desktop-host-screen";
+import type { AgentDesktopHostScreenOptions } from "@forion/orbit-adapters/agent-desktop-host-screen";
 import {
   agentDesktopCli,
   createAgentDesktopHostScreen,
-} from "@rakazo/adapters/agent-desktop-host-screen";
-import { createCuaHostScreen, cuaDriverConnector } from "@rakazo/adapters/cua-host-screen";
-import type { HostScreen } from "@rakazo/adapters/host-screen";
-import { HostScreenError } from "@rakazo/adapters/host-screen";
+} from "@forion/orbit-adapters/agent-desktop-host-screen";
+import { createCuaHostScreen, cuaDriverConnector } from "@forion/orbit-adapters/cua-host-screen";
+import type { HostScreen } from "@forion/orbit-adapters/host-screen";
+import { HostScreenError } from "@forion/orbit-adapters/host-screen";
 
 export const SCREEN_LOCKED_MESSAGE =
   "The user's screen is locked, so their apps can't be seen or used. Ask them to unlock it, then try again.";
 export const SCREEN_DRIVER_DOWNLOAD_MESSAGE =
   "Screen control couldn't be set up on this computer. Ask the user to check their internet connection, then try again.";
 export const SCREEN_PERMISSION_MESSAGE =
-  "Rakazo needs Accessibility and Screen Recording access on this Mac. Ask the user to allow Rakazo in System Settings > Privacy & Security, quit and reopen Rakazo, then try again.";
+  "Orbit needs Accessibility and Screen Recording access on this Mac. Ask the user to allow Orbit in System Settings > Privacy & Security, quit and reopen Orbit, then try again.";
 
 /** The parts of Electron's macOS permission API this uses. */
 export interface ScreenPermissionApi {

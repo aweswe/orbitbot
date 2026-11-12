@@ -1,12 +1,12 @@
 import { posix } from "node:path";
-import { ATTACHMENT_MAX_COUNT, MESSAGE_REACTIONS } from "@rakazo/contracts";
-import { appendEventInTransaction, createThreadMessageInTransaction } from "@rakazo/db";
+import { ATTACHMENT_MAX_COUNT, MESSAGE_REACTIONS } from "@forion/orbit-contracts";
 import {
   BOT_MESSAGE_MAX_LENGTH,
   isBackgroundRunTrigger,
   redactSecrets,
   resolveBotAddress,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
+import { appendEventInTransaction, createThreadMessageInTransaction } from "@forion/orbit-db";
 import {
   connectAgent,
   messageConnectedAgent,

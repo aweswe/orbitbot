@@ -1,10 +1,10 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { ArtifactStore, JobPublisher } from "@rakazo/adapter-kit";
-import { BillingEmulator } from "@rakazo/adapters";
-import type { Actor } from "@rakazo/contracts";
-import type { PrismaClient, ThreadEvents } from "@rakazo/db";
+import type { ArtifactStore, JobPublisher } from "@forion/orbit-adapter-kit";
+import { BillingEmulator } from "@forion/orbit-adapters";
+import type { Actor } from "@forion/orbit-contracts";
+import type { PrismaClient, ThreadEvents } from "@forion/orbit-db";
 import {
   asSystem,
   createDb,
@@ -12,7 +12,7 @@ import {
   runAsSystem,
   SPACE_DELETION_CLAIM_TIMEOUT_MS,
   SpaceDeletionInProgressError,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { deleteAccountContent } from "./account-deletion.js";
 import { createBillingService } from "./billing.js";
@@ -60,7 +60,7 @@ class FailingCancelEmulator extends BillingEmulator {
 describePostgres("account deletion billing ordering (PostgreSQL)", () => {
   const stamp = `${process.pid}-${Date.now()}`;
   const userId = `acct-billing-${stamp}`;
-  const email = `acct-billing-${stamp}@rakazo.test`;
+  const email = `acct-billing-${stamp}@orbit.test`;
   const organizationIds: string[] = [];
   let prisma: PrismaClient, db: ReturnType<typeof createDb>, root: string;
 

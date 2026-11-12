@@ -3,13 +3,13 @@ import type {
   ModelRoleChoice,
   ModelRoleSettings,
   SettingsScope,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   backupChoiceKey,
   canonicalPiProviderId,
   modelRoleChoiceKey,
   ThinkingLevelSchema,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import type { PrismaClient } from "./client.js";
 import { Prisma } from "./client.js";
 import { lockSpaceSettings, settingsTarget } from "./space-settings.js";

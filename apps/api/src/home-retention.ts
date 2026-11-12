@@ -1,10 +1,10 @@
 import { randomUUID } from "node:crypto";
-import type { TransactionalEmailProvider } from "@rakazo/adapter-kit";
-import type { HomeDeletionReason } from "@rakazo/auth";
-import { emailLocale, homeDeletionEmail } from "@rakazo/auth";
-import type { PrismaClient } from "@rakazo/db";
-import { hasModelAccess, needsBillingPortal, Prisma, runAsSystem } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+import type { TransactionalEmailProvider } from "@forion/orbit-adapter-kit";
+import type { HomeDeletionReason } from "@forion/orbit-auth";
+import { emailLocale, homeDeletionEmail } from "@forion/orbit-auth";
+import type { PrismaClient } from "@forion/orbit-db";
+import { hasModelAccess, needsBillingPortal, Prisma, runAsSystem } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const PLAN_ENDED_DAYS = 30;

@@ -1,5 +1,5 @@
-import type { MessageBlock, ReplyMode } from "@rakazo/contracts";
-import { isBackgroundRunTrigger, isConversationalRun } from "@rakazo/core";
+import type { MessageBlock, ReplyMode } from "@forion/orbit-contracts";
+import { isBackgroundRunTrigger, isConversationalRun } from "@forion/orbit-core";
 import { NO_RESPONSE } from "./silent-reply.js";
 import { messageUserMaxLength } from "./user-progress.js";
 

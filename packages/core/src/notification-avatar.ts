@@ -1,5 +1,5 @@
-import { BotAvatarValueSchema, parseBotAvatarValue } from "@rakazo/contracts";
-import { lightTokens } from "@rakazo/ui-tokens";
+import { BotAvatarValueSchema, parseBotAvatarValue } from "@forion/orbit-contracts";
+import { lightTokens } from "@forion/orbit-ui-tokens";
 import type { AvatarEyes } from "./avatar-shape.js";
 import {
   avatarEyeRects,

@@ -1,6 +1,6 @@
-import type { JobPublisher } from "@rakazo/adapter-kit";
-import type { PrismaClient } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+import type { JobPublisher } from "@forion/orbit-adapter-kit";
+import type { PrismaClient } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { clearRoutineBackoff } from "./routine-backoff.js";
 
 /**

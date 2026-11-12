@@ -1,5 +1,5 @@
-import type { MessageBlock } from "@rakazo/contracts";
-import { typeScale } from "@rakazo/ui-tokens";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { typeScale } from "@forion/orbit-ui-tokens";
 import { useEffect, useState } from "react";
 import type { ViewProps } from "react-native";
 import { Alert, StyleSheet, Text, View } from "react-native";

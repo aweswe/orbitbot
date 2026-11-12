@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import type { MessageReaction, ThreadMessage } from "@rakazo/contracts";
+import type { MessageReaction, ThreadMessage } from "@forion/orbit-contracts";
 import type { ReactNode } from "react";
 import { act } from "react";
 import type { Root } from "react-dom/client";

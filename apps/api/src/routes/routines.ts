@@ -1,19 +1,19 @@
-import { ORPCError } from "@orpc/server";
-import { routineJobKey, routineWakeupJob, runContinueJob } from "@rakazo/adapter-kit";
+import { routineJobKey, routineWakeupJob, runContinueJob } from "@forion/orbit-adapter-kit";
 import {
   finishRoutineHandover,
   parseRoutineWatch,
   stableStringify,
   validateRoutineWatch,
-} from "@rakazo/adapters";
-import { canonicalPiProviderId, ROUTINE_TRIGGER_REQUIRED } from "@rakazo/contracts";
+} from "@forion/orbit-adapters";
+import { canonicalPiProviderId, ROUTINE_TRIGGER_REQUIRED } from "@forion/orbit-contracts";
 import {
   expandSkillReferencesInPrompt,
   hasMixedOneShotSchedule,
   isOneShotRoutineCrons,
-} from "@rakazo/core";
-import { IsolationError, isRecordNotFound, Prisma } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-core";
+import { IsolationError, isRecordNotFound, Prisma } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
+import { ORPCError } from "@orpc/server";
 import { assertEmailTrigger } from "../bot-email-address.js";
 import { assertRoutineModel } from "../model-pins.js";
 import { listRoutineRuns } from "../routine-runs.js";

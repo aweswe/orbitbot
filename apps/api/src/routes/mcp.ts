@@ -1,6 +1,5 @@
 import { createHash } from "node:crypto";
-import { ORPCError } from "@orpc/server";
-import { runContinueJob } from "@rakazo/adapter-kit";
+import { runContinueJob } from "@forion/orbit-adapter-kit";
 import {
   applyMcpSourcePreset,
   createPluginMarketplace,
@@ -15,11 +14,11 @@ import {
   recordMcpServerHealth,
   sanitizeIntegrationError,
   verifyMcpInstall,
-} from "@rakazo/adapters";
-import type { Actor } from "@rakazo/contracts";
-import { MCP_OAUTH_REDIRECT_MISMATCH, signupSurveyAsksTeamSize } from "@rakazo/contracts";
-import { comparePlugins, containsSecret, matchesPluginQuery } from "@rakazo/core";
-import type { Prisma } from "@rakazo/db";
+} from "@forion/orbit-adapters";
+import type { Actor } from "@forion/orbit-contracts";
+import { MCP_OAUTH_REDIRECT_MISMATCH, signupSurveyAsksTeamSize } from "@forion/orbit-contracts";
+import { comparePlugins, containsSecret, matchesPluginQuery } from "@forion/orbit-core";
+import type { Prisma } from "@forion/orbit-db";
 import {
   AVAILABILITY_SELECT,
   availableInSpace,
@@ -27,8 +26,9 @@ import {
   isUniqueViolation,
   itemSecretIn,
   spaceAvailability,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
+import { ORPCError } from "@orpc/server";
 import { requireAdmin } from "../admins.js";
 import {
   assertNameFreeWhereAvailable,

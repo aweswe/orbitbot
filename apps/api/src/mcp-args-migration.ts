@@ -1,7 +1,7 @@
-import type { SecretStore } from "@rakazo/adapter-kit";
-import { persistPreparedSecret } from "@rakazo/adapters";
-import type { PrismaClient } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+import type { SecretStore } from "@forion/orbit-adapter-kit";
+import { persistPreparedSecret } from "@forion/orbit-adapters";
+import type { PrismaClient } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { serverSecretSpace } from "./availability.js";
 import type { McpSecretMaterial } from "./mcp-material.js";
 import { legacyMcpArgs } from "./mcp-material.js";

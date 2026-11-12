@@ -1,15 +1,19 @@
-import { Plural, Trans, useLingui } from "@lingui/react/macro";
-import { useLinkFavicon } from "@rakazo/chat-ui/web";
+import { useLinkFavicon } from "@forion/orbit-chat-ui/web";
 import type {
   CapabilityInstall,
   McpServer,
   PluginMarketplaceEntry,
   PluginPart,
   PluginPreview,
-} from "@rakazo/contracts";
-import { mcpServerConnection, mcpServerNeedsSignIn, PluginPreviewSchema } from "@rakazo/contracts";
-import { installedPluginParts } from "@rakazo/core";
-import { Button, Spinner } from "@rakazo/ui-web";
+} from "@forion/orbit-contracts";
+import {
+  mcpServerConnection,
+  mcpServerNeedsSignIn,
+  PluginPreviewSchema,
+} from "@forion/orbit-contracts";
+import { installedPluginParts } from "@forion/orbit-core";
+import { Button, Spinner } from "@forion/orbit-ui-web";
+import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { ArrowUpRight, Check, ChevronLeft, FileText, Plug } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { connectMcpOauth } from "../../lib/mcp-connect";

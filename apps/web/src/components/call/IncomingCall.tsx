@@ -1,7 +1,7 @@
+import type { Bot } from "@forion/orbit-contracts";
+import { nextIncomingCall, respondToIncomingCall } from "@forion/orbit-core";
+import { BotAvatar, Button, defaultBotAvatarValue } from "@forion/orbit-ui-web";
 import { useLingui } from "@lingui/react/macro";
-import type { Bot } from "@rakazo/contracts";
-import { nextIncomingCall, respondToIncomingCall } from "@rakazo/core";
-import { BotAvatar, Button, defaultBotAvatarValue } from "@rakazo/ui-web";
 import { Phone, PhoneOff } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { isLeavingSession, startCall, useCallSession } from "../../lib/call-session";

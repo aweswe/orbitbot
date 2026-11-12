@@ -1,8 +1,8 @@
+import type { LinkFavicons } from "@forion/orbit-chat-ui/web";
+import { LinkFaviconsContext, RemoteImagesContext } from "@forion/orbit-chat-ui/web";
+import { analyticsScreen } from "@forion/orbit-core";
+import { Button } from "@forion/orbit-ui-web";
 import { Trans, useLingui } from "@lingui/react/macro";
-import type { LinkFavicons } from "@rakazo/chat-ui/web";
-import { LinkFaviconsContext, RemoteImagesContext } from "@rakazo/chat-ui/web";
-import { analyticsScreen } from "@rakazo/core";
-import { Button, OrbitPlanetAvatar } from "@rakazo/ui-web";
 import {
   Suspense,
   useEffect,
@@ -16,6 +16,7 @@ import { formatElapsed, LoadingState } from "./components/ai/primitives";
 import { CallLayout } from "./components/call/CallLayout";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { MarkdownLinkPrompt } from "./components/markdown-link-prompt";
+import { OrbitLogoMark } from "./components/OrbitLogoMark";
 import { PageLoading } from "./components/PageLoading";
 import { SubscriptionGate } from "./components/SubscriptionGate";
 import { authClient } from "./lib/auth";
@@ -346,24 +347,24 @@ function SessionUnavailable({ refetch }: { refetch: () => Promise<void> }) {
     <div className="relative grid h-full place-items-center overflow-hidden bg-background px-6 text-center select-none">
       {/* Cosmic ambient glow backdrop */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="h-96 w-96 rounded-full bg-cyan-500/10 blur-[120px] animate-pulse" />
-        <div className="h-80 w-80 rounded-full bg-amber-500/10 blur-[140px]" />
+        <div className="h-96 w-96 rounded-full bg-primary/10 blur-[120px] animate-pulse" />
+        <div className="h-80 w-80 rounded-full bg-warning/10 blur-[140px]" />
       </div>
 
       {/* Floating glassmorphic orbital status card */}
       <div className="relative flex flex-col items-center max-w-sm sm:max-w-md w-full p-8 sm:p-10 rounded-3xl bg-card/60 border border-border/50 backdrop-blur-2xl shadow-2xl">
         {/* Animated Orbit Planet with pulsing signal radar rings */}
         <div className="relative mb-6 flex items-center justify-center">
-          <div className="absolute h-24 w-24 rounded-full border border-cyan-500/25 animate-ping opacity-35" />
-          <div className="absolute h-32 w-32 rounded-full border border-amber-500/20 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] opacity-25" />
-          <OrbitPlanetAvatar size={64} isWorking={true} ringColor="#ff8a3d" />
+          <div className="absolute h-24 w-24 rounded-full border border-primary/25 animate-ping opacity-35" />
+          <div className="absolute h-32 w-32 rounded-full border border-warning/20 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] opacity-25" />
+          <OrbitLogoMark className="size-16" />
         </div>
 
         {/* Live Reconnecting Status Pill */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-500 dark:text-amber-400 text-caption font-mono font-medium tracking-wide">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-warning/10 border border-warning/25 text-warning text-caption font-mono font-medium tracking-wide">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-warning/75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-warning" />
           </span>
           <span>{t`Reconnecting`}</span>
           <span className="text-muted-foreground/50">•</span>
@@ -375,7 +376,9 @@ function SessionUnavailable({ refetch }: { refetch: () => Promise<void> }) {
           <Trans>Lost connection to Orbit</Trans>
         </h2>
         <p className="mt-2 text-body-sm text-muted-foreground/80 leading-relaxed max-w-[280px]">
-          <Trans>Can&apos;t reach the server. Attempting to re-establish your workspace link...</Trans>
+          <Trans>
+            Can&apos;t reach the server. Attempting to re-establish your workspace link...
+          </Trans>
         </p>
 
         {/* Action Button */}
@@ -415,15 +418,15 @@ function AppFailed() {
     >
       {/* Subtle red/cosmic alert ambient glow */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="h-96 w-96 rounded-full bg-rose-500/10 blur-[130px]" />
+        <div className="h-96 w-96 rounded-full bg-destructive/10 blur-[130px]" />
       </div>
 
       <div className="relative flex flex-col items-center max-w-sm sm:max-w-md w-full p-8 sm:p-10 rounded-3xl bg-card/60 border border-border/50 backdrop-blur-2xl shadow-2xl">
         <div className="relative mb-6 flex items-center justify-center">
-          <OrbitPlanetAvatar size={64} isWorking={false} ringColor="#f43f5e" />
+          <OrbitLogoMark className="size-16" />
         </div>
 
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-500 dark:text-rose-400 text-caption font-medium">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-destructive/10 border border-destructive/20 text-destructive text-caption font-medium">
           <Trans>System Interruption</Trans>
         </div>
 
@@ -431,7 +434,9 @@ function AppFailed() {
           <Trans>Something went wrong</Trans>
         </h2>
         <p className="mt-2 text-body-sm text-muted-foreground/80 leading-relaxed max-w-[280px]">
-          <Trans>Orion encountered an unexpected state. Refreshing will reload the interface cleanly.</Trans>
+          <Trans>
+            Orbit encountered an unexpected state. Refreshing will reload the interface cleanly.
+          </Trans>
         </p>
 
         <div className="mt-6">

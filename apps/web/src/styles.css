@@ -1,75 +1,34 @@
 @import "tailwindcss";
-@import "@rakazo/ui-web/styles.css";
+@import "@forion/orbit-ui-web/styles.css";
 
-@font-face {
-  font-family: 'Corpta DEMO';
-  src: url('/assets/font/Corpta%20DEMO.otf') format('opentype'),
-       url('/assets/font/Corpta DEMO.otf');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
+html[data-font="google-sans"],
+html[data-font="google-sans"] * {
+  font-family:
+    "Product Sans", "Google Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
 }
-
-.orbit-brand-text {
-  font-family: 'Corpta DEMO', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-  letter-spacing: -0.01em;
-}
-
-html[data-font='google-sans'], html[data-font='google-sans'] * {
-  font-family: "Product Sans", "Google Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-}
-html[data-font='bricolage-grotesque'], html[data-font='bricolage-grotesque'] * {
+html[data-font="bricolage-grotesque"],
+html[data-font="bricolage-grotesque"] * {
   font-family: "Bricolage Grotesque", sans-serif !important;
 }
-html[data-font='poppins'], html[data-font='poppins'] * {
+html[data-font="poppins"],
+html[data-font="poppins"] * {
   font-family: "Poppins", sans-serif !important;
 }
-html[data-font='roboto'], html[data-font='roboto'] * {
+html[data-font="roboto"],
+html[data-font="roboto"] * {
   font-family: "Roboto", sans-serif !important;
 }
-html[data-font='geist-mono'], html[data-font='geist-mono'] * {
+html[data-font="geist-mono"],
+html[data-font="geist-mono"] * {
   font-family: "Geist Mono", monospace !important;
 }
-html[data-font='space-mono'], html[data-font='space-mono'] * {
+html[data-font="space-mono"],
+html[data-font="space-mono"] * {
   font-family: "Space Mono", monospace !important;
 }
-html[data-font='inter'], html[data-font='inter'] * {
+html[data-font="inter"],
+html[data-font="inter"] * {
   font-family: "Inter", sans-serif !important;
-}
-
-/* Ensure Corpta DEMO is preserved for Orbit branding even under font overrides */
-.orbit-brand-text, .orbit-brand-text * {
-  font-family: 'Corpta DEMO', -apple-system, sans-serif !important;
-}
-
-/* ── Orion ──────────────────────────────────────────────────────────────── */
-.orion-mark {
-  filter: drop-shadow(0 0 6px color-mix(in srgb, currentColor 35%, transparent));
-}
-
-.orion-star {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: orion-twinkle 5.5s ease-in-out infinite;
-}
-
-@keyframes orion-twinkle {
-  0%, 100% { opacity: 0.85; transform: scale(1); }
-  45% { opacity: 1; transform: scale(1.18); }
-  70% { opacity: 0.7; transform: scale(0.94); }
-}
-
-.orion-lift {
-  transition: transform 240ms cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 240ms ease;
-}
-.orion-lift:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 30px -18px color-mix(in srgb, currentColor 60%, transparent);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .orion-star { animation: none; }
-  .orion-lift { transition: none; }
 }
 
 @source "../../packages/ui-web/src/**/*.{ts,tsx}";
@@ -235,22 +194,24 @@ body,
 :root,
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: #090a10;
-  --surface: #11131c;
-  --surface-2: #181b28;
-  --surface-hover: #1e2233;
+  --bg: #050508;
+  --surface: #0a0a0c;
+  --surface-2: #0a0a0c;
+  --surface-hover: #18181b;
   --border: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.16);
-  --text: #f8fafc;
-  --text-muted: #94a3b8;
-  --text-subtle: #64748b;
+  --text: #fafafa;
+  --text-muted: #a1a1aa;
+  --text-subtle: #71717a;
   --accent: #22d3ee;
   --accent-hover: #06b6d4;
-  --accent-foreground: #090a10;
+  --accent-foreground: #050508;
+  --orbit-grad-via: #ec4899;
+  --orbit-grad-to: #f97316;
   --success: #10b981;
   --warning: #f59e0b;
   --danger: #f43f5e;
-  --ring: #22d3ee;
+  --ring: rgba(255, 255, 255, 0.32);
   --shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.5);
   --glow-color: #22d3ee;
   --glow-opacity: 0.12;
@@ -268,7 +229,7 @@ body,
   --primary-foreground: var(--accent-foreground);
   --accent-primary: var(--accent);
   --destructive: var(--danger);
-  --sidebar: var(--bg);
+  --sidebar: var(--surface);
   --sidebar-foreground: var(--text);
   --sidebar-border: var(--border);
   --sidebar-accent: var(--surface-hover);
@@ -279,24 +240,24 @@ body,
 [data-theme="light"],
 [data-orbit-theme="cosmic-light"] {
   color-scheme: light;
-  --bg: #f8fafc;
-  --surface: #ffffff;
-  --surface-2: #f1f5f9;
-  --surface-hover: #e2e8f0;
-  --border: #e2e8f0;
-  --border-strong: #cbd5e1;
-  --text: #0f172a;
-  --text-muted: #475569;
-  --text-subtle: #64748b;
-  --accent: #0284c7;
-  --accent-hover: #0369a1;
+  --bg: #ffffff;
+  --surface: #f4f4f5;
+  --surface-2: #f4f4f5;
+  --surface-hover: #e4e4e7;
+  --border: rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 0, 0, 0.15);
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-subtle: #71717a;
+  --accent: #0891b2;
+  --accent-hover: #0e7490;
   --accent-foreground: #ffffff;
   --success: #059669;
   --warning: #d97706;
   --danger: #e11d48;
-  --ring: #0284c7;
+  --ring: rgba(24, 24, 27, 0.22);
   --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
-  --glow-color: #0284c7;
+  --glow-color: #0891b2;
   --glow-opacity: 0.06;
 
   /* Framework Mappings */
@@ -312,7 +273,7 @@ body,
   --primary-foreground: var(--accent-foreground);
   --accent-primary: var(--accent);
   --destructive: var(--danger);
-  --sidebar: var(--bg);
+  --sidebar: var(--surface);
   --sidebar-foreground: var(--text);
   --sidebar-border: var(--border);
   --sidebar-accent: var(--surface-hover);
@@ -320,7 +281,7 @@ body,
 }
 
 /* ── Cosmic Accent Variants ── */
-[data-orbit-theme='deep-space'] {
+[data-orbit-theme="deep-space"] {
   --accent: #22d3ee;
   --accent-hover: #06b6d4;
   --accent-foreground: #090a10;
@@ -328,7 +289,7 @@ body,
   --primary: #22d3ee;
   --glow-color: #22d3ee;
 }
-[data-orbit-theme='nebula'] {
+[data-orbit-theme="nebula"] {
   --accent: #e879f9;
   --accent-hover: #d946ef;
   --accent-foreground: #090a10;
@@ -336,7 +297,7 @@ body,
   --primary: #e879f9;
   --glow-color: #e879f9;
 }
-[data-orbit-theme='solar'] {
+[data-orbit-theme="solar"] {
   --accent: #fb923c;
   --accent-hover: #f97316;
   --accent-foreground: #090a10;
@@ -344,15 +305,15 @@ body,
   --primary: #fb923c;
   --glow-color: #fb923c;
 }
-[data-orbit-theme='phantom'] {
-  --accent: #00FF41;
+[data-orbit-theme="phantom"] {
+  --accent: #00ff41;
   --accent-hover: #00cc33;
   --accent-foreground: #090a10;
-  --ring: #00FF41;
-  --primary: #00FF41;
-  --glow-color: #00FF41;
+  --ring: #00ff41;
+  --primary: #00ff41;
+  --glow-color: #00ff41;
 }
-[data-orbit-theme='ocean'] {
+[data-orbit-theme="ocean"] {
   --accent: #38bdf8;
   --accent-hover: #0284c7;
   --accent-foreground: #090a10;
@@ -360,7 +321,7 @@ body,
   --primary: #38bdf8;
   --glow-color: #38bdf8;
 }
-[data-orbit-theme='blueprint'] {
+[data-orbit-theme="blueprint"] {
   --accent: #3b82f6;
   --accent-hover: #2563eb;
   --accent-foreground: #ffffff;
@@ -376,8 +337,16 @@ body,
   pointer-events: none;
   z-index: var(--z-ambient, 0);
   background:
-    radial-gradient(60% 45% at 50% 0%, color-mix(in srgb, var(--glow-color) calc(var(--glow-opacity) * 100%), transparent), transparent 70%),
-    radial-gradient(40% 30% at 85% 10%, color-mix(in srgb, var(--glow-color) calc(var(--glow-opacity) * 50%), transparent), transparent 70%);
+    radial-gradient(
+      60% 45% at 50% 0%,
+      color-mix(in srgb, var(--glow-color) calc(var(--glow-opacity) * 100%), transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      40% 30% at 85% 10%,
+      color-mix(in srgb, var(--glow-color) calc(var(--glow-opacity) * 50%), transparent),
+      transparent 70%
+    );
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -393,8 +362,10 @@ body,
 }
 
 @keyframes ambientDrift {
-  0% { transform: translateY(0) scale(1); }
-  100% { transform: translateY(14px) scale(1.02); }
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(14px) scale(1.02);
+  }
 }
-
-

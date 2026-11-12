@@ -62,7 +62,7 @@ export const ORBIT_FONTS: OrbitFontOption[] = [
 ];
 
 export function OrbitFontPicker() {
-  const [activeFont, setActiveFont] = useState<string>("google-sans");
+  const [activeFont, setActiveFont] = useState<string>("poppins");
 
   useEffect(() => {
     try {
@@ -84,12 +84,14 @@ export function OrbitFontPicker() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent text-foreground border border-border">
           <Type className="size-4" />
         </div>
         <div>
           <h4 className="text-body-sm font-semibold text-foreground">Orbit Typography</h4>
-          <p className="text-caption text-muted-foreground">Select your workspace font family across all chat, sidebars, and panels.</p>
+          <p className="text-caption text-muted-foreground">
+            Select your workspace font family across all chat, sidebars, and panels.
+          </p>
         </div>
       </div>
 
@@ -103,19 +105,19 @@ export function OrbitFontPicker() {
               onClick={() => selectFont(font.id)}
               className={`group relative flex flex-col items-start gap-1 rounded-xl p-3.5 text-left transition-all border ${
                 isSelected
-                  ? "bg-cyan-500/[0.08] border-cyan-400/50 shadow-[0_0_15px_rgba(34,211,238,0.12)]"
-                  : "bg-white/[0.02] border-white/10 hover:border-white/20 hover:bg-white/[0.04]"
+                  ? "bg-primary/10 border-primary/40 shadow-sm"
+                  : "bg-card border-border hover:border-foreground/20 hover:bg-muted"
               }`}
             >
               <div className="flex w-full items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="text-body-sm font-medium text-foreground">{font.name}</span>
-                  <span className="text-caption font-medium text-muted-foreground/80 px-1.5 py-0.5 rounded bg-white/5 border border-white/5">
+                  <span className="text-caption font-medium text-muted-foreground/80 px-1.5 py-0.5 rounded bg-muted border border-border">
                     {font.category}
                   </span>
                 </div>
                 {isSelected && (
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500 text-black">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground">
                     <Check className="size-3 stroke-[2.5]" />
                   </span>
                 )}
@@ -133,4 +135,3 @@ export function OrbitFontPicker() {
     </div>
   );
 }
-

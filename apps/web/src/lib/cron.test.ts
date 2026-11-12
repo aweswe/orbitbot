@@ -1,4 +1,4 @@
-import { formatCron } from "@rakazo/core";
+import { formatCron } from "@forion/orbit-core";
 import { describe, expect, it } from "vitest";
 import { cronLabels } from "./cron";
 

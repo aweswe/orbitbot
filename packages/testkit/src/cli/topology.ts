@@ -1,9 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { createServer } from "node:net";
 import path from "node:path";
-import type { RunsListOutput, ThreadSnapshot } from "@rakazo/contracts";
-import { isTerminal } from "@rakazo/core";
-import { computerNetworkNameFor } from "@rakazo/sandbox-supervisor/computer-spec";
+import type { RunsListOutput, ThreadSnapshot } from "@forion/orbit-contracts";
+import { isTerminal } from "@forion/orbit-core";
+import { computerNetworkNameFor } from "@forion/orbit-sandbox-supervisor/computer-spec";
 
 const composeFile = path.resolve("infra/compose/docker-compose.topology.yml");
 const keep = process.argv.includes("--keep");

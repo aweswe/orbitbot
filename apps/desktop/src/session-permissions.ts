@@ -1,5 +1,5 @@
-import { COMPUTER_SCREEN_PATH } from "@rakazo/contracts/content-security-policy";
-import { secureHttpOrigin as httpOrigin } from "@rakazo/contracts/network-host";
+import { COMPUTER_SCREEN_PATH } from "@forion/orbit-contracts/content-security-policy";
+import { secureHttpOrigin as httpOrigin } from "@forion/orbit-contracts/network-host";
 import type { Session, WebContents } from "electron";
 
 type AppPermissionTarget = {

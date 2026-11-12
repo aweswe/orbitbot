@@ -2,8 +2,8 @@ import {
   disabledBuiltinToolSet,
   FLEET_TOOL_NAMES,
   FLEET_WRITE_TOOL_NAMES,
-} from "@rakazo/contracts";
-import { isBackgroundRunTrigger, isOwnerStartedRun } from "@rakazo/core";
+} from "@forion/orbit-contracts";
+import { isBackgroundRunTrigger, isOwnerStartedRun } from "@forion/orbit-core";
 import { builtinAgentTools } from "./builtin-tools.js";
 import { selectCloudAgentTools } from "./cloud-agent-tools-select.js";
 import { selectMemoryTools } from "./memory-tools.js";

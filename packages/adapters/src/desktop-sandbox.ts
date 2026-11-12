@@ -28,8 +28,8 @@ import type {
   ScreenRequest,
   ScreenSession,
   WorkspaceDirectoryRequest,
-} from "@rakazo/adapter-kit";
-import { boundedSandboxCommandTimeoutMs } from "@rakazo/core";
+} from "@forion/orbit-adapter-kit";
+import { boundedSandboxCommandTimeoutMs } from "@forion/orbit-core";
 import {
   applyPlaceholderAction,
   boundedComputerActions,

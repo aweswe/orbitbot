@@ -1,7 +1,7 @@
-import type { VoiceVerifyResult } from "@rakazo/adapter-kit";
-import { VoiceAccountError } from "@rakazo/adapter-kit";
-import type { VoiceAccountErrorCode } from "@rakazo/contracts";
-import { cancelResponseBody } from "@rakazo/core";
+import type { VoiceVerifyResult } from "@forion/orbit-adapter-kit";
+import { VoiceAccountError } from "@forion/orbit-adapter-kit";
+import type { VoiceAccountErrorCode } from "@forion/orbit-contracts";
+import { cancelResponseBody } from "@forion/orbit-core";
 import { readBodyCapped } from "./web-ssrf.js";
 
 /** A 2,000-character utterance should stay far below this, even at high MP3 bitrates. */

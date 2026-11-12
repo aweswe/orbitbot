@@ -4,9 +4,8 @@ import { randomUUID } from "node:crypto";
 import { access, lstat, open, readFile, rename, unlink } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { serve } from "@hono/node-server";
-import type { ServerUpdateRun } from "@rakazo/contracts";
-import type { ComposeUpdateStep } from "@rakazo/core";
+import type { ServerUpdateRun } from "@forion/orbit-contracts";
+import type { ComposeUpdateStep } from "@forion/orbit-core";
 import {
   chooseUpdateStrategy,
   commitImageTag,
@@ -33,11 +32,12 @@ import {
   selectLatestRelease,
   upsertEnvAssignments,
   validateUpdateRequest,
-} from "@rakazo/core";
-import type { Logger } from "@rakazo/logging";
-import { SERVICE_NAMES } from "@rakazo/logging";
-import { createRootLogger } from "@rakazo/logging/axiom";
-import { requestLogging } from "@rakazo/logging/hono";
+} from "@forion/orbit-core";
+import type { Logger } from "@forion/orbit-logging";
+import { SERVICE_NAMES } from "@forion/orbit-logging";
+import { createRootLogger } from "@forion/orbit-logging/axiom";
+import { requestLogging } from "@forion/orbit-logging/hono";
+import { serve } from "@hono/node-server";
 import type { Context } from "hono";
 import { Hono } from "hono";
 import type { UpdaterConfig } from "./updater-logic.js";

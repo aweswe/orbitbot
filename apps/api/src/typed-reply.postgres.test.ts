@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
-import type { Actor, MessageBlock } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
+import type { Actor, MessageBlock } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
 import {
   answerRunInput,
   asSystem,
@@ -11,7 +11,7 @@ import {
   runAsSystem,
   runAsTenant,
   SpaceDeletionInProgressError,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ThreadTarget } from "./thread-target.js";
 import { sendThreadMessage } from "./thread-target.js";

@@ -12,9 +12,8 @@ const dotenv = require("dotenv");
 
 dotenv.config({ path: path.resolve(root, ".env") });
 
-const connectionString =
-  process.env.DATABASE_URL ||
-  "postgresql://postgres:p0probe@127.0.0.1:55433/orbit_bot";
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) throw new Error("DATABASE_URL is required");
 
 const pool = new Pool({ connectionString });
 
@@ -23,7 +22,8 @@ async function seed() {
   const client = await pool.connect();
 
   try {
-    const userId = process.env.DEV_API_USER_ID || "xsviuWUARjywMLDk0bcI6";
+    const userId = process.env.DEV_API_USER_ID;
+    if (!userId) throw new Error("DEV_API_USER_ID is required");
     const orgId = "org_orbit_default";
     const spaceId = "space_orbit_default";
     const botId = "bot_orbit_main";

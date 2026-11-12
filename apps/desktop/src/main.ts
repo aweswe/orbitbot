@@ -3,15 +3,15 @@ import { randomBytes } from "node:crypto";
 import { existsSync } from "node:fs";
 import { readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
-import type { HostScreen } from "@rakazo/adapters/host-screen";
-import { startUserDeviceClient } from "@rakazo/adapters/user-device-client";
+import type { HostScreen } from "@forion/orbit-adapters/host-screen";
+import { startUserDeviceClient } from "@forion/orbit-adapters/user-device-client";
 import type {
   DesktopMenuCommand,
   DesktopReachability,
   DesktopSetup,
-  RakazoDesktopDevice,
-} from "@rakazo/contracts";
-import { parseServerHeaders } from "@rakazo/contracts";
+  OrbitDesktopDevice,
+} from "@forion/orbit-contracts";
+import { parseServerHeaders } from "@forion/orbit-contracts";
 import type { Session } from "electron";
 import {
   app,
@@ -86,7 +86,7 @@ import { installSessionPermissions } from "./session-permissions.js";
 import {
   DEFAULT_LOCAL_WEB_URL,
   desktopStackImageTag,
-  isRakazoHealth,
+  isOrbitHealth,
   managedLocalOpenUrl,
   maySendDesktopStackToken,
   normalizeServerUrl,
@@ -686,7 +686,7 @@ async function runMenuUpdateCheck() {
       : dialog.showMessageBox(options);
   if (state.phase === "ready") {
     const { response } = await alert({
-      message: t("Rakazo {version} is ready to install.", {
+      message: t("Orbit {version} is ready to install.", {
         version: state.availableVersion ?? "",
       }),
       buttons: [t("Restart"), t("Later")],
@@ -712,7 +712,7 @@ async function runMenuUpdateCheck() {
     });
   } else if (state.phase === "idle") {
     await alert({
-      message: t("Rakazo is up to date."),
+      message: t("Orbit is up to date."),
       detail: t("Version {version}", { version: state.currentVersion }),
     });
   }
@@ -774,7 +774,7 @@ function installApplicationMenu() {
   };
   const changeServer: Electron.MenuItemConstructorOptions = {
     id: "change-rakazo-server",
-    label: t("Change Rakazo Server…"),
+    label: t("Change Orbit Server…"),
     accelerator: "CmdOrCtrl+Shift+K",
     click: () => showSetupWindow(),
   };
@@ -959,7 +959,7 @@ function installApplicationMenu() {
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 
-/** Setup IPC must only answer the setup window, never a connected Rakazo server. */
+/** Setup IPC must only answer the setup window, never a connected Orbit server. */
 function fromSetupWindow(event: Pick<Electron.IpcMainInvokeEvent, "sender">) {
   return (
     setupWindow !== null && !setupWindow.isDestroyed() && event.sender === setupWindow.webContents
@@ -990,7 +990,7 @@ async function probeServer(
         ok: false,
         status: response.status,
         url,
-        error: t("That address redirects elsewhere. Enter the final Rakazo server address."),
+        error: t("That address redirects elsewhere. Enter the final Orbit server address."),
       };
     }
     if (!response.ok) {
@@ -1002,12 +1002,12 @@ async function probeServer(
       };
     }
     const health = await readProbeJson(response);
-    if (!isRakazoHealth(health)) {
+    if (!isOrbitHealth(health)) {
       return {
         ok: false,
         status: response.status,
         url,
-        error: t("That address did not respond like a Rakazo server."),
+        error: t("That address did not respond like an Orbit server."),
       };
     }
     return {
@@ -1569,7 +1569,7 @@ app.whenReady().then(async () => {
       ? origin
       : null;
   };
-  const deviceState = async (origin: string | null): Promise<RakazoDesktopDevice | null> => {
+  const deviceState = async (origin: string | null): Promise<OrbitDesktopDevice | null> => {
     const state = origin === null ? null : userDevices?.state(origin);
     return state ? { ...state, name: await deviceName() } : null;
   };
@@ -1698,7 +1698,7 @@ app.whenReady().then(async () => {
         if (managedUrl === null || !(await localStack.matchesDesiredStack())) {
           return {
             ok: false,
-            error: t("The app-managed Rakazo services are not ready. Retry setup."),
+            error: t("The app-managed Orbit services are not ready. Retry setup."),
           };
         }
         openSetup = { mode: "new", serverUrl: managedUrl };

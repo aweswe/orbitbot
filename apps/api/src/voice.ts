@@ -1,6 +1,5 @@
-import { ORPCError } from "@orpc/server";
-import type { AdapterContext, SecretStore } from "@rakazo/adapter-kit";
-import { VoiceAccountError } from "@rakazo/adapter-kit";
+import type { AdapterContext, SecretStore } from "@forion/orbit-adapter-kit";
+import { VoiceAccountError } from "@forion/orbit-adapter-kit";
 import {
   createVoiceProvider,
   isSpeechModelId,
@@ -13,17 +12,17 @@ import {
   openAiCompatibleVoiceServer,
   serializeOpenAiCompatibleVoiceSecret,
   voiceCatalogEntry,
-} from "@rakazo/adapters";
+} from "@forion/orbit-adapters";
 import type {
   Actor,
   SettingsScope,
   VoiceAccountErrorCode,
   VoiceCredential,
   VoiceStatus,
-} from "@rakazo/contracts";
-import { SettingsScopeSchema } from "@rakazo/contracts";
-import { speakable, toUtterances } from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-contracts";
+import { SettingsScopeSchema } from "@forion/orbit-contracts";
+import { speakable, toUtterances } from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
 import {
   deleteUnreferencedCredentialSecret,
   findDefaultVoiceCredential,
@@ -39,9 +38,10 @@ import {
   selectVoicePreference,
   voicePreferenceTarget,
   withTransactionRetry,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
-import { markExpectedFailure } from "@rakazo/logging/hono";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
+import { markExpectedFailure } from "@forion/orbit-logging/hono";
+import { ORPCError } from "@orpc/server";
 import type { Context, Hono } from "hono";
 import { readBoundedBody } from "./http-body.js";
 import type { SpeechSummarizer } from "./speech-summary.js";

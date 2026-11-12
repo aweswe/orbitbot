@@ -212,15 +212,15 @@ describe("sandboxProviderOptionsFromEnv", () => {
       sandboxProviderOptionsFromEnv({
         KUBERNETES_SANDBOX_HOME_CLAIM: "rakazo-data",
         KUBERNETES_SANDBOX_HOME_COLOCATE_NAMESPACE: "rakazo",
-        KUBERNETES_SANDBOX_HOME_COLOCATE_LABELS: '{"app":"rakazo-api"}',
+        KUBERNETES_SANDBOX_HOME_COLOCATE_LABELS: '{"app":"orbit-api"}',
       }),
     ).toMatchObject({
       kubernetesHomeClaim: "rakazo-data",
       kubernetesHomeColocateNamespace: "rakazo",
-      kubernetesHomeColocateLabels: { app: "rakazo-api" },
+      kubernetesHomeColocateLabels: { app: "orbit-api" },
     });
     expect(() =>
-      sandboxProviderOptionsFromEnv({ KUBERNETES_SANDBOX_HOME_COLOCATE_LABELS: "rakazo-api" }),
+      sandboxProviderOptionsFromEnv({ KUBERNETES_SANDBOX_HOME_COLOCATE_LABELS: "orbit-api" }),
     ).toThrow("KUBERNETES_SANDBOX_HOME_COLOCATE_LABELS must be a JSON object of string values");
   });
 

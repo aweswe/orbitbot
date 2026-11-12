@@ -1,8 +1,8 @@
 import { randomBytes } from "node:crypto";
-import type { MessageBlock } from "@rakazo/contracts";
+import type { MessageBlock } from "@forion/orbit-contracts";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { PrismaClient } from "./client.js";
-import { createDb } from "./client.js";
+import { createDb, schemaFromConnectionString } from "./client.js";
 import { ContentDecryptionError } from "./content-crypto.js";
 import { contentEncryptionOf } from "./content-encryption.js";
 import type { ContentExportRecord } from "./content-export.js";
@@ -17,7 +17,7 @@ import {
 import { appendEventInTransaction } from "./events.js";
 import { readHistory, searchHistory } from "./history-retrieval.js";
 import { createThreadMessage, createThreadMessageInTransaction } from "./messages.js";
-import { runAsSystem } from "./row-security.js";
+import { createScopedQuery, runAsSystem } from "./row-security.js";
 
 const databaseUrl = process.env.DATABASE_URL;
 const describePostgres =
@@ -36,7 +36,7 @@ describePostgres("content encryption (PostgreSQL)", () => {
   const scope = { spaceId, userId, threadId, botId };
   const clients: Array<ReturnType<typeof createDb>> = [];
   let prisma: PrismaClient;
-  let raw: ReturnType<typeof createDb>["pool"];
+  let raw: ReturnType<typeof createScopedQuery>;
 
   function client(keys = [masterA], options: { encryptContent?: boolean } = {}) {
     // The derived key keeps rows from other suites sharing this database readable.
@@ -74,17 +74,19 @@ describePostgres("content encryption (PostgreSQL)", () => {
     }));
 
   const rawBlocks = async (id: string) =>
-    (await raw.query(`SELECT blocks::text AS blocks FROM messages WHERE id = $1`, [id])).rows[0]
+    (await raw.query(`SELECT blocks::text AS blocks FROM messages WHERE id = $1`, [id])).rows[0]!
       .blocks as string;
 
   beforeAll(() =>
     runAsSystem("test fixture", async () => {
-      ({ prisma, pool: raw } = client());
+      const created = client();
+      prisma = created.prisma;
+      raw = createScopedQuery(created.pool, { schema: schemaFromConnectionString(databaseUrl!) });
       await prisma.user.create({
         data: {
           id: userId,
           name: "Encryption",
-          email: `${userId}@rakazo.test`,
+          email: `${userId}@orbit.test`,
           emailVerified: false,
         },
       });
@@ -199,7 +201,10 @@ describePostgres("content encryption (PostgreSQL)", () => {
         fresh.prisma.message.findUnique({ where: { id: message.id }, select: { blocks: true } }),
       ).rejects.toBeInstanceOf(ContentDecryptionError);
       const rows = (
-        await raw.query(`SELECT id, "threadId", blocks FROM messages WHERE id = $1`, [message.id])
+        await raw.query<{ id: string; threadId: string; blocks: unknown }>(
+          `SELECT id, "threadId", blocks FROM messages WHERE id = $1`,
+          [message.id],
+        )
       ).rows;
       await expect(
         contentEncryptionOf(fresh.prisma)!.openRows("Message", rows),
@@ -265,7 +270,7 @@ describePostgres("content encryption (PostgreSQL)", () => {
         `SELECT count(*)::int AS n FROM messages m WHERE m."threadId" = $1 AND COALESCE(cardinality(m."searchTokens"), 0) = 0`,
         [threadId],
       );
-      expect(left.rows[0].n).toBe(0);
+      expect(left.rows[0]!.n).toBe(0);
       // Variants across the user's chats verify each query against the decrypted text.
       const variants = await searchHistory(
         prisma,
@@ -350,7 +355,7 @@ describePostgres("content encryption (PostgreSQL)", () => {
           await raw.query(`SELECT "historyCompactionSummary" AS s FROM threads WHERE id = $1`, [
             threadId,
           ])
-        ).rows[0].s,
+        ).rows[0]!.s,
       ).toMatch(/^rkz1:/);
       expect(
         (await prisma.thread.findUnique({ where: { id: threadId } }))?.historyCompactionSummary,
@@ -423,7 +428,7 @@ describePostgres("content encryption (PostgreSQL)", () => {
         `SELECT count(*)::int AS n FROM space_keys WHERE "spaceId" = $1`,
         [spaceId],
       );
-      expect(versions.rows[0].n).toBe(2);
+      expect(versions.rows[0]!.n).toBe(2);
       const search = await searchHistory(onlyB.prisma, scope, { query: "axolotls" });
       expect(search.messages.map((m) => m.messageId)).toEqual([message.id]);
     }));
@@ -436,7 +441,7 @@ describePostgres("content encryption (PostgreSQL)", () => {
         `SELECT count(*)::int AS n FROM messages WHERE "threadId" = $1 AND blocks::text LIKE '%rkz1:%'`,
         [threadId],
       );
-      expect(stored.rows[0].n).toBe(0);
+      expect(stored.rows[0]!.n).toBe(0);
       expect(await rawBlocks(`enc-plain-${suffix}`)).toContain("pelicans");
       await migrateContent(db.prisma, { mode: "encrypt" });
     }));
@@ -453,7 +458,7 @@ describePostgres("content encryption (PostgreSQL)", () => {
           await raw.query(`SELECT count(*)::int AS n FROM space_keys WHERE "spaceId" = $1`, [
             doomed,
           ])
-        ).rows[0].n;
+        ).rows[0]!.n;
       expect(await count()).toBe(1);
       await prisma.space.delete({ where: { id: doomed } });
       expect(await count()).toBe(0);

@@ -3,7 +3,7 @@ import {
   CALL_FAREWELL_TIMEOUT_MS,
   callIdFromClientNonce,
   INTERIM_BARGE_IN_MS,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { hapticImpact, hapticSuccess } from "./haptics";
 

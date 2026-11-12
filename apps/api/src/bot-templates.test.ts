@@ -1,6 +1,6 @@
-import type { ConnectionCatalogItem } from "@rakazo/contracts";
-import { AgentImportCreateInput } from "@rakazo/contracts";
-import { findBotTemplate } from "@rakazo/core";
+import type { ConnectionCatalogItem } from "@forion/orbit-contracts";
+import { AgentImportCreateInput } from "@forion/orbit-contracts";
+import { findBotTemplate } from "@forion/orbit-core";
 import { describe, expect, it } from "vitest";
 import { templateAppCards } from "./bot-templates.js";
 import { managedAppCatalog } from "./onboarding.js";

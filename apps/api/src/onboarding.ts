@@ -1,18 +1,18 @@
-import type { ConnectorRegistry } from "@rakazo/adapters";
-import type { Actor, ConnectionCatalogItem, MessageBlock } from "@rakazo/contracts";
+import type { ConnectorRegistry } from "@forion/orbit-adapters";
+import type { Actor, ConnectionCatalogItem, MessageBlock } from "@forion/orbit-contracts";
 import {
   appConnectCard,
   connectedAppBlocks,
   matchAppCatalog,
   matchesAppConnection,
-} from "@rakazo/core";
-import type { Prisma, PrismaClient, ThreadEvents } from "@rakazo/db";
+} from "@forion/orbit-core";
+import type { Prisma, PrismaClient, ThreadEvents } from "@forion/orbit-db";
 import {
   appendEventInTransaction,
   createThreadMessageInTransaction,
   IsolationError,
   THREAD_LOCK_TRANSACTION_OPTIONS,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
 import { requireBotThread } from "./bot-thread.js";
 import { resolveThreadTarget } from "./thread-target.js";
 

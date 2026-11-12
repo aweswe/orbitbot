@@ -1,5 +1,5 @@
-import type { PrismaClient } from "@rakazo/db";
-import { requireMembership } from "@rakazo/db";
+import type { PrismaClient } from "@forion/orbit-db";
+import { requireMembership } from "@forion/orbit-db";
 import { describe, expect, it, vi } from "vitest";
 import { actorFromMembership } from "./app.js";
 

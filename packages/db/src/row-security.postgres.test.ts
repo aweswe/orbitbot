@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { PrismaClient } from "./client.js";
-import { createDb } from "./client.js";
+import { createDb, schemaFromConnectionString } from "./client.js";
 import {
   databaseUrls,
   describeRowSecurity,
@@ -148,7 +148,7 @@ describePostgres("row-level security (PostgreSQL)", () => {
     });
     for (const t of tenants) {
       await o.user.create({
-        data: { id: t.userId, name: t.name, email: `${t.userId}@rakazo.test`, emailVerified: true },
+        data: { id: t.userId, name: t.name, email: `${t.userId}@orbit.test`, emailVerified: true },
       });
       await o.space.create({ data: { id: t.spaceId, organizationId, name: t.name } });
       await o.bot.create({
@@ -589,13 +589,15 @@ describePostgres("row-level security (PostgreSQL)", () => {
   });
 
   it("ignores a bypass a tenant session turns on without the key", async () => {
+    const schema = schemaFromConnectionString(runtimeUrl!) ?? "public";
     const client = await app.pool.connect();
     try {
-      // What SQL run in a tenant context could do to its own session.
+      await client.query("BEGIN");
+      // What SQL run in a tenant context could do to its own transaction.
       for (const key of ["", "guess"]) {
         await client.query(
-          "SELECT set_config('app.space_id', $1, false), set_config('app.user_id', $2, false), set_config('app.rls_bypass', 'on', false), set_config('app.rls_bypass_key', $3, false), set_config('app.rls_version', '', false)",
-          [a.spaceId, a.userId, key],
+          "SELECT set_config('search_path', $1, true), set_config('app.space_id', $2, true), set_config('app.user_id', $3, true), set_config('app.rls_bypass', 'on', true), set_config('app.rls_bypass_key', $4, true), set_config('app.rls_version', '', true)",
+          [schema, a.spaceId, a.userId, key],
         );
         const threads = await client.query("SELECT id FROM threads WHERE id = ANY($1)", [
           threadIds(),
@@ -609,6 +611,7 @@ describePostgres("row-level security (PostgreSQL)", () => {
       await expect(
         client.query("SELECT count(*) FROM rakazo_private.rls_bypass_keys"),
       ).rejects.toThrow(/permission denied/);
+      await client.query("ROLLBACK");
     } finally {
       client.release(true);
     }
@@ -618,7 +621,7 @@ describePostgres("row-level security (PostgreSQL)", () => {
     const policies = await owner.prisma.$queryRaw<
       Array<{ policyname: string; qual: string; with_check: string | null }>
     >`
-      SELECT policyname, qual, with_check FROM pg_policies WHERE schemaname = 'public'
+      SELECT policyname, qual, with_check FROM pg_policies WHERE schemaname = current_schema()
         AND (policyname LIKE '%\\_system' OR qual LIKE '%rls\\_%' OR with_check LIKE '%rls\\_%')`;
     expect(policies.length).toBeGreaterThan(50);
     expect(
@@ -801,6 +804,46 @@ describePostgres("row-level security (PostgreSQL)", () => {
     expect(fluent).toHaveLength(2);
   });
 
+  it("keeps a tenant's context across rollbacks and failed writes without leaking it", async () => {
+    await expect(
+      runAsTenant(b, () =>
+        db.$transaction(async (tx) => {
+          await tx.message.create({
+            data: { threadId: b.threadId, seq: 99, role: "assistant", blocks: [] },
+          });
+          throw new Error("rolled back on purpose");
+        }),
+      ),
+    ).rejects.toThrow("rolled back on purpose");
+    expect(
+      await runAsTenant(b, () => db.message.count({ where: { threadId: b.threadId, seq: 99 } })),
+    ).toBe(0);
+    expect(
+      await runAsSystem("rollback fixture", () =>
+        db.message.count({ where: { threadId: b.threadId, seq: 99 } }),
+      ),
+    ).toBe(0);
+
+    // A rejected write that row-level security refuses leaves the pooled
+    // connection reusable with this tenant's context, not the rejected one.
+    await expect(
+      runAsTenant(b, () =>
+        db.message.create({
+          data: { threadId: a.threadId, seq: 98, role: "assistant", blocks: [] },
+        }),
+      ),
+    ).rejects.toThrow(/row-level security/);
+    expect(
+      await runAsTenant(b, () => db.thread.count({ where: { id: { in: threadIds() } } })),
+    ).toBe(1);
+    expect(
+      await runAsTenant(a, () => db.thread.count({ where: { id: { in: threadIds() } } })),
+    ).toBe(1);
+    expect(await db.thread.count({ where: { id: { in: threadIds() } } })).toBe(0);
+    // The unscoped read above is deliberate.
+    drainUnscopedDatabaseAccess();
+  });
+
   it("never lets one tenant's settings reach another's query", async () => {
     // A small pool forces queued checkouts and connection reuse across tenants,
     // and same-tick findUnique calls exercise Prisma's batching.
@@ -845,7 +888,7 @@ describePostgres("row-level security (PostgreSQL)", () => {
   it("protects exactly the tables the client treats as protected", async () => {
     const rows = await owner.prisma.$queryRaw<Array<{ relname: string }>>`
       SELECT relname FROM pg_class
-      WHERE relnamespace = 'public'::regnamespace AND relkind = 'r' AND relrowsecurity`;
+      WHERE relnamespace = current_schema()::regnamespace AND relkind = 'r' AND relrowsecurity`;
     const tables = rows.map((row) => row.relname).sort();
     const { models } = (
       db as unknown as { _runtimeDataModel: { models: Record<string, { dbName: string | null }> } }

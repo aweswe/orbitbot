@@ -1,4 +1,4 @@
-import { logSinkHealth } from "@rakazo/logging";
+import { logSinkHealth } from "@forion/orbit-logging";
 import { Hono } from "hono";
 
 /**

@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { DEFAULT_LOCALE, LOCALES, localeHomePath } from "../i18n/locales";
 
 export const BLOG_CATEGORIES = ["comparisons", "guides", "roundups", "product"] as const;
 
@@ -71,6 +72,17 @@ function normalizePath(pathname: string): string {
 export function isIndexedPath(pathname: string): boolean {
   const normalized = normalizePath(pathname);
   if (normalized.endsWith(".xml")) return false;
+  // Non-English locale homes still serve the English page until translated. Keep
+  // them reachable for the language menu but out of search and the sitemap.
+  if (
+    LOCALES.some(
+      (locale) =>
+        locale !== DEFAULT_LOCALE &&
+        normalizePath(localeHomePath(locale)) === normalized,
+    )
+  ) {
+    return false;
+  }
   // Claim forms are for an app's owner, not for search.
   if (/^\/integrations\/[^/]+\/claim$/.test(normalized)) return false;
   const category = BLOG_CATEGORIES.find(

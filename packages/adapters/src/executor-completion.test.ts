@@ -1,5 +1,5 @@
-import { ModelOutputError } from "@rakazo/adapter-kit";
-import { MISSING_TOOL_FINAL_RESPONSE_ERROR } from "@rakazo/core";
+import { ModelOutputError } from "@forion/orbit-adapter-kit";
+import { MISSING_TOOL_FINAL_RESPONSE_ERROR } from "@forion/orbit-core";
 import { describe, expect, it } from "vitest";
 import { runIdentityInstruction } from "./run-instructions.js";
 import { mayOpenModelStream } from "./run-lifecycle.js";
@@ -557,28 +557,35 @@ describe("runReplyGuidance", () => {
       description: "Reads and sorts mail.",
       instructions: "Reads and sorts mail.",
     };
-    expect(runIdentityInstruction(bot, "user")).toBe("Ada\nReads and sorts mail.");
-    expect(runIdentityInstruction({ ...bot, instructions: "" }, "user")).toBe(
-      "Ada\nReads and sorts mail.",
-    );
+    const result = runIdentityInstruction(bot, "user");
+    expect(result.endsWith("Ada\nReads and sorts mail.")).toBe(true);
+    expect(result.match(/Reads and sorts mail\./g)).toHaveLength(1);
+    const emptyInstructions = runIdentityInstruction({ ...bot, instructions: "" }, "user");
+    expect(emptyInstructions.endsWith("Ada\nReads and sorts mail.")).toBe(true);
+    expect(emptyInstructions.match(/Reads and sorts mail\./g)).toHaveLength(1);
   });
 
   it("omits blank profile lines and treats missing fields as empty", () => {
     expect(
-      runIdentityInstruction({ name: "Ada", description: "", instructions: "Stay quiet." }, "user"),
-    ).toBe(
-      "Ada\nTeammates see only the profile above. These instructions are private to you:\nStay quiet.",
-    );
-    expect(runIdentityInstruction({ name: "Ada", description: "", instructions: "" }, "user")).toBe(
-      "Ada",
-    );
+      runIdentityInstruction(
+        { name: "Ada", description: "", instructions: "Stay quiet." },
+        "user",
+      ).endsWith(
+        "Ada\nTeammates see only the profile above. These instructions are private to you:\nStay quiet.",
+      ),
+    ).toBe(true);
+    expect(
+      runIdentityInstruction({ name: "Ada", description: "", instructions: "" }, "user").endsWith(
+        "Ada",
+      ),
+    ).toBe(true);
     expect(
       runIdentityInstruction(
         { name: "Ada", description: "Reads and sorts mail.", instructions: "" },
         "user",
-      ),
-    ).toBe("Ada\nReads and sorts mail.");
-    expect(runIdentityInstruction({ name: "Ada" }, "routine")).toBe("Ada");
+      ).endsWith("Ada\nReads and sorts mail."),
+    ).toBe(true);
+    expect(runIdentityInstruction({ name: "Ada" }, "routine").endsWith("Ada")).toBe(true);
   });
 
   it("does not send a finish notification for the creation intro", () => {

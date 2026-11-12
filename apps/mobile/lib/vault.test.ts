@@ -1,10 +1,10 @@
-import type { BotSecretMetadata, ContactFields } from "@rakazo/contracts";
+import type { BotSecretMetadata, ContactFields } from "@forion/orbit-contracts";
 import {
   decodeCardSecret,
   decodeContactSecret,
   decodeLoginSecret,
   vaultKind,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("./i18n", () => ({

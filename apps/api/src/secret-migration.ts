@@ -1,5 +1,5 @@
-import type { SecretMigrationRepository, SecretMigrationRow } from "@rakazo/adapters";
-import type { PrismaClient } from "@rakazo/db";
+import type { SecretMigrationRepository, SecretMigrationRow } from "@forion/orbit-adapters";
+import type { PrismaClient } from "@forion/orbit-db";
 
 const tables = ["secret", "botSecret", "vaultCredential", "integrationProviderConfig"] as const;
 

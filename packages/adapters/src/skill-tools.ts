@@ -1,13 +1,13 @@
-import type { SkillRecord, SkillSource } from "@rakazo/core";
+import type { SkillRecord, SkillSource } from "@forion/orbit-core";
 import {
   buildSkillMd,
   findSkillByName,
   isSkillReadOnly,
   mergeBuiltinSkills,
   parseSkillMd,
-} from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
-import { availableInSpace } from "@rakazo/db";
+} from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
+import { availableInSpace } from "@forion/orbit-db";
 import { BUILTIN_AGENT_SKILLS } from "./builtin-skills.js";
 
 export const SKILL_TOOL_NAMES = new Set([

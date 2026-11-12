@@ -1,0 +1,129 @@
+{
+  "generatedAt": "2026-11-10",
+  "baselineCommit": "b365d73b66e2b7c24d13a12a2e523049925c703f",
+  "release": false,
+  "counts": {
+    "provenance": {
+      "upstream-unmodified": 1960,
+      "upstream-modified": 2494,
+      "locally-added": 92,
+      "upstream-moved-or-copied": 4,
+      "upstream-deleted": 254
+    },
+    "dependencies": {
+      "total": 2193,
+      "direct": 193,
+      "notInstalled": 0
+    },
+    "assets": 64
+  },
+  "checks": [
+    {
+      "id": "provenance.modified",
+      "severity": "warning",
+      "message": "2494 Rakazo-derived files differ from the baseline.",
+      "releaseBlocker": true
+    },
+    {
+      "id": "provenance.added",
+      "severity": "info",
+      "message": "92 files are not in the upstream baseline."
+    },
+    {
+      "id": "provenance.moved",
+      "severity": "warning",
+      "message": "4 files match an upstream blob at another path.",
+      "releaseBlocker": true
+    },
+    {
+      "id": "provenance.policy-pending",
+      "severity": "warning",
+      "message": "The Apache-2.0 Section 4(b) modification notice policy is not approved.",
+      "releaseBlocker": true
+    },
+    {
+      "id": "dependencies.obligation",
+      "severity": "info",
+      "message": "@img/sharp-libvips-darwin-arm64@1.3.4: LGPL-3.0-or-later",
+      "package": "@img/sharp-libvips-darwin-arm64",
+      "license": "LGPL-3.0-or-later",
+      "obligation": "Include the LGPL-3.0 text and a source-availability/written-offer statement in distributed server or desktop artifacts that include this binary. Licence text: licenses/LGPL-3.0.txt. Source project: https://github.com/lovell/sharp-libvips."
+    },
+    {
+      "id": "dependencies.obligation",
+      "severity": "info",
+      "message": "dompurify@3.4.17: Apache-2.0",
+      "package": "dompurify",
+      "license": "Apache-2.0",
+      "obligation": "Elect Apache-2.0. Include the DOMPurify Apache-2.0 notice where the package is distributed."
+    },
+    {
+      "id": "dependencies.obligation",
+      "severity": "info",
+      "message": "node-forge@1.4.3: BSD-3-Clause",
+      "package": "node-forge",
+      "license": "BSD-3-Clause",
+      "obligation": "Elect BSD-3-Clause. Include the node-forge BSD-3-Clause notice where the package is distributed. Do not rely on the GPL-2.0 option."
+    },
+    {
+      "id": "dependencies.new",
+      "severity": "info",
+      "message": "New direct dependency: @react-native-vector-icons/material-design-icons@13.1.4."
+    },
+    {
+      "id": "dependencies.new",
+      "severity": "info",
+      "message": "New direct dependency: @sentry/node@11.8.0,11.10.0."
+    },
+    {
+      "id": "dependencies.new",
+      "severity": "info",
+      "message": "New direct dependency: @sentry/react@10.37.0,11.10.0."
+    },
+    {
+      "id": "dependencies.new",
+      "severity": "info",
+      "message": "New direct dependency: @types/node@12.20.55,18.19.130,20.19.43,22.20.5,24.13.3,24.19.2,26.6.6."
+    },
+    {
+      "id": "dependencies.new",
+      "severity": "info",
+      "message": "New direct dependency: @vitejs/plugin-react@5.2.0,6.2.1."
+    },
+    {
+      "id": "dependencies.new",
+      "severity": "info",
+      "message": "New direct dependency: dotenv@16.6.1,17.4.2."
+    },
+    {
+      "id": "dependencies.new",
+      "severity": "info",
+      "message": "New direct dependency: fflate@0.4.9,0.8.3."
+    },
+    {
+      "id": "dependencies.new",
+      "severity": "info",
+      "message": "New direct dependency: pngjs@3.4.0,7.0.0."
+    },
+    {
+      "id": "dependencies.new",
+      "severity": "info",
+      "message": "New direct dependency: typescript@6.0.3,7.0.2."
+    },
+    {
+      "id": "dependencies.new",
+      "severity": "info",
+      "message": "New direct dependency: undici@6.29.1,7.30.1,7.30.2,8.12.3."
+    },
+    {
+      "id": "dependencies.new",
+      "severity": "info",
+      "message": "New direct dependency: vitest@4.1.11,4.1.12."
+    },
+    {
+      "id": "dependencies.new",
+      "severity": "info",
+      "message": "New direct dependency: yaml@2.8.3,2.9.1."
+    }
+  ]
+}

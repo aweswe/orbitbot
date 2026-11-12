@@ -1,17 +1,14 @@
 import { mkdir, mkdtemp, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { InferRouterInitialContext } from "@orpc/server";
-import { createRouterClient } from "@orpc/server";
-import { RPCHandler } from "@orpc/server/fetch";
-import type { ManagedConnectorProvider } from "@rakazo/adapter-kit";
+import type { ManagedConnectorProvider } from "@forion/orbit-adapter-kit";
 import {
   ConnectorAuthUnavailableError,
   routineWakeupJob,
   SecretStoreUnavailableError,
-} from "@rakazo/adapter-kit";
-import type { McpOAuthSummary } from "@rakazo/adapters";
-import * as adapters from "@rakazo/adapters";
+} from "@forion/orbit-adapter-kit";
+import type { McpOAuthSummary } from "@forion/orbit-adapters";
+import * as adapters from "@forion/orbit-adapters";
 import {
   COMPUTER_SCREEN_UNAVAILABLE,
   CodexCatalogCache,
@@ -28,23 +25,26 @@ import {
   parseModelSecret,
   screenLeaseIdForRun,
   serializeModelSecret,
-} from "@rakazo/adapters";
-import type { Actor, Bot, ProductEvent } from "@rakazo/contracts";
+} from "@forion/orbit-adapters";
+import type { Actor, Bot, ProductEvent } from "@forion/orbit-contracts";
 import {
   CONNECTOR_AUTH_UNAVAILABLE,
   MCP_OAUTH_CLIENT_REQUIRED,
   MODEL_KEY_FORMAT_ERROR,
   REPLY_QUOTE_MAX_LENGTH,
-} from "@rakazo/contracts";
-import { openScreenCapability } from "@rakazo/core/node/screen-capability";
-import type { PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-contracts";
+import { openScreenCapability } from "@forion/orbit-core/node/screen-capability";
+import type { PrismaClient } from "@forion/orbit-db";
 import {
   AnswerTooLongError,
   configureProviderTransactionPool,
   Prisma,
   runProviderTransaction,
-} from "@rakazo/db";
-import { createLogger, createTestSink, installLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { createLogger, createTestSink, installLogger } from "@forion/orbit-logging";
+import type { InferRouterInitialContext } from "@orpc/server";
+import { createRouterClient } from "@orpc/server";
+import { RPCHandler } from "@orpc/server/fetch";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { mainRole, withModelRoles } from "../../../packages/adapters/src/testing/model-roles.js";
 import type { RouterDeps } from "./router.js";
@@ -78,7 +78,7 @@ describe("account preferences", () => {
   function preferencesDeps(avatarStyle: string, timezone: string | null = null) {
     const update = vi.fn().mockResolvedValue({});
     const user = {
-      email: "user@rakazo.test",
+      email: "user@orbit.test",
       name: "Test User",
       avatarStyle,
       timezone,
@@ -158,7 +158,7 @@ describe("account preferences", () => {
     const actor = {
       spaceId: "workspace-1",
       userId: "user-1",
-      email: "user@rakazo.test",
+      email: "user@orbit.test",
       isDeploymentOwner: true,
     } satisfies Actor;
     return {
@@ -631,7 +631,7 @@ describe("billing", () => {
     const prisma = {
       user: {
         findUniqueOrThrow: vi.fn().mockResolvedValue({
-          email: "user@rakazo.test",
+          email: "user@orbit.test",
           name: "Test User",
           avatarStyle: "robot",
           signupSurvey,
@@ -658,7 +658,7 @@ describe("billing", () => {
     const actor = {
       spaceId: "workspace-1",
       userId: "user-1",
-      email: "user@rakazo.test",
+      email: "user@orbit.test",
       isDeploymentOwner,
     } satisfies Actor;
     return createRouterClient(createRouter(deps), { context: { actor } });
@@ -778,7 +778,7 @@ describe("model setup gate", () => {
     const prisma = {
       user: {
         findUniqueOrThrow: vi.fn().mockResolvedValue({
-          email: "user@rakazo.test",
+          email: "user@orbit.test",
           name: "Test User",
           avatarStyle: "robot",
           secrets: [],
@@ -821,7 +821,7 @@ describe("model setup gate", () => {
     const actor = {
       spaceId: "workspace-1",
       userId: "user-1",
-      email: "user@rakazo.test",
+      email: "user@orbit.test",
       isDeploymentOwner: true,
     } satisfies Actor;
     return { actor, handler: new RPCHandler(createRouter(deps)) };
@@ -990,7 +990,7 @@ describe("thread answer delivery", () => {
     const answerRunInput = vi.fn().mockResolvedValue(true);
     const enqueue = vi.fn().mockRejectedValue(new Error("job broker unavailable"));
     const sink = createTestSink();
-    installLogger(createLogger({ service: "rakazo-api", sinks: [sink] }));
+    installLogger(createLogger({ service: "orbit-api", sinks: [sink] }));
     const prisma = {
       bot: {
         findFirst: vi.fn().mockResolvedValue({
@@ -1016,7 +1016,7 @@ describe("thread answer delivery", () => {
     const actor = {
       spaceId: "workspace-1",
       userId: "user-1",
-      email: "user@rakazo.test",
+      email: "user@orbit.test",
       isDeploymentOwner: true,
     } satisfies Actor;
     const handler = new RPCHandler(createRouter(deps));
@@ -1051,7 +1051,7 @@ describe("thread answer delivery", () => {
     );
     expect(enqueue).toHaveBeenCalledOnce();
     expect(sink.events.some((event) => event.message === "thread answer enqueue")).toBe(true);
-    installLogger(createLogger({ service: "rakazo-api", level: "off", sinks: [] }));
+    installLogger(createLogger({ service: "orbit-api", level: "off", sinks: [] }));
   });
 });
 
@@ -1324,7 +1324,7 @@ describe("thread stream authorization", () => {
     const actor = {
       spaceId: "workspace-1",
       userId: "user-1",
-      email: "user@rakazo.test",
+      email: "user@orbit.test",
       isDeploymentOwner: true,
     } satisfies Actor;
     const stillAuthorized = vi.fn().mockResolvedValue(true);
@@ -1426,7 +1426,7 @@ describe("MCP server deletion", () => {
     const actor = {
       spaceId: "workspace-1",
       userId: "user-1",
-      email: "user@rakazo.test",
+      email: "user@orbit.test",
       isDeploymentOwner: true,
     } satisfies Actor;
     const handler = new RPCHandler(createRouter(deps));
@@ -1573,7 +1573,7 @@ describe("MCP prepared credential updates", () => {
     const actor = {
       spaceId: "space",
       userId: "user",
-      email: "user@rakazo.test",
+      email: "user@orbit.test",
       isDeploymentOwner: true,
     } satisfies Actor;
     const client = createRouterClient(createRouter(deps), { context: { actor } as never });
@@ -1654,7 +1654,7 @@ describe("MCP pre-registered OAuth client", () => {
         }),
       },
       user: {
-        findUnique: vi.fn(async () => ({ email: "owner@rakazo.test", emailVerified: true })),
+        findUnique: vi.fn(async () => ({ email: "owner@orbit.test", emailVerified: true })),
       },
       deploymentSettings: { findUnique: vi.fn().mockResolvedValue({ ownerUserId: "owner-1" }) },
       $executeRaw: vi.fn(async () => 1),
@@ -1681,14 +1681,14 @@ describe("MCP pre-registered OAuth client", () => {
         mcpAllowPrivateEndpoint: isDeploymentOwner,
         mcpStdioEnabled: true,
         mcpStdioAllowedCommands: allowedCommands,
-        adminEmails: ["owner@rakazo.test"],
+        adminEmails: ["owner@orbit.test"],
       },
       dataDir: "/tmp/rakazo-router-test",
     } as unknown as RouterDeps;
     const actor = {
       spaceId: "workspace-1",
       userId: isDeploymentOwner ? "owner-1" : "member-1",
-      email: "owner@rakazo.test",
+      email: "owner@orbit.test",
       isDeploymentOwner,
     } satisfies Actor;
     return {
@@ -2237,7 +2237,7 @@ describe("MCP loopback endpoints", () => {
     return {
       spaceId: "workspace-1",
       userId: isDeploymentOwner ? "owner-1" : "member-1",
-      email: "user@rakazo.test",
+      email: "user@orbit.test",
       isDeploymentOwner,
     };
   }
@@ -2375,9 +2375,9 @@ describe("MCP server health", () => {
       mcpServerSpace: { findMany: vi.fn(async () => []) },
       secret: { findFirst: vi.fn(), create: vi.fn(), deleteMany: vi.fn() },
       user: {
-        findUnique: vi.fn(async () => ({ email: "owner@rakazo.test", emailVerified: true })),
+        findUnique: vi.fn(async () => ({ email: "owner@orbit.test", emailVerified: true })),
         findUniqueOrThrow: vi.fn(async () => ({
-          email: "owner@rakazo.test",
+          email: "owner@orbit.test",
           name: "Owner",
           secrets: [],
         })),
@@ -2404,7 +2404,7 @@ describe("MCP server health", () => {
         sandboxProvider: "fake",
         mcpStdioEnabled: true,
         mcpStdioAllowedCommands: ["npx"],
-        adminEmails: ["owner@rakazo.test"],
+        adminEmails: ["owner@orbit.test"],
       },
       dataDir: "/tmp/rakazo-router-test",
     } as unknown as RouterDeps;
@@ -2414,7 +2414,7 @@ describe("MCP server health", () => {
           actor: {
             spaceId: "workspace-1",
             userId: "owner-1",
-            email: "owner@rakazo.test",
+            email: "owner@orbit.test",
             isDeploymentOwner: true,
             ...actor,
           },
@@ -2433,7 +2433,7 @@ describe("MCP server health", () => {
             actor: {
               spaceId: "workspace-1",
               userId: "owner-1",
-              email: "owner@rakazo.test",
+              email: "owner@orbit.test",
               isDeploymentOwner: true,
             },
           } as never,
@@ -2483,7 +2483,7 @@ describe("MCP server health", () => {
 
   it("lets only admins add or change stdio servers", async () => {
     const h = harness();
-    Object.assign(h.deps.env, { adminEmails: ["someone-else@rakazo.test"] });
+    Object.assign(h.deps.env, { adminEmails: ["someone-else@orbit.test"] });
     const refusal = { code: "FORBIDDEN", message: "Only admins can add local MCP servers" };
 
     expect((await h.client.me()).mcpStdioEnabled).toBe(false);
@@ -2795,7 +2795,7 @@ describe("MCP server health", () => {
           actor: {
             spaceId: "workspace-1",
             userId: "owner-1",
-            email: "owner@rakazo.test",
+            email: "owner@orbit.test",
             isDeploymentOwner: true,
           },
         } as never,
@@ -2838,7 +2838,7 @@ describe("MCP server health", () => {
           actor: {
             spaceId: "workspace-1",
             userId: "owner-1",
-            email: "owner@rakazo.test",
+            email: "owner@orbit.test",
             isDeploymentOwner: true,
           },
         } as never,
@@ -2864,7 +2864,7 @@ describe("MCP server health", () => {
           actor: {
             spaceId: "workspace-1",
             userId: "owner-1",
-            email: "owner@rakazo.test",
+            email: "owner@orbit.test",
             isDeploymentOwner: true,
           },
         } as never,
@@ -2894,7 +2894,7 @@ describe("MCP server health", () => {
           actor: {
             spaceId: "workspace-1",
             userId: "owner-1",
-            email: "owner@rakazo.test",
+            email: "owner@orbit.test",
             isDeploymentOwner: true,
           },
         } as never,
@@ -3124,7 +3124,7 @@ describe("private API connectors", () => {
     return {
       spaceId: "workspace-1",
       userId: isDeploymentOwner ? "owner-1" : "member-1",
-      email: "user@rakazo.test",
+      email: "user@orbit.test",
       isDeploymentOwner,
     };
   }
@@ -3217,7 +3217,7 @@ describe("connections.begin", () => {
     const actor = {
       spaceId: "workspace-1",
       userId: "user-1",
-      email: "user@rakazo.test",
+      email: "user@orbit.test",
       isDeploymentOwner: true,
     } satisfies Actor;
     const handler = new RPCHandler(createRouter(deps));
@@ -3323,7 +3323,7 @@ describe("connections.begin", () => {
             actor: {
               spaceId: "workspace-1",
               userId: "user-1",
-              email: "user@rakazo.test",
+              email: "user@orbit.test",
               isDeploymentOwner: true,
             },
           },
@@ -3394,7 +3394,7 @@ describe("connections.begin", () => {
           actor: {
             spaceId: "workspace-1",
             userId: "user-1",
-            email: "user@rakazo.test",
+            email: "user@orbit.test",
             isDeploymentOwner: true,
           },
         },
@@ -3526,7 +3526,7 @@ describe("connections.complete", () => {
             actor: {
               spaceId: "workspace-1",
               userId: "user-1",
-              email: "user@rakazo.test",
+              email: "user@orbit.test",
               isDeploymentOwner: true,
             },
           },
@@ -3607,7 +3607,7 @@ describe("connections.complete", () => {
     const actor = {
       spaceId: "workspace-1",
       userId: "user-1",
-      email: "user@rakazo.test",
+      email: "user@orbit.test",
       isDeploymentOwner: true,
     } satisfies Actor;
     const handler = new RPCHandler(createRouter(deps));
@@ -3697,7 +3697,7 @@ describe("connections.complete", () => {
               actor: {
                 spaceId: "workspace-1",
                 userId: "user-1",
-                email: "user@rakazo.test",
+                email: "user@orbit.test",
                 isDeploymentOwner: true,
               },
             },
@@ -3808,7 +3808,7 @@ describe("connections.complete", () => {
         {
           prefix: "/rpc",
           context: {
-            actor: { spaceId, userId, email: `${userId}@rakazo.test`, isDeploymentOwner: true },
+            actor: { spaceId, userId, email: `${userId}@orbit.test`, isDeploymentOwner: true },
           },
         },
       );
@@ -3836,7 +3836,7 @@ describe("connections.complete", () => {
   });
 
   afterEach(() => {
-    installLogger(createLogger({ service: "rakazo-api", level: "off", sinks: [] }));
+    installLogger(createLogger({ service: "orbit-api", level: "off", sinks: [] }));
   });
 
   function pollFixture(status: string) {
@@ -3900,7 +3900,7 @@ describe("connections.complete", () => {
       } as unknown as RouterDeps),
     );
     const sink = createTestSink();
-    installLogger(createLogger({ service: "rakazo-api", sinks: [sink] }));
+    installLogger(createLogger({ service: "orbit-api", sinks: [sink] }));
     async function complete(connectionId = row.id, signal?: AbortSignal) {
       return call("complete", connectionId, signal);
     }
@@ -3921,7 +3921,7 @@ describe("connections.complete", () => {
             actor: {
               spaceId: "workspace-1",
               userId: "user-1",
-              email: "user@rakazo.test",
+              email: "user@orbit.test",
               isDeploymentOwner: true,
             },
             signal,
@@ -4106,14 +4106,14 @@ describe("connections.complete", () => {
           actor: {
             spaceId: "workspace-1",
             userId: "user-1",
-            email: "user@rakazo.test",
+            email: "user@orbit.test",
             isDeploymentOwner: true,
           },
         } as never,
       },
     );
     const sink = createTestSink();
-    installLogger(createLogger({ service: "rakazo-api", sinks: [sink] }));
+    installLogger(createLogger({ service: "orbit-api", sinks: [sink] }));
 
     await client.connections.catalog({ connectorId: "composio" });
     await client.connections.catalog({ connectorId: "composio" });
@@ -4140,7 +4140,7 @@ describe("updater owner gate", () => {
     const prisma = {
       user: {
         findUniqueOrThrow: vi.fn().mockResolvedValue({
-          email: "user@rakazo.test",
+          email: "user@orbit.test",
           name: "Test User",
           avatarStyle: "robot",
           secrets: [],
@@ -4169,7 +4169,7 @@ describe("updater owner gate", () => {
     const actor = {
       spaceId: "workspace-1",
       userId: "user-2",
-      email: "member@rakazo.test",
+      email: "member@orbit.test",
       isDeploymentOwner: false,
     } satisfies Actor;
 
@@ -4191,7 +4191,7 @@ describe("updater owner gate", () => {
     const actor = {
       spaceId: "workspace-1",
       userId: "user-1",
-      email: "owner@rakazo.test",
+      email: "owner@orbit.test",
       isDeploymentOwner: true,
     } satisfies Actor;
 
@@ -4213,7 +4213,7 @@ describe("updater owner gate", () => {
     const actor = {
       spaceId: "workspace-1",
       userId: "user-1",
-      email: "owner@rakazo.test",
+      email: "owner@orbit.test",
       isDeploymentOwner: true,
     } satisfies Actor;
 
@@ -4235,7 +4235,7 @@ describe("computer screen url", () => {
   const actor = {
     spaceId: "workspace-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
   const computerRow = {
@@ -4375,7 +4375,7 @@ describe("computer terminal and file transfer", () => {
   const actor = {
     spaceId: "workspace-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
   const controlled = {
@@ -4699,7 +4699,7 @@ describe("integration setup authorization", () => {
             actor: {
               userId: "user",
               spaceId: "space",
-              email: "user@rakazo.test",
+              email: "user@orbit.test",
               isDeploymentOwner: owner,
             },
           },
@@ -4733,7 +4733,7 @@ describe("integration setup authorization", () => {
           actor: {
             userId: "member",
             spaceId: "space",
-            email: "member@rakazo.test",
+            email: "member@orbit.test",
             isDeploymentOwner: false,
           },
         },
@@ -4786,7 +4786,7 @@ describe("OpenAI-compatible model probes", () => {
   const actor = {
     spaceId: "workspace-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
   const baseUrl = "https://127.0.0.1:8000/v1";
@@ -5118,7 +5118,7 @@ describe("model credential persistence", () => {
   const actor = {
     spaceId: "workspace-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
 
@@ -5867,7 +5867,7 @@ describe("model disconnect", () => {
   const actor = {
     spaceId: "space-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
   const connection = (id: string) => ({
@@ -5968,7 +5968,7 @@ describe("bot intro run", () => {
   const actor = {
     spaceId: "space-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
   const bot = { id: "bot-1", threadId: "thread-1" } as unknown as Bot;
@@ -6114,7 +6114,7 @@ describe("codex catalog auth", () => {
   const actor = {
     spaceId: "workspace-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
   const spark = "gpt-5.3-codex-spark";
@@ -6203,7 +6203,7 @@ describe("codex live catalog", () => {
   const actor = {
     spaceId: "workspace-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
   const spark = "gpt-5.3-codex-spark";
@@ -6725,7 +6725,7 @@ describe("model set default auth", () => {
   const actor = {
     spaceId: "workspace-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
   const spark = "gpt-5.3-codex-spark";
@@ -7113,7 +7113,7 @@ describe("bot model auth on save", () => {
   const actor = {
     spaceId: "workspace-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
   const spark = "gpt-5.3-codex-spark";
@@ -7419,7 +7419,7 @@ describe("bot restore computer quota", () => {
             actor: {
               spaceId: "space-1",
               userId: "user-1",
-              email: "user@rakazo.test",
+              email: "user@orbit.test",
               isDeploymentOwner: true,
             },
           },
@@ -7483,7 +7483,7 @@ describe("group restore with archived bots", () => {
     const call = async () =>
       handle(
         handler,
-        new Request("http://rakazo.test/rpc/groups/restore", {
+        new Request("http://orbit.test/rpc/groups/restore", {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ json: { groupId: "group-1" } }),
@@ -7541,7 +7541,7 @@ describe("routine live Codex model validation", () => {
   it.each(["create", "update"] as const)(
     "saves a listed live-only model on %s and rejects an unlisted id",
     async (operation) => {
-      const actor = { userId: "user-1", spaceId: "space-1", email: "user@rakazo.test" };
+      const actor = { userId: "user-1", spaceId: "space-1", email: "user@orbit.test" };
       const modelId = "gpt-6-luna-latest";
       const stamp = new Date("2026-01-01T00:00:00Z");
       const row = {
@@ -7708,7 +7708,7 @@ describe("routines.update", () => {
   const actor = {
     spaceId: "space-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
   const routine = {
@@ -8097,7 +8097,7 @@ describe("openai-compatible enabled models", () => {
   const actor = {
     spaceId: "space-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
   const compatible = "openai-compatible";
@@ -9024,7 +9024,7 @@ describe("threads.answerCall and threads.declineCall", () => {
     const actor = {
       spaceId: "space-1",
       userId: "user-1",
-      email: "user@rakazo.test",
+      email: "user@orbit.test",
       isDeploymentOwner: true,
     } satisfies Actor;
     const handler = new RPCHandler(createRouter(deps));
@@ -9141,7 +9141,7 @@ describe("threads.endCall", () => {
     const actor = {
       spaceId: "space-1",
       userId: "user-1",
-      email: "user@rakazo.test",
+      email: "user@orbit.test",
       isDeploymentOwner: true,
     } satisfies Actor;
     const handler = new RPCHandler(createRouter(deps));
@@ -9325,7 +9325,7 @@ describe("groups.archive", () => {
     const actor = {
       spaceId: "workspace-1",
       userId: "user-1",
-      email: "user@rakazo.test",
+      email: "user@orbit.test",
       isDeploymentOwner: true,
     } satisfies Actor;
 
@@ -9588,7 +9588,7 @@ describe("boards.rename", () => {
   const actor = {
     spaceId: "workspace-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
 
@@ -9743,7 +9743,7 @@ describe("boards.tickets.list", () => {
   const actor = {
     spaceId: "workspace-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
 
@@ -9791,7 +9791,7 @@ describe("export.bot", () => {
   const actor = {
     spaceId: "workspace-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
   const roots: string[] = [];
@@ -9801,7 +9801,7 @@ describe("export.bot", () => {
   });
 
   async function homeWith(files: Record<string, string | Uint8Array>) {
-    const root = await mkdtemp(path.join(tmpdir(), "rakazo-export-"));
+    const root = await mkdtemp(path.join(tmpdir(), "orbit-export-"));
     roots.push(root);
     const home = new LocalAgentHomeStore(root);
     for (const [file, content] of Object.entries(files)) {
@@ -9958,7 +9958,7 @@ describe("link favicons", () => {
   const reader = {
     spaceId: "workspace-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: false,
   } satisfies Actor;
 
@@ -10002,7 +10002,7 @@ describe("link favicons", () => {
 });
 
 describe("memory documents", () => {
-  const actor = { userId: "user-1", spaceId: "space-1", email: "user@rakazo.test" };
+  const actor = { userId: "user-1", spaceId: "space-1", email: "user@orbit.test" };
 
   function memoryClient(
     doc: { id: string; path: string; scope: string; botId: string | null } | null,
@@ -10075,7 +10075,7 @@ describe("routine watch creation boundaries", () => {
   const actor = {
     spaceId: "space-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: true,
   } satisfies Actor;
 
@@ -10226,7 +10226,7 @@ describe("API-key live model catalog", () => {
 });
 
 describe("shared space bot permissions", () => {
-  const actor = { userId: "user-1", spaceId: "space-1", email: "user@rakazo.test" };
+  const actor = { userId: "user-1", spaceId: "space-1", email: "user@orbit.test" };
 
   function sharedBotClient(role: string) {
     const bot = {
@@ -10361,7 +10361,7 @@ describe("quarantined computer stop", () => {
               actor: {
                 userId: "user",
                 spaceId: "space",
-                email: "user@rakazo.test",
+                email: "user@orbit.test",
                 isDeploymentOwner: true,
               },
             },

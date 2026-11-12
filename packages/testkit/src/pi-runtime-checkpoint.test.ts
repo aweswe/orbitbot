@@ -1,7 +1,7 @@
 import { mkdtemp, readdir, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { AgentRunRequest, AgentRuntimeEvent } from "@rakazo/adapter-kit";
+import type { AgentRunRequest, AgentRuntimeEvent } from "@forion/orbit-adapter-kit";
 import { describe, expect, it, vi } from "vitest";
 import { MAX_APPROVAL_DETAIL_LENGTH } from "../../adapters/src/approval-ask.js";
 import { approvalPausedToolResult } from "../../adapters/src/approval-effect.js";

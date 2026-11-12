@@ -1,7 +1,7 @@
+import type { SpaceSetting } from "@forion/orbit-contracts";
+import { writeSaved } from "@forion/orbit-core/query";
+import { Button } from "@forion/orbit-ui-web";
 import { useLingui } from "@lingui/react/macro";
-import type { SpaceSetting } from "@rakazo/contracts";
-import { writeSaved } from "@rakazo/core/query";
-import { Button } from "@rakazo/ui-web";
 import type { QueryKey } from "@tanstack/react-query";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";

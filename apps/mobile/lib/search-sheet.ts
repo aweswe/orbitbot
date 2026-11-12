@@ -1,5 +1,5 @@
-import type { SearchHit, SpaceBot, SpaceGroup } from "@rakazo/contracts";
-import { dedupeSearchHits, searchHitListKey } from "@rakazo/core";
+import type { SearchHit, SpaceBot, SpaceGroup } from "@forion/orbit-contracts";
+import { dedupeSearchHits, searchHitListKey } from "@forion/orbit-core";
 import type { MobileBot, MobileGroup } from "./api";
 import { t } from "./i18n";
 import { filterBots } from "./inbox";

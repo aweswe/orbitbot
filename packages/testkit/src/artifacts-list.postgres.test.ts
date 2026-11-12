@@ -1,7 +1,7 @@
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { PrismaClient } from "@rakazo/db";
+import type { PrismaClient } from "@forion/orbit-db";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { sessionCookieHeader } from "./index.js";
 import { asSystem } from "./system-db.js";
@@ -25,7 +25,7 @@ describe.skipIf(!hasDb)("artifacts.listSpace made by bots", () => {
   const dataDir = mkdtempSync(path.join(tmpdir(), "rakazo-artifacts-list-"));
 
   beforeAll(async () => {
-    const { createApp } = await import("@rakazo/api/app");
+    const { createApp } = await import("@forion/orbit-api/app");
     const handles = await createApp({
       databaseUrl: process.env.DATABASE_URL!,
       dataDir,
@@ -42,7 +42,7 @@ describe.skipIf(!hasDb)("artifacts.listSpace made by bots", () => {
   });
 
   it("keeps files whose newest version a bot made, page by page", async () => {
-    const cookie = await signup(app, `artifacts-list-${Date.now()}@rakazo.test`);
+    const cookie = await signup(app, `artifacts-list-${Date.now()}@orbit.test`);
     const bot = await rpc<{ id: string }>(app, cookie, "bots/create", {
       name: "Analyst",
       title: "Analyst",

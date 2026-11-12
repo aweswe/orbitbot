@@ -1,4 +1,4 @@
-import { createKeyedListeners } from "@rakazo/core";
+import { createKeyedListeners } from "@forion/orbit-core";
 
 const offers = createKeyedListeners<string>();
 

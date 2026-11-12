@@ -2,18 +2,16 @@
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import { BRAND_COLORS, BRAND_LOGOS } from "../brand";
-import { githubStarsLabel } from "../github";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const starsLabel = await githubStarsLabel();
 ---
 
-<BaseLayout title="Brand · Rakazo" description="Rakazo logos and colors for press and partners.">
+<BaseLayout title="Brand · Orbit" description="Orbit logos and colors for press and partners.">
   <div class="container">
-    <Header starsLabel={starsLabel} />
+    <Header />
     <main id="main" class="privacy-copy brand-kit">
       <h1>Brand</h1>
-      <p>Logos and colors for writing about Rakazo.</p>
+      <p>Logos and colors for writing about Orbit.</p>
       <h2>Logos</h2>
       <ul class="brand-kit__logos">
         {
@@ -41,7 +39,7 @@ const starsLabel = await githubStarsLabel();
         }
       </ul>
       <h2>Usage</h2>
-      <p>Write Rakazo with a capital R in text. The wordmark is lowercase. Do not alter the mascot or imply an endorsement.</p>
+      <p>Write Orbit with a capital O in text. Do not alter the mark or imply an endorsement.</p>
       <p>For press, email <a href="mailto:hello@forion.dev">hello@forion.dev</a>.</p>
     </main>
     <Footer />

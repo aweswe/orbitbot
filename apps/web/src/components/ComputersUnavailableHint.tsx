@@ -1,5 +1,5 @@
+import { Button, buttonVariants, Spinner } from "@forion/orbit-ui-web";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Button, buttonVariants, Spinner } from "@rakazo/ui-web";
 import { useEffect, useRef, useState } from "react";
 import type { SandboxAvailabilityPhase } from "../lib/computer-sandbox";
 import {

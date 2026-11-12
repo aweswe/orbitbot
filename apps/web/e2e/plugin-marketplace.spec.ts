@@ -1,11 +1,11 @@
-import { expect, test } from "@playwright/test";
 import type {
   AgentSkillCatalogEntry,
   BotMcpServer,
   CapabilityInstall,
   McpServer,
-} from "@rakazo/contracts";
-import { MCP_OAUTH_CLIENT_REQUIRED } from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
+import { MCP_OAUTH_CLIENT_REQUIRED } from "@forion/orbit-contracts";
+import { expect, test } from "@playwright/test";
 import {
   activeBotId,
   captureScreenshot,
@@ -18,7 +18,7 @@ import {
 test("Integrations installs a plugin, completes real broker OAuth against a fake provider, and removes its children", async ({
   page,
 }, testInfo) => {
-  await signup(page, `marketplace-${Date.now()}@rakazo.test`, "password12", "Marketplace Test");
+  await signup(page, `marketplace-${Date.now()}@orbit.test`, "password12", "Marketplace Test");
   await completeOnboarding(page);
   const botId = activeBotId(page);
   let cancel = true;
@@ -132,7 +132,7 @@ test("Integrations installs a plugin, completes real broker OAuth against a fake
 test("shows directly registered MCP servers in Integrations without catalog connections", async ({
   page,
 }, testInfo) => {
-  await signup(page, `direct-mcp-list-${Date.now()}@rakazo.test`, "password12", "Direct MCP List");
+  await signup(page, `direct-mcp-list-${Date.now()}@orbit.test`, "password12", "Direct MCP List");
   await completeOnboarding(page);
   await page.goto("/app");
   await page.waitForURL(/\/app\/[^/]+$/);

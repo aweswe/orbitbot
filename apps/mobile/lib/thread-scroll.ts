@@ -1,7 +1,7 @@
-import type { ThreadMessage } from "@rakazo/contracts";
-import type { ThreadScrollState } from "@rakazo/core";
+import type { ThreadMessage } from "@forion/orbit-contracts";
+import type { ThreadScrollState } from "@forion/orbit-core";
 
-export type { ThreadScrollState } from "@rakazo/core";
+export type { ThreadScrollState } from "@forion/orbit-core";
 
 export type ThreadScrollAction = "jump" | "smooth" | null;
 

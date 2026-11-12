@@ -33,7 +33,7 @@ export function OrbitPlanetAvatar({
   ringColor = "#ff8a3d",
   isWorking = false,
   className,
-  title = "Orion",
+  title = "Orbit",
 }: OrbitPlanetAvatarProps) {
   // Scaling unit: 1u at 220px design size = size / 220
   const u = size / 220;
@@ -42,7 +42,7 @@ export function OrbitPlanetAvatar({
     <div
       className={cn(
         "relative shrink-0 select-none flex items-center justify-center rounded-2xl overflow-visible transition-all duration-300",
-        className
+        className,
       )}
       style={{
         width: size,
@@ -60,7 +60,7 @@ export function OrbitPlanetAvatar({
         xmlns="http://www.w3.org/2000/svg"
         className={cn(
           "w-full h-full overflow-visible transition-transform duration-300",
-          isWorking ? "animate-pulse scale-[1.04]" : "hover:scale-105"
+          isWorking ? "animate-pulse scale-[1.04]" : "hover:scale-105",
         )}
       >
         <defs>
@@ -89,7 +89,13 @@ export function OrbitPlanetAvatar({
 
           {/* Glow filter for the front ring */}
           <filter id={`ring-glow-${size}`} x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="3" stdDeviation="5" floodColor={ringColor} floodOpacity="0.4" />
+            <feDropShadow
+              dx="0"
+              dy="3"
+              stdDeviation="5"
+              floodColor={ringColor}
+              floodOpacity="0.4"
+            />
           </filter>
         </defs>
 
@@ -186,4 +192,3 @@ export function OrbitPlanetAvatar({
     </div>
   );
 }
-

@@ -1,7 +1,11 @@
-import type { AgentImportSetupItem, AgentImportSetupState, MessageBlock } from "@rakazo/contracts";
+import type {
+  AgentImportSetupItem,
+  AgentImportSetupState,
+  MessageBlock,
+} from "@forion/orbit-contracts";
 
 /**
- * Needs Rakazo cannot check from its own data: what a skill declares, and a program or local
+ * Needs Orbit cannot check from its own data: what a skill declares, and a program or local
  * paths a stdio server relies on. Such rows are never shown as done.
  */
 export function isImportSetupVerifiable(item: AgentImportSetupItem): boolean {

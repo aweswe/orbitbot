@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
-import type { Bot } from "@rakazo/contracts";
-import { foldPeerReplies } from "@rakazo/core";
+import type { Bot } from "@forion/orbit-contracts";
+import { foldPeerReplies } from "@forion/orbit-core";
 import { act, lazy, StrictMode, Suspense, useEffect, useRef } from "react";
 import type { Root } from "react-dom/client";
 import { createRoot } from "react-dom/client";

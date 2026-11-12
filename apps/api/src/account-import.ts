@@ -6,14 +6,14 @@ import { chmod, mkdir, mkdtemp, open, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { createInterface } from "node:readline";
-import type { AdapterContext } from "@rakazo/adapter-kit";
-import { normalizeWorkspacePath, resolveBotWorkspacePath } from "@rakazo/adapters";
+import type { AdapterContext } from "@forion/orbit-adapter-kit";
+import { normalizeWorkspacePath, resolveBotWorkspacePath } from "@forion/orbit-adapters";
 import type {
   AccountExportManifest,
   AccountExportRecord,
   AccountImportResult,
   Actor,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   ACCOUNT_EXPORT_FORMAT,
   ACCOUNT_EXPORT_MANIFEST_PATH,
@@ -24,8 +24,8 @@ import {
   AccountExportRecordSchema,
   attachmentSizeLabel,
   resolveBotAvatarSet,
-} from "@rakazo/contracts";
-import { organicAvatarFamily } from "@rakazo/core";
+} from "@forion/orbit-contracts";
+import { organicAvatarFamily } from "@forion/orbit-core";
 import {
   createRepos,
   createSpaceForMember,
@@ -35,10 +35,10 @@ import {
   runAsSystem,
   runAsTenant,
   SpaceLimitError,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
-import { pageViewerCode } from "@rakazo/page-kit/compile";
-import { checkPageSource } from "@rakazo/page-kit/validate";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
+import { pageViewerCode } from "@forion/orbit-page-kit/compile";
+import { checkPageSource } from "@forion/orbit-page-kit/validate";
 import type { Hono } from "hono";
 import { inflateEntry, parseZipArchive, readExact, ZipFormatError } from "./account-zip-reader.js";
 import { cancelBody } from "./http-body.js";

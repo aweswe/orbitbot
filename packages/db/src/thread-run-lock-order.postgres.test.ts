@@ -1,10 +1,10 @@
 import type { Pool } from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { PrismaClient } from "./client.js";
-import { createDb, Prisma } from "./client.js";
+import { createDb, Prisma, schemaFromConnectionString } from "./client.js";
 import { clearThread, finalizeComputerControlRelease } from "./events.js";
 import { provisionMessagingIdentity } from "./messaging.js";
-import { asSystem, runAsSystem, runAsTenant } from "./row-security.js";
+import { asSystem, createScopedQuery, runAsSystem, runAsTenant } from "./row-security.js";
 
 const databaseUrl = process.env.DATABASE_URL;
 const describePostgres =
@@ -107,11 +107,15 @@ describePostgres("thread row before run rows for clear and control release (Post
    * every probe would silently report "not locked".
    */
   async function connectProbe() {
-    const client = await runAsSystem("lock probe", () => pool.connect());
+    const scoped = createScopedQuery(pool, {
+      schema: schemaFromConnectionString(databaseUrl!) ?? "",
+    });
+    const asSystemQuery = <T extends Record<string, unknown>>(text: string, values?: unknown[]) =>
+      runAsSystem("lock probe", () => scoped.query<T>(text, values));
     return {
       async rowLocked(table: "runs" | "computers", id: string): Promise<boolean> {
         try {
-          const result = await client.query(
+          const result = await asSystemQuery(
             `SELECT id FROM ${table} WHERE id = $1 FOR UPDATE NOWAIT`,
             [id],
           );
@@ -124,7 +128,7 @@ describePostgres("thread row before run rows for clear and control release (Post
         }
       },
       async runStatus(id: string): Promise<string | null> {
-        const result = await client.query<{ status: string | null }>(
+        const result = await asSystemQuery<{ status: string | null }>(
           "SELECT status FROM runs WHERE id = $1",
           [id],
         );
@@ -132,13 +136,13 @@ describePostgres("thread row before run rows for clear and control release (Post
       },
       /** Backends waiting on the holder's transaction: the function under test, blocked. */
       async waitingOnHolder(xactId: string): Promise<number> {
-        const result = await client.query(
+        const result = await asSystemQuery<{ waiting: number }>(
           "SELECT count(*)::int AS waiting FROM pg_locks WHERE locktype = 'transactionid' AND NOT granted AND transactionid::text = $1",
           [xactId],
         );
-        return result.rows[0].waiting as number;
+        return result.rows[0]!.waiting;
       },
-      release: () => client.release(),
+      release: () => undefined,
     };
   }
 

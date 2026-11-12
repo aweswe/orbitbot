@@ -87,15 +87,17 @@ async function provisionWith(owner: Client, runtimeUrl: string): Promise<{ warni
       });
   }
   await owner.query(`
-    GRANT USAGE ON SCHEMA public TO ${RUNTIME_ROLE};
-    GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO ${RUNTIME_ROLE};
-    GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO ${RUNTIME_ROLE};
-    REVOKE ALL ON TABLE "_prisma_migrations" FROM ${RUNTIME_ROLE};
-    REVOKE UPDATE ON TABLE "security_events" FROM ${RUNTIME_ROLE};
-    REVOKE UPDATE ON TABLE "audit_events" FROM ${RUNTIME_ROLE};
-    ALTER DEFAULT PRIVILEGES IN SCHEMA public
+    GRANT USAGE ON SCHEMA orbit_bot TO ${RUNTIME_ROLE};
+    GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA orbit_bot TO ${RUNTIME_ROLE};
+    GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA orbit_bot TO ${RUNTIME_ROLE};
+    REVOKE ALL ON TABLE orbit_bot."_prisma_migrations" FROM ${RUNTIME_ROLE};
+    REVOKE UPDATE ON TABLE orbit_bot.security_events FROM ${RUNTIME_ROLE};
+    REVOKE UPDATE ON TABLE orbit_bot.audit_events FROM ${RUNTIME_ROLE};
+    REVOKE UPDATE, DELETE, TRUNCATE ON TABLE orbit_bot.billing_audit_events FROM ${RUNTIME_ROLE};
+    GRANT SELECT, INSERT ON TABLE orbit_bot.billing_audit_events TO ${RUNTIME_ROLE};
+    ALTER DEFAULT PRIVILEGES IN SCHEMA orbit_bot
       GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO ${RUNTIME_ROLE};
-    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO ${RUNTIME_ROLE};
+    ALTER DEFAULT PRIVILEGES IN SCHEMA orbit_bot GRANT USAGE, SELECT ON SEQUENCES TO ${RUNTIME_ROLE};
   `);
   await owner.query(
     `DO $$ BEGIN EXECUTE format('GRANT CONNECT ON DATABASE %I TO ${RUNTIME_ROLE}', current_database()); END $$`,
@@ -147,7 +149,8 @@ async function provisionWith(owner: Client, runtimeUrl: string): Promise<{ warni
   try {
     if (!role) await owner.query(`CREATE ROLE ${name} LOGIN ${secret} ${limits}`);
     else await owner.query(`ALTER ROLE ${name} LOGIN ${secret} ${limits}`);
-    if (login !== RUNTIME_ROLE) await owner.query(`GRANT ${RUNTIME_ROLE} TO ${name}`);
+    if (login !== RUNTIME_ROLE)
+      await owner.query(`GRANT ${RUNTIME_ROLE} TO ${name} WITH INHERIT TRUE, SET FALSE`);
   } catch (error) {
     const denied = (error as { code?: string }).code === "42501";
     if (denied && provisioned) return {};
@@ -269,7 +272,8 @@ export async function describeRowSecurity(prisma: PrismaClient): Promise<RowSecu
   >(`SELECT current_user AS role, r.rolsuper, r.rolbypassrls,
         pg_has_role(current_user, c.relowner, 'USAGE') AS owns
       FROM pg_roles r, pg_class c
-      WHERE r.rolname = current_user AND c.oid = 'public.messages'::regclass`);
+      WHERE r.rolname = current_user
+        AND c.oid = to_regclass(format('%I.messages', current_schema()))`);
   if (!row) return { enforced: false, role: "unknown", reason: "could not read the role" };
   const reason = row.rolsuper
     ? "is a superuser"

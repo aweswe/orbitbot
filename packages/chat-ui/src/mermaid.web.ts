@@ -1,5 +1,5 @@
-import type { ResolvedAppearance } from "@rakazo/ui-tokens";
-import { webTokensForAppearance } from "@rakazo/ui-tokens";
+import type { ResolvedAppearance } from "@forion/orbit-ui-tokens";
+import { webTokensForAppearance } from "@forion/orbit-ui-tokens";
 import type mermaid from "mermaid";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { chatMermaidConfig } from "./mermaid";

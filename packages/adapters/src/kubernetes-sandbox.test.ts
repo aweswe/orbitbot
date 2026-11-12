@@ -2,9 +2,9 @@ import { execFileSync } from "node:child_process";
 import { link, mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import type { AdapterContext, ComputerRef, ProcessEvent } from "@forion/orbit-adapter-kit";
+import { shellQuote } from "@forion/orbit-core/node/desktop-runtime";
 import type { Exec, V1Pod } from "@kubernetes/client-node";
-import type { AdapterContext, ComputerRef, ProcessEvent } from "@rakazo/adapter-kit";
-import { shellQuote } from "@rakazo/core/node/desktop-runtime";
 import { describe, expect, it, vi } from "vitest";
 import { encodeTarEntry, TarReader } from "./exec-computer.js";
 import type { KubernetesSandboxSdk } from "./kubernetes-sandbox.js";
@@ -103,7 +103,7 @@ describe("KubernetesSandboxProvider", () => {
               executable: command[write + 2] === "700",
             });
           } else {
-            expect(command).toContain("rakazo-export-list");
+            expect(command).toContain("orbit-export-list");
             exportedNames = content.toString().split("\0").filter(Boolean);
           }
           finish();
@@ -357,7 +357,7 @@ describe("KubernetesSandboxProvider", () => {
     const home = {
       homeClaim: "data-claim",
       homeColocateNamespace: "rakazo",
-      homeColocateLabels: { app: "rakazo-api" },
+      homeColocateLabels: { app: "orbit-api" },
     };
 
     it("mounts only the bot's home directory and pins the pod beside the volume", async () => {
@@ -382,7 +382,7 @@ describe("KubernetesSandboxProvider", () => {
             requiredDuringSchedulingIgnoredDuringExecution: [
               {
                 namespaces: ["rakazo"],
-                labelSelector: { matchLabels: { app: "rakazo-api" } },
+                labelSelector: { matchLabels: { app: "orbit-api" } },
                 topologyKey: "kubernetes.io/hostname",
               },
             ],

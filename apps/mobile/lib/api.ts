@@ -15,7 +15,7 @@ import type {
   Space,
   SpaceNavigation,
   ThreadSnapshot,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   accountSecuritySchema,
   authCapabilitiesSchema,
@@ -24,8 +24,8 @@ import {
   legacyAccountSecurity,
   legacyAuthCapabilitiesSchema,
   parseServerHeaders,
-} from "@rakazo/contracts";
-import type { LiveThreadMessage, LiveThreadRun, ThreadHistory } from "@rakazo/core";
+} from "@forion/orbit-contracts";
+import type { LiveThreadMessage, LiveThreadRun, ThreadHistory } from "@forion/orbit-core";
 import {
   aiConsentTargets,
   aiDataUsesForProcedure,
@@ -43,8 +43,8 @@ import {
   readBoundedJsonResponse,
   signupRequiresEmailVerification,
   withAbort,
-} from "@rakazo/core";
-import { clientCorrelationHeaders, responseCorrelation } from "@rakazo/logging/monitoring";
+} from "@forion/orbit-core";
+import { clientCorrelationHeaders, responseCorrelation } from "@forion/orbit-logging/monitoring";
 import * as SecureStore from "expo-secure-store";
 import { promptAiConsent } from "./ai-consent";
 import type { EndpointResult } from "./endpoint";

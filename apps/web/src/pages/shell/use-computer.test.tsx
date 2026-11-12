@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
-import { COMPUTER_ALLOWANCE_USED_ERROR } from "@rakazo/contracts";
-import { SCREEN_RECONNECT_STABLE_MS } from "@rakazo/core";
+import { COMPUTER_ALLOWANCE_USED_ERROR } from "@forion/orbit-contracts";
+import { SCREEN_RECONNECT_STABLE_MS } from "@forion/orbit-core";
 import type { ComponentProps, ReactNode } from "react";
 import { act } from "react";
 import type { Root } from "react-dom/client";
@@ -15,7 +15,7 @@ vi.mock("@lingui/react/macro", () => ({
     t: (parts: TemplateStringsArray, ...values: unknown[]) => String.raw(parts, ...values),
   }),
 }));
-vi.mock("@rakazo/ui-web", () => ({
+vi.mock("@forion/orbit-ui-web", () => ({
   Button: (props: ComponentProps<"button">) => <button type="button" {...props} />,
   Spinner: () => null,
 }));

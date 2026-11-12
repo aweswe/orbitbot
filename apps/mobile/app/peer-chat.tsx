@@ -1,7 +1,7 @@
-import { ChatMarkdown } from "@rakazo/chat-ui/native";
-import type { PeerConversation } from "@rakazo/core";
-import { displayName, loadPeerHistory, peerConversations } from "@rakazo/core";
-import { typeScale } from "@rakazo/ui-tokens";
+import { ChatMarkdown } from "@forion/orbit-chat-ui/native";
+import type { PeerConversation } from "@forion/orbit-core";
+import { displayName, loadPeerHistory, peerConversations } from "@forion/orbit-core";
+import { typeScale } from "@forion/orbit-ui-tokens";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {

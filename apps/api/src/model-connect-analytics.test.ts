@@ -1,5 +1,5 @@
-import type { Actor } from "@rakazo/contracts";
-import { MODEL_KEY_REJECTED_ERROR, OPENAI_COMPATIBLE_PROVIDER_ID } from "@rakazo/contracts";
+import type { Actor } from "@forion/orbit-contracts";
+import { MODEL_KEY_REJECTED_ERROR, OPENAI_COMPATIBLE_PROVIDER_ID } from "@forion/orbit-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   firstModelConnectAnalytics,

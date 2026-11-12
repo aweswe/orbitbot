@@ -8,17 +8,17 @@ import type {
   PurchaseCredentialKind,
   PurchaseSnapshot,
   PurchaseStatus,
-} from "@rakazo/adapter-kit";
+} from "@forion/orbit-adapter-kit";
 import {
   PaymentWalletDisconnected,
   PaymentWalletRequestRejected,
   purchasePollJob,
-} from "@rakazo/adapter-kit";
-import type { PurchaseCardField } from "@rakazo/contracts";
-import { PurchaseIdInput, PurchaseRequestInput } from "@rakazo/contracts";
-import type { Purchase } from "@rakazo/db";
-import { recordPayment, releasePayment } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import type { PurchaseCardField } from "@forion/orbit-contracts";
+import { PurchaseIdInput, PurchaseRequestInput } from "@forion/orbit-contracts";
+import type { Purchase } from "@forion/orbit-db";
+import { recordPayment, releasePayment } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { cardRedactionForms } from "./bot-secrets.js";
 import type { PaymentWalletDeps } from "./payment-wallets.js";
 import { withPaymentWalletCredential } from "./payment-wallets.js";

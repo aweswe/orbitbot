@@ -245,8 +245,21 @@ esac
   write(path.join(bin, "pg_restore"), `#!/bin/bash\ngrep -q "custom-format dump"\n`);
   chmodSync(path.join(bin, "pg_restore"), 0o755);
   // No inherited deployment settings, credentials, or executable search paths.
+  // flock is a Linux util-linux tool; Homebrew provides it on macOS.
+  const flock = [
+    "/usr/bin/flock",
+    "/bin/flock",
+    "/opt/homebrew/bin/flock",
+    "/usr/local/bin/flock",
+  ].find((candidate) => existsSync(candidate));
   const env = {
-    PATH: [bin, path.dirname(process.execPath), "/usr/bin", "/bin"].join(path.delimiter),
+    PATH: [
+      bin,
+      path.dirname(process.execPath),
+      path.dirname(flock ?? "/usr/bin/flock"),
+      "/usr/bin",
+      "/bin",
+    ].join(path.delimiter),
     COMMAND_LOG: path.join(root, "commands.jsonl"),
     SQL_INPUT: path.join(root, "input.sql"),
     SQL_SERVICE_STATE: path.join(root, "sql-service-state"),
@@ -731,7 +744,7 @@ describe("production backup deployment and archive behavior", () => {
       custom ? { RAKAZO_DEPLOY_DIR: deployment } : {},
     );
     expect(result.status, result.stderr).toBe(0);
-    expect(result.stdout).toContain("Verified Rakazo backup");
+    expect(result.stdout).toContain("Verified Orbit backup");
     expect(result.stderr).toContain("not encrypted");
     expect(readdirSync(result.stdout.trim().split("written to ")[1]!).sort()).toEqual([
       "SHA256SUMS",
@@ -764,7 +777,7 @@ describe("production backup deployment and archive behavior", () => {
     const result = f.run("infra/compose/backup-prod.sh", [], { CHANGED_TAR: "1" });
     expect(result.status, result.stderr).toBe(0);
     expect(result.stderr).toContain("file changed as we read it");
-    expect(result.stdout).toContain("Verified Rakazo backup");
+    expect(result.stdout).toContain("Verified Orbit backup");
     const snapshot = result.stdout.trim().split("written to ")[1]!;
     expect(contents(path.join(snapshot, "appdata.tgz"))).toContain("home.txt");
     expect(existsSync(path.join(snapshot, "SHA256SUMS"))).toBe(true);
@@ -778,7 +791,7 @@ describe("production backup deployment and archive behavior", () => {
       const f = fixture();
       const result = f.run("infra/compose/backup-prod.sh", [], failure);
       expect(result.status).not.toBe(0);
-      expect(result.stdout).not.toContain("Verified Rakazo backup");
+      expect(result.stdout).not.toContain("Verified Orbit backup");
       expect(snapshotNames(f.snapshots)).toEqual([]);
     },
   );
@@ -888,7 +901,7 @@ echo "/dev/fake 104857600 0 $free 0% /"
         ...(output === "dump" ? { OVERSIZE_DUMP: "1" } : { OVERSIZE_ARCHIVE: "1" }),
       });
       expect(result.status).not.toBe(0);
-      expect(result.stdout).not.toContain("Verified Rakazo backup");
+      expect(result.stdout).not.toContain("Verified Orbit backup");
       expect(snapshotNames(f.snapshots)).toEqual(["20261017T000000Z"]);
       expect(readFileSync(path.join(last, "SHA256SUMS"), "utf8")).toBe("verified");
     },
@@ -935,7 +948,7 @@ exec /usr/bin/sync "$@"
       chmodSync(sync, 0o755);
       const result = f.run("infra/compose/backup-prod.sh");
       expect(result.status).not.toBe(0);
-      expect(result.stdout).not.toContain("Verified Rakazo backup");
+      expect(result.stdout).not.toContain("Verified Orbit backup");
       expect(snapshotNames(f.snapshots)).toEqual(["20261017T000000Z"]);
     },
   );
@@ -978,7 +991,7 @@ exec /usr/bin/sync "$@"
       },
     );
     expect(result.status).toBe(1);
-    expect(result.stderr).toContain("Another Rakazo backup is running");
+    expect(result.stderr).toContain("Another Orbit backup is running");
   });
 
   it("rejects a non-positive retention", () => {
@@ -1094,7 +1107,7 @@ describe("encrypted production backups", { timeout: 20_000 }, () => {
       RAKAZO_BACKUP_AGE_RECIPIENTS: recipients,
     });
     expect(result.status).not.toBe(0);
-    expect(result.stdout).not.toContain("Verified Rakazo backup");
+    expect(result.stdout).not.toContain("Verified Orbit backup");
     expect(snapshotNames(f.snapshots)).toEqual([]);
     expect(existsSync(path.join(f.snapshots, ".encrypted"))).toBe(false);
   });
@@ -1167,7 +1180,7 @@ describe("off-site copies", { timeout: 20_000 }, () => {
       ...settings,
     });
     expect(result.status).toBe(1);
-    expect(result.stdout).toContain("Verified Rakazo backup");
+    expect(result.stdout).toContain("Verified Orbit backup");
     expect(result.stderr).toContain(`Off-site copy failed: ${message}`);
     expect(existsSync(path.join(snapshotOf(result), "SHA256SUMS"))).toBe(true);
     if (message.includes("require")) expect(rcloneCalls(f)).toEqual([]);

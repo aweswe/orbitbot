@@ -4,13 +4,13 @@ import type { RequestListener, Server } from "node:http";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import type { OrbitDesktop } from "@forion/orbit-contracts";
 import type { ElectronApplication } from "@playwright/test";
 import { _electron as electron, expect, test } from "@playwright/test";
-import type { RakazoDesktop } from "@rakazo/contracts";
 import { prepareHostComputer } from "../src/host-computer.js";
 import { shownWindow } from "./shown-window.js";
 
-const APP_MARKER = "Local Rakazo stack ready";
+const APP_MARKER = "Local Orbit stack ready";
 const IMAGE_TAG = "v9.9.9";
 const STACK_PROBE_PATH = "/.well-known/rakazo-desktop-stack";
 const STACK_TOKEN_HEADER = "x-rakazo-desktop-stack-token";
@@ -56,7 +56,7 @@ test.beforeAll(async () => {
     }
     response.writeHead(200, { "content-type": "text/html; charset=utf-8" });
     response.end(
-      `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Rakazo</title></head><body><main>${APP_MARKER}</main></body></html>`,
+      `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Orbit</title></head><body><main>${APP_MARKER}</main></body></html>`,
     );
   });
   await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
@@ -95,13 +95,13 @@ function fakeDockerLog() {
  */
 async function writeFakeDocker(mode: FakeDockerMode) {
   const script = path.join(userData, "fake-docker.sh");
-  let up = '  up) echo "Container rakazo-web-1 Started"; exit 0 ;;';
+  let up = '  up) echo "Container orbit-web-1 Started"; exit 0 ;;';
   if (mode === "pool-exhausted") {
     up = '  up) echo "all predefined address pools have been fully subnetted" >&2; exit 1 ;;';
   } else if (mode === "ports-exhausted") {
     up = '  up) echo "port is already allocated" >&2; exit 1 ;;';
   } else if (mode === "port-conflict") {
-    up = `  up) if [ ! -f '${path.join(userData, "port-conflict")}' ]; then touch '${path.join(userData, "port-conflict")}'; echo "port is already allocated" >&2; exit 1; fi; echo "Container rakazo-web-1 Started"; exit 0 ;;`;
+    up = `  up) if [ ! -f '${path.join(userData, "port-conflict")}' ]; then touch '${path.join(userData, "port-conflict")}'; echo "port is already allocated" >&2; exit 1; fi; echo "Container orbit-web-1 Started"; exit 0 ;;`;
   }
   const lines = [
     "#!/bin/sh",
@@ -177,7 +177,7 @@ test("This computer installs and starts the stack, then opens the app", async ()
 
   const appWindowPromise = app.waitForEvent("window");
   await setup.getByRole("button", { name: "Continue" }).click();
-  await expect(setup.locator("#stack-phase")).toHaveText("Downloading Rakazo…");
+  await expect(setup.locator("#stack-phase")).toHaveText("Downloading Orbit…");
   await expect(setup.getByRole("button", { name: "Continue" })).toBeDisabled();
   // Docker output stays behind the details toggle; the phase, the bar, and the size show by default.
   await expect(setup.locator("#stack-detail")).toHaveText("412 MB downloaded");
@@ -252,7 +252,7 @@ test("switching to Existing instance while the stack starts keeps that choice", 
   await setup.getByRole("radio", { name: /This computer/ }).check();
 
   await setup.getByRole("button", { name: "Continue" }).click();
-  await expect(setup.locator("#stack-phase")).toHaveText("Downloading Rakazo…");
+  await expect(setup.locator("#stack-phase")).toHaveText("Downloading Orbit…");
 
   // Fake docker sleeps during pull; leave This computer before ready so followStack must not save.
   await setup.getByRole("radio", { name: /Existing instance/ }).check();
@@ -518,7 +518,7 @@ test("the desktop never exposes server administration or account impersonation",
     await main.evaluate(
       () =>
         "localSettings" in
-        (window as typeof window & { rakazoDesktop: RakazoDesktop }).rakazoDesktop,
+        (window as typeof window & { rakazoDesktop: OrbitDesktop }).rakazoDesktop,
     ),
   ).toBe(false);
   expect(

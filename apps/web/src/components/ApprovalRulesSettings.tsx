@@ -1,19 +1,18 @@
-import { Trans, useLingui } from "@lingui/react/macro";
 import type {
   ActionApprovalRule,
   ActionAutoReviewSettings,
   ApprovalMode,
   SettingsScope,
-} from "@rakazo/contracts";
-import type { ApprovalRuleChoice } from "@rakazo/core";
+} from "@forion/orbit-contracts";
+import type { ApprovalRuleChoice } from "@forion/orbit-core";
 import {
   APPROVAL_RULE_EFFECTS,
   approvalRuleApplies,
   approvalRuleChoices,
   approvalRuleEffectChoices,
   approvalRuleLabel,
-} from "@rakazo/core";
-import { writeSaved } from "@rakazo/core/query";
+} from "@forion/orbit-core";
+import { writeSaved } from "@forion/orbit-core/query";
 import {
   Button,
   Command,
@@ -26,7 +25,8 @@ import {
   PopoverTrigger,
   ToggleGroup,
   ToggleGroupItem,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
 import { useRef, useState } from "react";

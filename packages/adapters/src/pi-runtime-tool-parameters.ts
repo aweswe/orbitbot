@@ -1,6 +1,6 @@
-import type { ConnectorTool } from "@rakazo/adapter-kit";
-import { BOT_INSTRUCTIONS_MAX_LENGTH, ThinkingLevelSchema } from "@rakazo/contracts";
-import { getLogger } from "@rakazo/logging";
+import type { ConnectorTool } from "@forion/orbit-adapter-kit";
+import { BOT_INSTRUCTIONS_MAX_LENGTH, ThinkingLevelSchema } from "@forion/orbit-contracts";
+import { getLogger } from "@forion/orbit-logging";
 import { Type } from "typebox";
 import { MAX_APPROVAL_DETAIL_LENGTH } from "./approval-ask.js";
 import {

@@ -3,11 +3,11 @@ import type {
   AdapterContext,
   HttpPaymentAuthorization,
   PaymentWalletProvider,
-} from "@rakazo/adapter-kit";
-import { PaidRequestInput } from "@rakazo/contracts";
-import { stableJsonValue } from "@rakazo/core/node/approval-effect-key";
-import type { Purchase } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import { PaidRequestInput } from "@forion/orbit-contracts";
+import { stableJsonValue } from "@forion/orbit-core/node/approval-effect-key";
+import type { Purchase } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { redactConnectorPayload } from "./connector-safety.js";
 import type { PurchaseDeps } from "./purchase-service.js";
 import {

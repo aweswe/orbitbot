@@ -8,13 +8,14 @@ WORKDIR /app
 # leave the copied tree unreadable to USER node at runtime.
 COPY --chmod=755 . .
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @rakazo/db generate
-RUN pnpm --filter @rakazo/api --filter @rakazo/worker build
-RUN RAKAZO_ALLOW_DEV_SECRETS=1 pnpm --filter @rakazo/web build
+RUN pnpm --filter @forion/orbit-db generate
+RUN pnpm --filter @forion/orbit-api --filter @forion/orbit-worker build
+RUN RAKAZO_ALLOW_DEV_SECRETS=1 pnpm --filter @forion/orbit-web build
+RUN install -d -m 755 /usr/share/doc/orbit && cp LICENSE NOTICE ATTRIBUTION.md THIRD_PARTY_NOTICES.md compliance/modified-files.md /usr/share/doc/orbit/ && cp -r compliance/licenses /usr/share/doc/orbit/licenses
 RUN install -d -m 750 -o node -g node /data /app/apps/web/node_modules/.vite-temp
 RUN /tmp/apt-security.sh --check && rm -f /tmp/apt-security.sh
 
 ENV NODE_ENV=production
 EXPOSE 3100 7091
 USER node
-CMD ["pnpm", "--filter", "@rakazo/api", "start"]
+CMD ["pnpm", "--filter", "@forion/orbit-api", "start"]

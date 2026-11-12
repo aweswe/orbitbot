@@ -1,7 +1,6 @@
-import { ORPCError } from "@orpc/server";
-import { runContinueJob, runJobKey } from "@rakazo/adapter-kit";
-import { settleCallRequest } from "@rakazo/adapters";
-import type { Actor } from "@rakazo/contracts";
+import { runContinueJob, runJobKey } from "@forion/orbit-adapter-kit";
+import { settleCallRequest } from "@forion/orbit-adapters";
+import type { Actor } from "@forion/orbit-contracts";
 import {
   AttachmentValidationError,
   CALL_CLIENT_NONCE_PREFIX,
@@ -9,8 +8,8 @@ import {
   expandSkillReferencesInPrompt,
   MODEL_REQUIRED_SEND_ERROR,
   QUEUE_HOLDING_RUN_STATUSES,
-} from "@rakazo/core";
-import type { Prisma } from "@rakazo/db";
+} from "@forion/orbit-core";
+import type { Prisma } from "@forion/orbit-db";
 import {
   AnswerTooLongError,
   appendEventInTransaction,
@@ -23,8 +22,9 @@ import {
   THREAD_LOCK_TRANSACTION_OPTIONS,
   touchGroupUpdatedAt,
   withTransactionRetry,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
+import { ORPCError } from "@orpc/server";
 import type { RouterDeps } from "../router.js";
 import { createRoutineTestRun, routineTestRunNonce, routineTestTarget } from "../routines.js";
 import { assertTeachingSendAllowed } from "../taught-skills.js";

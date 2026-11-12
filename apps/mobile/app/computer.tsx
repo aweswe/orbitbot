@@ -1,13 +1,13 @@
-import type { ComputerMode, ComputerReleaseReason } from "@rakazo/contracts";
-import { isComputerAllowanceUsed } from "@rakazo/contracts";
-import type { ScreenPageState } from "@rakazo/core";
+import type { ComputerMode, ComputerReleaseReason } from "@forion/orbit-contracts";
+import { isComputerAllowanceUsed } from "@forion/orbit-contracts";
+import type { ScreenPageState } from "@forion/orbit-core";
 import {
   createScreenReconnect,
   displayName,
   isRetryableError,
   screenProbeUrl,
   waitForScreenPage,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import type { RefObject } from "react";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";

@@ -6,7 +6,7 @@ import type {
   ModelApiProtocol,
   PurchaseCardField,
   SandboxKind,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 
 export interface AdapterContext {
   operationId: string;

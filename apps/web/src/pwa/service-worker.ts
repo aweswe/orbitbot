@@ -1,4 +1,4 @@
-export const SKIP_WAITING = "rakazo:skip-waiting";
+export const SKIP_WAITING = "orbit:skip-waiting";
 export const CACHE_PREFIX = "rakazo-shell-";
 
 // Live data, auth callbacks and the screen proxy always go straight to the server.

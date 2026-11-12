@@ -1,6 +1,6 @@
 import { fileURLToPath } from "node:url";
-import { isBuildId } from "@rakazo/contracts/client-build";
-import { webDarkTokens } from "@rakazo/ui-tokens";
+import { isBuildId } from "@forion/orbit-contracts/client-build";
+import { webDarkTokens } from "@forion/orbit-ui-tokens";
 import type { Plugin, Rolldown } from "vite";
 import { CACHE_PREFIX } from "./service-worker.js";
 
@@ -17,16 +17,18 @@ export function webManifest() {
   }));
   return {
     id: "/",
-    name: "Orion",
-    short_name: "Orion",
-    description: "Orbit Autonomous AI Agent.",
+    name: "Orbit by Forion",
+    short_name: "Orbit",
+    description: "Orbit Bot — autonomous AI agents, computers, and multi-agent workspaces.",
     start_url: "/",
     scope: "/",
     display: "standalone",
     background_color: webDarkTokens.background,
     theme_color: webDarkTokens.background,
-    // The icons are full-bleed, so the same art also works under a launcher mask.
+    // The vector mark is the same one the main Orbit app uses; the PNGs are install fallbacks.
     icons: [
+      { src: "/favicon.svg", sizes: "any", type: "image/svg+xml" },
+      { src: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
       ...icons.map((icon) => ({ ...icon, purpose: "any" })),
       ...icons.map((icon) => ({ ...icon, purpose: "maskable" })),
     ],

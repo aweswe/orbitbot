@@ -1,8 +1,8 @@
 import type { AssistantMessage, Model } from "@earendil-works/pi-ai";
 import { AssistantMessageEventStream } from "@earendil-works/pi-ai/utils/event-stream";
-import type { AgentRunRequest, AgentRuntimeEvent } from "@rakazo/adapter-kit";
-import type * as Core from "@rakazo/core";
-import { MODEL_OUTPUT_CUT_ERROR, MODEL_OUTPUT_LIMIT_ERROR } from "@rakazo/core";
+import type { AgentRunRequest, AgentRuntimeEvent } from "@forion/orbit-adapter-kit";
+import type * as Core from "@forion/orbit-core";
+import { MODEL_OUTPUT_CUT_ERROR, MODEL_OUTPUT_LIMIT_ERROR } from "@forion/orbit-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const providerState = vi.hoisted(() => ({
@@ -11,13 +11,14 @@ const providerState = vi.hoisted(() => ({
   delay: vi.fn<(delayMs: number, signal?: AbortSignal) => Promise<void>>(),
 }));
 
-vi.mock("@rakazo/core", async (importOriginal) => ({
+vi.mock("@forion/orbit-core", async (importOriginal) => ({
   ...(await importOriginal<typeof Core>()),
   abortableDelay: providerState.delay,
 }));
 
 vi.mock("@earendil-works/pi-ai/providers/all", () => ({
   builtinModels: () => ({
+    setProvider: (provider: unknown) => provider,
     getModel: (provider: string, id: string) => providerState.models.get(`${provider}/${id}`),
     streamSimple: (...args: unknown[]) => providerState.stream(...args),
   }),

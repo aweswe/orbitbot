@@ -1,5 +1,5 @@
-import type { IntegrationCatalogResult, IntegrationCatalogSurface } from "@rakazo/contracts";
-import { cancelResponseBody } from "@rakazo/core";
+import type { IntegrationCatalogResult, IntegrationCatalogSurface } from "@forion/orbit-contracts";
+import { cancelResponseBody } from "@forion/orbit-core";
 
 const RESPONSE_LIMIT = 1_000_000;
 const SEARCH_LIMIT = 8;

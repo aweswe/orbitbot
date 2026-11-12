@@ -1,8 +1,8 @@
-import type { JobPublisher } from "@rakazo/adapter-kit";
-import { runContinueJob } from "@rakazo/adapter-kit";
-import { isTicketCompletedStatus, TicketStatusSchema } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+import type { JobPublisher } from "@forion/orbit-adapter-kit";
+import { runContinueJob } from "@forion/orbit-adapter-kit";
+import { isTicketCompletedStatus, TicketStatusSchema } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 
 /** Assignment wakes only its current owner, without posting a chat message. */
 export async function wakeTicketAssignee(

@@ -1,5 +1,5 @@
-import type { ComposerMentionBinding } from "@rakazo/core";
-import { validateComposerMentionBindings } from "@rakazo/core";
+import type { ComposerMentionBinding } from "@forion/orbit-core";
+import { validateComposerMentionBindings } from "@forion/orbit-core";
 import { Directory, File, Paths } from "expo-file-system";
 import { currentApiBase } from "./api";
 

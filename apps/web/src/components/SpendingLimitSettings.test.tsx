@@ -27,7 +27,7 @@ vi.mock("@lingui/react/macro", () => {
     Trans: ({ children }: { children: ReactNode }) => children,
   };
 });
-vi.mock("@rakazo/ui-web", async () => {
+vi.mock("@forion/orbit-ui-web", async () => {
   const { createContext, useContext } = await import("react");
   type Choice = {
     value: string;

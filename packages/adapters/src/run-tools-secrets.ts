@@ -1,8 +1,8 @@
-import { runContinueJob } from "@rakazo/adapter-kit";
-import { BotSecretName, botSecretSubmissionSchema } from "@rakazo/contracts";
-import { createStreamingRedactor, displayName } from "@rakazo/core";
-import { runCodeKind, runLoginKind, runSecretKind, spaceIsShared } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+import { runContinueJob } from "@forion/orbit-adapter-kit";
+import { BotSecretName, botSecretSubmissionSchema } from "@forion/orbit-contracts";
+import { createStreamingRedactor, displayName } from "@forion/orbit-core";
+import { runCodeKind, runLoginKind, runSecretKind, spaceIsShared } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import {
   completeExternalEffect,
   replaceCompletedExternalEffectResult,

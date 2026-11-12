@@ -1,6 +1,6 @@
+import type { DesktopUpdateState } from "@forion/orbit-contracts";
+import { Button, toast } from "@forion/orbit-ui-web";
 import { Trans, useLingui } from "@lingui/react/macro";
-import type { DesktopUpdateState } from "@rakazo/contracts";
-import { Button, toast } from "@rakazo/ui-web";
 import type { ReactNode } from "react";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { desktopBridge } from "../lib/desktop";

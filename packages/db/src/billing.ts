@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
-import type { BillingSubscriptionSnapshot } from "@rakazo/adapter-kit";
-import { BYOK_TIERS } from "@rakazo/contracts";
+import type { BillingSubscriptionSnapshot } from "@forion/orbit-adapter-kit";
+import { BYOK_TIERS } from "@forion/orbit-contracts";
 import type { BillingAccount, PrismaClient } from "./client.js";
 import { Prisma } from "./client.js";
 import { isUniqueViolation } from "./prisma-errors.js";

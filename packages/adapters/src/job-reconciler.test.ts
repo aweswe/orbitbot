@@ -1,6 +1,6 @@
-import type { BackgroundJob, JobPublisher } from "@rakazo/adapter-kit";
-import { stuckWorkStatusMessages } from "@rakazo/core";
-import type { Pool, PrismaClient, ThreadEvents } from "@rakazo/db";
+import type { BackgroundJob, JobPublisher } from "@forion/orbit-adapter-kit";
+import { stuckWorkStatusMessages } from "@forion/orbit-core";
+import type { Pool, PrismaClient, ThreadEvents } from "@forion/orbit-db";
 import { describe, expect, it, vi } from "vitest";
 import { returnBotMessageOutcome } from "./bot-messages.js";
 import type { ReconciliationLeadership } from "./job-reconciler.js";
@@ -1020,47 +1020,69 @@ describe("createJobReconciler", () => {
 });
 
 describe("createPostgresReconciliationLeadership", () => {
+  function leasePool() {
+    let row: { name: string; ownerId: string; expiresAt: number } | undefined;
+    const query = vi.fn(async (sql: string, values?: unknown[]) => {
+      const [name, ownerId, leaseMs] = values as [string, string, number];
+      if (sql.includes("INSERT INTO orbit_bot.reconciler_leases")) {
+        if (row && row.expiresAt > Date.now()) return { rows: [], rowCount: 0 };
+        row = { name, ownerId, expiresAt: Date.now() + leaseMs };
+        return { rows: [{ owner_id: ownerId }], rowCount: 1 };
+      }
+      if (sql.includes("UPDATE orbit_bot.reconciler_leases")) {
+        if (!row || row.name !== name || row.ownerId !== ownerId || row.expiresAt <= Date.now())
+          return { rows: [], rowCount: 0 };
+        row.expiresAt = Date.now() + leaseMs;
+        return { rows: [{ owner_id: ownerId }], rowCount: 1 };
+      }
+      if (sql.includes("DELETE FROM orbit_bot.reconciler_leases")) {
+        const removed = row?.name === name && row.ownerId === ownerId;
+        if (removed) row = undefined;
+        return { rows: [], rowCount: removed ? 1 : 0 };
+      }
+      throw new Error(`unexpected SQL: ${sql}`);
+    });
+    return { pool: { query } as unknown as Pick<Pool, "query">, query };
+  }
+
   it("retains leadership for one replica and transfers it after release", async () => {
-    let locked = false;
-    const clients: Array<{
-      query: ReturnType<typeof vi.fn>;
-      release: ReturnType<typeof vi.fn>;
-      once: ReturnType<typeof vi.fn>;
-      removeListener: ReturnType<typeof vi.fn>;
-    }> = [];
-    const pool = {
-      connect: vi.fn(async () => {
-        const client = {
-          query: vi.fn(async (sql: string) => {
-            if (sql.includes("pg_try_advisory_lock")) {
-              const acquired = !locked;
-              if (acquired) locked = true;
-              return { rows: [{ acquired }] };
-            }
-            const released = locked;
-            locked = false;
-            return { rows: [{ released }] };
-          }),
-          release: vi.fn(),
-          once: vi.fn(),
-          removeListener: vi.fn(),
-        };
-        clients.push(client);
-        return client;
-      }),
-    } as unknown as Pick<Pool, "connect">;
+    const { pool } = leasePool();
     const first = createPostgresReconciliationLeadership(pool);
     const second = createPostgresReconciliationLeadership(pool);
 
     await expect(first.tryAcquire()).resolves.toBe(true);
     await expect(first.tryAcquire()).resolves.toBe(true);
     await expect(second.tryAcquire()).resolves.toBe(false);
-    expect(pool.connect).toHaveBeenCalledTimes(2);
-    expect(clients[1]?.release).toHaveBeenCalledOnce();
 
     await first.release();
     await expect(second.tryAcquire()).resolves.toBe(true);
-    expect(clients[0]?.removeListener).toHaveBeenCalledWith("error", expect.any(Function));
-    expect(clients[0]?.release).toHaveBeenCalledWith(false);
+    await second.release();
+  });
+
+  it("lets a follower take over an expired lease after a crash", async () => {
+    const { pool } = leasePool();
+    const crashed = createPostgresReconciliationLeadership(pool, { leaseMs: 20 });
+    const follower = createPostgresReconciliationLeadership(pool, { leaseMs: 20 });
+
+    await expect(crashed.tryAcquire()).resolves.toBe(true);
+    await new Promise((resolve) => setTimeout(resolve, 35));
+    await expect(follower.tryAcquire()).resolves.toBe(true);
+    // The old owner cannot renew or release the new owner's lease.
+    await expect(crashed.tryAcquire()).resolves.toBe(false);
+    await crashed.release();
+    await expect(follower.tryAcquire()).resolves.toBe(true);
+    await follower.release();
+  });
+
+  it("stops renewing when the database row is gone", async () => {
+    const { pool, query } = leasePool();
+    const leader = createPostgresReconciliationLeadership(pool, { leaseMs: 20 });
+    await expect(leader.tryAcquire()).resolves.toBe(true);
+    await new Promise((resolve) => setTimeout(resolve, 35));
+    await expect(leader.tryAcquire()).resolves.toBe(false);
+    // A failed renewal must not keep querying in the background.
+    const calls = query.mock.calls.length;
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    expect(query.mock.calls.length).toBe(calls);
   });
 });

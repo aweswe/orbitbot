@@ -1,12 +1,12 @@
-import { ORPCError } from "@orpc/server";
-import { PaymentWalletRequestRejected } from "@rakazo/adapter-kit";
-import type { PaymentWalletDeps } from "@rakazo/adapters";
+import { PaymentWalletRequestRejected } from "@forion/orbit-adapter-kit";
+import type { PaymentWalletDeps } from "@forion/orbit-adapters";
 import {
   connectPaymentWallet,
   disconnectPaymentWallet,
   paymentWalletStatus,
-} from "@rakazo/adapters";
-import { recordSecurityEvent } from "@rakazo/db";
+} from "@forion/orbit-adapters";
+import { recordSecurityEvent } from "@forion/orbit-db";
+import { ORPCError } from "@orpc/server";
 import { paymentWalletConnectedEvent } from "../security-audit.js";
 import type { RouterContext } from "./context.js";
 

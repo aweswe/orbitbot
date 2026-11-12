@@ -1,6 +1,6 @@
 import type { MenuAction } from "@expo/ui/community/menu";
-import type { OrganizationList } from "@rakazo/contracts";
-import { organizationLandingSpaceId, organizationOfSpace } from "@rakazo/core";
+import type { OrganizationList } from "@forion/orbit-contracts";
+import { organizationLandingSpaceId, organizationOfSpace } from "@forion/orbit-core";
 import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import {

@@ -26,8 +26,10 @@ done
 # Encrypt every artifact to public age recipients. The private key never lives on this host,
 # and plaintext is streamed straight into age, so it never touches disk.
 age_args=()
-read -r -a recipients <<<"${RAKAZO_BACKUP_AGE_RECIPIENTS:-}"
-for recipient in "${recipients[@]}"; do age_args+=(-r "${recipient}"); done
+if [[ -n "${RAKAZO_BACKUP_AGE_RECIPIENTS:-}" ]]; then
+  read -r -a recipients <<<"${RAKAZO_BACKUP_AGE_RECIPIENTS}"
+  for recipient in "${recipients[@]}"; do age_args+=(-r "${recipient}"); done
+fi
 RECIPIENTS_FILE="${RAKAZO_BACKUP_AGE_RECIPIENTS_FILE:-}"
 if [[ -n "${RECIPIENTS_FILE}" ]]; then
   [[ -r "${RECIPIENTS_FILE}" && -s "${RECIPIENTS_FILE}" ]] || {
@@ -78,11 +80,11 @@ appdata="$(docker inspect "${api}" \
 install -d -m 700 "${BACKUP_ROOT}"
 # One backup at a time, so cleanup never removes a snapshot another run is still writing.
 exec 8>"${BACKUP_ROOT}/.lock"
-flock -n 8 || { echo "Another Rakazo backup is running" >&2; exit 1; }
+flock -n 8 || { echo "Another Orbit backup is running" >&2; exit 1; }
 # Newest first; stamps sort by time. Only stamp-named directories are ever listed or removed.
 snapshots() {
-  find "${BACKUP_ROOT}" -mindepth 1 -maxdepth 1 -type d -regextype posix-extended \
-    -regex '.*/[0-9]{8}T[0-9]{6}Z' -print | sort -r
+  find "${BACKUP_ROOT}" -mindepth 1 -maxdepth 1 -type d \
+    -name '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]T[0-9][0-9][0-9][0-9][0-9][0-9]Z' -print | sort -r
 }
 
 # Remove abandoned partial snapshots and excess history BEFORE checking free space.
@@ -236,7 +238,7 @@ while read -r dir; do
   fi
 done < <(snapshots)
 
-echo "Verified Rakazo backup written to ${SNAPSHOT_DIR}"
+echo "Verified Orbit backup written to ${SNAPSHOT_DIR}"
 
 # Optional off-site copy through any rclone remote (S3-compatible storage, SFTP, ...), configured
 # with rclone's own settings. A failure here keeps the verified local snapshot but fails the run.
@@ -258,7 +260,8 @@ echo "Copied to ${remote}${STAMP}"
 ((OFFSITE_KEEP > 0)) || exit 0
 listing="$(rclone lsf -R --max-depth 2 -- "${remote}")" || offsite_failed "listing for retention"
 stamp='^[0-9]{8}T[0-9]{6}Z/'
-mapfile -t kept_remote < <(grep -E "${stamp}SHA256SUMS\$" <<<"${listing}" | cut -d/ -f1 | sort -r | head -n "${OFFSITE_KEEP}")
+kept_remote=()
+while IFS= read -r line; do kept_remote+=("${line}"); done < <(grep -E "${stamp}SHA256SUMS\$" <<<"${listing}" | cut -d/ -f1 | sort -r | head -n "${OFFSITE_KEEP}")
 while read -r old; do
   [[ -n "${old}" && "${old}" != "${STAMP}" && " ${kept_remote[*]} " != *" ${old} "* ]] || continue
   rclone purge -- "${remote}${old}" || offsite_failed "pruning ${old}"

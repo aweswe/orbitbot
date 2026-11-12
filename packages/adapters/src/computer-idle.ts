@@ -4,7 +4,7 @@ import type {
   ComputerRef,
   JobPublisher,
   SandboxProvider,
-} from "@rakazo/adapter-kit";
+} from "@forion/orbit-adapter-kit";
 import {
   computerSleepJob,
   runJobKey,
@@ -12,10 +12,10 @@ import {
   SandboxUnavailableError,
   SandboxUnresponsiveError,
   WorkspaceTooLargeError,
-} from "@rakazo/adapter-kit";
-import { COMPUTER_ALLOWANCE_USED_ERROR } from "@rakazo/contracts";
-import { QUEUE_HOLDING_RUN_STATUSES, withAbort } from "@rakazo/core";
-import type { PrismaClient, ThreadEvents } from "@rakazo/db";
+} from "@forion/orbit-adapter-kit";
+import { COMPUTER_ALLOWANCE_USED_ERROR } from "@forion/orbit-contracts";
+import { QUEUE_HOLDING_RUN_STATUSES, withAbort } from "@forion/orbit-core";
+import type { PrismaClient, ThreadEvents } from "@forion/orbit-db";
 import {
   appendEventInTransaction,
   clearEndedExecutionRunBinding,
@@ -24,8 +24,8 @@ import {
   isUniqueViolation,
   recordComputerRunEnd,
   recordComputerRunSeen,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { activeCodingAgent } from "./coding-agent-activity.js";
 import { expireComputerControl, hasActiveComputerControl } from "./computer-control.js";
 import { diskUpdate, measureComputerDisk } from "./computer-disk.js";

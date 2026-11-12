@@ -1,4 +1,3 @@
-import { Readability } from "@mozilla/readability";
 import type {
   AdapterContext,
   WebFetchRequest,
@@ -6,7 +5,8 @@ import type {
   WebProvider,
   WebSearchHit,
   WebSearchRequest,
-} from "@rakazo/adapter-kit";
+} from "@forion/orbit-adapter-kit";
+import { Readability } from "@mozilla/readability";
 import { JSDOM } from "jsdom";
 import { clampMaxChars, clampMaxResults, clampOffset, pageWindow } from "./web-limits.js";
 import type { ResolveHostname } from "./web-ssrf.js";
@@ -64,8 +64,7 @@ export class KeylessHttpWebProvider implements WebProvider {
     this.searchTimeoutMs = options.searchTimeoutMs ?? 15_000;
     this.fetchTimeoutMs = options.fetchTimeoutMs ?? 15_000;
     this.maxBufferBytes = options.maxBufferBytes ?? 5 * 1024 * 1024;
-    this.userAgent =
-      options.userAgent ?? "Orbit/1.0 (+https://orbit.forion.dev; web tools)";
+    this.userAgent = options.userAgent ?? "Orbit/1.0 (+https://orbit.forion.dev; web tools)";
   }
 
   describe() {

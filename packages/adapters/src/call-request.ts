@@ -1,9 +1,9 @@
 import { randomUUID } from "node:crypto";
-import type { JobPublisher, NotificationProvider } from "@rakazo/adapter-kit";
-import { callExpireJob } from "@rakazo/adapter-kit";
-import type { IncomingBotCall, MessageBlock } from "@rakazo/contracts";
-import { resolveBotAvatarSet } from "@rakazo/contracts";
-import type { CallRequestBlock } from "@rakazo/core";
+import type { JobPublisher, NotificationProvider } from "@forion/orbit-adapter-kit";
+import { callExpireJob } from "@forion/orbit-adapter-kit";
+import type { IncomingBotCall, MessageBlock } from "@forion/orbit-contracts";
+import { resolveBotAvatarSet } from "@forion/orbit-contracts";
+import type { CallRequestBlock } from "@forion/orbit-core";
 import {
   CALL_CLIENT_NONCE_PREFIX,
   callIdFromClientNonce,
@@ -12,16 +12,16 @@ import {
   callRequestClientNonce,
   phoneCallSettings,
   ringingCall,
-} from "@rakazo/core";
-import type { Prisma, PrismaClient, ThreadEvents } from "@rakazo/db";
+} from "@forion/orbit-core";
+import type { Prisma, PrismaClient, ThreadEvents } from "@forion/orbit-db";
 import {
   appendEventInTransaction,
   createThreadMessageInTransaction,
   isUniqueViolation,
   runAsSystem,
   THREAD_LOCK_TRANSACTION_OPTIONS,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import type { ExecutorDeps } from "./executor-deps.js";
 import { publishMessage, runLeaseFor } from "./run-messages.js";
 

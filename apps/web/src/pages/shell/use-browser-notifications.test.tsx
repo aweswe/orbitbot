@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
+
+import type { Bot, ChatAlert } from "@forion/orbit-contracts";
 import { i18n } from "@lingui/core";
-import type { Bot, ChatAlert } from "@rakazo/contracts";
 import { act } from "react";
 import type { Root } from "react-dom/client";
 import { createRoot } from "react-dom/client";

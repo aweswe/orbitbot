@@ -1,5 +1,5 @@
-import type { AdapterContext, JobPublisher } from "@rakazo/adapter-kit";
-import type { Actor, Group, MessageBlock } from "@rakazo/contracts";
+import type { AdapterContext, JobPublisher } from "@forion/orbit-adapter-kit";
+import type { Actor, Group, MessageBlock } from "@forion/orbit-contracts";
 import {
   BOT_INSTRUCTIONS_MAX_LENGTH,
   BotSectionName,
@@ -13,9 +13,13 @@ import {
   ThinkingLevelSchema,
   TimeZoneSchema,
   UpdateGroupInput,
-} from "@rakazo/contracts";
-import { CARD_TITLE_ESCAPED_CHARACTERS, ONCE_ROUTINE_CRON, redactSecrets } from "@rakazo/core";
-import type { Prisma, PrismaClient, ThreadEvents } from "@rakazo/db";
+} from "@forion/orbit-contracts";
+import {
+  CARD_TITLE_ESCAPED_CHARACTERS,
+  ONCE_ROUTINE_CRON,
+  redactSecrets,
+} from "@forion/orbit-core";
+import type { Prisma, PrismaClient, ThreadEvents } from "@forion/orbit-db";
 import {
   commitBotUpdate,
   createGroupRepos,
@@ -24,8 +28,8 @@ import {
   IsolationError,
   isRecordNotFound,
   SpaceDeletionInProgressError,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import type { FleetCardSummary } from "./approval-ask.js";
 import { approvalDetailLength, MAX_APPROVAL_SUMMARY_LENGTH } from "./approval-ask.js";
 import { attachedImageArtifactIds, resolveUpdateBotAvatar } from "./bot-avatar.js";

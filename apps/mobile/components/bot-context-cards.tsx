@@ -1,5 +1,5 @@
-import type { MemoryDocument, ScratchpadItem } from "@rakazo/contracts";
-import { isEmptyBotMemory } from "@rakazo/contracts";
+import type { MemoryDocument, ScratchpadItem } from "@forion/orbit-contracts";
+import { isEmptyBotMemory } from "@forion/orbit-contracts";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { Pressable, Text, View } from "react-native";

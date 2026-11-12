@@ -1,5 +1,5 @@
-import type { ComputerStatus } from "@rakazo/contracts";
-import { displayName } from "@rakazo/core";
+import type { ComputerStatus } from "@forion/orbit-contracts";
+import { displayName } from "@forion/orbit-core";
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useRef, useState } from "react";
 import { Alert, Platform, ScrollView, StyleSheet, Text, View } from "react-native";

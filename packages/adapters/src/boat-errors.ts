@@ -4,8 +4,8 @@ import {
   SandboxProviderAccountError,
   SandboxRateLimitError,
   SandboxUnresponsiveError,
-} from "@rakazo/adapter-kit";
-import { redactSecrets } from "@rakazo/core";
+} from "@forion/orbit-adapter-kit";
+import { redactSecrets } from "@forion/orbit-core";
 import { readBodyCapped } from "./web-ssrf.js";
 
 const MAX_BOAT_ERROR_RESPONSE_BYTES = 16 * 1024;

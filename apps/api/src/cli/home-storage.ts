@@ -4,9 +4,9 @@ import {
   createAgentHomeStore,
   ObjectAgentHomeStore,
   unwrapEnvFromKeyManager,
-} from "@rakazo/adapters";
-import { loadRootEnv } from "@rakazo/core/node/load-root-env";
-import { createDb } from "@rakazo/db";
+} from "@forion/orbit-adapters";
+import { loadRootEnv } from "@forion/orbit-core/node/load-root-env";
+import { createDb } from "@forion/orbit-db";
 
 loadRootEnv();
 await unwrapEnvFromKeyManager();

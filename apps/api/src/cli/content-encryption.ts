@@ -9,10 +9,10 @@ import {
   unwrapEnvFromKeyManager,
   upgradeLegacySecrets,
   withSecretPersistence,
-} from "@rakazo/adapters";
-import { resolveContentEncryption, resolveEncryptionKey } from "@rakazo/core";
-import { loadRootEnv } from "@rakazo/core/node/load-root-env";
-import type { ContentMigrationMode } from "@rakazo/db";
+} from "@forion/orbit-adapters";
+import { resolveContentEncryption, resolveEncryptionKey } from "@forion/orbit-core";
+import { loadRootEnv } from "@forion/orbit-core/node/load-root-env";
+import type { ContentMigrationMode } from "@forion/orbit-db";
 import {
   contentEncryptionStatus,
   createDb,
@@ -21,7 +21,7 @@ import {
   rewrapSpaceKeys,
   rotateSpaceDataKeys,
   runAsSystem,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
 import { moveMcpArgsIntoSecrets } from "../mcp-args-migration.js";
 import { createSecretMigrationRepository } from "../secret-migration.js";
 

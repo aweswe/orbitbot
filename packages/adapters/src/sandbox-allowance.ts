@@ -1,7 +1,7 @@
-import type { ComputerRef, SandboxProvider } from "@rakazo/adapter-kit";
-import { SANDBOX_HOURLY_COST_MICROS } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
-import { MICROS_PER_DOLLAR, sandboxAllowancePlan, sandboxRunHours } from "@rakazo/db";
+import type { ComputerRef, SandboxProvider } from "@forion/orbit-adapter-kit";
+import { SANDBOX_HOURLY_COST_MICROS } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
+import { MICROS_PER_DOLLAR, sandboxAllowancePlan, sandboxRunHours } from "@forion/orbit-db";
 
 type AllowanceDeps = { prisma: PrismaClient; sandbox: SandboxProvider };
 

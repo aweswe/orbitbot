@@ -3,8 +3,8 @@ import type {
   ProductEvent,
   ThreadMessage,
   ThreadSnapshot,
-} from "@rakazo/contracts";
-import { reconcileRefreshedThread, reduceThreadSnapshot } from "@rakazo/core";
+} from "@forion/orbit-contracts";
+import { reconcileRefreshedThread, reduceThreadSnapshot } from "@forion/orbit-core";
 import { describe, expect, it } from "vitest";
 import {
   clearActiveThreadRuns,

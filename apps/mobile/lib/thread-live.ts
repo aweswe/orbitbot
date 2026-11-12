@@ -6,7 +6,7 @@ import {
   reduceThreadSnapshot,
   rememberTerminalRun,
   retryDelayMs,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import type { RefObject } from "react";
 import { useEffect, useRef } from "react";
 import type { MobileSnapshot } from "./api";

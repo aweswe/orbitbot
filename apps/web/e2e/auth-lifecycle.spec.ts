@@ -26,19 +26,20 @@ test(
     });
 
     await page.goto("/sign-up");
-    await expect(page.locator('[data-rakazo-app-state="session-pending"]')).toBeVisible();
-    await expect(page.locator("#root")).toHaveText("");
+    const pending = page.locator('[data-rakazo-app-state="session-pending"]');
+    await expect(pending).toBeVisible();
+    await expect(pending.getByText("Orbit", { exact: true })).toBeVisible();
     await captureScreenshot(page, testInfo, "signup-session-pending");
 
     const capabilitiesRequested = page.waitForRequest("**/api/auth/capabilities");
     releaseSession();
     await capabilitiesRequested;
     await expect(page.locator('[data-rakazo-app-state="ready"]')).toBeVisible();
-    await expect(page.locator("#root")).toHaveText("");
+    await expect(page.locator('input[name="email"]')).toHaveCount(0);
     await captureScreenshot(page, testInfo, "signup-options-pending");
 
     releaseCapabilities();
-    await expect(page.getByRole("heading", { name: "Create your Rakazo" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Create your Orbit" })).toBeVisible();
     await expect(page.getByLabel("Email", { exact: true })).toBeVisible();
     await captureScreenshot(page, testInfo, "signup-ready");
   },
@@ -99,7 +100,7 @@ test(
     await expect(page.getByRole("heading", { name: "Check your email" })).toBeVisible();
     await captureScreenshot(page, testInfo, "signup-verification-required");
     await page.getByRole("link", { name: "Back to sign in" }).click();
-    await expect(page.getByRole("heading", { name: "Sign in to Rakazo" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Sign in to Orbit" })).toBeVisible();
   },
 );
 
@@ -116,12 +117,12 @@ test(
     await page.setViewportSize({ width: 320, height: 640 });
     await page.goto("/");
     await expect(page).toHaveURL(/\/sign-up$/);
-    await expect(page.getByRole("heading", { name: "Create your Rakazo" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Create your Orbit" })).toBeVisible();
     await expect(page.locator("body")).toHaveJSProperty("scrollWidth", 320);
     await captureScreenshot(page, testInfo, "logged-out-sign-up-phone");
     await page.getByRole("link", { name: "Sign in", exact: true }).click();
     await expect(page).toHaveURL(/\/sign-in$/);
-    await expect(page.getByRole("heading", { name: "Sign in to Rakazo" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Sign in to Orbit" })).toBeVisible();
   },
 );
 
@@ -146,7 +147,7 @@ test("logout protects bot deep links and sign-in restores the session", async ({
   page,
 }, testInfo) => {
   const stamp = Date.now();
-  const email = `auth-lifecycle-${stamp}@rakazo.test`;
+  const email = `auth-lifecycle-${stamp}@orbit.test`;
   const password = "password12";
   const userName = "Auth Lifecycle";
 
@@ -191,7 +192,7 @@ test("logout protects bot deep links and sign-in restores the session", async ({
   };
   page.on("request", trackRefresh);
   await page.getByRole("button", { name: "Log out" }).click();
-  await expect(page.getByRole("heading", { name: "Sign in to Rakazo" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Sign in to Orbit" })).toBeVisible();
   page.off("request", trackRefresh);
   await Promise.all(refreshes);
   await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 250)));
@@ -199,12 +200,12 @@ test("logout protects bot deep links and sign-in restores the session", async ({
   // Someone who has signed in here before reopens the app to sign in, not to a new account.
   await page.goto("/");
   await expect(page).toHaveURL(/\/sign-in$/);
-  await expect(page.getByRole("heading", { name: "Sign in to Rakazo" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Sign in to Orbit" })).toBeVisible();
   await captureScreenshot(page, testInfo, "37-logged-out-returning");
 
   await page.goto(protectedBotPath);
   await page.waitForURL((url) => url.pathname === "/sign-in");
-  await expect(page.getByRole("heading", { name: "Sign in to Rakazo" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Sign in to Orbit" })).toBeVisible();
   await expect(page.getByText("Chief", { exact: true })).toHaveCount(0);
   await expect(page.getByText(userName, { exact: true })).toHaveCount(0);
   await expect(page.getByLabel("Email")).toHaveAttribute("autocomplete", "username webauthn");
@@ -265,7 +266,7 @@ test("logout protects bot deep links and sign-in restores the session", async ({
 
 test("changes and recovers an email password", async ({ page }, testInfo) => {
   const stamp = Date.now();
-  const email = `password-recovery-${stamp}@rakazo.test`;
+  const email = `password-recovery-${stamp}@orbit.test`;
   const originalPassword = "password12";
   const changedPassword = "changed-password12";
   const resetPassword = "reset-password12";
@@ -341,7 +342,7 @@ test("changes and recovers an email password", async ({ page }, testInfo) => {
       html: string;
     }>;
     return messages.filter(
-      (message) => message.to === email && message.subject === "Reset your Rakazo password",
+      (message) => message.to === email && message.subject === "Reset your Orbit password",
     );
   };
   await expect.poll(async () => (await sentToUser()).length).toBeGreaterThan(0);

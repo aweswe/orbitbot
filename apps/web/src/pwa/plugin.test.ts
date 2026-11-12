@@ -1,4 +1,4 @@
-import { webDarkTokens } from "@rakazo/ui-tokens";
+import { webDarkTokens } from "@forion/orbit-ui-tokens";
 import type { Rolldown } from "vite";
 import { describe, expect, it } from "vitest";
 import { injectShell, shellFiles, webManifest } from "./plugin.js";
@@ -53,6 +53,8 @@ describe("PWA build", () => {
       background_color: webDarkTokens.background,
       theme_color: webDarkTokens.background,
     });
-    expect(manifest.icons.filter((icon) => icon.purpose === "maskable")).toHaveLength(2);
+    expect(
+      manifest.icons.filter((icon) => "purpose" in icon && icon.purpose === "maskable"),
+    ).toHaveLength(2);
   });
 });

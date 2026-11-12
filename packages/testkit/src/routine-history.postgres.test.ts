@@ -1,8 +1,8 @@
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { RoutineHistory } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
+import type { RoutineHistory } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { sessionCookieHeader } from "./index.js";
 import { asSystem } from "./system-db.js";
@@ -24,7 +24,7 @@ describeHistory("routines.history late starts", () => {
   const dataDir = mkdtempSync(path.join(tmpdir(), "rakazo-routine-history-"));
 
   beforeAll(async () => {
-    const { createApp } = await import("@rakazo/api/app");
+    const { createApp } = await import("@forion/orbit-api/app");
     const handles = await createApp({
       databaseUrl: process.env.DATABASE_URL!,
       dataDir,
@@ -41,7 +41,7 @@ describeHistory("routines.history late starts", () => {
   });
 
   it("returns the due time a late run recorded, unchanged by later schedule edits", async () => {
-    const cookie = await signup(app, `routine-late-${stamp}@rakazo.test`, "Late User");
+    const cookie = await signup(app, `routine-late-${stamp}@orbit.test`, "Late User");
     const bot = await rpc<{ id: string }>(app, cookie, "bots/create", {
       name: "Brief",
       title: "Brief",

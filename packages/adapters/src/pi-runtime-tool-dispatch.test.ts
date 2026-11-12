@@ -1,4 +1,4 @@
-import type { AgentToolCompletion, ConnectorTool } from "@rakazo/adapter-kit";
+import type { AgentToolCompletion, ConnectorTool } from "@forion/orbit-adapter-kit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { builtinAgentTools } from "./builtin-tools.js";
 
@@ -455,6 +455,7 @@ vi.mock("@earendil-works/pi-agent-core", () => ({
 
 vi.mock("@earendil-works/pi-ai/providers/all", () => ({
   builtinModels: () => ({
+    setProvider: (provider: unknown) => provider,
     getModel: (_provider: string, modelId: string) =>
       modelId === "dispatch-test-model" ? { provider: "test", id: modelId } : undefined,
     streamSimple: () => {

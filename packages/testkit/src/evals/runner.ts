@@ -1,15 +1,20 @@
 import { randomUUID } from "node:crypto";
-import type { AgentRuntime, JobPublisher, NotificationProvider } from "@rakazo/adapter-kit";
-import { runJobKey } from "@rakazo/adapter-kit";
+import type { AgentRuntime, JobPublisher, NotificationProvider } from "@forion/orbit-adapter-kit";
+import { runJobKey } from "@forion/orbit-adapter-kit";
 import {
   CapturingNotificationProvider,
   MessagingTeamChatEmulator,
   messageBot,
-} from "@rakazo/adapters";
-import type { MessageBlock, ModelConnectInput, ReplyMode, RunStatus } from "@rakazo/contracts";
-import { ACTIVE_RUN_STATUSES, attachmentComputerPath, isTerminal } from "@rakazo/core";
-import type { createDb } from "@rakazo/db";
-import { createThreadEvents } from "@rakazo/db";
+} from "@forion/orbit-adapters";
+import type {
+  MessageBlock,
+  ModelConnectInput,
+  ReplyMode,
+  RunStatus,
+} from "@forion/orbit-contracts";
+import { ACTIVE_RUN_STATUSES, attachmentComputerPath, isTerminal } from "@forion/orbit-core";
+import type { createDb } from "@forion/orbit-db";
+import { createThreadEvents } from "@forion/orbit-db";
 import { discardBotIntroRun } from "../discard-bot-intro.js";
 import { sessionCookieHeader } from "../index.js";
 import { asSystem } from "../system-db.js";

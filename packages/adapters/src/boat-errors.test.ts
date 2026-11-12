@@ -4,8 +4,8 @@ import {
   SandboxProviderAccountError,
   SandboxRateLimitError,
   SandboxUnresponsiveError,
-} from "@rakazo/adapter-kit";
-import { COMPUTER_PROVIDER_UNAVAILABLE_ERROR } from "@rakazo/contracts";
+} from "@forion/orbit-adapter-kit";
+import { COMPUTER_PROVIDER_UNAVAILABLE_ERROR } from "@forion/orbit-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { BoatApiError, BoatRequestGate, boatResponseError, wrapBoatCall } from "./boat-errors.js";
 import { BoatSandboxProvider } from "./boat-sandbox.js";

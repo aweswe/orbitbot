@@ -13,9 +13,9 @@ import type {
   ScreenRequest,
   ScreenSession,
   TerminalRequest,
-} from "@rakazo/adapter-kit";
-import { boundedSandboxCommandTimeoutMs } from "@rakazo/core";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import { boundedSandboxCommandTimeoutMs } from "@forion/orbit-core";
+import { getLogger } from "@forion/orbit-logging";
 import { sandboxIdleMs } from "./computer-idle.js";
 import {
   normalizeWorkspacePath,

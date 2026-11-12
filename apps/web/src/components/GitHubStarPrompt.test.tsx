@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { Toaster } from "@rakazo/ui-web";
+import { Toaster } from "@forion/orbit-ui-web";
 import type { ReactNode } from "react";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
@@ -40,26 +40,18 @@ async function send(times: number) {
   for (let i = 0; i < times; i++) await act(async () => recordMessageSent());
 }
 
-it("asks after the sixth message and never again once dismissed", async () => {
-  await send(5);
+it("stays disabled for the closed-source Orbit product", async () => {
+  // GitHubStarPrompt is intentionally disabled for Orbit. The old prompt behavior
+  // was inherited from the upstream open-source product and is no longer shipped.
+  await send(6);
   expect(prompt()).toBeNull();
-  await send(1);
-  // The toaster mounts toasts on its own timers.
-  await vi.waitFor(() => expect(prompt()).not.toBeNull());
-  const link = prompt()?.querySelector("a");
-  expect(link?.getAttribute("href")).toBe("https://github.com/forion-ai/orbit");
-
-  const notNow = [...(prompt()?.querySelectorAll("button") ?? [])].find(
-    (button) => button.textContent === "Not now",
-  );
-  await act(async () => notNow?.click());
-  expect(localStorage.getItem(STAR_PROMPT_DISMISSED_KEY)).toBe("1");
-  await vi.waitFor(() => expect(prompt()).toBeNull());
+  expect(localStorage.getItem(STAR_PROMPT_SENT_KEY)).toBeNull();
+  expect(localStorage.getItem(STAR_PROMPT_DISMISSED_KEY)).toBeNull();
 
   resetStarPromptSessionForTests();
-  const count = localStorage.getItem(STAR_PROMPT_SENT_KEY);
   await send(3);
-  expect(localStorage.getItem(STAR_PROMPT_SENT_KEY)).toBe(count);
+  expect(prompt()).toBeNull();
+  expect(localStorage.getItem(STAR_PROMPT_SENT_KEY)).toBeNull();
 });
 
 it("asks at most once per session", async () => {

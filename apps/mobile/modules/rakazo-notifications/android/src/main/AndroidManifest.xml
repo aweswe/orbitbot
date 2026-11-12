@@ -16,17 +16,17 @@
   <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
   <application>
     <service android:name="expo.modules.notifications.service.ExpoFirebaseMessagingService" tools:node="remove" />
-    <service android:name=".RakazoMessagingService" android:exported="false">
+    <service android:name=".OrbitMessagingService" android:exported="false">
       <intent-filter><action android:name="com.google.firebase.MESSAGING_EVENT" /></intent-filter>
     </service>
     <receiver android:name=".DeclineIncomingCallReceiver" android:exported="false" />
     <activity android:name=".IncomingCallActivity" android:exported="false" android:excludeFromRecents="true" android:showWhenLocked="true" android:turnScreenOn="true" android:theme="@style/RakazoIncomingCallTheme" />
     <service
-      android:name=".RakazoNotificationService"
+      android:name=".OrbitNotificationService"
       android:exported="false"
       android:foregroundServiceType="remoteMessaging" />
     <service
-      android:name=".RakazoCallService"
+      android:name=".OrbitCallService"
       android:exported="false"
       android:foregroundServiceType="microphone" />
   </application>

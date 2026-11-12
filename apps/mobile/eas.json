@@ -9,7 +9,7 @@
       "environment": "preview",
       "channel": "preview",
       "node": "24.22.1",
-      "pnpm": "12.18.0",
+      "pnpm": "10.31.0",
       "ios": {
         "image": "macos-tahoe-26.6-xcode-27.1"
       }
@@ -19,7 +19,7 @@
       "environment": "production",
       "channel": "production",
       "node": "24.22.1",
-      "pnpm": "12.18.0",
+      "pnpm": "10.31.0",
       "ios": {
         "image": "macos-tahoe-26.6-xcode-27.1"
       }

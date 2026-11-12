@@ -1,8 +1,8 @@
+import type { PaymentWalletProvider } from "@forion/orbit-adapter-kit";
+import { createPaymentWalletProvider } from "@forion/orbit-adapters";
+import type { Actor } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
 import { RPCHandler } from "@orpc/server/fetch";
-import type { PaymentWalletProvider } from "@rakazo/adapter-kit";
-import { createPaymentWalletProvider } from "@rakazo/adapters";
-import type { Actor } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
 import { describe, expect, it, vi } from "vitest";
 import type { RouterDeps } from "./router.js";
 import { createRouter } from "./router.js";
@@ -15,7 +15,7 @@ type Row = Record<string, unknown>;
 const actor = {
   spaceId: "space-1",
   userId: "user-1",
-  email: "user@rakazo.test",
+  email: "user@orbit.test",
   isDeploymentOwner: false,
 } satisfies Actor;
 

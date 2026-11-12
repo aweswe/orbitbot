@@ -1,13 +1,13 @@
-import type { AdapterContext, JobPublisher } from "@rakazo/adapter-kit";
-import { cloudAgentPollJob } from "@rakazo/adapter-kit";
-import { cloudAgentBlockFromPayload } from "@rakazo/core";
-import type { CloudAgent, PrismaClient, ThreadEvents } from "@rakazo/db";
+import type { AdapterContext, JobPublisher } from "@forion/orbit-adapter-kit";
+import { cloudAgentPollJob } from "@forion/orbit-adapter-kit";
+import { cloudAgentBlockFromPayload } from "@forion/orbit-core";
+import type { CloudAgent, PrismaClient, ThreadEvents } from "@forion/orbit-db";
 import {
   appendEventInTransaction,
   createThreadMessageInTransaction,
   THREAD_LOCK_TRANSACTION_OPTIONS,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import type { CloudAgentConnection } from "./cloud-agent-factory.js";
 import { cloudAgentsEnabled } from "./cloud-agent-factory.js";
 import { cloudAgentLaunchSchema, cloudAgentReplySchema } from "./cloud-agent-tools.js";

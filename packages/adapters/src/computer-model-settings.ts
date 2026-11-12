@@ -1,8 +1,8 @@
-import type { AgentRunModel } from "@rakazo/adapter-kit";
-import { isModelCredentialRejected } from "@rakazo/adapter-kit";
-import type { PrismaClient } from "@rakazo/db";
-import { appliedModelRole } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+import type { AgentRunModel } from "@forion/orbit-adapter-kit";
+import { isModelCredentialRejected } from "@forion/orbit-adapter-kit";
+import type { PrismaClient } from "@forion/orbit-db";
+import { appliedModelRole } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { computerTarget } from "./pi-runtime-computer-mode.js";
 import { isTerminalModelSetupError } from "./run-model.js";
 import { restoreTurnCheckpoint } from "./turn-checkpoint.js";

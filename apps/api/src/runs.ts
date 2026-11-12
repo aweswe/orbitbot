@@ -1,14 +1,14 @@
-import type { Actor, RunActivityRow } from "@rakazo/contracts";
-import { MessageBlock } from "@rakazo/contracts";
+import type { Actor, RunActivityRow } from "@forion/orbit-contracts";
+import { MessageBlock } from "@forion/orbit-contracts";
 import {
   ACTIVE_RUN_STATUSES,
   BACKGROUND_RUN_TRIGGERS,
   botMessageContext,
   displayName,
   truncatePlainText,
-} from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
-import { Prisma } from "@rakazo/db";
+} from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
+import { Prisma } from "@forion/orbit-db";
 
 const RECENT_LIMIT = 20;
 const TERMINAL_STATUSES = ["completed", "failed", "cancelled"] as const;

@@ -1,7 +1,7 @@
-import { destroyBot } from "@rakazo/adapters";
-import type { Actor } from "@rakazo/contracts";
-import type { createRepos } from "@rakazo/db";
-import { requireSpaceOwner } from "@rakazo/db";
+import { destroyBot } from "@forion/orbit-adapters";
+import type { Actor } from "@forion/orbit-contracts";
+import type { createRepos } from "@forion/orbit-db";
+import { requireSpaceOwner } from "@forion/orbit-db";
 import type { RouterDeps } from "./router.js";
 
 export function createBotRemoval(deps: RouterDeps, repos: ReturnType<typeof createRepos>) {

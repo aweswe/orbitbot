@@ -1,6 +1,16 @@
+import { Popover, PopoverContent, PopoverTrigger } from "@forion/orbit-ui-web";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Popover, PopoverContent, PopoverTrigger } from "@rakazo/ui-web";
-import { Check, Flame, Grid, Moon, Palette, Sparkles, SunMedium, Terminal, Waves } from "lucide-react";
+import {
+  Check,
+  Flame,
+  Grid,
+  Moon,
+  Palette,
+  Sparkles,
+  SunMedium,
+  Terminal,
+  Waves,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 
 export type OrbitThemeId =
@@ -98,7 +108,7 @@ export function OrbitThemeSwitcher({ className }: { className?: string }) {
     setCurrentTheme(themeId);
     try {
       localStorage.setItem("orbit-cosmic-theme", themeId);
-      localStorage.setItem("rakazo.uiAppearance", themeId === "cosmic-light" ? "light" : "dark");
+      localStorage.setItem("orbit.uiAppearance", themeId === "cosmic-light" ? "light" : "dark");
     } catch {}
 
     const mode = themeId === "cosmic-light" ? "light" : "dark";
@@ -145,9 +155,7 @@ export function OrbitThemeSwitcher({ className }: { className?: string }) {
           <span className="text-caption font-bold tracking-wider uppercase text-muted-foreground">
             <Trans>Orbit Themes</Trans>
           </span>
-          <span className="text-caption font-semibold text-primary">
-            {activeTheme.name}
-          </span>
+          <span className="text-caption font-semibold text-primary">{activeTheme.name}</span>
         </div>
         <div className="space-y-1">
           {ORBIT_THEMES.map((theme) => {
@@ -183,9 +191,7 @@ export function OrbitThemeSwitcher({ className }: { className?: string }) {
                     </div>
                   </div>
                 </div>
-                {isSelected && (
-                  <Check size={14} className="shrink-0 text-primary ms-2" />
-                )}
+                {isSelected && <Check size={14} className="shrink-0 text-primary ms-2" />}
               </button>
             );
           })}

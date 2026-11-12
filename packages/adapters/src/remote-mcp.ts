@@ -1,14 +1,7 @@
 import { lookup } from "node:dns/promises";
 import type { LookupFunction } from "node:net";
 import { isDeepStrictEqual } from "node:util";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import {
-  StreamableHTTPClientTransport,
-  StreamableHTTPError,
-} from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import type { RequestOptions } from "@modelcontextprotocol/sdk/shared/protocol.js";
-import type { Tool } from "@modelcontextprotocol/sdk/types.js";
-import type { ConnectorTool } from "@rakazo/adapter-kit";
+import type { ConnectorTool } from "@forion/orbit-adapter-kit";
 import {
   ipVersion,
   isCloudMetadataAddress,
@@ -20,8 +13,15 @@ import {
   isNonPublicAddress,
   MCP_APP_READ_TIMEOUT_MS,
   normalizeHost,
-} from "@rakazo/contracts";
-import { cancelResponseBody } from "@rakazo/core";
+} from "@forion/orbit-contracts";
+import { cancelResponseBody } from "@forion/orbit-core";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import {
+  StreamableHTTPClientTransport,
+  StreamableHTTPError,
+} from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+import type { RequestOptions } from "@modelcontextprotocol/sdk/shared/protocol.js";
+import type { Tool } from "@modelcontextprotocol/sdk/types.js";
 import type { Dispatcher } from "undici";
 import { Agent, EnvHttpProxyAgent, Pool } from "undici";
 import { composioToolBatch } from "./composio-batch.js";

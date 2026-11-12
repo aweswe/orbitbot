@@ -1,4 +1,3 @@
-import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import type {
   CapabilityInstall,
   Connection,
@@ -9,7 +8,7 @@ import type {
   McpServerConnection,
   McpSourcePreset,
   PluginMarketplaceEntry,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   CATALOG_SEARCH_QUERY_MAX_LENGTH,
   CONNECTION_LABEL_MAX_LENGTH,
@@ -17,8 +16,8 @@ import {
   mcpServerNeedsSignIn,
   PluginPreviewSchema,
   SUBMIT_PLUGIN_URL,
-} from "@rakazo/contracts";
-import type { PluginCategory } from "@rakazo/core";
+} from "@forion/orbit-contracts";
+import type { PluginCategory } from "@forion/orbit-core";
 import {
   buildFeaturedConnectorTiles,
   CONNECTION_CATALOG_PAGE_SIZE,
@@ -36,8 +35,8 @@ import {
   matchesWordPrefixes,
   OTHER_PLUGINS,
   PLUGIN_CATEGORIES,
-} from "@rakazo/core";
-import { fetchFresh, writeSaved } from "@rakazo/core/query";
+} from "@forion/orbit-core";
+import { fetchFresh, writeSaved } from "@forion/orbit-core/query";
 import {
   Badge,
   Button,
@@ -60,7 +59,8 @@ import {
   NativeSelectOption,
   SectionHeading,
   Spinner,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { queryOptions, skipToken, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowUpRight,

@@ -5,14 +5,14 @@ import type {
   SecretPutOptions,
   SecretRecord,
   SecretStore,
-} from "@rakazo/adapter-kit";
-import { SecretNotFoundError, SecretStoreUnavailableError } from "@rakazo/adapter-kit";
-import { readBoundedJsonResponse } from "@rakazo/core";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import { SecretNotFoundError, SecretStoreUnavailableError } from "@forion/orbit-adapter-kit";
+import { readBoundedJsonResponse } from "@forion/orbit-core";
+import { getLogger } from "@forion/orbit-logging";
 import { credentialDigest } from "./credential-digest.js";
 import { SecretChanges } from "./secret-changes.js";
 
-export { SecretNotFoundError, SecretStoreUnavailableError } from "@rakazo/adapter-kit";
+export { SecretNotFoundError, SecretStoreUnavailableError } from "@forion/orbit-adapter-kit";
 
 export const INFISICAL_REF_PREFIX = "infisical:v1:";
 export interface InfisicalSecretStoreOptions {

@@ -1,7 +1,11 @@
-import type { ConnectorProvider, JobPublisher } from "@rakazo/adapter-kit";
-import { routineJobKey, routineWakeupJob } from "@rakazo/adapter-kit";
-import type { RoutineWatch } from "@rakazo/contracts";
-import { ROUTINE_WATCH_MIN_MINUTES, RoutineWatchSchema, TimeZoneSchema } from "@rakazo/contracts";
+import type { ConnectorProvider, JobPublisher } from "@forion/orbit-adapter-kit";
+import { routineJobKey, routineWakeupJob } from "@forion/orbit-adapter-kit";
+import type { RoutineWatch } from "@forion/orbit-contracts";
+import {
+  ROUTINE_WATCH_MIN_MINUTES,
+  RoutineWatchSchema,
+  TimeZoneSchema,
+} from "@forion/orbit-contracts";
 import {
   cronFromPreset,
   formatCron,
@@ -13,10 +17,10 @@ import {
   unevenInterval,
   wallClock,
   zonedDateTime,
-} from "@rakazo/core";
-import type { PrismaClient, ThreadEvents } from "@rakazo/db";
-import { Prisma, runAsSystemInTransaction } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-core";
+import type { PrismaClient, ThreadEvents } from "@forion/orbit-db";
+import { Prisma, runAsSystemInTransaction } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 
 import { localDateTime } from "./current-time.js";
 import { finishRoutineHandover } from "./routine-handover.js";

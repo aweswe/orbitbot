@@ -1,6 +1,5 @@
-import { ORPCError } from "@orpc/server";
-import type { SecretStore } from "@rakazo/adapter-kit";
-import type { CodexLiveCatalog } from "@rakazo/adapters";
+import type { SecretStore } from "@forion/orbit-adapter-kit";
+import type { CodexLiveCatalog } from "@forion/orbit-adapters";
 import {
   CHATGPT_OAUTH_PROVIDER,
   codexLiveModel,
@@ -13,11 +12,12 @@ import {
   runModelChoice,
   runtimeModelAcceptsImages,
   selectConfiguredModel,
-} from "@rakazo/adapters";
-import type { Actor, MessageBlock } from "@rakazo/contracts";
-import { MODEL_IMAGE_INPUT_ERROR, MODEL_IMAGE_INPUT_UNKNOWN } from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
-import { appliedModelRole, findModelCredential, findModelCredentialById } from "@rakazo/db";
+} from "@forion/orbit-adapters";
+import type { Actor, MessageBlock } from "@forion/orbit-contracts";
+import { MODEL_IMAGE_INPUT_ERROR, MODEL_IMAGE_INPUT_UNKNOWN } from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
+import { appliedModelRole, findModelCredential, findModelCredentialById } from "@forion/orbit-db";
+import { ORPCError } from "@orpc/server";
 
 type ModelChoice = {
   modelProvider: string | null;

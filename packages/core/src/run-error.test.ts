@@ -1,4 +1,7 @@
-import { COMPUTER_PROVIDER_UNAVAILABLE_ERROR, COMPUTER_RATE_LIMIT_ERROR } from "@rakazo/contracts";
+import {
+  COMPUTER_PROVIDER_UNAVAILABLE_ERROR,
+  COMPUTER_RATE_LIMIT_ERROR,
+} from "@forion/orbit-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   APPROVED_ACTION_NOT_RUN_ERROR,

@@ -1,9 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
-import { onError } from "@orpc/server";
-import { RPCHandler } from "@orpc/server/fetch";
-import { finishRoutineHandover } from "@rakazo/adapters";
-import type { Actor } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
+import { finishRoutineHandover } from "@forion/orbit-adapters";
+import type { Actor } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
 import {
   asSystem,
   claimSpacesLeavingWithAccount,
@@ -19,7 +17,9 @@ import {
   personalOrganizationIds,
   recordAuditEvent,
   runAsTenant,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
+import { onError } from "@orpc/server";
+import { RPCHandler } from "@orpc/server/fetch";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { handleRpcError } from "./app.js";
 import type { RouterDeps } from "./router.js";

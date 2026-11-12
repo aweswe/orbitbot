@@ -1,6 +1,6 @@
+import type { BillingStatus } from "@forion/orbit-contracts";
+import { Button, Skeleton } from "@forion/orbit-ui-web";
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
-import type { BillingStatus } from "@rakazo/contracts";
-import { Button, Skeleton } from "@rakazo/ui-web";
 import { Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ModelCreditsSettings } from "../components/ModelCredits";
@@ -73,14 +73,19 @@ export function BillingSettingsPanel({ client }: { client: RpcClient }) {
               <Zap size={16} className="text-white fill-white" />
             </div>
             <div>
-              <h4 className="text-body-sm font-semibold text-foreground">Orbit Control Plane Billing</h4>
-              <p className="text-caption text-muted-foreground">Unified credit deductions for Forion & Orion</p>
+              <h4 className="text-body-sm font-semibold text-foreground">
+                Orbit Control Plane Billing
+              </h4>
+              <p className="text-caption text-muted-foreground">
+                Unified credit deductions for Forion & Orbit
+              </p>
             </div>
           </div>
           <OrbitCreditBadge />
         </div>
         <p className="text-caption text-muted-foreground/80 mt-2">
-          Every agent interaction in Orion automatically draws from your Forion credit ledger in real time.
+          Every agent interaction in Orbit automatically draws from your Forion credit ledger in
+          real time.
         </p>
       </div>
 

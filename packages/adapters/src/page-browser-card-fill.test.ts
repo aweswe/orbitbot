@@ -1,5 +1,5 @@
-import type { AdapterContext, ComputerRef } from "@rakazo/adapter-kit";
-import * as Logging from "@rakazo/logging";
+import type { AdapterContext, ComputerRef } from "@forion/orbit-adapter-kit";
+import * as Logging from "@forion/orbit-logging";
 import { describe, expect, it, vi } from "vitest";
 import type { CardFillStep } from "./browser-tools.js";
 import {

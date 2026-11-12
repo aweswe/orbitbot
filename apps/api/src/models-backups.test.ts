@@ -1,8 +1,8 @@
+import * as adapters from "@forion/orbit-adapters";
+import { listPiCatalog, serializeModelSecret } from "@forion/orbit-adapters";
+import type { Actor } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
 import { RPCHandler } from "@orpc/server/fetch";
-import * as adapters from "@rakazo/adapters";
-import { listPiCatalog, serializeModelSecret } from "@rakazo/adapters";
-import type { Actor } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
 import { describe, expect, it, vi } from "vitest";
 import type { RouterDeps } from "./router.js";
 import { createRouter } from "./router.js";
@@ -10,7 +10,7 @@ import { createRouter } from "./router.js";
 const owner: Actor = {
   userId: "user-one",
   spaceId: "space-one",
-  email: "one@rakazo.test",
+  email: "one@orbit.test",
   isDeploymentOwner: true,
 };
 
@@ -427,7 +427,7 @@ describe("model backup settings API", () => {
       ...owner,
       userId: "user-two",
       spaceId: "space-two",
-      email: "two@rakazo.test",
+      email: "two@orbit.test",
     };
     const kept = { userId: owner.userId, provider: "openrouter", modelId: "keep", position: 0 };
     const { rows, call, userModelRoleChoice } = setup({ actor, existing: [kept] });
@@ -671,10 +671,12 @@ describe("role-based model settings API", () => {
   });
   it("reads each connection's key and the saved choices once for the whole catalog", async () => {
     const { call, prisma } = setup();
+    // OpenRouter models are catalog-wide choices; use a provider whose live list
+    // differs per account to exercise per-connection serving.
     const connection = (id: string) => ({
       id,
       userId: owner.userId,
-      provider: "openrouter",
+      provider: "fireworks",
       label: id,
       secretId: `${id}-secret`,
       createdAt: new Date(0),
@@ -701,8 +703,9 @@ describe("role-based model settings API", () => {
     });
     // The work account's live list adds models the personal one does not list.
     const bundled = listPiCatalog()
-      .filter((entry) => entry.provider === "openrouter" && !entry.placeholder)
+      .filter((entry) => entry.provider === "fireworks" && !entry.placeholder)
       .map((entry) => entry.id);
+    expect(bundled.length).toBeGreaterThan(0);
     const liveOnly = bundled.slice(0, 20).map((id) => `${id}-preview`);
     const lists = vi
       .spyOn(adapters.ProviderCatalogCache.prototype, "read")
@@ -713,7 +716,7 @@ describe("role-based model settings API", () => {
     try {
       const catalog = (await (await call("models/forRole", { role: "main" })).response.json())
         .json as Array<{ id: string; credentialIds?: string[] }>;
-      expect(catalog.filter((entry) => liveOnly.includes(entry.id))).toHaveLength(20);
+      expect(catalog.filter((entry) => liveOnly.includes(entry.id))).toHaveLength(liveOnly.length);
       expect(catalog.find((entry) => entry.id === liveOnly[0])?.credentialIds).toEqual([
         "credential-work",
       ]);

@@ -1,11 +1,11 @@
 import { normalizeContext } from "@earendil-works/pi-ai";
-import { WorkspaceTooLargeError } from "@rakazo/adapter-kit";
-import type { MessageBlock } from "@rakazo/contracts";
-import { FLEET_TOOL_NAMES } from "@rakazo/contracts";
-import { isOwnerStartedRun, ONCE_ROUTINE_CRON } from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
-import { RunHistoryWriteError } from "@rakazo/db";
-import { createLogger, createTestSink, installLogger } from "@rakazo/logging";
+import { WorkspaceTooLargeError } from "@forion/orbit-adapter-kit";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { FLEET_TOOL_NAMES } from "@forion/orbit-contracts";
+import { isOwnerStartedRun, ONCE_ROUTINE_CRON } from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
+import { RunHistoryWriteError } from "@forion/orbit-db";
+import { createLogger, createTestSink, installLogger } from "@forion/orbit-logging";
 import { describe, expect, it, vi } from "vitest";
 import { builtinAgentTools } from "./builtin-tools.js";
 import {
@@ -1496,7 +1496,7 @@ describe("userTurnInstructions", () => {
       archiveBot,
       "Connected plugins: none",
       "Agent skills",
-      expect.stringContaining("read the Rakazo skill"),
+      expect.stringContaining("read the Orbit skill"),
       "Taught skills",
       ...stableTail,
       "Group context",

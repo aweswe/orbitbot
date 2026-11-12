@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: rakazo-web\n"
+"Project-Id-Version: orbit-web\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-26 00:00+0000\n"
 "PO-Revision-Date: \n"
@@ -626,7 +626,7 @@ msgstr "{name} 的帳號選單"
 
 #. placeholder {0}: bot.name
 #. placeholder {0}: group.spaceName
-#. placeholder {0}: page.title
+#. placeholder {0}: item.chat.name
 #: src/components/pages/PagesList.tsx
 #: src/pages/BotContextMenu.tsx
 #: src/pages/McpServersOverlay.tsx
@@ -642,14 +642,11 @@ msgstr ""
 msgid "Actions for space"
 msgstr "空間操作"
 
+#: src/components/OrbitCosmicThemePicker.tsx
 #: src/pages/BillingSettingsPanel.tsx
 #: src/pages/RoutineEditor.tsx
 msgid "Active"
 msgstr "啟用"
-
-#: src/pages/shell/sidebar-header.tsx
-msgid "Activity"
-msgstr "動態"
 
 #: src/components/integrations/plugin-marketplace.tsx
 #: src/components/SecretAskCard.tsx
@@ -806,6 +803,10 @@ msgstr ""
 msgid "Adds"
 msgstr "將新增"
 
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Adjust compact or spacious list density in the agent sidebar"
+msgstr ""
+
 #: src/pages/McpServersOverlay.tsx
 #: src/pages/model-settings/compatible-model-fields.tsx
 #: src/pages/ModelSettingsOverlay.tsx
@@ -815,6 +816,10 @@ msgstr "將新增"
 #: src/pages/shell/bot-panel.tsx
 msgid "Advanced"
 msgstr "進階"
+
+#: src/pages/VoiceSettingsOverlay.tsx
+msgid "Advanced: Custom Voice Endpoint"
+msgstr ""
 
 #: src/pages/RoutineEditor.tsx
 msgid "Advanced..."
@@ -872,8 +877,8 @@ msgid "Allow once"
 msgstr "允許一次"
 
 #: src/lib/dictation.ts
-msgid "Allow Rakazo to use Speech Recognition and the microphone in System Settings."
-msgstr "請在系統設定中允許 Rakazo 使用語音辨識和麥克風。"
+msgid "Allow Orbit to use Speech Recognition and the microphone in System Settings."
+msgstr "請在系統設定中允許 Orbit 使用語音辨識和麥克風。"
 
 #: src/pages/memory-providers/SerenitySettingsForm.tsx
 msgid "Allow writing"
@@ -1021,6 +1026,7 @@ msgid "API URL"
 msgstr ""
 
 #: src/pages/AccountSettingsOverlay.tsx
+#: src/pages/settings-nav.ts
 msgid "Appearance"
 msgstr "外觀"
 
@@ -1357,10 +1363,6 @@ msgstr "內建"
 msgid "Button “{button}” · read from the page, not checked"
 msgstr "按鈕「{button}」· 讀取自頁面，未核實"
 
-#: src/pages/shell/chat-header.tsx
-msgid "Call"
-msgstr "通話"
-
 #: src/components/call/VoiceChatCard.tsx
 msgid "Call back"
 msgstr "回撥"
@@ -1391,8 +1393,8 @@ msgid "Can view without signing in"
 msgstr "無需登入即可檢視"
 
 #: src/App.tsx
-msgid "Can't reach the server."
-msgstr "無法連線伺服器。"
+msgid "Can't reach the server. Attempting to re-establish your workspace link..."
+msgstr ""
 
 #: src/components/TextOnlyMark.tsx
 #: src/pages/shell/chat-model-picker.tsx
@@ -1607,6 +1609,10 @@ msgstr "設定新密碼"
 msgid "Choose a provider"
 msgstr "選擇供應商"
 
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Choose a signature celestial aesthetic. Your theme automatically synchronizes across the application shell, chat workspace, and deck computer."
+msgstr ""
+
 #: src/pages/shell/agent-import.tsx
 msgid "Choose backup"
 msgstr "選擇備份"
@@ -1622,8 +1628,8 @@ msgstr "選擇資料夾"
 
 #: src/components/ModelCredits.tsx
 #: src/components/SubscriptionGate.tsx
-msgid "Choose how to use Rakazo"
-msgstr "選擇 Rakazo 的使用方式"
+msgid "Choose how to use Orbit"
+msgstr "選擇 Orbit 的使用方式"
 
 #: src/components/vault/VaultItemEditor.tsx
 msgid "City"
@@ -1696,6 +1702,10 @@ msgstr "關閉電腦"
 msgid "Close image preview"
 msgstr "關閉圖片預覽"
 
+#: src/pages/shell/chat-header.tsx
+msgid "Close Inspector"
+msgstr ""
+
 #: src/pages/PluginsOverlay.tsx
 msgid "Close integrations"
 msgstr "關閉整合"
@@ -1730,6 +1740,10 @@ msgstr "關閉面板"
 #: src/components/ArtifactFileCard.tsx
 msgid "Close preview"
 msgstr "關閉預覽"
+
+#: src/pages/shell/sidebar-header.tsx
+msgid "Close search"
+msgstr ""
 
 #: src/components/integrations/skills-dialog.tsx
 msgid "Close skills"
@@ -1780,6 +1794,7 @@ msgid "column {index}"
 msgstr "第 {index} 欄"
 
 #: src/pages/AccountSettingsOverlay.tsx
+#: src/pages/AppearanceSettingsPanel.tsx
 msgid "Comfortable"
 msgstr "寬鬆"
 
@@ -1806,6 +1821,7 @@ msgid "Communication"
 msgstr "通訊"
 
 #: src/pages/AccountSettingsOverlay.tsx
+#: src/pages/AppearanceSettingsPanel.tsx
 msgid "Compact"
 msgstr "緊湊"
 
@@ -1958,8 +1974,8 @@ msgstr "請先連結此模型的供應商。"
 
 #. js-lingui-explicit-id
 #: src/lib/run-error.ts
-msgid "Connect your own API key in Models or choose Rakazo credits in Billing."
-msgstr "請在「模型」中連接你自己的 API 金鑰，或在「帳務」中選擇 Rakazo 點數。"
+msgid "Connect your own API key in Models or choose Orbit credits in Billing."
+msgstr "請在「模型」中連接你自己的 API 金鑰，或在「帳務」中選擇 Orbit 點數。"
 
 #: src/components/bot-templates/bot-templates-dialog.tsx
 #: src/components/ComputerDeviceSettings.tsx
@@ -1977,6 +1993,10 @@ msgstr "已連線"
 #: src/pages/VoiceSettingsOverlay.tsx
 msgid "Connected {0}."
 msgstr "已連線 {0}。"
+
+#: src/pages/shell/chat-header.tsx
+msgid "Connected apps"
+msgstr ""
 
 #: src/components/integrations/plugin-marketplace.tsx
 #: src/pages/McpServersOverlay.tsx
@@ -2103,6 +2123,10 @@ msgstr "複製提示詞"
 #: src/components/markdown-copy.tsx
 msgid "Copy rows"
 msgstr "複製列"
+
+#: src/pages/shell/avatar-studio-popover.tsx
+msgid "Cosmic Space Companions"
+msgstr ""
 
 #: src/pages/AccountSettingsOverlay.tsx
 msgid "Cost"
@@ -2736,7 +2760,7 @@ msgstr ""
 #: src/pages/shell/agent-import.tsx
 #: src/pages/shell/create-bot-dialog.tsx
 #: src/pages/shell/dialogs.tsx
-#: src/pages/shell/sidebar-header.tsx
+#: src/pages/shell/shell-sidebar.tsx
 msgid "Create"
 msgstr "建立"
 
@@ -2750,6 +2774,8 @@ msgid "Create account"
 msgstr "建立帳號"
 
 #: src/components/bot-templates/bot-templates-dialog.tsx
+#: src/pages/Shell.tsx
+#: src/pages/shell/sidebar-roster.tsx
 msgid "Create bot"
 msgstr "建立機器人"
 
@@ -2772,8 +2798,8 @@ msgid "Create space"
 msgstr "建立空間"
 
 #: src/pages/Auth.tsx
-msgid "Create your Rakazo"
-msgstr "建立你的 Rakazo"
+msgid "Create your Orbit"
+msgstr "建立你的 Orbit"
 
 #: src/components/AskCard.tsx
 msgid "Created"
@@ -2826,6 +2852,10 @@ msgstr "幣別"
 #: src/pages/AccountSettingsOverlay.tsx
 msgid "Current password"
 msgstr "目前密碼"
+
+#: src/pages/shell/create-bot-dialog.tsx
+msgid "Custom Agent"
+msgstr ""
 
 #: src/components/vault/VaultItemEditor.tsx
 msgid "Custom header"
@@ -2983,6 +3013,10 @@ msgstr "要刪除此空間的憑證嗎？"
 msgid "deleted"
 msgstr "已刪除"
 
+#: src/pages/shell/shell-dialogs.tsx
+msgid "Deleted {botName}"
+msgstr ""
+
 #: src/components/PasskeySettings.tsx
 #: src/pages/Artifacts.tsx
 #: src/pages/OrganizationSettingsPanel.tsx
@@ -3131,10 +3165,6 @@ msgstr "Docker"
 msgid "Docker limits access to your computer for added security. Using {hostLabel} lets bots work with your local files and tools."
 msgstr "Docker 限制對你電腦的存取，以提高安全性。使用 {hostLabel} 時，機器人可以處理你的本機檔案並使用本機工具。"
 
-#: src/components/SidebarFooter.tsx
-msgid "Docs"
-msgstr "說明文件"
-
 #: src/pages/KnowledgeSection.tsx
 msgid "Document changed. Reopen to edit the latest version."
 msgstr "文件已變更，請重新開啟以編輯最新版本。"
@@ -3174,6 +3204,10 @@ msgstr "下載 {name}"
 #: src/components/markdown-copy.tsx
 msgid "Download CSV"
 msgstr "下載 CSV"
+
+#: src/components/SidebarFooter.tsx
+msgid "Download Orbit for Android"
+msgstr ""
 
 #: src/components/pages/DownloadPdfButton.tsx
 msgid "Download PDF"
@@ -3252,6 +3286,10 @@ msgstr "需要驗證電子信箱"
 msgid "Enable {0}"
 msgstr "啟用 {0}"
 
+#: src/pages/shell/chat-header.tsx
+msgid "End call"
+msgstr ""
+
 #: src/components/ComputerProviderSettings.tsx
 msgid "End user ID"
 msgstr ""
@@ -3259,10 +3297,6 @@ msgstr ""
 #: src/lib/billing.ts
 msgid "Ends {day}"
 msgstr "於 {day} 結束"
-
-#: src/components/GitHubStarPrompt.tsx
-msgid "Enjoying Rakazo?"
-msgstr "喜歡 Rakazo 嗎？"
 
 #: src/lib/user-error.ts
 msgid "Enter a password"
@@ -3379,6 +3413,10 @@ msgstr ""
 msgid "Everyone in this bot's space can read the chats it gets from {linkApp}."
 msgstr ""
 
+#: src/pages/shell/chat-header.tsx
+msgid "Executing tools…"
+msgstr ""
+
 #: src/pages/shell/message-cards.tsx
 msgid "Expand"
 msgstr "展開"
@@ -3387,6 +3425,14 @@ msgstr "展開"
 #: src/pages/shell/sidebar-roster.tsx
 msgid "Expand {0}"
 msgstr "展開 {0}"
+
+#: src/pages/shell/chat-header.tsx
+msgid "Expand Sidebar"
+msgstr ""
+
+#: src/pages/shell/chat-header.tsx
+msgid "Expand Sidebar (Cmd+B)"
+msgstr ""
 
 #: src/components/markdown-copy.tsx
 msgid "Expand table"
@@ -3444,6 +3490,10 @@ msgstr "失敗"
 #: src/pages/ActivityList.tsx
 msgid "Failed"
 msgstr "失敗"
+
+#: src/pages/shell/sidebar-roster.tsx
+msgid "Failed to load bots"
+msgstr ""
 
 #: src/pages/shell/use-composer-actions.ts
 msgid "Failed to send message"
@@ -3519,6 +3569,14 @@ msgstr "尋找頁面"
 #: src/pages/shell/keyboard-shortcuts-dialog.tsx
 msgid "Find in chat"
 msgstr "在聊天中尋找"
+
+#: src/pages/shell/chat-header.tsx
+msgid "Find in thread"
+msgstr ""
+
+#: src/pages/shell/chat-header.tsx
+msgid "Find in thread (Cmd+F)"
+msgstr ""
 
 #: src/pages/model-settings/compatible-model-fields.tsx
 #: src/pages/Onboarding.tsx
@@ -3624,10 +3682,6 @@ msgstr "一般"
 msgid "Get an email address"
 msgstr "取得電子郵件地址"
 
-#: src/components/SidebarFooter.tsx
-msgid "Get the mobile app"
-msgstr "下載手機應用程式"
-
 #: src/components/ComputerUpdateProgress.tsx
 msgid "Getting ready"
 msgstr "正在準備"
@@ -3658,11 +3712,14 @@ msgstr "正在授予…"
 
 #: src/lib/identity-display.ts
 #: src/pages/MessagingSettingsPanel.tsx
-#: src/pages/shell/chat-header.tsx
 #: src/pages/shell/side-panel.tsx
 #: src/pages/SpaceSearch.tsx
 msgid "Group"
 msgstr "群組"
+
+#: src/pages/shell/chat-header.tsx
+msgid "Group Chat"
+msgstr ""
 
 #: src/pages/GroupPanel.tsx
 msgid "Group settings"
@@ -3785,8 +3842,8 @@ msgid "How to check"
 msgstr "如何檢查"
 
 #: src/components/SignupSurvey.tsx
-msgid "How will you use Rakazo?"
-msgstr "你會如何使用 Rakazo？"
+msgid "How will you use Orbit?"
+msgstr "你會如何使用 Orbit？"
 
 #: src/pages/shell/computer-release-actions.tsx
 msgid "I’m done"
@@ -3874,6 +3931,10 @@ msgstr "輸入"
 msgid "Inputs"
 msgstr "輸入"
 
+#: src/pages/shell/chat-header.tsx
+msgid "Inspect {title}"
+msgstr ""
+
 #: src/components/SidebarFooter.tsx
 msgid "Install update"
 msgstr "安裝更新"
@@ -3946,10 +4007,6 @@ msgstr "驗證碼無效"
 #: src/components/SpaceMembersSettings.tsx
 msgid "Invite"
 msgstr ""
-
-#: src/pages/shell/chat-header.tsx
-msgid "Invite a friend"
-msgstr "邀請朋友"
 
 #: src/components/SidebarFooter.tsx
 msgid "Invite friends"
@@ -4129,6 +4186,10 @@ msgstr "自動載入網路圖片"
 msgid "Loading activity…"
 msgstr "正在載入動態…"
 
+#: src/pages/shell/sidebar-roster.tsx
+msgid "Loading bots"
+msgstr ""
+
 #: src/pages/PluginsOverlay.tsx
 msgid "Loading integrations…"
 msgstr "正在載入整合…"
@@ -4157,7 +4218,6 @@ msgstr "正在載入語音供應商…"
 #: src/components/bot-templates/bot-templates-dialog.tsx
 #: src/components/integrations/plugin-marketplace.tsx
 #: src/components/integrations/skills-dialog.tsx
-#: src/components/PageLoading.tsx
 #: src/components/SpaceMembersSettings.tsx
 #: src/pages/AdminAccessPage.tsx
 #: src/pages/Artifacts.tsx
@@ -4198,6 +4258,10 @@ msgstr ""
 #: src/pages/shell/agent-import.tsx
 msgid "Looks like it contains a key"
 msgstr "似乎包含金鑰"
+
+#: src/App.tsx
+msgid "Lost connection to Orbit"
+msgstr ""
 
 #: src/lib/ticket-priority.ts
 #: src/pages/model-settings/compatible-model-fields.tsx
@@ -4399,8 +4463,8 @@ msgid "Message from another agent"
 msgstr "來自其他代理程式的訊息"
 
 #: src/pages/shell/composer.tsx
-msgid "Message…"
-msgstr "訊息…"
+msgid "Message Orbit…"
+msgstr ""
 
 #: src/pages/shell/message-view.tsx
 msgid "Messaged {peer}"
@@ -4609,8 +4673,8 @@ msgid "Name this routine"
 msgstr "給這個例行任務命名"
 
 #: src/pages/shell/create-bot-dialog.tsx
-msgid "Name your Bot"
-msgstr "為你的機器人命名"
+msgid "Name your Orbit"
+msgstr ""
 
 #: src/lib/roster-status.ts
 msgid "Needs an answer"
@@ -4623,6 +4687,7 @@ msgid "Needs an OAuth client ID"
 msgstr "需要 OAuth 用戶端 ID"
 
 #: src/pages/ActivityList.tsx
+#: src/pages/shell/chat-header.tsx
 msgid "Needs attention"
 msgstr "需要處理"
 
@@ -4648,6 +4713,10 @@ msgstr "需要你處理"
 msgid "Needs: {names}"
 msgstr "需要：{names}"
 
+#: src/pages/VoiceSettingsOverlay.tsx
+msgid "Neural voice synthesis is pre-configured. Bot messages can be read aloud at any time by clicking the speaker icon on any message bubble."
+msgstr ""
+
 #: src/components/ApprovalRulesSettings.tsx
 msgid "Never ask"
 msgstr "永不詢問"
@@ -4664,9 +4733,12 @@ msgstr ""
 
 #: src/pages/Shell.tsx
 #: src/pages/shell/bot-picker.tsx
-#: src/pages/shell/create-bot-dialog.tsx
 msgid "New bot"
 msgstr "新增機器人"
+
+#: src/pages/shell/shell-sidebar.tsx
+msgid "New Bot"
+msgstr ""
 
 #: src/components/VaultSettings.tsx
 msgid "New card"
@@ -4761,6 +4833,10 @@ msgstr "尚無成品"
 msgid "No authentication"
 msgstr "無驗證"
 
+#: src/pages/Shell.tsx
+msgid "No bot selected"
+msgstr ""
+
 #: src/components/integrations/agent-access.tsx
 msgid "No bots"
 msgstr "沒有機器人"
@@ -4769,6 +4845,10 @@ msgstr "沒有機器人"
 #: src/pages/shell/bot-picker.tsx
 msgid "No bots match"
 msgstr "沒有符合的機器人"
+
+#: src/pages/shell/sidebar-roster.tsx
+msgid "No bots yet"
+msgstr ""
 
 #: src/components/AskCard.tsx
 #: src/components/SecretAskCard.tsx
@@ -4896,26 +4976,25 @@ msgid "Not imported"
 msgstr "未匯入"
 
 #: src/pages/shell/import-status.ts
-msgid "Not in Rakazo's catalog"
-msgstr "不在 Rakazo 目錄中"
+msgid "Not in Orbit's catalog"
+msgstr "不在 Orbit 目錄中"
 
 #: src/pages/PluginsOverlay.tsx
 msgid "Not in the plugin catalog"
 msgstr "不在外掛程式目錄中"
 
-#: src/components/GitHubStarPrompt.tsx
 #: src/pages/shell/message-cards.tsx
 msgid "Not now"
 msgstr "暫不"
 
 #: src/pages/shell/agent-import.tsx
 #: src/pages/shell/import-status.ts
-msgid "Not supported in Rakazo"
-msgstr "Rakazo 不支援"
+msgid "Not supported in Orbit"
+msgstr "Orbit 不支援"
 
 #: src/pages/shell/agent-import.tsx
-msgid "Not used by Rakazo"
-msgstr "Rakazo 不使用"
+msgid "Not used by Orbit"
+msgstr "Orbit 不使用"
 
 #: src/components/McpServerHealthLine.tsx
 #: src/pages/PluginsOverlay.tsx
@@ -5020,10 +5099,6 @@ msgstr "開啟 {title}"
 msgid "Open <0>{0}</0> and enter this code:"
 msgstr "開啟 <0>{0}</0> 並輸入以下代碼："
 
-#: src/pages/shell/chat-header.tsx
-msgid "Open call"
-msgstr "開啟通話"
-
 #. placeholder {0}: call.botName
 #: src/components/call/CallCard.tsx
 msgid "Open chat with {0}"
@@ -5041,6 +5116,10 @@ msgstr "開啟外部連結？"
 msgid "Open in full window"
 msgstr "在完整視窗中開啟"
 
+#: src/pages/shell/chat-header.tsx
+msgid "Open Inspector"
+msgstr ""
+
 #: src/components/pages/SharePopover.tsx
 msgid "Open link"
 msgstr "開啟連結"
@@ -5052,8 +5131,8 @@ msgstr "開啟導覽"
 #: src/components/pages/PublicPageShell.tsx
 #: src/pages/Invite.tsx
 #: src/pages/SharedPage.tsx
-msgid "Open Rakazo"
-msgstr "開啟 Rakazo"
+msgid "Open Orbit"
+msgstr "開啟 Orbit"
 
 #: src/pages/ScratchpadSection.tsx
 msgid "Open work"
@@ -5091,6 +5170,81 @@ msgstr "選填標頭值"
 #: src/pages/Onboarding.tsx
 msgid "Or paste an API key"
 msgstr "或貼上 API 金鑰"
+
+#: src/App.tsx
+msgid "Or reload window"
+msgstr ""
+
+#: src/components/PageLoading.tsx
+#: src/pages/AccountSettingsOverlay.tsx
+#: src/pages/shell/avatar-studio-popover.tsx
+msgid "Orbit"
+msgstr "Orbit"
+
+#: src/pages/shell/create-bot-dialog.tsx
+msgid "Orbit Agent Studio"
+msgstr ""
+
+#: src/pages/shell/chat-header.tsx
+msgid "Orbit Assistant"
+msgstr ""
+
+#: src/pages/shell/create-bot-dialog.tsx
+msgid "Orbit Blueprints"
+msgstr ""
+
+#: src/components/ComputersUnavailableHint.tsx
+msgid "Orbit Cloud"
+msgstr ""
+
+#: src/pages/AccountSettingsOverlay.tsx
+msgid "Orbit Cosmic Theme"
+msgstr ""
+
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Orbit Cosmic Themes"
+msgstr ""
+
+#: src/pages/settings-nav.ts
+msgid "Orbit Cosmic Themes, custom typography, and visual density."
+msgstr ""
+
+#: src/pages/Onboarding.tsx
+msgid "Orbit credits"
+msgstr "Orbit 額度"
+
+#: src/App.tsx
+msgid "Orbit encountered an unexpected state. Refreshing will reload the interface cleanly."
+msgstr ""
+
+#: src/pages/shell/avatar-studio-popover.tsx
+msgid "Orbit Official Planet Bot"
+msgstr ""
+
+#: src/components/SidebarFooter.tsx
+msgid "Orbit Platform"
+msgstr ""
+
+#. placeholder {0}: activeTheme.name
+#: src/components/OrbitThemeSwitcher.tsx
+msgid "Orbit Theme: {0}"
+msgstr ""
+
+#: src/components/OrbitThemeSwitcher.tsx
+msgid "Orbit Themes"
+msgstr ""
+
+#: src/pages/Auth.tsx
+msgid "Orbit uses your Forion account. You’ll be back here in a moment."
+msgstr ""
+
+#: src/pages/memory-providers/HonchoSettingsForm.tsx
+msgid "orbit-shared and IDs starting with bot- are reserved for Orbit."
+msgstr ""
+
+#: src/pages/shell/chat-header.tsx
+msgid "Orbital Command Bar"
+msgstr ""
 
 #: src/components/ComputerProviderSettings.tsx
 #: src/pages/settings-nav.ts
@@ -5231,8 +5385,8 @@ msgid "Paste a replacement key"
 msgstr "貼上替換金鑰"
 
 #: src/pages/model-settings/compatible-model-fields.tsx
-msgid "Paste the OpenAI-compatible address from your server. Rakazo adds /v1 if needed."
-msgstr "貼上伺服器的 OpenAI 相容地址。需要時 Rakazo 會補上 /v1。"
+msgid "Paste the OpenAI-compatible address from your server. Orbit adds /v1 if needed."
+msgstr "貼上伺服器的 OpenAI 相容地址。需要時 Orbit 會補上 /v1。"
 
 #: src/pages/shell/agent-import.tsx
 msgid "Paste the reply"
@@ -5295,6 +5449,10 @@ msgstr "請從目錄中選擇模型。"
 msgid "Pick a model from the list or enter a model id served by this endpoint."
 msgstr "請從清單中選擇模型，或輸入此端點提供的模型 ID。"
 
+#: src/pages/AccountSettingsOverlay.tsx
+msgid "Pick a signature cosmic color palette across Orbit"
+msgstr ""
+
 #: src/pages/RoutineEditor.tsx
 msgid "Pick a tool to check"
 msgstr "選擇要檢查的工具"
@@ -5316,6 +5474,10 @@ msgstr "方案"
 #: src/components/ArtifactFileCard.tsx
 msgid "Play {name}"
 msgstr "播放 {name}"
+
+#: src/pages/VoiceSettingsOverlay.tsx
+msgid "Playing sample…"
+msgstr ""
 
 #: src/pages/VoiceSettingsOverlay.tsx
 msgid "Playing…"
@@ -5426,19 +5588,6 @@ msgstr "Pull request"
 msgid "Queued"
 msgstr "排隊中"
 
-#: src/pages/AccountSettingsOverlay.tsx
-#: src/pages/shell/avatar-studio-popover.tsx
-msgid "Rakazo"
-msgstr "Rakazo"
-
-#: src/pages/Onboarding.tsx
-msgid "Rakazo credits"
-msgstr "Rakazo 額度"
-
-#: src/pages/memory-providers/HonchoSettingsForm.tsx
-msgid "rakazo-shared and IDs starting with bot- are reserved for Rakazo."
-msgstr "rakazo-shared 與以 bot- 開頭的 ID 保留給 Rakazo 使用。"
-
 #: src/pages/shell/message-hover-actions.tsx
 msgid "React"
 msgstr "回應"
@@ -5446,6 +5595,10 @@ msgstr "回應"
 #: src/pages/shell/message-hover-actions.tsx
 msgid "Reactions"
 msgstr "表情回應"
+
+#: src/pages/shell/message-hover-actions.tsx
+msgid "Read aloud"
+msgstr ""
 
 #: src/components/AskCard.tsx
 msgid "Read from the page, not checked"
@@ -5455,7 +5608,9 @@ msgstr "讀取自頁面，未核實"
 msgid "Read replies aloud"
 msgstr "朗讀回覆"
 
+#: src/pages/shell/chat-header.tsx
 #: src/pages/shell/import-status.ts
+#: src/pages/VoiceSettingsOverlay.tsx
 msgid "Ready"
 msgstr "就緒"
 
@@ -5473,8 +5628,8 @@ msgid "Recall and write"
 msgstr "回想與寫入"
 
 #: src/pages/memory-providers/HonchoSettingsForm.tsx
-msgid "Recall from this peer; save to Rakazo’s own peers."
-msgstr "從此 peer 讀取；儲存至 Rakazo 自己的 peer。"
+msgid "Recall from this peer; save to Orbit’s own peers."
+msgstr "從此 peer 讀取；儲存至 Orbit 自己的 peer。"
 
 #: src/pages/memory-providers/SerenitySettingsForm.tsx
 msgid "Recall only"
@@ -5485,6 +5640,7 @@ msgid "Received"
 msgstr "已收到"
 
 #: src/pages/ActivityList.tsx
+#: src/pages/Shell.tsx
 msgid "Recent"
 msgstr "最近"
 
@@ -5876,6 +6032,7 @@ msgstr "正在還原工作空間"
 #: src/pages/ModelRoleSettings.tsx
 #: src/pages/PluginsOverlay.tsx
 #: src/pages/PluginSubmissionsPanel.tsx
+#: src/pages/shell/sidebar-roster.tsx
 #: src/pages/SpaceSettingOverrides.tsx
 msgid "Retry"
 msgstr "重試"
@@ -5896,8 +6053,8 @@ msgstr "返回與 {0} 的通話"
 
 #: src/pages/McpOAuthCallback.tsx
 #: src/pages/SlackInstallCallback.tsx
-msgid "Return to Rakazo"
-msgstr "返回 Rakazo"
+msgid "Return to Orbit"
+msgstr "返回 Orbit"
 
 #: src/lib/model-connection-preflight.ts
 msgid "Review provider settings and test again."
@@ -6182,9 +6339,17 @@ msgstr "安全與維運"
 msgid "Security code"
 msgstr ""
 
-#: src/pages/shell/chat-header.tsx
-msgid "Select a bot"
-msgstr "選擇機器人"
+#: src/pages/Shell.tsx
+msgid "Select a bot from the sidebar or create a new companion to begin."
+msgstr ""
+
+#: src/pages/shell/create-bot-dialog.tsx
+msgid "Select a pre-configured Orbit Agent blueprint to get started:"
+msgstr ""
+
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Select your preferred typeface family. Orbit hot-reloads fonts in real-time across all headings, code blocks, and chat transcripts."
+msgstr ""
 
 #: src/pages/memory-providers/ConnectionModeFields.tsx
 msgid "Self-hosted"
@@ -6290,7 +6455,6 @@ msgstr "設定：用量"
 msgid "Setup complete"
 msgstr "設定完成"
 
-#: src/components/ComputersUnavailableHint.tsx
 #: src/pages/model-settings/compatible-model-fields.tsx
 msgid "Setup help"
 msgstr "設定說明"
@@ -6373,6 +6537,10 @@ msgstr "顯示文字紀錄"
 msgid "Sidebar density"
 msgstr "側邊欄密度"
 
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Sidebar Density"
+msgstr ""
+
 #: src/components/integrations/plugin-marketplace.tsx
 #: src/lib/localized-provider-hint.ts
 #: src/pages/Auth.tsx
@@ -6398,12 +6566,17 @@ msgid "Sign in at <0>{0}</0>, then paste the code here."
 msgstr "在 <0>{0}</0> 登入，然後將代碼貼到這裡。"
 
 #: src/pages/Auth.tsx
-msgid "Sign in to Rakazo"
-msgstr "登入 Rakazo"
+msgid "Sign in to Orbit"
+msgstr "登入 Orbit"
 
 #: src/lib/user-error.ts
 msgid "Sign in to your existing account to link SSO"
 msgstr "請登入現有帳號以關聯 SSO"
+
+#. placeholder {0}: reset.sso.name
+#: src/pages/Auth.tsx
+msgid "Sign in with {0}"
+msgstr ""
 
 #: src/components/PasskeySignIn.tsx
 msgid "Sign in with passkey"
@@ -6420,6 +6593,10 @@ msgstr "註冊"
 #: src/components/integrations/plugin-marketplace.tsx
 msgid "Sign-in cancelled. Try again."
 msgstr "登入已取消。請重試。"
+
+#: src/pages/Auth.tsx
+msgid "Signing in…"
+msgstr ""
 
 #: src/components/vault/VaultItemDetail.tsx
 #: src/components/vault/VaultItemEditor.tsx
@@ -6494,6 +6671,9 @@ msgid "Some settings are not imported"
 msgstr "部分設定不會匯入"
 
 #: src/App.tsx
+msgid "Something went wrong"
+msgstr ""
+
 #: src/lib/user-error.ts
 msgid "Something went wrong. Try again."
 msgstr "出了點問題。請重試。"
@@ -6567,10 +6747,6 @@ msgstr "單一登入"
 msgid "SSO is temporarily unavailable. Try again."
 msgstr "SSO 暫時不可用，請重試。"
 
-#: src/components/GitHubStarPrompt.tsx
-msgid "Star on GitHub"
-msgstr "在 GitHub 上給星"
-
 #: src/pages/shell/computer-overlay.tsx
 msgid "Start"
 msgstr "啟動"
@@ -6643,6 +6819,7 @@ msgstr "停止"
 msgid "Stop computer"
 msgstr "停止電腦"
 
+#: src/pages/shell/message-hover-actions.tsx
 #: src/pages/shell/message-view.tsx
 msgid "Stop speaking"
 msgstr "停止朗讀"
@@ -6744,6 +6921,10 @@ msgstr "正在切換…"
 #: src/pages/Shell.tsx
 msgid "System"
 msgstr "系統"
+
+#: src/App.tsx
+msgid "System Interruption"
+msgstr ""
 
 #: src/components/markdown-copy.tsx
 msgid "Table"
@@ -6881,6 +7062,11 @@ msgstr "共用連結將失效"
 #: src/components/ModelCredits.tsx
 msgid "The unused difference is credited to your next invoice."
 msgstr "未使用的差額將抵扣到你的下一張帳單。"
+
+#. placeholder {0}: activeTheme.name
+#: src/components/OrbitThemeSwitcher.tsx
+msgid "Theme: {0}"
+msgstr ""
 
 #: src/pages/shell/agent-import.tsx
 msgid "These files are too large to import."
@@ -7065,8 +7251,8 @@ msgid "This server's tool result does not fit the model. Turn off Keep tool resu
 msgstr "此伺服器的工具結果超出模型容量。請關閉該伺服器的「保留完整工具結果」，或選擇其他模型。"
 
 #: src/pages/model-settings/connection-controls.tsx
-msgid "This subscription sign-in is not available in Rakazo yet. Use a deployment credential or choose another provider."
-msgstr "此訂閱登入在 Rakazo 中尚不可用。請使用部署憑證或選擇其他供應商。"
+msgid "This subscription sign-in is not available in Orbit yet. Use a deployment credential or choose another provider."
+msgstr "此訂閱登入在 Orbit 中尚不可用。請使用部署憑證或選擇其他供應商。"
 
 #: src/components/bot-templates/bot-templates-dialog.tsx
 msgid "This template was just updated. Check it again."
@@ -7242,12 +7428,20 @@ msgstr "輸入文字但不記錄內容"
 msgid "Type your answer"
 msgstr "輸入你的回答"
 
+#: src/pages/AccountSettingsOverlay.tsx
+msgid "Typography"
+msgstr ""
+
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Typography Engine"
+msgstr ""
+
 #: src/pages/BotContextMenu.tsx
-#: src/pages/Shell.tsx
 msgid "Unassigned"
 msgstr "未分配"
 
 #: src/components/AskCard.tsx
+#: src/pages/shell/shell-dialogs.tsx
 msgid "Undo"
 msgstr "復原"
 
@@ -7402,13 +7596,13 @@ msgstr ""
 msgid "Use my subscription or API key"
 msgstr "使用我的訂閱或 API 金鑰"
 
+#: src/components/ModelCredits.tsx
+msgid "Use Orbit credits"
+msgstr "使用 Orbit 額度"
+
 #: src/components/teach/TeachRecordingChrome.tsx
 msgid "Use Protected input for passwords."
 msgstr "輸入密碼時，請使用受保護的輸入。"
-
-#: src/components/ModelCredits.tsx
-msgid "Use Rakazo credits"
-msgstr "使用 Rakazo 額度"
 
 #: src/pages/memory-providers/HonchoSettingsForm.tsx
 msgid "Use up to 512 letters, digits, _ or -."
@@ -7496,6 +7690,10 @@ msgstr "檢視來源"
 msgid "Voice"
 msgstr "語音"
 
+#: src/pages/shell/chat-header.tsx
+msgid "Voice Call"
+msgstr ""
+
 #: src/lib/tts.ts
 msgid "Voice request timed out."
 msgstr "語音請求逾時。"
@@ -7555,8 +7753,8 @@ msgid "Weekly"
 msgstr "每週"
 
 #: src/components/SignupSurvey.tsx
-msgid "Welcome to Rakazo"
-msgstr "歡迎使用 Rakazo"
+msgid "Welcome to Orbit"
+msgstr "歡迎使用 Orbit"
 
 #: src/pages/shell/dialogs.tsx
 msgid "What about its memories?"
@@ -7567,8 +7765,8 @@ msgid "What can this space use?"
 msgstr "此空間可以使用什麼？"
 
 #: src/components/SignupSurvey.tsx
-msgid "What do you most want Rakazo to help with?"
-msgstr "你最希望 Rakazo 幫你做什麼？"
+msgid "What do you most want Orbit to help with?"
+msgstr "你最希望 Orbit 幫你做什麼？"
 
 #: src/pages/shell/message-cards.tsx
 msgid "What do you want me on first?"
@@ -7680,8 +7878,13 @@ msgid "Works with your ChatGPT or Claude plan."
 msgstr "可使用你的 ChatGPT 或 Claude 方案。"
 
 #: src/pages/memory-providers/HonchoSettingsForm.tsx
+#: src/pages/shell/chat-header.tsx
 msgid "Workspace"
 msgstr "工作空間"
+
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Workspace Density"
+msgstr ""
 
 #: src/lib/billing.ts
 msgid "year"

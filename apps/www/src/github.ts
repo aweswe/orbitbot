@@ -1,4 +1,4 @@
-// Relative source path: Vercel functions cannot resolve the TypeScript exports of @rakazo/core.
+// Relative source path: Vercel functions cannot resolve the TypeScript exports of @forion/orbit-core.
 import { readBoundedJsonResponse } from "../../../packages/core/src/http-response.js";
 import { GITHUB_API_REPO } from "./site";
 
@@ -110,7 +110,7 @@ async function fetchGithubJson<T>(
       fetchImpl(url, {
         headers: {
           Accept: "application/vnd.github+json",
-          "User-Agent": "rakazo-www",
+          "User-Agent": "orbit-www",
           // Optional: anonymous requests share a 60/hour limit per IP.
           ...(process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {}),
         },

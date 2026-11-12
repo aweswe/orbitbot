@@ -1,0 +1,523 @@
+{
+  "reviewedAt": "2026-11-10",
+  "note": "Manual and exact-version registry licence resolutions. A registry declaration is not a substitute for reviewing the exact installed version or its bundled licence file.",
+  "packages": [
+    {
+      "name": "@astrojs/check",
+      "version": "0.9.12",
+      "license": "MIT",
+      "source": "npm registry 0.9.12",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "@astrojs/markdown-satteri",
+      "version": "0.4.4",
+      "license": "MIT",
+      "source": "npm registry 0.4.4",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "@astrojs/react",
+      "version": "6.0.6",
+      "license": "MIT",
+      "source": "npm registry 6.0.6",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "@astrojs/sitemap",
+      "version": "3.7.4",
+      "license": "MIT",
+      "source": "npm registry 3.7.4",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "@expo/metro-runtime",
+      "version": "57.0.18",
+      "license": "MIT",
+      "source": "npm registry 57.0.18",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "@expo/ui",
+      "version": "57.0.26",
+      "license": "MIT",
+      "source": "npm registry 57.0.26",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "@img/sharp-libvips-darwin-arm64",
+      "license": "LGPL-3.0-or-later",
+      "source": "package.json and package metadata",
+      "status": "reviewed-with-obligation",
+      "distribution": "optional native binary used by sharp for image processing on macOS arm64",
+      "obligation": "Include the LGPL-3.0 text and a source-availability/written-offer statement in distributed server or desktop artifacts that include this binary. Licence text: licenses/LGPL-3.0.txt. Source project: https://github.com/lovell/sharp-libvips.",
+      "version": "1.3.4"
+    },
+    {
+      "name": "@react-native-vector-icons/ionicons",
+      "version": "13.1.4",
+      "license": "MIT",
+      "source": "npm registry 13.1.4",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "@react-native/metro-config",
+      "version": "0.86.3",
+      "license": "MIT",
+      "source": "npm registry 0.86.3",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "@sentry/cli",
+      "version": "2.58.4",
+      "license": "FSL-1.1-MIT",
+      "source": "npm registry 2.58.4",
+      "status": "dev-only",
+      "distribution": "build-time tooling; not shipped to end users",
+      "note": "Functional Source License; keep it in dev/build tooling and do not redistribute the tool itself."
+    },
+    {
+      "name": "@sentry/electron",
+      "version": "8.3.0",
+      "license": "MIT",
+      "source": "npm registry 8.3.0",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "@sentry/react-native",
+      "version": "7.11.0",
+      "license": "MIT",
+      "source": "npm registry 7.11.0",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "@vercel/functions",
+      "version": "3.10.6",
+      "license": "Apache-2.0",
+      "source": "npm registry 3.10.6",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "astro",
+      "version": "7.4.1",
+      "license": "MIT",
+      "source": "npm registry 7.4.1",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "electron",
+      "version": "45.2.2",
+      "license": "MIT",
+      "source": "npm registry 45.2.2",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "electron-builder",
+      "version": "26.15.3",
+      "license": "MIT",
+      "source": "npm registry 26.15.3",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "electron-updater",
+      "version": "6.8.11",
+      "license": "MIT",
+      "source": "npm registry 6.8.11",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo",
+      "version": "57.0.32",
+      "license": "MIT",
+      "source": "npm registry 57.0.32",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-application",
+      "version": "57.0.3",
+      "license": "MIT",
+      "source": "npm registry 57.0.3",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-audio",
+      "version": "57.0.5",
+      "license": "MIT",
+      "source": "npm registry 57.0.5",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-clipboard",
+      "version": "57.0.2",
+      "license": "MIT",
+      "source": "npm registry 57.0.2",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-constants",
+      "version": "57.0.23",
+      "license": "MIT",
+      "source": "npm registry 57.0.23",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-document-picker",
+      "version": "57.0.3",
+      "license": "MIT",
+      "source": "npm registry 57.0.3",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-file-system",
+      "version": "57.0.7",
+      "license": "MIT",
+      "source": "npm registry 57.0.7",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-font",
+      "version": "57.0.4",
+      "license": "MIT",
+      "source": "npm registry 57.0.4",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-haptics",
+      "version": "57.0.3",
+      "license": "MIT",
+      "source": "npm registry 57.0.3",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-image-manipulator",
+      "version": "57.0.22",
+      "license": "MIT",
+      "source": "npm registry 57.0.22",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-image-picker",
+      "version": "57.0.21",
+      "license": "MIT",
+      "source": "npm registry 57.0.21",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-keep-awake",
+      "version": "57.0.2",
+      "license": "MIT",
+      "source": "npm registry 57.0.2",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-linking",
+      "version": "57.0.13",
+      "license": "MIT",
+      "source": "npm registry 57.0.13",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-localization",
+      "version": "57.0.2",
+      "license": "MIT",
+      "source": "npm registry 57.0.2",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-modules-core",
+      "version": "57.0.25",
+      "license": "MIT",
+      "source": "npm registry 57.0.25",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-notifications",
+      "version": "57.0.25",
+      "license": "MIT",
+      "source": "npm registry 57.0.25",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-router",
+      "version": "57.0.30",
+      "license": "MIT",
+      "source": "npm registry 57.0.30",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-secure-store",
+      "version": "57.0.4",
+      "license": "MIT",
+      "source": "npm registry 57.0.4",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-sharing",
+      "version": "57.0.25",
+      "license": "MIT",
+      "source": "npm registry 57.0.25",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-speech",
+      "version": "57.0.3",
+      "license": "MIT",
+      "source": "npm registry 57.0.3",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-speech-recognition",
+      "version": "57.1.0",
+      "license": "MIT",
+      "source": "npm registry 57.1.0",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-splash-screen",
+      "version": "57.0.11",
+      "license": "MIT",
+      "source": "npm registry 57.0.11",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-status-bar",
+      "version": "57.0.1",
+      "license": "MIT",
+      "source": "npm registry 57.0.1",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-symbols",
+      "version": "57.0.3",
+      "license": "MIT",
+      "source": "npm registry 57.0.3",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-updates",
+      "version": "57.0.27",
+      "license": "MIT",
+      "source": "npm registry 57.0.27",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-video",
+      "version": "57.0.5",
+      "license": "MIT",
+      "source": "npm registry 57.0.5",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "expo-web-browser",
+      "version": "57.0.3",
+      "license": "MIT",
+      "source": "npm registry 57.0.3",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "khroma",
+      "license": "MIT",
+      "source": "package LICENSE file",
+      "status": "reviewed",
+      "distribution": "transitive runtime package; may be bundled",
+      "note": "package.json omitted the field; the bundled LICENSE is MIT.",
+      "version": "2.1.0"
+    },
+    {
+      "name": "pagefind",
+      "version": "1.6.0",
+      "license": "MIT",
+      "source": "npm registry 1.6.0",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "posthog-js",
+      "version": "1.445.3",
+      "license": "(Apache-2.0 AND MIT)",
+      "source": "npm registry 1.445.3",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "react-native-gesture-handler",
+      "version": "2.32.0",
+      "license": "MIT",
+      "source": "npm registry 2.32.0",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "react-native-keyboard-controller",
+      "version": "1.21.9",
+      "license": "MIT",
+      "source": "npm registry 1.21.9",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "react-native-passkeys",
+      "version": "0.4.2",
+      "license": "MIT",
+      "source": "npm registry 0.4.2",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "react-native-reanimated",
+      "version": "4.5.1",
+      "license": "MIT",
+      "source": "npm registry 4.5.1",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "react-native-safe-area-context",
+      "version": "5.7.0",
+      "license": "MIT",
+      "source": "npm registry 5.7.0",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "react-native-screens",
+      "version": "4.26.2",
+      "license": "MIT",
+      "source": "npm registry 4.26.2",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "react-native-svg",
+      "version": "15.15.4",
+      "license": "MIT",
+      "source": "npm registry 15.15.4",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "react-native-web",
+      "version": "0.21.2",
+      "license": "MIT",
+      "source": "npm registry 0.21.2",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "react-native-webview",
+      "version": "13.16.1",
+      "license": "MIT",
+      "source": "npm registry 13.16.1",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "react-native-worklets",
+      "version": "0.10.1",
+      "license": "MIT",
+      "source": "npm registry 0.10.1",
+      "status": "registry-declared",
+      "distribution": "declared dependency outside the root workspace; verify the installed version before shipping"
+    },
+    {
+      "name": "node-forge",
+      "version": "1.4.3",
+      "license": "BSD-3-Clause",
+      "source": "package.json and bundled LICENSE; dual-licensed BSD-3-Clause OR GPL-2.0",
+      "status": "reviewed-with-obligation",
+      "distribution": "transitive dependency of undici, openapi-fetch, expo tooling, and Electron tooling",
+      "obligation": "Elect BSD-3-Clause. Include the node-forge BSD-3-Clause notice where the package is distributed. Do not rely on the GPL-2.0 option."
+    },
+    {
+      "name": "dompurify",
+      "version": "3.4.17",
+      "license": "Apache-2.0",
+      "source": "package.json and bundled LICENSE; dual-licensed MPL-2.0 OR Apache-2.0",
+      "status": "reviewed-with-obligation",
+      "distribution": "runtime HTML sanitizer bundled in the web app",
+      "obligation": "Elect Apache-2.0. Include the DOMPurify Apache-2.0 notice where the package is distributed."
+    },
+    {
+      "name": "lightningcss",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "source": "package.json and bundled LICENSE",
+      "status": "dev-only",
+      "distribution": "Vite/Vitest CSS build tooling; not present in the application bundle"
+    },
+    {
+      "name": "lightningcss-darwin-arm64",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "source": "package.json and bundled LICENSE",
+      "status": "dev-only",
+      "distribution": "native build tooling for lightningcss; not shipped"
+    },
+    {
+      "name": "elkjs",
+      "version": "0.11.1",
+      "license": "EPL-2.0",
+      "source": "package.json and bundled LICENSE.md",
+      "status": "dev-only",
+      "distribution": "transitive dependency of Prisma Studio; not present in the application bundle"
+    },
+    {
+      "name": "caniuse-lite",
+      "version": "1.0.30001823",
+      "license": "CC-BY-4.0",
+      "source": "package.json and bundled LICENSE",
+      "status": "dev-only",
+      "distribution": "browserslist build data; not shipped as application code"
+    },
+    {
+      "name": "sentry",
+      "version": "0.45.0",
+      "license": "FSL-1.1-Apache-2.0",
+      "source": "package.json",
+      "status": "dev-only",
+      "distribution": "Sentry CLI build tooling; not shipped"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
+import type { OrbitDesktop, UserDeviceSummary } from "@forion/orbit-contracts";
+import { Button, Label, Switch } from "@forion/orbit-ui-web";
 import { Trans, useLingui } from "@lingui/react/macro";
-import type { RakazoDesktop, UserDeviceSummary } from "@rakazo/contracts";
-import { Button, Label, Switch } from "@rakazo/ui-web";
 import { Trash2 } from "lucide-react";
 import { useCallback, useEffect, useId, useState } from "react";
 import { desktopBridge } from "../lib/desktop";
@@ -11,9 +11,7 @@ import { SettingsGroup, SettingsRow } from "./SettingsRows";
 type ThisComputer = { allowed: boolean; setAllowed: (allowed: boolean) => Promise<unknown> };
 
 /** A remote server pairs this computer; the app-managed local stack runs bots on it directly. */
-async function thisComputerAccess(
-  desktop: RakazoDesktop | undefined,
-): Promise<ThisComputer | null> {
+async function thisComputerAccess(desktop: OrbitDesktop | undefined): Promise<ThisComputer | null> {
   const device = desktop?.device;
   const paired = await device?.state().catch(() => null);
   if (device && paired) return { allowed: paired.allowed, setAllowed: device.setAllowed };

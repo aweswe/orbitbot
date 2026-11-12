@@ -1,4 +1,4 @@
-import { McpServerConfigInput } from "@rakazo/contracts";
+import { McpServerConfigInput } from "@forion/orbit-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { deriveMcpSlug } from "./mcp.js";
 

@@ -1,4 +1,4 @@
-import type { SettingsScope } from "@rakazo/contracts";
+import type { SettingsScope } from "@forion/orbit-contracts";
 import {
   ensureAiDataConsent,
   readVoiceAudio,
@@ -7,7 +7,7 @@ import {
   toUtterances,
   VOICE_RESPONSE_TIMEOUT_MS,
   withAbort,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import { createAudioPlayer, setAudioModeAsync } from "expo-audio";
 import { File, Paths } from "expo-file-system";
 import type * as ExpoSpeech from "expo-speech";

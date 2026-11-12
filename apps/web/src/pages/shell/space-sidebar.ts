@@ -1,4 +1,4 @@
-import { groupBotsForSidebar } from "@rakazo/core";
+import { groupBotsForSidebar } from "@forion/orbit-core";
 
 type SidebarChat = {
   id: string;

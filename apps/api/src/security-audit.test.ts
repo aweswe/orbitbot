@@ -1,10 +1,10 @@
-import { BotSecretPutInput } from "@rakazo/contracts";
-import type * as Db from "@rakazo/db";
-import { recordSecurityEvent } from "@rakazo/db";
+import { BotSecretPutInput } from "@forion/orbit-contracts";
+import type * as Db from "@forion/orbit-db";
+import { recordSecurityEvent } from "@forion/orbit-db";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createAuthResponseAudit, procedureSecurityEvent } from "./security-audit.js";
 
-vi.mock("@rakazo/db", async (original) => ({
+vi.mock("@forion/orbit-db", async (original) => ({
   ...(await original<typeof Db>()),
   recordSecurityEvent: vi.fn(async () => undefined),
 }));

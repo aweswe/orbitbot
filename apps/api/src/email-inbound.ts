@@ -1,23 +1,23 @@
 import { createHash } from "node:crypto";
-import type { MessagingInboundAttachment } from "@rakazo/adapter-kit";
-import type { InboundEmail } from "@rakazo/adapters";
-import { INBOUND_EMAIL_MAX_BYTES, readInboundEmail } from "@rakazo/adapters";
-import type { RoutineEmailSenders } from "@rakazo/contracts";
-import { ATTACHMENT_MAX_COUNT } from "@rakazo/contracts";
+import type { MessagingInboundAttachment } from "@forion/orbit-adapter-kit";
+import type { InboundEmail } from "@forion/orbit-adapters";
+import { INBOUND_EMAIL_MAX_BYTES, readInboundEmail } from "@forion/orbit-adapters";
+import type { RoutineEmailSenders } from "@forion/orbit-contracts";
+import { ATTACHMENT_MAX_COUNT } from "@forion/orbit-contracts";
 import {
   AttachmentValidationError,
   escapePromptData,
   hasValidBearerToken,
   sanitizeMessagingLabel,
-} from "@rakazo/core";
-import type { ThreadEvents } from "@rakazo/db";
+} from "@forion/orbit-core";
+import type { ThreadEvents } from "@forion/orbit-db";
 import {
   appendEventInTransaction,
   createThreadMessageInTransaction,
   isUniqueViolation,
   SpaceDeletionInProgressError,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import type { Hono } from "hono";
 import { cancelBody, readBoundedBytes } from "./http-body.js";
 import type { WebhookDeps } from "./webhook-inbound.js";

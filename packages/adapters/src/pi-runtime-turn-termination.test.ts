@@ -1,6 +1,10 @@
 import type { AssistantMessage, Model } from "@earendil-works/pi-ai";
 import { AssistantMessageEventStream } from "@earendil-works/pi-ai/utils/event-stream";
-import type { AgentRunRequest, AgentRuntimeEvent, AgentSteeringMessage } from "@rakazo/adapter-kit";
+import type {
+  AgentRunRequest,
+  AgentRuntimeEvent,
+  AgentSteeringMessage,
+} from "@forion/orbit-adapter-kit";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 
 const providerState = vi.hoisted(() => ({
@@ -10,6 +14,7 @@ const providerState = vi.hoisted(() => ({
 
 vi.mock("@earendil-works/pi-ai/providers/all", () => ({
   builtinModels: () => ({
+    setProvider: (provider: unknown) => provider,
     getModel: (provider: string, id: string) => providerState.models.get(`${provider}/${id}`),
     streamSimple: (...args: unknown[]) => providerState.stream(...args),
   }),

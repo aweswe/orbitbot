@@ -1,6 +1,6 @@
+import type { Bot, BotSection, Group } from "@forion/orbit-contracts";
+import { toast } from "@forion/orbit-ui-web";
 import { t } from "@lingui/core/macro";
-import type { Bot, BotSection, Group } from "@rakazo/contracts";
-import { toast } from "@rakazo/ui-web";
 import { lazyOverlay } from "../../components/ErrorBoundary";
 import type { createSpaceRpc } from "../../lib/rpc";
 import type { ShellDialogsState } from "./shell-dialogs";

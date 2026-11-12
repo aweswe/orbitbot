@@ -2,19 +2,33 @@ import { execFileSync } from "node:child_process";
 import { cpSync, mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { Client } from "pg";
+import { Client, escapeIdentifier } from "pg";
 
 /** First line of a migration that may only run once the release before it has stopped. */
 export const DEFERRED_MIGRATION_MARKER = "-- deferred";
 
+/** The schema Prisma uses for this connection: `?schema=`, or public. */
+function schemaName(url: string): string {
+  return new URL(url).searchParams.get("schema") || "public";
+}
+
+/** Raw `pg` does not read Prisma's `?schema=`, so every ledger reference is qualified. */
+function ledgerTable(url: string, table: "_prisma_migrations" | "_deferred_migrations"): string {
+  return `${escapeIdentifier(schemaName(url))}.${escapeIdentifier(table)}`;
+}
+
 /** Finished migrations, or undefined on a database no migration run has touched. */
-async function appliedMigrations(client: Client): Promise<Set<string> | undefined> {
+async function appliedMigrations(
+  client: Client,
+  migrationUrl: string,
+): Promise<Set<string> | undefined> {
   const { rows: tables } = await client.query<{ exists: boolean }>(
-    "SELECT to_regclass('_prisma_migrations') IS NOT NULL AS exists",
+    "SELECT to_regclass($1) IS NOT NULL AS exists",
+    [ledgerTable(migrationUrl, "_prisma_migrations")],
   );
   if (!tables[0]?.exists) return undefined;
   const { rows } = await client.query<{ migration_name: string }>(
-    "SELECT migration_name FROM _prisma_migrations WHERE finished_at IS NOT NULL AND rolled_back_at IS NULL",
+    `SELECT migration_name FROM ${ledgerTable(migrationUrl, "_prisma_migrations")} WHERE finished_at IS NOT NULL AND rolled_back_at IS NULL`,
   );
   return new Set(rows.map((row) => row.migration_name));
 }
@@ -45,15 +59,16 @@ export async function heldBackMigrations(
   const client = new Client({ connectionString: migrationUrl });
   await client.connect();
   try {
-    const done = await appliedMigrations(client);
+    const done = await appliedMigrations(client, migrationUrl);
     if (!done?.size) return [];
     const pending = deferred.filter((name) => !done.has(name));
     if (pending.length === 0) return [];
+    const table = ledgerTable(migrationUrl, "_deferred_migrations");
     await client.query(
-      'CREATE TABLE IF NOT EXISTS "_deferred_migrations" (name TEXT PRIMARY KEY, seen_at TIMESTAMPTZ NOT NULL DEFAULT now())',
+      `CREATE TABLE IF NOT EXISTS ${table} (name TEXT PRIMARY KEY, seen_at TIMESTAMPTZ NOT NULL DEFAULT now())`,
     );
     const { rows: firstSeen } = await client.query<{ name: string }>(
-      'INSERT INTO "_deferred_migrations" (name) SELECT unnest($1::text[]) ON CONFLICT DO NOTHING RETURNING name',
+      `INSERT INTO ${table} (name) SELECT unnest($1::text[]) ON CONFLICT DO NOTHING RETURNING name`,
       [pending],
     );
     const held = new Set(firstSeen.map((row) => row.name));
@@ -71,7 +86,10 @@ async function forgetHeldBack(migrationUrl: string, names: string[]) {
   const client = new Client({ connectionString: migrationUrl });
   await client.connect();
   try {
-    await client.query('DELETE FROM "_deferred_migrations" WHERE name = ANY($1)', [names]);
+    await client.query(
+      `DELETE FROM ${ledgerTable(migrationUrl, "_deferred_migrations")} WHERE name = ANY($1)`,
+      [names],
+    );
   } finally {
     await client.end();
   }
@@ -89,7 +107,7 @@ async function buildsIndexConcurrently(migrationUrl: string, migrationsPath: str
   const client = new Client({ connectionString: migrationUrl });
   await client.connect();
   try {
-    const done = (await appliedMigrations(client)) ?? new Set<string>();
+    const done = (await appliedMigrations(client, migrationUrl)) ?? new Set<string>();
     return readdirSync(migrationsPath, { withFileTypes: true }).some(
       (entry) =>
         entry.isDirectory() &&
@@ -131,7 +149,7 @@ async function rollBackLockConflict(migrationUrl: string, migrationsPath: string
       migration_name: string;
       logs: string | null;
     }>(
-      "SELECT id, migration_name, logs FROM _prisma_migrations WHERE finished_at IS NULL AND rolled_back_at IS NULL",
+      `SELECT id, migration_name, logs FROM ${ledgerTable(migrationUrl, "_prisma_migrations")} WHERE finished_at IS NULL AND rolled_back_at IS NULL`,
     );
     const failed = rows.length === 1 ? rows[0]! : undefined;
     if (!failed || !LOCK_CONFLICT.test(failed.logs ?? "")) return undefined;
@@ -141,7 +159,7 @@ async function rollBackLockConflict(migrationUrl: string, migrationsPath: string
     );
     if (NOT_ONE_TRANSACTION.test(sql)) return undefined;
     await client.query(
-      "UPDATE _prisma_migrations SET rolled_back_at = now() WHERE id = $1 AND finished_at IS NULL AND rolled_back_at IS NULL",
+      `UPDATE ${ledgerTable(migrationUrl, "_prisma_migrations")} SET rolled_back_at = now() WHERE id = $1 AND finished_at IS NULL AND rolled_back_at IS NULL`,
       [failed.id],
     );
     return failed.migration_name;

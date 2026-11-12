@@ -1,5 +1,5 @@
-import type { Routine } from "@rakazo/contracts";
-import { formatCron } from "@rakazo/core";
+import type { Routine } from "@forion/orbit-contracts";
+import { formatCron } from "@forion/orbit-core";
 import { cronLabels } from "./cron";
 import { t } from "./i18n";
 

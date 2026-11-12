@@ -31,7 +31,7 @@ export const GET: APIRoute = async () => {
 <channel>
   <title>${SITE_NAME} blog</title>
   <link>${SITE_URL}/blog/</link>
-  <description>Notes on running an open source AI agent yourself.</description>
+  <description>Notes on running Orbit Bot, including self-hosting and deployment.</description>
 ${items}
 </channel>
 </rss>

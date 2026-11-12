@@ -16,14 +16,14 @@ import type {
   ScreenRequest,
   TerminalRequest,
   WorkspaceExportLimits,
-} from "@rakazo/adapter-kit";
+} from "@forion/orbit-adapter-kit";
 import {
   SandboxRateLimitError,
   SandboxUnavailableError,
   WorkspaceTooLargeError,
-} from "@rakazo/adapter-kit";
-import { boundedSandboxCommandTimeoutMs } from "@rakazo/core";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import { boundedSandboxCommandTimeoutMs } from "@forion/orbit-core";
+import { getLogger } from "@forion/orbit-logging";
 import {
   normalizeWorkspacePath,
   shellQuote,
@@ -181,7 +181,7 @@ export class BoxdSandboxProvider implements SandboxProvider {
       ...(this.org ? { org: this.org } : {}),
       // Bots run untrusted code: no boxd credentials inside, and no route to other machines.
       isolated: true,
-      // Rakazo's idle sleep stops the computer; boxd's own counts only network traffic and would
+      // Orbit's idle sleep stops the computer; boxd's own counts only network traffic and would
       // freeze a long command that prints nothing.
       config: { autoSuspendTimeout: 0 },
     };

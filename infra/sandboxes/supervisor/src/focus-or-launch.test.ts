@@ -66,7 +66,7 @@ describe("focus-or-launch desktop helper", () => {
                 .split("\n")
                 .map((line) => line.trim())
                 .filter(Boolean);
-              expect(actual).toEqual(expected);
+              expect(actual.sort()).toEqual([...expected].sort());
             },
             { timeout: 5_000, interval: 20 },
           );

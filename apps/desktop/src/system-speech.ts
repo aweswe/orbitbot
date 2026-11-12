@@ -1,6 +1,6 @@
 import type { ChildProcessWithoutNullStreams } from "node:child_process";
-import type { RakazoDesktopSpeechEvent } from "@rakazo/contracts";
-import { secureHttpOrigin } from "@rakazo/contracts/network-host";
+import type { OrbitDesktopSpeechEvent } from "@forion/orbit-contracts";
+import { secureHttpOrigin } from "@forion/orbit-contracts/network-host";
 import type { IpcMainInvokeEvent, WebContents } from "electron";
 import type { AppTarget } from "./app-frame.js";
 import { fromAppFrame } from "./app-frame.js";
@@ -70,7 +70,7 @@ export function createSystemSpeech(
         return false;
       if (active) close(active);
       const sender = event.sender;
-      const send = (message: RakazoDesktopSpeechEvent) => {
+      const send = (message: OrbitDesktopSpeechEvent) => {
         if (!ended && !sender.isDestroyed()) sender.send(SPEECH_EVENT_CHANNEL, message);
       };
       let ended = false;

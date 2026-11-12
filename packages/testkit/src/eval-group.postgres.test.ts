@@ -38,7 +38,7 @@ async function runGroupBudgetTrial(fixture: {
   let memberCalls = 0;
   const isMember = (request: ModelEmulatorRequest) =>
     JSON.stringify(request.messages).includes("member-keeps-searching");
-  const { createDb, asSystem } = await import("@rakazo/db");
+  const { createDb, asSystem } = await import("@forion/orbit-db");
   const db = createDb(process.env.DATABASE_URL!);
   const system = asSystem(db.prisma);
   // Both cases share one database, so lookups only count this trial's runs.
@@ -116,7 +116,7 @@ async function runGroupBudgetTrial(fixture: {
   const previousRunCap = process.env.MAX_TOOL_CALLS_PER_TURN;
   process.env.MAX_TOOL_CALLS_PER_TURN = "0";
   try {
-    const { createApp } = await import("@rakazo/api/app");
+    const { createApp } = await import("@forion/orbit-api/app");
     const result = await runTrial(scenario, 1, {
       connection: {
         provider: model.model.provider,

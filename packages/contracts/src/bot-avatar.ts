@@ -9,7 +9,7 @@ export function resolveBotAvatarSet(value?: string | null): BotAvatarSet {
   return value === "rakazo" ? "rakazo" : "organic";
 }
 
-/** Matches the eight shipped mascot shapes in `@rakazo/core`. */
+/** Matches the eight shipped mascot shapes in `@forion/orbit-core`. */
 export const BOT_AVATAR_SHAPE_COUNT = 8;
 
 /**
@@ -56,10 +56,7 @@ export function parseBotAvatarValue(raw: string): ParsedBotAvatar {
 export function isBotAvatarValue(raw: string): boolean {
   if (!raw || raw.length > BOT_AVATAR_VALUE_MAX_LENGTH) return false;
   return (
-    HEX_COLOR.test(raw) ||
-    SHAPE_SUFFIX.test(raw) ||
-    DATA_IMAGE.test(raw) ||
-    ORBIT_AVATAR.test(raw)
+    HEX_COLOR.test(raw) || SHAPE_SUFFIX.test(raw) || DATA_IMAGE.test(raw) || ORBIT_AVATAR.test(raw)
   );
 }
 

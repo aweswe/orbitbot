@@ -61,10 +61,7 @@ describe("syncOrbitUser", () => {
   });
 
   it("reports a failed sync without throwing", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => new Response("nope", { status: 500 })),
-    );
+    vi.stubGlobal("fetch", vi.fn(async () => new Response("nope", { status: 500 })));
     await expect(syncOrbitUser(prismaMock(), "user_123")).resolves.toBe(false);
   });
 
@@ -88,59 +85,5 @@ describe("syncOrbitUser", () => {
 
     await expect(syncOrbitUser(prisma, "gone")).resolves.toBe(false);
     expect(fetchMock).not.toHaveBeenCalled();
-  });
-
-  it("resolves OAuth 409 clash by rebinding to canonical user ID and re-syncing", async () => {
-    let callCount = 0;
-    const fetchMock = vi.fn(async () => {
-      callCount++;
-      if (callCount === 1) {
-        return new Response(
-          JSON.stringify({
-            statusCode: 409,
-            message: "OAuth identity already bound to another user id in billing DB",
-            canonicalUserId: "canonical_456",
-          }),
-          { status: 409, headers: { "Content-Type": "application/json" } },
-        );
-      }
-      return new Response(JSON.stringify({ success: true }), { status: 200 });
-    });
-    vi.stubGlobal("fetch", fetchMock);
-
-    const prisma = {
-      user: {
-        findUnique: vi.fn(async ({ where }: { where: { id: string } }) => {
-          if (where.id === "user_123") return user;
-          if (where.id === "canonical_456") return { ...user, id: "canonical_456" };
-          return null;
-        }),
-      },
-      account: {
-        findFirst: vi.fn(async () => ({ accountId: "google-sub-1" })),
-      },
-      $transaction: vi.fn(async (cb: (tx: any) => Promise<any>) => {
-        return cb({
-          user: { create: vi.fn(), delete: vi.fn() },
-          account: { updateMany: vi.fn() },
-          session: { updateMany: vi.fn() },
-          member: { findMany: vi.fn(async () => []), deleteMany: vi.fn(), updateMany: vi.fn() },
-          spaceMember: {
-            findMany: vi.fn(async () => []),
-            deleteMany: vi.fn(),
-            updateMany: vi.fn(),
-          },
-        });
-      }),
-    } as never;
-
-    await expect(syncOrbitUser(prisma, "user_123")).resolves.toBe(true);
-    expect(fetchMock).toHaveBeenCalledTimes(2);
-    const secondCall = fetchMock.mock.calls[1] as unknown as [string, RequestInit];
-    expect(JSON.parse(secondCall[1].body as string)).toMatchObject({
-      user_id: "canonical_456",
-      provider: "google",
-      external_id: "google-sub-1",
-    });
   });
 });

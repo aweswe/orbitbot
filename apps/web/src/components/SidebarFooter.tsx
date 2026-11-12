@@ -1,13 +1,13 @@
-import { Trans, useLingui } from "@lingui/react/macro";
-import type { NavLink } from "@rakazo/contracts";
-import { ANDROID_APP_STORE_URL, IOS_APP_STORE_URL } from "@rakazo/contracts";
+import type { NavLink } from "@forion/orbit-contracts";
+import { ANDROID_APP_STORE_URL, IOS_APP_STORE_URL } from "@forion/orbit-contracts";
 import {
   Button,
   buttonVariants,
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   BookOpen,
   Check,
@@ -208,7 +208,7 @@ export function SidebarFooter({
               download="orbit-bot.apk"
             >
               <Smartphone className="text-cyan-400" strokeWidth={1.75} />
-              <Trans>Download Orion for Android</Trans>
+              <Trans>Download Orbit for Android</Trans>
             </a>
             {onInvite ? (
               <Button
@@ -228,7 +228,7 @@ export function SidebarFooter({
                 rel="noreferrer"
               >
                 <BookOpen className="text-muted-foreground" strokeWidth={1.75} />
-                <Trans>Orion Platform</Trans>
+                <Trans>Orbit Platform</Trans>
               </a>
             ) : null}
             <div className="my-1 border-t border-border" />

@@ -1,21 +1,20 @@
 import { createHash, randomBytes } from "node:crypto";
-import { ORPCError } from "@orpc/server";
-import type { TransactionalEmail } from "@rakazo/adapter-kit";
-import { parsePluginSource, previewPluginInstall } from "@rakazo/adapters";
+import type { TransactionalEmail } from "@forion/orbit-adapter-kit";
+import { parsePluginSource, previewPluginInstall } from "@forion/orbit-adapters";
 import {
   emailLocale,
   integrationClaimConfirmEmail,
   pluginSubmissionAdminEmail,
   pluginSubmissionReceivedEmail,
   pluginSubmissionReviewedEmail,
-} from "@rakazo/auth";
+} from "@forion/orbit-auth";
 import type {
   IntegrationClaim,
   PluginMarketplaceEntry,
   PluginSubmission,
   PluginSubmissionReview,
   PluginSubmissionStatus,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   INTEGRATION_CLAIM_CONFIRM_PATH,
   INTEGRATION_CLAIMS_PATH,
@@ -23,9 +22,10 @@ import {
   integrationPageUrl,
   PLUGIN_SUBMISSIONS_PATH,
   PluginSubmissionInputSchema,
-} from "@rakazo/contracts";
-import { pluginCategory } from "@rakazo/core";
-import type { PluginSubmission as PluginSubmissionRow, PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-contracts";
+import { pluginCategory } from "@forion/orbit-core";
+import type { PluginSubmission as PluginSubmissionRow, PrismaClient } from "@forion/orbit-db";
+import { ORPCError } from "@orpc/server";
 import type { Context } from "hono";
 import { Hono } from "hono";
 import { readBoundedBody } from "./http-body.js";
@@ -33,7 +33,7 @@ import { assertMcpRemoteEndpoint } from "./mcp-servers.js";
 import type { RouterDeps } from "./router.js";
 import { throttleKey, windowCounter } from "./window-counter.js";
 
-const PLUGIN_REGISTRY = "Rakazo";
+const PLUGIN_REGISTRY = "Orbit";
 const MAX_BODY_BYTES = 32 * 1024;
 const HOUR_MS = 60 * 60_000;
 const SUBMISSIONS_PER_IP_PER_HOUR = 10;

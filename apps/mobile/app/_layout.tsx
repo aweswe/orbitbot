@@ -1,12 +1,12 @@
-import type { LinkFavicons } from "@rakazo/chat-ui/native";
+import type { LinkFavicons } from "@forion/orbit-chat-ui/native";
 import {
   CodeCopyButtonContext,
   LinkFaviconsContext,
   MarkdownLinkPromptProvider,
   MermaidDiagramContext,
   RemoteImagesContext,
-} from "@rakazo/chat-ui/native";
-import { analyticsScreen } from "@rakazo/core";
+} from "@forion/orbit-chat-ui/native";
+import { analyticsScreen } from "@forion/orbit-core";
 import {
   DarkTheme,
   Stack,
@@ -406,7 +406,7 @@ function LayoutContent() {
                       contentStyle: { backgroundColor: String(native.page) },
                     }}
                   >
-                    <Stack.Screen name="index" options={{ headerShown: false, title: "Rakazo" }} />
+                    <Stack.Screen name="index" options={{ headerShown: false, title: "Orbit" }} />
                     <Stack.Screen
                       name="search"
                       options={{

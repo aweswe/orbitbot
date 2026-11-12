@@ -1,6 +1,4 @@
-import { t } from "@lingui/core/macro";
-import { Trans, useLingui } from "@lingui/react/macro";
-import type { CronFreq, CronPreset, CronUnit } from "@rakazo/core";
+import type { CronFreq, CronPreset, CronUnit } from "@forion/orbit-core";
 import {
   CRON_FREQS,
   clampIntervalAmount,
@@ -9,8 +7,10 @@ import {
   describeCronPreset,
   localizedClock,
   russianIntervalUnit,
-} from "@rakazo/core";
-import { Input, NativeSelect, NativeSelectOption } from "@rakazo/ui-web";
+} from "@forion/orbit-core";
+import { Input, NativeSelect, NativeSelectOption } from "@forion/orbit-ui-web";
+import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Clock } from "lucide-react";
 import { cronLabels, cronUnitLabel } from "../lib/cron";
 

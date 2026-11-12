@@ -1,5 +1,5 @@
-import type { BillingProvider } from "@rakazo/adapter-kit";
-import type { PrismaClient } from "@rakazo/db";
+import type { BillingProvider } from "@forion/orbit-adapter-kit";
+import type { PrismaClient } from "@forion/orbit-db";
 import { describe, expect, it, vi } from "vitest";
 import { createReferrals } from "./referrals.js";
 

@@ -1,12 +1,12 @@
-import type { PushTokenStore } from "@rakazo/adapters";
-import type { DirectoryAccountChange } from "@rakazo/auth";
-import type { PrismaClient, SpaceDeparture, ThreadEvents } from "@rakazo/db";
+import type { PushTokenStore } from "@forion/orbit-adapters";
+import type { DirectoryAccountChange } from "@forion/orbit-auth";
+import type { PrismaClient, SpaceDeparture, ThreadEvents } from "@forion/orbit-db";
 import {
   cancelDeactivatedAccountRuns,
   leaveInvitedSpaces,
   recordSecurityEvent,
   runAsSystem,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
 import type { DeviceStore } from "./user-devices.js";
 import { revokeUserDevices } from "./user-devices.js";
 

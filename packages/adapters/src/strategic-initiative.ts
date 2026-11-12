@@ -1,19 +1,19 @@
-import type { JobPublisher } from "@rakazo/adapter-kit";
-import { runContinueJob } from "@rakazo/adapter-kit";
+import type { JobPublisher } from "@forion/orbit-adapter-kit";
+import { runContinueJob } from "@forion/orbit-adapter-kit";
 import {
   ACTIVE_RUN_STATUSES,
   escapePromptData,
   ONCE_ROUTINE_CRON,
   truncatePlainText,
-} from "@rakazo/core";
-import type { Prisma, PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-core";
+import type { Prisma, PrismaClient } from "@forion/orbit-db";
 import {
   isUniqueViolation,
   memberHasModelAccess,
   STRATEGIC_INITIATIVE_NONCE_PREFIX,
   THREAD_LOCK_TRANSACTION_OPTIONS,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { modelCreditBillingEnabled } from "./run-model.js";
 
 const STRATEGIC_INITIATIVE_INTERVAL_MS = 24 * 60 * 60 * 1000;

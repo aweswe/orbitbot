@@ -1,12 +1,12 @@
-import type { ModelCallObserver } from "@rakazo/adapter-kit";
-import { HOSTED_MODEL_CREDITS_REQUIRED_ERROR } from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
+import type { ModelCallObserver } from "@forion/orbit-adapter-kit";
+import { HOSTED_MODEL_CREDITS_REQUIRED_ERROR } from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
 import {
   creditAccount,
   organizationForMember,
   recordModelCreditReceipt,
   reserveModelCredits,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
 import { createOrbitModelCreditObserver } from "./orbit-control-plane/orbit-credit-observer.js";
 
 export class HostedModelCreditsRequiredError extends Error {}

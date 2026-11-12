@@ -625,7 +625,7 @@ msgstr "תפריט החשבון של {name}"
 
 #. placeholder {0}: bot.name
 #. placeholder {0}: group.spaceName
-#. placeholder {0}: page.title
+#. placeholder {0}: item.chat.name
 #: src/components/pages/PagesList.tsx
 #: src/pages/BotContextMenu.tsx
 #: src/pages/McpServersOverlay.tsx
@@ -641,14 +641,11 @@ msgstr ""
 msgid "Actions for space"
 msgstr "פעולות למרחב"
 
+#: src/components/OrbitCosmicThemePicker.tsx
 #: src/pages/BillingSettingsPanel.tsx
 #: src/pages/RoutineEditor.tsx
 msgid "Active"
 msgstr "פעיל"
-
-#: src/pages/shell/sidebar-header.tsx
-msgid "Activity"
-msgstr "פעילות"
 
 #: src/components/integrations/plugin-marketplace.tsx
 #: src/components/SecretAskCard.tsx
@@ -805,6 +802,10 @@ msgstr ""
 msgid "Adds"
 msgstr "מה יתווסף"
 
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Adjust compact or spacious list density in the agent sidebar"
+msgstr ""
+
 #: src/pages/McpServersOverlay.tsx
 #: src/pages/model-settings/compatible-model-fields.tsx
 #: src/pages/ModelSettingsOverlay.tsx
@@ -814,6 +815,10 @@ msgstr "מה יתווסף"
 #: src/pages/shell/bot-panel.tsx
 msgid "Advanced"
 msgstr "מתקדם"
+
+#: src/pages/VoiceSettingsOverlay.tsx
+msgid "Advanced: Custom Voice Endpoint"
+msgstr ""
 
 #: src/pages/RoutineEditor.tsx
 msgid "Advanced..."
@@ -871,7 +876,7 @@ msgid "Allow once"
 msgstr "אישור חד-פעמי"
 
 #: src/lib/dictation.ts
-msgid "Allow Rakazo to use Speech Recognition and the microphone in System Settings."
+msgid "Allow Orbit to use Speech Recognition and the microphone in System Settings."
 msgstr ""
 
 #: src/pages/memory-providers/SerenitySettingsForm.tsx
@@ -1020,6 +1025,7 @@ msgid "API URL"
 msgstr ""
 
 #: src/pages/AccountSettingsOverlay.tsx
+#: src/pages/settings-nav.ts
 msgid "Appearance"
 msgstr "מראה"
 
@@ -1356,10 +1362,6 @@ msgstr "מובנה"
 msgid "Button “{button}” · read from the page, not checked"
 msgstr "הכפתור “{button}” · נקרא מהדף, לא נבדק"
 
-#: src/pages/shell/chat-header.tsx
-msgid "Call"
-msgstr ""
-
 #: src/components/call/VoiceChatCard.tsx
 msgid "Call back"
 msgstr ""
@@ -1390,8 +1392,8 @@ msgid "Can view without signing in"
 msgstr "יכולים לצפות בלי להתחבר"
 
 #: src/App.tsx
-msgid "Can't reach the server."
-msgstr "אין גישה לשרת."
+msgid "Can't reach the server. Attempting to re-establish your workspace link..."
+msgstr ""
 
 #: src/components/TextOnlyMark.tsx
 #: src/pages/shell/chat-model-picker.tsx
@@ -1606,6 +1608,10 @@ msgstr "בחירת סיסמה חדשה"
 msgid "Choose a provider"
 msgstr ""
 
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Choose a signature celestial aesthetic. Your theme automatically synchronizes across the application shell, chat workspace, and deck computer."
+msgstr ""
+
 #: src/pages/shell/agent-import.tsx
 msgid "Choose backup"
 msgstr "בחירת גיבוי"
@@ -1621,7 +1627,7 @@ msgstr "בחירת תיקייה"
 
 #: src/components/ModelCredits.tsx
 #: src/components/SubscriptionGate.tsx
-msgid "Choose how to use Rakazo"
+msgid "Choose how to use Orbit"
 msgstr ""
 
 #: src/components/vault/VaultItemEditor.tsx
@@ -1695,6 +1701,10 @@ msgstr "סגירת המחשב"
 msgid "Close image preview"
 msgstr "סגירת התצוגה המקדימה של התמונה"
 
+#: src/pages/shell/chat-header.tsx
+msgid "Close Inspector"
+msgstr ""
+
 #: src/pages/PluginsOverlay.tsx
 msgid "Close integrations"
 msgstr "סגירת האינטגרציות"
@@ -1729,6 +1739,10 @@ msgstr "סגירת החלונית"
 #: src/components/ArtifactFileCard.tsx
 msgid "Close preview"
 msgstr "סגירת התצוגה המקדימה"
+
+#: src/pages/shell/sidebar-header.tsx
+msgid "Close search"
+msgstr ""
 
 #: src/components/integrations/skills-dialog.tsx
 msgid "Close skills"
@@ -1779,6 +1793,7 @@ msgid "column {index}"
 msgstr "עמודה {index}"
 
 #: src/pages/AccountSettingsOverlay.tsx
+#: src/pages/AppearanceSettingsPanel.tsx
 msgid "Comfortable"
 msgstr "מרווח"
 
@@ -1805,6 +1820,7 @@ msgid "Communication"
 msgstr ""
 
 #: src/pages/AccountSettingsOverlay.tsx
+#: src/pages/AppearanceSettingsPanel.tsx
 msgid "Compact"
 msgstr "צפוף"
 
@@ -1957,8 +1973,8 @@ msgstr "יש לחבר קודם את הספק של המודל הזה."
 
 #. js-lingui-explicit-id
 #: src/lib/run-error.ts
-msgid "Connect your own API key in Models or choose Rakazo credits in Billing."
-msgstr "חבר מפתח API משלך במודלים או בחר בקרדיטים של Rakazo בחיוב."
+msgid "Connect your own API key in Models or choose Orbit credits in Billing."
+msgstr "חבר מפתח API משלך במודלים או בחר בקרדיטים של Orbit בחיוב."
 
 #: src/components/bot-templates/bot-templates-dialog.tsx
 #: src/components/ComputerDeviceSettings.tsx
@@ -1976,6 +1992,10 @@ msgstr "מחובר"
 #: src/pages/VoiceSettingsOverlay.tsx
 msgid "Connected {0}."
 msgstr "{0} מחובר."
+
+#: src/pages/shell/chat-header.tsx
+msgid "Connected apps"
+msgstr ""
 
 #: src/components/integrations/plugin-marketplace.tsx
 #: src/pages/McpServersOverlay.tsx
@@ -2102,6 +2122,10 @@ msgstr "העתקת ההנחיה"
 #: src/components/markdown-copy.tsx
 msgid "Copy rows"
 msgstr "העתקת שורות"
+
+#: src/pages/shell/avatar-studio-popover.tsx
+msgid "Cosmic Space Companions"
+msgstr ""
 
 #: src/pages/AccountSettingsOverlay.tsx
 msgid "Cost"
@@ -2735,7 +2759,7 @@ msgstr ""
 #: src/pages/shell/agent-import.tsx
 #: src/pages/shell/create-bot-dialog.tsx
 #: src/pages/shell/dialogs.tsx
-#: src/pages/shell/sidebar-header.tsx
+#: src/pages/shell/shell-sidebar.tsx
 msgid "Create"
 msgstr "יצירה"
 
@@ -2749,6 +2773,8 @@ msgid "Create account"
 msgstr "יצירת חשבון"
 
 #: src/components/bot-templates/bot-templates-dialog.tsx
+#: src/pages/Shell.tsx
+#: src/pages/shell/sidebar-roster.tsx
 msgid "Create bot"
 msgstr "יצירת בוט"
 
@@ -2771,8 +2797,8 @@ msgid "Create space"
 msgstr "יצירת מרחב"
 
 #: src/pages/Auth.tsx
-msgid "Create your Rakazo"
-msgstr "יצירת Rakazo משלך"
+msgid "Create your Orbit"
+msgstr "יצירת Orbit משלך"
 
 #: src/components/AskCard.tsx
 msgid "Created"
@@ -2825,6 +2851,10 @@ msgstr "מטבע"
 #: src/pages/AccountSettingsOverlay.tsx
 msgid "Current password"
 msgstr "סיסמה נוכחית"
+
+#: src/pages/shell/create-bot-dialog.tsx
+msgid "Custom Agent"
+msgstr ""
 
 #: src/components/vault/VaultItemEditor.tsx
 msgid "Custom header"
@@ -2982,6 +3012,10 @@ msgstr "למחוק את פרטי הגישה של המרחב הזה?"
 msgid "deleted"
 msgstr "נמחק"
 
+#: src/pages/shell/shell-dialogs.tsx
+msgid "Deleted {botName}"
+msgstr ""
+
 #: src/components/PasskeySettings.tsx
 #: src/pages/Artifacts.tsx
 #: src/pages/OrganizationSettingsPanel.tsx
@@ -3130,10 +3164,6 @@ msgstr "Docker"
 msgid "Docker limits access to your computer for added security. Using {hostLabel} lets bots work with your local files and tools."
 msgstr "Docker מגביל את הגישה למחשב לאבטחה נוספת. שימוש ב-{hostLabel} מאפשר לבוטים לעבוד עם הקבצים והכלים המקומיים."
 
-#: src/components/SidebarFooter.tsx
-msgid "Docs"
-msgstr "תיעוד"
-
 #: src/pages/KnowledgeSection.tsx
 msgid "Document changed. Reopen to edit the latest version."
 msgstr "המסמך השתנה. יש לפתוח אותו מחדש כדי לערוך את הגרסה העדכנית."
@@ -3173,6 +3203,10 @@ msgstr "הורדת {name}"
 #: src/components/markdown-copy.tsx
 msgid "Download CSV"
 msgstr "הורדת CSV"
+
+#: src/components/SidebarFooter.tsx
+msgid "Download Orbit for Android"
+msgstr ""
 
 #: src/components/pages/DownloadPdfButton.tsx
 msgid "Download PDF"
@@ -3251,6 +3285,10 @@ msgstr "נדרש אימות אימייל"
 msgid "Enable {0}"
 msgstr "הפעלת {0}"
 
+#: src/pages/shell/chat-header.tsx
+msgid "End call"
+msgstr ""
+
 #: src/components/ComputerProviderSettings.tsx
 msgid "End user ID"
 msgstr ""
@@ -3258,10 +3296,6 @@ msgstr ""
 #: src/lib/billing.ts
 msgid "Ends {day}"
 msgstr "מסתיים ב-{day}"
-
-#: src/components/GitHubStarPrompt.tsx
-msgid "Enjoying Rakazo?"
-msgstr ""
 
 #: src/lib/user-error.ts
 msgid "Enter a password"
@@ -3378,6 +3412,10 @@ msgstr ""
 msgid "Everyone in this bot's space can read the chats it gets from {linkApp}."
 msgstr ""
 
+#: src/pages/shell/chat-header.tsx
+msgid "Executing tools…"
+msgstr ""
+
 #: src/pages/shell/message-cards.tsx
 msgid "Expand"
 msgstr "הרחבה"
@@ -3386,6 +3424,14 @@ msgstr "הרחבה"
 #: src/pages/shell/sidebar-roster.tsx
 msgid "Expand {0}"
 msgstr "הרחבת {0}"
+
+#: src/pages/shell/chat-header.tsx
+msgid "Expand Sidebar"
+msgstr ""
+
+#: src/pages/shell/chat-header.tsx
+msgid "Expand Sidebar (Cmd+B)"
+msgstr ""
 
 #: src/components/markdown-copy.tsx
 msgid "Expand table"
@@ -3443,6 +3489,10 @@ msgstr "נכשל"
 #: src/pages/ActivityList.tsx
 msgid "Failed"
 msgstr "נכשל"
+
+#: src/pages/shell/sidebar-roster.tsx
+msgid "Failed to load bots"
+msgstr ""
 
 #: src/pages/shell/use-composer-actions.ts
 msgid "Failed to send message"
@@ -3518,6 +3568,14 @@ msgstr "חיפוש דף"
 #: src/pages/shell/keyboard-shortcuts-dialog.tsx
 msgid "Find in chat"
 msgstr "חיפוש בצ׳אט"
+
+#: src/pages/shell/chat-header.tsx
+msgid "Find in thread"
+msgstr ""
+
+#: src/pages/shell/chat-header.tsx
+msgid "Find in thread (Cmd+F)"
+msgstr ""
 
 #: src/pages/model-settings/compatible-model-fields.tsx
 #: src/pages/Onboarding.tsx
@@ -3623,10 +3681,6 @@ msgstr "כללי"
 msgid "Get an email address"
 msgstr "קבלת כתובת אימייל"
 
-#: src/components/SidebarFooter.tsx
-msgid "Get the mobile app"
-msgstr "הורדת האפליקציה לנייד"
-
 #: src/components/ComputerUpdateProgress.tsx
 msgid "Getting ready"
 msgstr "מתכונן"
@@ -3657,11 +3711,14 @@ msgstr ""
 
 #: src/lib/identity-display.ts
 #: src/pages/MessagingSettingsPanel.tsx
-#: src/pages/shell/chat-header.tsx
 #: src/pages/shell/side-panel.tsx
 #: src/pages/SpaceSearch.tsx
 msgid "Group"
 msgstr "קבוצה"
+
+#: src/pages/shell/chat-header.tsx
+msgid "Group Chat"
+msgstr ""
 
 #: src/pages/GroupPanel.tsx
 msgid "Group settings"
@@ -3784,7 +3841,7 @@ msgid "How to check"
 msgstr "איך לבדוק"
 
 #: src/components/SignupSurvey.tsx
-msgid "How will you use Rakazo?"
+msgid "How will you use Orbit?"
 msgstr ""
 
 #: src/pages/shell/computer-release-actions.tsx
@@ -3873,6 +3930,10 @@ msgstr "קלט"
 msgid "Inputs"
 msgstr "קלטים"
 
+#: src/pages/shell/chat-header.tsx
+msgid "Inspect {title}"
+msgstr ""
+
 #: src/components/SidebarFooter.tsx
 msgid "Install update"
 msgstr "התקנת עדכון"
@@ -3945,10 +4006,6 @@ msgstr "קוד לא תקין"
 #: src/components/SpaceMembersSettings.tsx
 msgid "Invite"
 msgstr ""
-
-#: src/pages/shell/chat-header.tsx
-msgid "Invite a friend"
-msgstr "הזמנת חבר"
 
 #: src/components/SidebarFooter.tsx
 msgid "Invite friends"
@@ -4128,6 +4185,10 @@ msgstr "טעינה אוטומטית של תמונות מהרשת"
 msgid "Loading activity…"
 msgstr "טוען פעילות…"
 
+#: src/pages/shell/sidebar-roster.tsx
+msgid "Loading bots"
+msgstr ""
+
 #: src/pages/PluginsOverlay.tsx
 msgid "Loading integrations…"
 msgstr "טוען אינטגרציות…"
@@ -4156,7 +4217,6 @@ msgstr "טוען ספקי קול…"
 #: src/components/bot-templates/bot-templates-dialog.tsx
 #: src/components/integrations/plugin-marketplace.tsx
 #: src/components/integrations/skills-dialog.tsx
-#: src/components/PageLoading.tsx
 #: src/components/SpaceMembersSettings.tsx
 #: src/pages/AdminAccessPage.tsx
 #: src/pages/Artifacts.tsx
@@ -4197,6 +4257,10 @@ msgstr ""
 #: src/pages/shell/agent-import.tsx
 msgid "Looks like it contains a key"
 msgstr "נראה שמכיל מפתח"
+
+#: src/App.tsx
+msgid "Lost connection to Orbit"
+msgstr ""
 
 #: src/lib/ticket-priority.ts
 #: src/pages/model-settings/compatible-model-fields.tsx
@@ -4398,8 +4462,8 @@ msgid "Message from another agent"
 msgstr "הודעה מסוכן אחר"
 
 #: src/pages/shell/composer.tsx
-msgid "Message…"
-msgstr "הודעה…"
+msgid "Message Orbit…"
+msgstr ""
 
 #: src/pages/shell/message-view.tsx
 msgid "Messaged {peer}"
@@ -4608,7 +4672,7 @@ msgid "Name this routine"
 msgstr "שם לרוטינה"
 
 #: src/pages/shell/create-bot-dialog.tsx
-msgid "Name your Bot"
+msgid "Name your Orbit"
 msgstr ""
 
 #: src/lib/roster-status.ts
@@ -4622,6 +4686,7 @@ msgid "Needs an OAuth client ID"
 msgstr "נדרש מזהה לקוח OAuth"
 
 #: src/pages/ActivityList.tsx
+#: src/pages/shell/chat-header.tsx
 msgid "Needs attention"
 msgstr "דורש תשומת לב"
 
@@ -4647,6 +4712,10 @@ msgstr "נדרשת פעולה"
 msgid "Needs: {names}"
 msgstr "דורש: {names}"
 
+#: src/pages/VoiceSettingsOverlay.tsx
+msgid "Neural voice synthesis is pre-configured. Bot messages can be read aloud at any time by clicking the speaker icon on any message bubble."
+msgstr ""
+
 #: src/components/ApprovalRulesSettings.tsx
 msgid "Never ask"
 msgstr "לא לשאול אף פעם"
@@ -4663,9 +4732,12 @@ msgstr ""
 
 #: src/pages/Shell.tsx
 #: src/pages/shell/bot-picker.tsx
-#: src/pages/shell/create-bot-dialog.tsx
 msgid "New bot"
 msgstr "בוט חדש"
+
+#: src/pages/shell/shell-sidebar.tsx
+msgid "New Bot"
+msgstr ""
 
 #: src/components/VaultSettings.tsx
 msgid "New card"
@@ -4760,6 +4832,10 @@ msgstr "אין עדיין תוצרים"
 msgid "No authentication"
 msgstr "ללא אימות"
 
+#: src/pages/Shell.tsx
+msgid "No bot selected"
+msgstr ""
+
 #: src/components/integrations/agent-access.tsx
 msgid "No bots"
 msgstr ""
@@ -4768,6 +4844,10 @@ msgstr ""
 #: src/pages/shell/bot-picker.tsx
 msgid "No bots match"
 msgstr "אין בוטים תואמים"
+
+#: src/pages/shell/sidebar-roster.tsx
+msgid "No bots yet"
+msgstr ""
 
 #: src/components/AskCard.tsx
 #: src/components/SecretAskCard.tsx
@@ -4895,26 +4975,25 @@ msgid "Not imported"
 msgstr "לא יובא"
 
 #: src/pages/shell/import-status.ts
-msgid "Not in Rakazo's catalog"
-msgstr "לא בקטלוג של Rakazo"
+msgid "Not in Orbit's catalog"
+msgstr "לא בקטלוג של Orbit"
 
 #: src/pages/PluginsOverlay.tsx
 msgid "Not in the plugin catalog"
 msgstr "לא נמצא בקטלוג התוספים"
 
-#: src/components/GitHubStarPrompt.tsx
 #: src/pages/shell/message-cards.tsx
 msgid "Not now"
 msgstr "לא עכשיו"
 
 #: src/pages/shell/agent-import.tsx
 #: src/pages/shell/import-status.ts
-msgid "Not supported in Rakazo"
-msgstr "לא נתמך ב-Rakazo"
+msgid "Not supported in Orbit"
+msgstr "לא נתמך ב-Orbit"
 
 #: src/pages/shell/agent-import.tsx
-msgid "Not used by Rakazo"
-msgstr "לא בשימוש ב-Rakazo"
+msgid "Not used by Orbit"
+msgstr "לא בשימוש ב-Orbit"
 
 #: src/components/McpServerHealthLine.tsx
 #: src/pages/PluginsOverlay.tsx
@@ -5019,10 +5098,6 @@ msgstr "פתיחת {title}"
 msgid "Open <0>{0}</0> and enter this code:"
 msgstr "יש לפתוח את <0>{0}</0> ולהזין את הקוד הזה:"
 
-#: src/pages/shell/chat-header.tsx
-msgid "Open call"
-msgstr ""
-
 #. placeholder {0}: call.botName
 #: src/components/call/CallCard.tsx
 msgid "Open chat with {0}"
@@ -5040,6 +5115,10 @@ msgstr "לפתוח קישור חיצוני?"
 msgid "Open in full window"
 msgstr "פתיחה בחלון מלא"
 
+#: src/pages/shell/chat-header.tsx
+msgid "Open Inspector"
+msgstr ""
+
 #: src/components/pages/SharePopover.tsx
 msgid "Open link"
 msgstr "פתיחת הקישור"
@@ -5051,8 +5130,8 @@ msgstr "פתיחת הניווט"
 #: src/components/pages/PublicPageShell.tsx
 #: src/pages/Invite.tsx
 #: src/pages/SharedPage.tsx
-msgid "Open Rakazo"
-msgstr "פתיחת Rakazo"
+msgid "Open Orbit"
+msgstr "פתיחת Orbit"
 
 #: src/pages/ScratchpadSection.tsx
 msgid "Open work"
@@ -5090,6 +5169,81 @@ msgstr "ערך header אופציונלי"
 #: src/pages/Onboarding.tsx
 msgid "Or paste an API key"
 msgstr "או הדבקת מפתח API"
+
+#: src/App.tsx
+msgid "Or reload window"
+msgstr ""
+
+#: src/components/PageLoading.tsx
+#: src/pages/AccountSettingsOverlay.tsx
+#: src/pages/shell/avatar-studio-popover.tsx
+msgid "Orbit"
+msgstr "Orbit"
+
+#: src/pages/shell/create-bot-dialog.tsx
+msgid "Orbit Agent Studio"
+msgstr ""
+
+#: src/pages/shell/chat-header.tsx
+msgid "Orbit Assistant"
+msgstr ""
+
+#: src/pages/shell/create-bot-dialog.tsx
+msgid "Orbit Blueprints"
+msgstr ""
+
+#: src/components/ComputersUnavailableHint.tsx
+msgid "Orbit Cloud"
+msgstr ""
+
+#: src/pages/AccountSettingsOverlay.tsx
+msgid "Orbit Cosmic Theme"
+msgstr ""
+
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Orbit Cosmic Themes"
+msgstr ""
+
+#: src/pages/settings-nav.ts
+msgid "Orbit Cosmic Themes, custom typography, and visual density."
+msgstr ""
+
+#: src/pages/Onboarding.tsx
+msgid "Orbit credits"
+msgstr ""
+
+#: src/App.tsx
+msgid "Orbit encountered an unexpected state. Refreshing will reload the interface cleanly."
+msgstr ""
+
+#: src/pages/shell/avatar-studio-popover.tsx
+msgid "Orbit Official Planet Bot"
+msgstr ""
+
+#: src/components/SidebarFooter.tsx
+msgid "Orbit Platform"
+msgstr ""
+
+#. placeholder {0}: activeTheme.name
+#: src/components/OrbitThemeSwitcher.tsx
+msgid "Orbit Theme: {0}"
+msgstr ""
+
+#: src/components/OrbitThemeSwitcher.tsx
+msgid "Orbit Themes"
+msgstr ""
+
+#: src/pages/Auth.tsx
+msgid "Orbit uses your Forion account. You’ll be back here in a moment."
+msgstr ""
+
+#: src/pages/memory-providers/HonchoSettingsForm.tsx
+msgid "orbit-shared and IDs starting with bot- are reserved for Orbit."
+msgstr ""
+
+#: src/pages/shell/chat-header.tsx
+msgid "Orbital Command Bar"
+msgstr ""
 
 #: src/components/ComputerProviderSettings.tsx
 #: src/pages/settings-nav.ts
@@ -5230,8 +5384,8 @@ msgid "Paste a replacement key"
 msgstr "יש להדביק מפתח חלופי"
 
 #: src/pages/model-settings/compatible-model-fields.tsx
-msgid "Paste the OpenAI-compatible address from your server. Rakazo adds /v1 if needed."
-msgstr "יש להדביק את הכתובת התואמת ל-OpenAI מהשרת. Rakazo מוסיף /v1 במידת הצורך."
+msgid "Paste the OpenAI-compatible address from your server. Orbit adds /v1 if needed."
+msgstr "יש להדביק את הכתובת התואמת ל-OpenAI מהשרת. Orbit מוסיף /v1 במידת הצורך."
 
 #: src/pages/shell/agent-import.tsx
 msgid "Paste the reply"
@@ -5294,6 +5448,10 @@ msgstr "יש לבחור מודל מהקטלוג."
 msgid "Pick a model from the list or enter a model id served by this endpoint."
 msgstr "יש לבחור מודל מהרשימה או להזין מזהה מודל שמוגש על ידי נקודת הקצה הזו."
 
+#: src/pages/AccountSettingsOverlay.tsx
+msgid "Pick a signature cosmic color palette across Orbit"
+msgstr ""
+
 #: src/pages/RoutineEditor.tsx
 msgid "Pick a tool to check"
 msgstr ""
@@ -5315,6 +5473,10 @@ msgstr "תוכנית"
 #: src/components/ArtifactFileCard.tsx
 msgid "Play {name}"
 msgstr "הפעלת {name}"
+
+#: src/pages/VoiceSettingsOverlay.tsx
+msgid "Playing sample…"
+msgstr ""
 
 #: src/pages/VoiceSettingsOverlay.tsx
 msgid "Playing…"
@@ -5425,19 +5587,6 @@ msgstr "Pull request"
 msgid "Queued"
 msgstr "בתור"
 
-#: src/pages/AccountSettingsOverlay.tsx
-#: src/pages/shell/avatar-studio-popover.tsx
-msgid "Rakazo"
-msgstr "Rakazo"
-
-#: src/pages/Onboarding.tsx
-msgid "Rakazo credits"
-msgstr ""
-
-#: src/pages/memory-providers/HonchoSettingsForm.tsx
-msgid "rakazo-shared and IDs starting with bot- are reserved for Rakazo."
-msgstr ""
-
 #: src/pages/shell/message-hover-actions.tsx
 msgid "React"
 msgstr "הוספת אמוג׳י"
@@ -5445,6 +5594,10 @@ msgstr "הוספת אמוג׳י"
 #: src/pages/shell/message-hover-actions.tsx
 msgid "Reactions"
 msgstr "אמוג׳י"
+
+#: src/pages/shell/message-hover-actions.tsx
+msgid "Read aloud"
+msgstr ""
 
 #: src/components/AskCard.tsx
 msgid "Read from the page, not checked"
@@ -5454,7 +5607,9 @@ msgstr "נקרא מהדף, לא נבדק"
 msgid "Read replies aloud"
 msgstr "הקראת תשובות בקול"
 
+#: src/pages/shell/chat-header.tsx
 #: src/pages/shell/import-status.ts
+#: src/pages/VoiceSettingsOverlay.tsx
 msgid "Ready"
 msgstr "מוכן"
 
@@ -5472,8 +5627,8 @@ msgid "Recall and write"
 msgstr "שליפה וכתיבה"
 
 #: src/pages/memory-providers/HonchoSettingsForm.tsx
-msgid "Recall from this peer; save to Rakazo’s own peers."
-msgstr "שליפה מהעמית הזה; שמירה בעמיתים של Rakazo."
+msgid "Recall from this peer; save to Orbit’s own peers."
+msgstr "שליפה מהעמית הזה; שמירה בעמיתים של Orbit."
 
 #: src/pages/memory-providers/SerenitySettingsForm.tsx
 msgid "Recall only"
@@ -5484,6 +5639,7 @@ msgid "Received"
 msgstr ""
 
 #: src/pages/ActivityList.tsx
+#: src/pages/Shell.tsx
 msgid "Recent"
 msgstr "אחרונים"
 
@@ -5875,6 +6031,7 @@ msgstr "משחזר את סביבת העבודה"
 #: src/pages/ModelRoleSettings.tsx
 #: src/pages/PluginsOverlay.tsx
 #: src/pages/PluginSubmissionsPanel.tsx
+#: src/pages/shell/sidebar-roster.tsx
 #: src/pages/SpaceSettingOverrides.tsx
 msgid "Retry"
 msgstr "לנסות שוב"
@@ -5895,8 +6052,8 @@ msgstr ""
 
 #: src/pages/McpOAuthCallback.tsx
 #: src/pages/SlackInstallCallback.tsx
-msgid "Return to Rakazo"
-msgstr "חזרה ל-Rakazo"
+msgid "Return to Orbit"
+msgstr "חזרה ל-Orbit"
 
 #: src/lib/model-connection-preflight.ts
 msgid "Review provider settings and test again."
@@ -6181,9 +6338,17 @@ msgstr ""
 msgid "Security code"
 msgstr ""
 
-#: src/pages/shell/chat-header.tsx
-msgid "Select a bot"
-msgstr "בחירת בוט"
+#: src/pages/Shell.tsx
+msgid "Select a bot from the sidebar or create a new companion to begin."
+msgstr ""
+
+#: src/pages/shell/create-bot-dialog.tsx
+msgid "Select a pre-configured Orbit Agent blueprint to get started:"
+msgstr ""
+
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Select your preferred typeface family. Orbit hot-reloads fonts in real-time across all headings, code blocks, and chat transcripts."
+msgstr ""
 
 #: src/pages/memory-providers/ConnectionModeFields.tsx
 msgid "Self-hosted"
@@ -6289,7 +6454,6 @@ msgstr "הגדרות: שימוש"
 msgid "Setup complete"
 msgstr "ההגדרה הושלמה"
 
-#: src/components/ComputersUnavailableHint.tsx
 #: src/pages/model-settings/compatible-model-fields.tsx
 msgid "Setup help"
 msgstr "עזרה בהגדרה"
@@ -6372,6 +6536,10 @@ msgstr "הצגת תמליל"
 msgid "Sidebar density"
 msgstr "צפיפות סרגל הצד"
 
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Sidebar Density"
+msgstr ""
+
 #: src/components/integrations/plugin-marketplace.tsx
 #: src/lib/localized-provider-hint.ts
 #: src/pages/Auth.tsx
@@ -6397,12 +6565,17 @@ msgid "Sign in at <0>{0}</0>, then paste the code here."
 msgstr "התחברו ב-<0>{0}</0> והדביקו כאן את הקוד."
 
 #: src/pages/Auth.tsx
-msgid "Sign in to Rakazo"
-msgstr "התחברות ל-Rakazo"
+msgid "Sign in to Orbit"
+msgstr "התחברות ל-Orbit"
 
 #: src/lib/user-error.ts
 msgid "Sign in to your existing account to link SSO"
 msgstr "יש להתחבר לחשבון הקיים כדי לקשר SSO"
+
+#. placeholder {0}: reset.sso.name
+#: src/pages/Auth.tsx
+msgid "Sign in with {0}"
+msgstr ""
 
 #: src/components/PasskeySignIn.tsx
 msgid "Sign in with passkey"
@@ -6418,6 +6591,10 @@ msgstr "הרשמה"
 
 #: src/components/integrations/plugin-marketplace.tsx
 msgid "Sign-in cancelled. Try again."
+msgstr ""
+
+#: src/pages/Auth.tsx
+msgid "Signing in…"
 msgstr ""
 
 #: src/components/vault/VaultItemDetail.tsx
@@ -6493,6 +6670,9 @@ msgid "Some settings are not imported"
 msgstr "חלק מההגדרות לא מיובאות"
 
 #: src/App.tsx
+msgid "Something went wrong"
+msgstr ""
+
 #: src/lib/user-error.ts
 msgid "Something went wrong. Try again."
 msgstr "משהו השתבש. אפשר לנסות שוב."
@@ -6566,10 +6746,6 @@ msgstr ""
 msgid "SSO is temporarily unavailable. Try again."
 msgstr "SSO אינו זמין כרגע. אפשר לנסות שוב."
 
-#: src/components/GitHubStarPrompt.tsx
-msgid "Star on GitHub"
-msgstr ""
-
 #: src/pages/shell/computer-overlay.tsx
 msgid "Start"
 msgstr ""
@@ -6642,6 +6818,7 @@ msgstr "עצירה"
 msgid "Stop computer"
 msgstr ""
 
+#: src/pages/shell/message-hover-actions.tsx
 #: src/pages/shell/message-view.tsx
 msgid "Stop speaking"
 msgstr "הפסקת ההקראה"
@@ -6743,6 +6920,10 @@ msgstr "מחליף…"
 #: src/pages/Shell.tsx
 msgid "System"
 msgstr "מערכת"
+
+#: src/App.tsx
+msgid "System Interruption"
+msgstr ""
 
 #: src/components/markdown-copy.tsx
 msgid "Table"
@@ -6880,6 +7061,11 @@ msgstr "הקישור המשותף יפסיק לעבוד"
 #: src/components/ModelCredits.tsx
 msgid "The unused difference is credited to your next invoice."
 msgstr "ההפרש שלא נוצל יזוכה בחשבונית הבאה שלך."
+
+#. placeholder {0}: activeTheme.name
+#: src/components/OrbitThemeSwitcher.tsx
+msgid "Theme: {0}"
+msgstr ""
 
 #: src/pages/shell/agent-import.tsx
 msgid "These files are too large to import."
@@ -7064,8 +7250,8 @@ msgid "This server's tool result does not fit the model. Turn off Keep tool resu
 msgstr ""
 
 #: src/pages/model-settings/connection-controls.tsx
-msgid "This subscription sign-in is not available in Rakazo yet. Use a deployment credential or choose another provider."
-msgstr "התחברות עם המנוי הזה עדיין לא זמינה ב-Rakazo. אפשר להשתמש בפרטי גישה של ההתקנה או לבחור ספק אחר."
+msgid "This subscription sign-in is not available in Orbit yet. Use a deployment credential or choose another provider."
+msgstr "התחברות עם המנוי הזה עדיין לא זמינה ב-Orbit. אפשר להשתמש בפרטי גישה של ההתקנה או לבחור ספק אחר."
 
 #: src/components/bot-templates/bot-templates-dialog.tsx
 msgid "This template was just updated. Check it again."
@@ -7241,12 +7427,20 @@ msgstr "הקלדה בלי הקלטה"
 msgid "Type your answer"
 msgstr "יש להקליד תשובה"
 
+#: src/pages/AccountSettingsOverlay.tsx
+msgid "Typography"
+msgstr ""
+
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Typography Engine"
+msgstr ""
+
 #: src/pages/BotContextMenu.tsx
-#: src/pages/Shell.tsx
 msgid "Unassigned"
 msgstr "ללא שיוך"
 
 #: src/components/AskCard.tsx
+#: src/pages/shell/shell-dialogs.tsx
 msgid "Undo"
 msgstr "ביטול"
 
@@ -7401,13 +7595,13 @@ msgstr ""
 msgid "Use my subscription or API key"
 msgstr ""
 
+#: src/components/ModelCredits.tsx
+msgid "Use Orbit credits"
+msgstr ""
+
 #: src/components/teach/TeachRecordingChrome.tsx
 msgid "Use Protected input for passwords."
 msgstr "לסיסמאות יש להשתמש בקלט מוגן."
-
-#: src/components/ModelCredits.tsx
-msgid "Use Rakazo credits"
-msgstr ""
 
 #: src/pages/memory-providers/HonchoSettingsForm.tsx
 msgid "Use up to 512 letters, digits, _ or -."
@@ -7495,6 +7689,10 @@ msgstr ""
 msgid "Voice"
 msgstr "קול"
 
+#: src/pages/shell/chat-header.tsx
+msgid "Voice Call"
+msgstr ""
+
 #: src/lib/tts.ts
 msgid "Voice request timed out."
 msgstr ""
@@ -7554,7 +7752,7 @@ msgid "Weekly"
 msgstr "שבועי"
 
 #: src/components/SignupSurvey.tsx
-msgid "Welcome to Rakazo"
+msgid "Welcome to Orbit"
 msgstr ""
 
 #: src/pages/shell/dialogs.tsx
@@ -7566,7 +7764,7 @@ msgid "What can this space use?"
 msgstr ""
 
 #: src/components/SignupSurvey.tsx
-msgid "What do you most want Rakazo to help with?"
+msgid "What do you most want Orbit to help with?"
 msgstr ""
 
 #: src/pages/shell/message-cards.tsx
@@ -7679,7 +7877,12 @@ msgid "Works with your ChatGPT or Claude plan."
 msgstr "עובד עם המינוי שלך ל-ChatGPT או ל-Claude."
 
 #: src/pages/memory-providers/HonchoSettingsForm.tsx
+#: src/pages/shell/chat-header.tsx
 msgid "Workspace"
+msgstr ""
+
+#: src/pages/AppearanceSettingsPanel.tsx
+msgid "Workspace Density"
 msgstr ""
 
 #: src/lib/billing.ts

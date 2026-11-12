@@ -1,7 +1,6 @@
-import { Trans, useLingui } from "@lingui/react/macro";
-import type { MessageReaction, ThreadMessage } from "@rakazo/contracts";
-import { canReactToThreadMessage, MESSAGE_REACTIONS } from "@rakazo/contracts";
-import { canMarkMessageUnread, copyableMessageText } from "@rakazo/core";
+import type { MessageReaction, ThreadMessage } from "@forion/orbit-contracts";
+import { canReactToThreadMessage, MESSAGE_REACTIONS } from "@forion/orbit-contracts";
+import { canMarkMessageUnread, copyableMessageText } from "@forion/orbit-core";
 import {
   CopyTextFallback,
   DropdownMenu,
@@ -12,8 +11,18 @@ import {
   PopoverContent,
   PopoverTrigger,
   useCopyText,
-} from "@rakazo/ui-web";
-import { Check, Copy, MessageSquareDot, MoreHorizontal, Reply, Smile, Volume2, VolumeX } from "lucide-react";
+} from "@forion/orbit-ui-web";
+import { Trans, useLingui } from "@lingui/react/macro";
+import {
+  Check,
+  Copy,
+  MessageSquareDot,
+  MoreHorizontal,
+  Reply,
+  Smile,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
 import { useState } from "react";
 import { MessageHoverMetadata } from "../../components/MessageHoverMetadata";
 

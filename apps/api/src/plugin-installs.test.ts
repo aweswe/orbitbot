@@ -1,7 +1,7 @@
+import type { SecretStore } from "@forion/orbit-adapter-kit";
+import { BUILTIN_AGENT_SKILLS, previewPluginInstall } from "@forion/orbit-adapters";
+import type { Actor } from "@forion/orbit-contracts";
 import { createRouterClient } from "@orpc/server";
-import type { SecretStore } from "@rakazo/adapter-kit";
-import { BUILTIN_AGENT_SKILLS, previewPluginInstall } from "@rakazo/adapters";
-import type { Actor } from "@rakazo/contracts";
 import { describe, expect, it, vi } from "vitest";
 import { installPlugin, setPluginParts } from "./plugin-installs.js";
 import type { RouterDeps } from "./router.js";

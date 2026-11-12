@@ -1,5 +1,5 @@
-import type { BotAvatarSet } from "@rakazo/contracts";
-import { splitPeerLabel } from "@rakazo/core";
+import type { BotAvatarSet } from "@forion/orbit-contracts";
+import { splitPeerLabel } from "@forion/orbit-core";
 import type { PressableProps } from "react-native";
 import { Pressable, StyleSheet, Text } from "react-native";
 import { mobileTokens } from "../lib/appearance";

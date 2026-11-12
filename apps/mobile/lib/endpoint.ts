@@ -1,5 +1,5 @@
-import { isPrivateNetworkHost } from "@rakazo/contracts";
-import { cancelResponseBody, readBoundedJsonResponse, withAbort } from "@rakazo/core";
+import { isPrivateNetworkHost } from "@forion/orbit-contracts";
+import { cancelResponseBody, readBoundedJsonResponse, withAbort } from "@forion/orbit-core";
 import { t } from "./i18n";
 import { DEFAULT_API, LOCAL_API } from "./server-config";
 
@@ -82,7 +82,7 @@ export async function probeApiBase(
     );
     if (!res.ok) {
       cancelResponseBody(res);
-      return { ok: false, error: t("That URL did not look like a Rakazo server") };
+      return { ok: false, error: t("That URL did not look like an Orbit server") };
     }
     let body: HealthResponse;
     try {
@@ -96,7 +96,7 @@ export async function probeApiBase(
       body = {};
     }
     if (body.error || body.json?.ok !== true) {
-      return { ok: false, error: t("That URL did not look like a Rakazo server") };
+      return { ok: false, error: t("That URL did not look like an Orbit server") };
     }
     return parsed;
   } catch {

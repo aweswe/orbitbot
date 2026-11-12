@@ -1,6 +1,6 @@
 import type { Context } from "@earendil-works/pi-ai";
-import type { AgentRunModel } from "@rakazo/adapter-kit";
-import { MODEL_REQUEST_LIMIT_ERROR, normalizeRunError } from "@rakazo/core";
+import type { AgentRunModel } from "@forion/orbit-adapter-kit";
+import { MODEL_REQUEST_LIMIT_ERROR, normalizeRunError } from "@forion/orbit-core";
 import { Type } from "typebox";
 import { withChatCompletionsCompatibility } from "./chat-completions-compat.js";
 import { withCloudflareAuth } from "./cloudflare-ai-gateway.js";

@@ -1,4 +1,4 @@
-import type { MessageBlock } from "@rakazo/contracts";
+import type { MessageBlock } from "@forion/orbit-contracts";
 import { messageReaction } from "./message-reactions.js";
 
 type PresentableMessage = {

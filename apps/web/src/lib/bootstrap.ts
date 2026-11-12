@@ -1,6 +1,6 @@
-import type { AppBootstrap } from "@rakazo/contracts";
-import { ATTACHMENT_MAX_BYTES, attachmentMaxBytes } from "@rakazo/contracts";
-import { displayIdentityResult } from "@rakazo/core";
+import type { AppBootstrap } from "@forion/orbit-contracts";
+import { ATTACHMENT_MAX_BYTES, attachmentMaxBytes } from "@forion/orbit-contracts";
+import { displayIdentityResult } from "@forion/orbit-core";
 import { initialBootstrapTarget } from "./bootstrap-target";
 import { identityLabels } from "./identity-display";
 import { markOnce } from "./performance";

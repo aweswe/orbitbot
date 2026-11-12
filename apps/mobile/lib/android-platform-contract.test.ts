@@ -23,13 +23,32 @@ describe("Android mobile platform contract", () => {
     }
   });
 
+  it("registers the Android notification module class with Expo", () => {
+    const config = JSON.parse(
+      readFileSync(
+        resolve(mobileRoot, "modules/rakazo-notifications/expo-module.config.json"),
+        "utf8",
+      ),
+    ) as { android?: { modules?: string[] } };
+    expect(config.android?.modules).toContain("com.rakazo.notifications.OrbitNotificationsModule");
+    expect(() =>
+      readFileSync(
+        resolve(
+          mobileRoot,
+          "modules/rakazo-notifications/android/src/main/java/com/rakazo/notifications/OrbitNotificationsModule.kt",
+        ),
+        "utf8",
+      ),
+    ).not.toThrow();
+  });
+
   it("requests live-update promotion and exposes its Android settings", () => {
     const nativeRoot = resolve(
       mobileRoot,
       "modules/rakazo-notifications/android/src/main/java/com/rakazo/notifications",
     );
-    const service = readFileSync(resolve(nativeRoot, "RakazoNotificationService.kt"), "utf8");
-    const module = readFileSync(resolve(nativeRoot, "RakazoNotificationsModule.kt"), "utf8");
+    const service = readFileSync(resolve(nativeRoot, "OrbitNotificationService.kt"), "utf8");
+    const module = readFileSync(resolve(nativeRoot, "OrbitNotificationsModule.kt"), "utf8");
     const allowlist = readFileSync(resolve(nativeRoot, "EndpointAllowlist.kt"), "utf8");
     expect(service).toContain("android.requestPromotedOngoing");
     expect(service).toContain("liveStatusIcon(primary, avatarStyle)");
@@ -41,7 +60,7 @@ describe("Android mobile platform contract", () => {
     expect(service).toContain("if (!isAllowedNotificationEndpoint(endpoint)) throw IOException");
     expect(module).toContain("android.settings.APP_NOTIFICATION_PROMOTION_SETTINGS");
     expect(module).not.toContain("settings.copy(liveConnection = false)");
-    expect(module).toContain("RakazoNotificationService.clearSession(context)");
+    expect(module).toContain("OrbitNotificationService.clearSession(context)");
     expect(module).toContain("isAllowedNotificationEndpoint(endpoint)");
     expect(module).toContain("storage.spaceId = spaceId");
     expect(allowlist).toContain("isAllowedNotificationEndpoint");
@@ -103,7 +122,7 @@ describe("Android mobile platform contract", () => {
     const service = readFileSync(
       resolve(
         mobileRoot,
-        "modules/rakazo-notifications/android/src/main/java/com/rakazo/notifications/RakazoNotificationService.kt",
+        "modules/rakazo-notifications/android/src/main/java/com/rakazo/notifications/OrbitNotificationService.kt",
       ),
       "utf8",
     );
@@ -124,7 +143,7 @@ describe("Android mobile platform contract", () => {
     const service = readFileSync(
       resolve(
         mobileRoot,
-        "modules/rakazo-notifications/android/src/main/java/com/rakazo/notifications/RakazoNotificationService.kt",
+        "modules/rakazo-notifications/android/src/main/java/com/rakazo/notifications/OrbitNotificationService.kt",
       ),
       "utf8",
     );

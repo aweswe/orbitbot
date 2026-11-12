@@ -1,0 +1,114 @@
+{
+  "reviewedAt": "2026-11-10",
+  "notes": "Repository-level asset inventory. No commercial or third-party marketing fonts remain. 'accepted' means the repository has a plausible Forion or generated provenance; it is not a legal conclusion.",
+  "assets": [
+    {
+      "path": "apps/www/public/og-image.png",
+      "license": "Forion Orbit marketing image",
+      "reviewStatus": "accepted",
+      "evidence": "Generated for Orbit Bot from the shared app icon and verified product name."
+    },
+    {
+      "pathPrefix": "apps/www/public/apple-touch-icon",
+      "license": "Forion Orbit app icon",
+      "reviewStatus": "accepted",
+      "evidence": "Generated from the shared Orbit app icon."
+    },
+    {
+      "pathPrefix": "apps/www/public/icon-",
+      "license": "Forion Orbit app icon",
+      "reviewStatus": "accepted",
+      "evidence": "Generated from the shared Orbit app icon."
+    },
+    {
+      "pathPrefix": "apps/www/public/favicon",
+      "license": "Forion Orbit favicon",
+      "reviewStatus": "accepted",
+      "evidence": "Copied from the Orbit web brand assets."
+    },
+    {
+      "path": "apps/www/public/brand/orbit-mark.png",
+      "license": "Forion Orbit brand asset",
+      "reviewStatus": "accepted",
+      "evidence": "Same mark used by the main Orbit application."
+    },
+    {
+      "pathPrefix": "apps/www/public/brand/kit/",
+      "license": "Forion Orbit brand asset",
+      "reviewStatus": "accepted",
+      "evidence": "Orbit logo, wordmark, and app icon generated from the main Orbit brand system."
+    },
+    {
+      "pathPrefix": "docs/",
+      "license": "Repository documentation screenshot",
+      "reviewStatus": "accepted",
+      "evidence": "Captured for Orbit documentation; no third-party source identified. This is a repository-provenance classification, not a legal conclusion."
+    },
+    {
+      "pathPrefix": "apps/www/public/avatars/",
+      "license": "Forion-generated SVG avatars",
+      "reviewStatus": "accepted",
+      "evidence": "Generated in the repository; no third-party source found."
+    },
+    {
+      "pathPrefix": "apps/www/public/",
+      "license": "Marketing site asset; provenance varies",
+      "reviewStatus": "needs-review",
+      "evidence": "General marketing assets not covered by a more specific rule."
+    },
+    {
+      "pathPrefix": "apps/web/public/assets/imgs/logo/",
+      "license": "Forion web brand asset",
+      "reviewStatus": "accepted",
+      "evidence": "Forion web logo asset added in a local commit. Trademark ownership is not legally reviewed."
+    },
+    {
+      "pathPrefix": "apps/web/public/",
+      "license": "Forion web brand asset",
+      "reviewStatus": "accepted",
+      "evidence": "Forion web product asset added in a local commit. Trademark ownership is not legally reviewed."
+    },
+    {
+      "pathPrefix": "apps/desktop/assets/",
+      "license": "Forion desktop brand asset",
+      "reviewStatus": "accepted",
+      "evidence": "Forion desktop product asset added in a local commit. Trademark ownership is not legally reviewed."
+    },
+    {
+      "pathPrefix": "apps/mobile/assets/",
+      "license": "Forion mobile brand asset",
+      "reviewStatus": "accepted",
+      "evidence": "Forion mobile product asset added in a local commit. Trademark ownership is not legally reviewed."
+    },
+    {
+      "pathPrefix": "apps/mobile/ios-widgets/Assets.xcassets/",
+      "license": "Forion mobile brand asset",
+      "reviewStatus": "accepted",
+      "evidence": "Forion mobile widget asset added in a local commit. Trademark ownership is not legally reviewed."
+    },
+    {
+      "path": "packages/ui-tokens/assets/Orbit.icon/Assets/orbit-icon.png",
+      "license": "Forion Orbit brand asset",
+      "reviewStatus": "accepted",
+      "evidence": "Generated from the shared Orbit app icon and used by the Apple Icon Composer source."
+    },
+    {
+      "path": "packages/ui-tokens/assets/Orbit.icon/Assets/orange-bot.png",
+      "license": "Test fixture; not distributed",
+      "reviewStatus": "test-only",
+      "evidence": "Inherited avatar artwork used only as the pixel-regression source for the vector logo avatar; it is not packaged by any app."
+    },
+    {
+      "pathPrefix": "packages/ui-tokens/assets/",
+      "license": "Shared brand and icon asset",
+      "reviewStatus": "needs-review",
+      "evidence": "Shared Apple icon source and brand images; ownership not legally reviewed."
+    },
+    {
+      "pathPrefix": "apps/web/e2e/fixtures/",
+      "license": "Test fixture; not distributed",
+      "reviewStatus": "test-only",
+      "evidence": "Used only by end-to-end tests."
+    }
+  ]
+}

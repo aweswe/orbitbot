@@ -1,9 +1,9 @@
-import type { ResponseStreamingPreference } from "@rakazo/core";
+import type { ResponseStreamingPreference } from "@forion/orbit-core";
 import {
   normalizeResponseStreamingPreference,
   RESPONSE_STREAMING_STORAGE_KEY,
   responseStreamingEnabled,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import * as SecureStore from "expo-secure-store";
 
 export type { ResponseStreamingPreference };

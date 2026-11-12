@@ -1,4 +1,4 @@
-import { isApprovalAskBlock, isSecretAskBlock } from "@rakazo/core";
+import { isApprovalAskBlock, isSecretAskBlock } from "@forion/orbit-core";
 import type { MobileMessage } from "./api";
 import { isCenteredAgentEvent, THREAD_COLUMN_GUTTER } from "./message-presentation";
 

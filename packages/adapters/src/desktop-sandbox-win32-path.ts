@@ -8,7 +8,7 @@ import {
 } from "node:fs";
 import { promisify } from "node:util";
 import type { LibraryHandle } from "koffi";
-import { koffi } from "./koffi-lazy.js";
+import koffi from "koffi";
 
 type KoffiFunction = ReturnType<LibraryHandle["func"]>;
 
@@ -72,17 +72,17 @@ export function win32NtRelativeAvailable(): boolean {
 function nt(): NtFns {
   if (cached === null) throw new Error("Win32 NT APIs unavailable");
   if (cached) return cached;
-  const ntdll = koffi().load("ntdll.dll");
-  const kernel32 = koffi().load("kernel32.dll");
+  const ntdll = koffi.load("ntdll.dll");
+  const kernel32 = koffi.load("kernel32.dll");
   // Convert through the running Node/Electron runtime: a separately loaded CRT owns a different fd table.
-  const runtime = koffi().load(null);
+  const runtime = koffi.load(null);
 
-  koffi().struct("UNICODE_STRING", {
+  koffi.struct("UNICODE_STRING", {
     Length: "uint16_t",
     MaximumLength: "uint16_t",
     Buffer: "void *",
   });
-  const OBJECT_ATTRIBUTES = koffi().struct("OBJECT_ATTRIBUTES", {
+  const OBJECT_ATTRIBUTES = koffi.struct("OBJECT_ATTRIBUTES", {
     Length: "uint32_t",
     RootDirectory: "void *",
     ObjectName: "UNICODE_STRING *",
@@ -90,7 +90,7 @@ function nt(): NtFns {
     SecurityDescriptor: "void *",
     SecurityQualityOfService: "void *",
   });
-  koffi().struct("IO_STATUS_BLOCK", {
+  koffi.struct("IO_STATUS_BLOCK", {
     Status: "intptr_t",
     Information: "uintptr_t",
   });
@@ -108,7 +108,7 @@ function nt(): NtFns {
     GetFinalPathNameByHandleW: kernel32.func(
       "uint32_t __stdcall GetFinalPathNameByHandleW(void *hFile, void *lpszFilePath, uint32_t cchFilePath, uint32_t dwFlags)",
     ),
-    objectAttributesSize: koffi().sizeof(OBJECT_ATTRIBUTES),
+    objectAttributesSize: koffi.sizeof(OBJECT_ATTRIBUTES),
   };
   return cached;
 }

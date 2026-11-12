@@ -1,5 +1,5 @@
-import type { ActionApprovalRule as StoredActionApprovalRule } from "@rakazo/contracts";
-import { BUILTIN_TOOL_NAMES } from "@rakazo/contracts";
+import type { ActionApprovalRule as StoredActionApprovalRule } from "@forion/orbit-contracts";
+import { BUILTIN_TOOL_NAMES } from "@forion/orbit-contracts";
 import { humanizeToolName } from "./events.js";
 
 const APPROVAL_EXEMPT_TOOLS = new Set([

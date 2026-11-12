@@ -1,7 +1,11 @@
-import { Trans, useLingui } from "@lingui/react/macro";
-import type { BotSecretMetadata, SettingsScope, VaultKind, VaultRevealed } from "@rakazo/contracts";
-import { isIdentityConfirmationRequired, VAULT_KINDS, vaultKind } from "@rakazo/contracts";
-import { fetchFresh, writeSaved } from "@rakazo/core/query";
+import type {
+  BotSecretMetadata,
+  SettingsScope,
+  VaultKind,
+  VaultRevealed,
+} from "@forion/orbit-contracts";
+import { isIdentityConfirmationRequired, VAULT_KINDS, vaultKind } from "@forion/orbit-contracts";
+import { fetchFresh, writeSaved } from "@forion/orbit-core/query";
 import {
   Button,
   DropdownMenu,
@@ -10,7 +14,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   ListSearchInput,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronDown, ChevronRight, Plus } from "lucide-react";
 import { Fragment, useEffect, useRef, useState } from "react";

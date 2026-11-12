@@ -1,5 +1,4 @@
-import { Trans, useLingui } from "@lingui/react/macro";
-import type { BillingStatus, ByokInterval, ByokTier } from "@rakazo/contracts";
+import type { BillingStatus, ByokInterval, ByokTier } from "@forion/orbit-contracts";
 import {
   ByokIntervalSchema,
   ByokTierSchema,
@@ -11,7 +10,7 @@ import {
   isCancelledTrial,
   MODEL_CREDIT_AMOUNTS,
   ModelCreditAmountSchema,
-} from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,7 +38,8 @@ import {
   SelectValue,
   ToggleGroup,
   ToggleGroupItem,
-} from "@rakazo/ui-web";
+} from "@forion/orbit-ui-web";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Check } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import {

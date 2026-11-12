@@ -2,9 +2,9 @@ import type {
   CapabilityInstall,
   ConnectionCatalogItem,
   PluginMarketplaceEntry,
-} from "@rakazo/contracts";
-import { PluginPreviewSchema } from "@rakazo/contracts";
-import type { PluginCategory } from "@rakazo/core";
+} from "@forion/orbit-contracts";
+import { PluginPreviewSchema } from "@forion/orbit-contracts";
+import type { PluginCategory } from "@forion/orbit-core";
 import {
   catalogItemKey,
   installedPluginParts,
@@ -12,7 +12,7 @@ import {
   matchesPluginQuery,
   OTHER_PLUGINS,
   PLUGIN_CATEGORIES,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 
 /** What the plugin screen needs, from a catalog entry or a pasted GitHub URL. */
 export type PluginParams = {

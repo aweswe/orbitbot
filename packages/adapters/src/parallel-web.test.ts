@@ -1,4 +1,4 @@
-import type { AdapterContext } from "@rakazo/adapter-kit";
+import type { AdapterContext } from "@forion/orbit-adapter-kit";
 import { describe, expect, it, vi } from "vitest";
 import { ParallelWebProvider } from "./parallel-web.js";
 import { parallelMcpFixture } from "./parallel-web.test-support.js";
@@ -219,7 +219,7 @@ describe("optional Parallel web provider", () => {
       for (const request of peer.requests) {
         expect(request.url).toBe("https://search.parallel.ai/mcp");
         expect(request.headers.get("user-agent")).toBe(
-          "Rakazo/0.1 (+https://github.com/elie222/rakazo; web tools)",
+          "Orbit/1.0 (+https://orbit.forion.dev; web tools)",
         );
         expect(request.headers.has("authorization")).toBe(false);
       }

@@ -1,4 +1,4 @@
-import { normalizeRunError } from "@rakazo/core";
+import { normalizeRunError } from "@forion/orbit-core";
 import { describe, expect, it } from "vitest";
 import { runErrorActionLabel, runErrorDiagnostic } from "./run-error-presentation";
 

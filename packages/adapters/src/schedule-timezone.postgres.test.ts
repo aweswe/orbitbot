@@ -1,5 +1,12 @@
-import type { PrismaClient } from "@rakazo/db";
-import { asSystem, createDb, runAsSystem, runAsTenant } from "@rakazo/db";
+import type { PrismaClient } from "@forion/orbit-db";
+import {
+  applyLocalContext,
+  asSystem,
+  createDb,
+  runAsSystem,
+  runAsTenant,
+  schemaFromConnectionString,
+} from "@forion/orbit-db";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { changeUserTimezone, createScheduleFromTool } from "./schedule-tools.js";
 
@@ -57,7 +64,7 @@ describePostgres("moving routines with the account timezone (PostgreSQL)", () =>
         data: {
           id,
           name: id,
-          email: `${id}@rakazo.test`,
+          email: `${id}@orbit.test`,
           emailVerified: true,
           timezone: "Africa/Cairo",
         },
@@ -291,6 +298,7 @@ describePostgres("moving routines with the account timezone (PostgreSQL)", () =>
       const monitor = await owner.pool.connect();
       try {
         await client.query("BEGIN");
+        await applyLocalContext(client, schemaFromConnectionString(runtimeUrl!) ?? "");
         await client.query('SELECT id FROM routines WHERE "userId" = $1 FOR UPDATE', [userId]);
         const { rows: own } = await client.query<{ pid: number }>("SELECT pg_backend_pid() AS pid");
         const deadline = performance.now() + BARRIER_POLL_BUDGET_MS;
@@ -336,16 +344,17 @@ describePostgres("moving routines with the account timezone (PostgreSQL)", () =>
       const monitor = await owner.pool.connect();
       try {
         await client.query("BEGIN");
+        await applyLocalContext(client, schemaFromConnectionString(runtimeUrl!) ?? "");
         await client.query("SELECT id FROM routines WHERE id = $1 FOR UPDATE", [routine.id]);
         const { rows: own } = await client.query<{ pid: number }>("SELECT pg_backend_pid() AS pid");
         const deadline = performance.now() + BARRIER_POLL_BUDGET_MS;
         const moving = ops.track(save(userId, "Europe/London", spaces[0]!));
         // Only once the save provably waits on the claimed row does the claim advance it.
         await waitForBlockedOn(monitor, own[0]!.pid, "the zone save", deadline);
-        await client.query('UPDATE routines SET "nextRunAt" = $2 WHERE id = $1', [
-          routine.id,
-          claimed,
-        ]);
+        await client.query(
+          `UPDATE routines SET "nextRunAt" = ($2::timestamptz AT TIME ZONE 'UTC') WHERE id = $1`,
+          [routine.id, claimed.toISOString()],
+        );
         await client.query("COMMIT");
         await moving;
       } finally {
@@ -376,6 +385,7 @@ describePostgres("moving routines with the account timezone (PostgreSQL)", () =>
       const monitor = await owner.pool.connect();
       try {
         await client.query("BEGIN");
+        await applyLocalContext(client, schemaFromConnectionString(runtimeUrl!) ?? "");
         await client.query("SELECT id FROM routines WHERE id = $1 FOR UPDATE", [fixture.id]);
         const { rows: own } = await client.query<{ pid: number }>("SELECT pg_backend_pid() AS pid");
         const deadline = performance.now() + BARRIER_POLL_BUDGET_MS;

@@ -1,4 +1,4 @@
-import type { normalizeRunError, RunErrorTranslator } from "@rakazo/core";
+import type { normalizeRunError, RunErrorTranslator } from "@forion/orbit-core";
 
 /** The label of the one action that fixes the failure; transient failures have none. */
 export function runErrorActionLabel(

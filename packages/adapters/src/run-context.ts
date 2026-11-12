@@ -7,13 +7,13 @@ import type {
   SandboxProvider,
   SemanticMemoryProvider,
   WebProvider,
-} from "@rakazo/adapter-kit";
-import type { ComputerMode, MessageBlock, ReplyMode } from "@rakazo/contracts";
-import { createStreamingRedactor } from "@rakazo/core";
-import { toolEffectIdempotencyKey } from "@rakazo/core/node/approval-effect-key";
-import type { Bot, Computer, effectiveMemoryScope, Run, Task, Thread } from "@rakazo/db";
-import { dropRunTurnCheckpoint, saveRunTurnCheckpoint } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import type { ComputerMode, MessageBlock, ReplyMode } from "@forion/orbit-contracts";
+import { createStreamingRedactor } from "@forion/orbit-core";
+import { toolEffectIdempotencyKey } from "@forion/orbit-core/node/approval-effect-key";
+import type { Bot, Computer, effectiveMemoryScope, Run, Task, Thread } from "@forion/orbit-db";
+import { dropRunTurnCheckpoint, saveRunTurnCheckpoint } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import type {
   ApprovalPausedToolResult,
   ApprovedEffectReplayQueue,

@@ -1,7 +1,7 @@
-import type { LoginFieldInput } from "@rakazo/contracts";
-import { normalizeOneTimeCode, vaultKind } from "@rakazo/contracts";
-import { isSecretAskBlock } from "@rakazo/core";
-import { fontWeight, typeScale } from "@rakazo/ui-tokens";
+import type { LoginFieldInput } from "@forion/orbit-contracts";
+import { normalizeOneTimeCode, vaultKind } from "@forion/orbit-contracts";
+import { isSecretAskBlock } from "@forion/orbit-core";
+import { fontWeight, typeScale } from "@forion/orbit-ui-tokens";
 import { useRef, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import type { MobileMessage } from "../../lib/api";

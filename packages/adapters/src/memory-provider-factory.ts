@@ -1,6 +1,10 @@
-import type { DurableMemoryScope, SecretStore, SemanticMemoryProvider } from "@rakazo/adapter-kit";
-import type { PrismaClient } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+import type {
+  DurableMemoryScope,
+  SecretStore,
+  SemanticMemoryProvider,
+} from "@forion/orbit-adapter-kit";
+import type { PrismaClient } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import {
   createHonchoProvider,
   HONCHO_PROVIDER_ID,

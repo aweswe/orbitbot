@@ -1,12 +1,12 @@
 import { createHash } from "node:crypto";
-import type { JobPublisher, SecretStore } from "@rakazo/adapter-kit";
-import { runContinueJob, SecretStoreUnavailableError } from "@rakazo/adapter-kit";
-import { inboundRoutineModelPin } from "@rakazo/adapters";
-import type { MessageBlock } from "@rakazo/contracts";
-import { escapePromptData, inboundRoutineBlock, messageBlockForArtifact } from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
-import { accountDeactivated, SpaceDeletionInProgressError } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+import type { JobPublisher, SecretStore } from "@forion/orbit-adapter-kit";
+import { runContinueJob, SecretStoreUnavailableError } from "@forion/orbit-adapter-kit";
+import { inboundRoutineModelPin } from "@forion/orbit-adapters";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import { escapePromptData, inboundRoutineBlock, messageBlockForArtifact } from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
+import { accountDeactivated, SpaceDeletionInProgressError } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import type { Context } from "hono";
 
 export const WEBHOOK_MAX_BODY_BYTES = 64 * 1024;

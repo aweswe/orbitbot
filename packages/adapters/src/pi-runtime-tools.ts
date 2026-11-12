@@ -9,10 +9,10 @@ import type {
   AgentToolExecutionResult,
   ConnectorTool,
   ModelCallObserver,
-} from "@rakazo/adapter-kit";
-import { DEFAULT_CONTEXT_STRATEGY } from "@rakazo/adapter-kit";
-import { FLEET_TOOL_NAMES } from "@rakazo/contracts";
-import { batchActions, humanizeToolName, redactSecrets } from "@rakazo/core";
+} from "@forion/orbit-adapter-kit";
+import { DEFAULT_CONTEXT_STRATEGY } from "@forion/orbit-adapter-kit";
+import { FLEET_TOOL_NAMES } from "@forion/orbit-contracts";
+import { batchActions, humanizeToolName, redactSecrets } from "@forion/orbit-core";
 import { MAX_APPROVAL_DETAIL_LENGTH } from "./approval-ask.js";
 import {
   isInternalTermination,

@@ -1,6 +1,6 @@
-import type { Routine } from "@rakazo/contracts";
-import type { RoutineDraft } from "@rakazo/core";
-import { defaultCronPreset, draftFromRoutine, emptyRoutineDraft } from "@rakazo/core";
+import type { Routine } from "@forion/orbit-contracts";
+import type { RoutineDraft } from "@forion/orbit-core";
+import { defaultCronPreset, draftFromRoutine, emptyRoutineDraft } from "@forion/orbit-core";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Alert, BackHandler, ScrollView, Text, View } from "react-native";

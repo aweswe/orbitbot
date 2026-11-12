@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { webDarkTokens, webLightTokens } from "@rakazo/ui-tokens";
+import { webDarkTokens, webLightTokens } from "@forion/orbit-ui-tokens";
 import { describe, expect, it } from "vitest";
 
 // index.html sets theme-color before any module loads, so it cannot import the
@@ -16,7 +16,7 @@ describe("index.html theme bootstrap", () => {
       `<meta name="theme-color" content="${webDarkTokens.background.toLowerCase()}" />`,
     );
     expect(script).toContain(
-      `theme === "light" ? "${webLightTokens.background.toLowerCase()}" : "${webDarkTokens.background.toLowerCase()}"`,
+      `mode === "light" ? "${webLightTokens.background.toLowerCase()}" : "${webDarkTokens.background.toLowerCase()}"`,
     );
   });
 
@@ -31,7 +31,11 @@ describe("index.html theme bootstrap", () => {
     ["Win32", 0, undefined],
     ["Linux x86_64", 0, undefined],
   ] as const)("flags macOS (%s, %i touch points) for its regular weight", (platform, touch, os) => {
-    const root = { dataset: {} as Record<string, string>, style: {} as Record<string, string> };
+    const root = {
+      dataset: {} as Record<string, string>,
+      style: {} as Record<string, string>,
+      classList: { add() {}, remove() {} },
+    };
     const run = new Function("document", "navigator", "localStorage", "matchMedia", script);
     run(
       { documentElement: root, querySelector: () => null },

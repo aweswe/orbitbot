@@ -1,10 +1,10 @@
 import { randomUUID } from "node:crypto";
-import type { SandboxProvider } from "@rakazo/adapter-kit";
-import type { ComputerCommand } from "@rakazo/contracts";
-import { COMPUTER_COMMAND_OUTPUT_MAX_CHARS } from "@rakazo/contracts";
-import { redactSecrets, sandboxCommandTimeoutMs } from "@rakazo/core";
-import { RunHistoryWriteError, releasePayment } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+import type { SandboxProvider } from "@forion/orbit-adapter-kit";
+import type { ComputerCommand } from "@forion/orbit-contracts";
+import { COMPUTER_COMMAND_OUTPUT_MAX_CHARS } from "@forion/orbit-contracts";
+import { redactSecrets, sandboxCommandTimeoutMs } from "@forion/orbit-core";
+import { RunHistoryWriteError, releasePayment } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { redactShellStreams } from "./agent-environment.js";
 import {
   resolveCodeFill,

@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
-import type { BotAvatarSet } from "@rakazo/contracts";
-import { ORGANIC_AVATAR_LOOKS } from "@rakazo/core";
+import type { BotAvatarSet } from "@forion/orbit-contracts";
+import { ORGANIC_AVATAR_LOOKS } from "@forion/orbit-core";
 import type { ReactNode } from "react";
 import { act } from "react";
 import type { Root } from "react-dom/client";
@@ -58,7 +58,7 @@ function button(name: string) {
 }
 
 async function typeName(value: string) {
-  const input = document.querySelector<HTMLInputElement>('input[placeholder="Name your Bot"]')!;
+  const input = document.querySelector<HTMLInputElement>('input[placeholder="Name your Orbit"]')!;
   await act(async () => {
     Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set?.call(input, value);
     input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -86,8 +86,11 @@ describe("CreateBotDialog", () => {
     const onCreate = vi.fn(async (_input: CreateBotDialogInput) => undefined);
     await render(onCreate);
     expect(document.querySelector('[role="tablist"]')).toBeNull();
+    // The default look is a cosmic avatar; choose an organic shape so this test
+    // exercises the account's organic avatar set and its preview family.
+    await click(button("Shape 2"));
     const family = Number(
-      document.querySelector(".rakazo-organic-avatar")?.getAttribute("data-shape-family"),
+      document.querySelector(".orbit-organic-avatar")?.getAttribute("data-shape-family"),
     );
     await typeName("Scout");
     await click(button("Create"));
@@ -96,20 +99,23 @@ describe("CreateBotDialog", () => {
     expect(onCreate.mock.lastCall?.[0]).not.toHaveProperty("id");
   });
 
-  it("sends the Rakazo preview id without an organic family", async () => {
+  it("sends the Orbit preview id without an organic family", async () => {
     const onCreate = vi.fn(async (_input: CreateBotDialogInput) => undefined);
     await render(onCreate, "rakazo");
+    // The default look is the Orbit planet avatar; pick a flat colour to exercise
+    // the logo-derived preview this test covers.
+    await click(button("Color #00C972"));
     await typeName("Scout");
     await click(button("Create"));
     const input = onCreate.mock.lastCall![0];
-    const preview = document.querySelector(".rakazo-logo-avatar")!;
+    const preview = document.querySelector(".orbit-logo-avatar")!;
     expect(input).toMatchObject({ name: "Scout" });
     expect(input).not.toHaveProperty("avatarFamily");
     expect(input.id).toMatch(/^c[a-z0-9]{24}$/);
     expect(input.color?.toUpperCase()).toBe(preview.getAttribute("data-color")?.toUpperCase());
   });
 
-  it("preserves an explicitly chosen Rakazo colour through a failed create and retry", async () => {
+  it("preserves an explicitly chosen Orbit colour through a failed create and retry", async () => {
     const onCreate = vi
       .fn(async (_input: CreateBotDialogInput) => undefined)
       .mockRejectedValueOnce(new Error("Try again"));
@@ -127,7 +133,7 @@ describe("CreateBotDialog", () => {
     await render(onCreate);
     await click(button("Shape 2"));
     await click(button("Color #00C972"));
-    const preview = document.querySelector(".rakazo-organic-avatar");
+    const preview = document.querySelector(".orbit-organic-avatar");
     const family = Number(preview?.getAttribute("data-shape-family"));
     await typeName("Scout");
     await click(button("Create"));
@@ -170,10 +176,11 @@ it("retains the preview identity and colour through rerenders and a retry", asyn
     .fn(async (_input: CreateBotDialogInput) => undefined)
     .mockRejectedValueOnce(new Error("Try again"));
   await render(onCreate, "rakazo");
-  const colour = document.querySelector(".rakazo-logo-avatar")!.getAttribute("data-color");
+  await click(button("Color #00C972"));
+  const colour = document.querySelector(".orbit-logo-avatar")!.getAttribute("data-color");
   await typeName("First name");
   await render(onCreate, "rakazo");
-  expect(document.querySelector(".rakazo-logo-avatar")!.getAttribute("data-color")).toBe(colour);
+  expect(document.querySelector(".orbit-logo-avatar")!.getAttribute("data-color")).toBe(colour);
   await click(button("Create"));
   const first = onCreate.mock.lastCall![0];
   await typeName("Retry name");

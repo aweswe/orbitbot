@@ -9,6 +9,7 @@ import {
   readlinkSync,
   rmSync,
   symlinkSync,
+  unlinkSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -17,7 +18,7 @@ import {
   DEFAULT_DESKTOP_ENV,
   ensureScreenCommand,
   TERMINAL_MENU_COMMAND,
-} from "@rakazo/core/node/desktop-runtime";
+} from "@forion/orbit-core/node/desktop-runtime";
 import type Docker from "dockerode";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
@@ -1279,7 +1280,11 @@ describe("graphical computer spec", () => {
           const gone = spawnSync("/bin/sleep", ["0"]);
           expect(gone.status).toBe(0);
           expect(spawnSync("kill", ["-0", String(gone.pid)]).status).not.toBe(0);
-          rmSync(liveLock, { force: true });
+          try {
+            unlinkSync(liveLock);
+          } catch {
+            // The crashed-state setup may not have created it.
+          }
           symlinkSync(`testhost-${gone.pid}`, liveLock);
           const cleared = launch();
           expect(cleared.status, cleared.error?.message ?? cleared.stderr).toBe(0);

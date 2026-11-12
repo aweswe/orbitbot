@@ -1,4 +1,4 @@
-import type { AdapterContext, MemorySnapshot, MemoryStore } from "@rakazo/adapter-kit";
+import type { AdapterContext, MemorySnapshot, MemoryStore } from "@forion/orbit-adapter-kit";
 import { describe, expect, it, vi } from "vitest";
 import { buildAgentMemoryPrompt, loadAgentMemoryContext } from "./memory-context.js";
 

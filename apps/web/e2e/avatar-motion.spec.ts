@@ -92,7 +92,7 @@ test("organic avatars hold still while idle and stop working motion while offscr
       const states = (mode: string) =>
         [
           ...svg.querySelectorAll(
-            `.rakazo-organic-avatar-body-${mode}, .rakazo-organic-avatar-eyes-${mode}`,
+            `.orbit-organic-avatar-body-${mode}, .orbit-organic-avatar-eyes-${mode}`,
           ),
         ].flatMap((element) =>
           element
@@ -103,7 +103,7 @@ test("organic avatars hold still while idle and stop working motion while offscr
       return {
         clockPaused: svg.animationsPaused(),
         morphing: ["idle", "working"].filter((mode) =>
-          svg.querySelector(`.rakazo-organic-avatar-body-${mode} animate`),
+          svg.querySelector(`.orbit-organic-avatar-body-${mode} animate`),
         ),
         idle: [...new Set(states("idle"))],
         working: [...new Set(states("working"))],
@@ -125,7 +125,7 @@ test("organic avatars hold still while idle and stop working motion while offscr
   // The working morph joins the running svg clock instead of restarting it, and fades in.
   const handoff = await avatar.evaluate(async (svg: SVGSVGElement) => {
     const body = (mode: string) =>
-      svg.querySelector<SVGPathElement>(`.rakazo-organic-avatar-body-${mode}`)!;
+      svg.querySelector<SVGPathElement>(`.orbit-organic-avatar-body-${mode}`)!;
     const before = svg.getCurrentTime();
     svg.parentElement!.querySelector("button")!.click();
     await new Promise((resolve) => setTimeout(resolve, 0));

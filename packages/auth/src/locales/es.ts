@@ -3,7 +3,7 @@ export const ES_MESSAGES: Record<string, string> = {
   "Hi there,": "Hola:",
   "Verify your Orbit email": "Verifica tu correo para Orbit",
   "Verify email": "Verificar correo",
-  "Then return to Orbit to sign in.": "Luego vuelve a Orbit para iniciar sesión.",
+  "Then return to Orbit to sign in.": "Luego vuelve an Orbit para iniciar sesión.",
   "This link expires in one hour. If you did not register, ignore this email.":
     "Este enlace vence en una hora. Si no te registraste, ignora este correo.",
   "Your Orbit sign-in code": "Tu código para iniciar sesión en Orbit",
@@ -23,7 +23,7 @@ export const ES_MESSAGES: Record<string, string> = {
   "Your Orbit confirmation code": "Tu código de confirmación de Orbit",
   "Enter this code in Orbit to confirm it's you:":
     "Introduce este código en Orbit para confirmar que eres tú:",
-  "Welcome to Orbit": "Te damos la bienvenida a Orbit",
+  "Welcome to Orbit": "Te damos la bienvenida an Orbit",
   "Thanks for signing up for Orbit.": "Gracias por registrarte en Orbit.",
   "Orbit also has apps for": "Orbit también tiene apps para",
   "Questions or ideas?": "¿Tienes preguntas o ideas?",
@@ -37,7 +37,7 @@ export const ES_MESSAGES: Record<string, string> = {
   Unsubscribe: "Cancelar suscripción",
   "Invite a friend": "Invita a un amigo",
   "Invite a friend to Orbit: they get {weeks} weeks free, and you earn a free month when they start a qualifying subscription with a new card.":
-    "Invita a un amigo a Orbit: recibe {weeks} semanas gratis y tú ganas un mes gratis cuando empiece una suscripción válida con una tarjeta nueva.",
+    "Invita a un amigo an Orbit: recibe {weeks} semanas gratis y tú ganas un mes gratis cuando empiece una suscripción válida con una tarjeta nueva.",
   "Open Orbit": "Abre Orbit",
   "and choose Invite friends for your link.": "y elige Invitar amigos para obtener tu enlace.",
   "Have any questions? Just reply to this email.":
@@ -63,7 +63,7 @@ export const ES_MESSAGES: Record<string, string> = {
   "If you did not submit a plugin, ignore this email.":
     "Si no enviaste ningún plugin, ignora este correo.",
   "{name} is in the Orbit marketplace": "{name} ya está en el marketplace de Orbit",
-  "Your Orbit plugin submission: {name}": "Tu envío de plugin a Orbit: {name}",
+  "Your Orbit plugin submission: {name}": "Tu envío de plugin an Orbit: {name}",
   "{name} is now listed in the Orbit plugin marketplace.":
     "{name} ya aparece en el marketplace de plugins de Orbit.",
   "We couldn't list {name} in the Orbit plugin marketplace.":

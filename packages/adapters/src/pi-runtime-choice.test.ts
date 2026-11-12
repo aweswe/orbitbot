@@ -1,4 +1,4 @@
-import type { AgentRuntimeEvent, ConnectorTool } from "@rakazo/adapter-kit";
+import type { AgentRuntimeEvent, ConnectorTool } from "@forion/orbit-adapter-kit";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const fakeAgentState = vi.hoisted(() => ({
@@ -44,6 +44,7 @@ vi.mock("@earendil-works/pi-agent-core", () => ({
 
 vi.mock("@earendil-works/pi-ai/providers/all", () => ({
   builtinModels: () => ({
+    setProvider: (provider: unknown) => provider,
     getModel: (_provider: string, modelId: string) =>
       modelId === "choice-pi-model" ? { provider: "test", id: modelId } : undefined,
     streamSimple: () => {

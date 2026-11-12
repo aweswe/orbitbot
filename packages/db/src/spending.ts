@@ -1,12 +1,12 @@
-import type { SpendingLimit, SpendingPayment, SpendingStatus } from "@rakazo/contracts";
+import type { SpendingLimit, SpendingPayment, SpendingStatus } from "@forion/orbit-contracts";
 import {
   MAX_SPENDING_LIMIT,
   SPENDING_CURRENCIES,
   SpendingLimitSchema,
   SpendingPeriodSchema,
-} from "@rakazo/contracts";
-import { spendingPeriodStart } from "@rakazo/core";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-contracts";
+import { spendingPeriodStart } from "@forion/orbit-core";
+import { getLogger } from "@forion/orbit-logging";
 import type { PrismaClient } from "./client.js";
 import { Prisma } from "./client.js";
 import { runAsSystem } from "./row-security.js";

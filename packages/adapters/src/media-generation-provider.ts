@@ -5,9 +5,9 @@ import type {
   MediaGenerationInput,
   MediaGenerationProvider,
   MediaVideoJob,
-} from "@rakazo/adapter-kit";
-import { MediaGenerationError } from "@rakazo/adapter-kit";
-import { ATTACHMENT_MAX_BYTES } from "@rakazo/contracts";
+} from "@forion/orbit-adapter-kit";
+import { MediaGenerationError } from "@forion/orbit-adapter-kit";
+import { ATTACHMENT_MAX_BYTES } from "@forion/orbit-contracts";
 import { z } from "zod";
 import { FAKE_VIDEO_BASE64 } from "./fake-media-assets.js";
 import type { ResolveHostname } from "./web-ssrf.js";
@@ -309,14 +309,19 @@ export class RequestyMediaGenerationProvider implements MediaGenerationProvider 
       throw new MediaGenerationError("provider_failure");
     }
 
-    const choices = data.choices as Array<{ message?: { role?: string; content?: unknown; images?: unknown } }> | undefined;
+    const choices = data.choices as
+      | Array<{ message?: { role?: string; content?: unknown; images?: unknown } }>
+      | undefined;
     const msg = choices?.[0]?.message;
     let imageUrl: string | undefined;
 
     // 1. Requesty gemini image format: message.images array
     if (Array.isArray(msg?.images)) {
       for (const item of msg.images) {
-        if (typeof item === "string" && (item.startsWith("data:image/") || item.startsWith("http"))) {
+        if (
+          typeof item === "string" &&
+          (item.startsWith("data:image/") || item.startsWith("http"))
+        ) {
           imageUrl = item;
           break;
         }

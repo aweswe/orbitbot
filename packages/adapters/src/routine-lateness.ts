@@ -1,4 +1,4 @@
-import { nextRoutineRunDateAcross } from "@rakazo/core";
+import { nextRoutineRunDateAcross } from "@forion/orbit-core";
 import { localDateTime } from "./current-time.js";
 import { routineTimerScheduledFor } from "./routine-coalescing.js";
 

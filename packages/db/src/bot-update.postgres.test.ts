@@ -2,8 +2,8 @@ import { Pool } from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { commitBotUpdate } from "./bot-update.js";
 import type { PrismaClient } from "./client.js";
-import { createDb } from "./client.js";
-import { installDbContext, runAsSystem, runAsTenant } from "./row-security.js";
+import { createDb, schemaFromConnectionString } from "./client.js";
+import { applyLocalContext, installDbContext, runAsSystem, runAsTenant } from "./row-security.js";
 
 const databaseUrl = process.env.DATABASE_URL;
 const describePostgres =
@@ -67,7 +67,7 @@ describePostgres("commitBotUpdate against a moving default avatar set (PostgreSQ
         data: {
           id: ids.userId,
           name: ids.userId,
-          email: `${ids.userId}@rakazo.test`,
+          email: `${ids.userId}@orbit.test`,
           emailVerified: false,
           botAvatarSet: "organic",
         },
@@ -139,7 +139,13 @@ describePostgres("commitBotUpdate against a moving default avatar set (PostgreSQ
    * their rows from a context-free connection, so the probe would lock nothing;
    * the settings the checkout applies stay on the client for its transaction.
    */
-  const barrierClient = (reason: string) => runAsSystem(reason, () => db.pool.connect());
+  const barrierClient = (reason: string) =>
+    runAsSystem(reason, async () => {
+      const client = await db.pool.connect();
+      await client.query("BEGIN");
+      await applyLocalContext(client, schemaFromConnectionString(databaseUrl!) ?? "");
+      return client;
+    });
 
   /** An operation set whose failures are handled at once and drained at cleanup. */
   function started() {
@@ -196,7 +202,6 @@ describePostgres("commitBotUpdate against a moving default avatar set (PostgreSQ
       await runAsSystem("test fixture", () =>
         prisma.user.update({ where: { id: ids.userId }, data: { botAvatarSet: "rakazo" } }),
       );
-      await holder.query("BEGIN");
       await holder.query("SELECT id FROM threads WHERE id = $1 FOR UPDATE", [ids.threadId]);
       const { rows: own } = await holder.query<{ pid: number }>("SELECT pg_backend_pid() AS pid");
       const deadline = performance.now() + BARRIER_POLL_BUDGET_MS;
@@ -235,7 +240,6 @@ describePostgres("commitBotUpdate against a moving default avatar set (PostgreSQ
       );
       // The bot row is held, so the restyle sits between its FOR SHARE read of the
       // default and its bot write, provably past the read.
-      await holder.query("BEGIN");
       await holder.query("SELECT id FROM bots WHERE id = $1 FOR UPDATE", [ids.botId]);
       const { rows: own } = await holder.query<{ pid: number }>("SELECT pg_backend_pid() AS pid");
       const deadline = performance.now() + BARRIER_POLL_BUDGET_MS;
@@ -272,9 +276,19 @@ describePostgres("commitBotUpdate against a moving default avatar set (PostgreSQ
     // the database contexts, so each leg runs as the job system would under the
     // runtime role; a context-free leg sees no routines to lock.
     const side = new Pool({ connectionString: databaseUrl, max: 4 });
-    installDbContext(side);
-    const routineWake = await runAsSystem("routine wake probe leg", () => side.connect());
-    const zoneSave = await runAsSystem("timezone save probe leg", () => side.connect());
+    installDbContext(side, { schema: schemaFromConnectionString(databaseUrl!) });
+    const routineWake = await runAsSystem("routine wake probe leg", async () => {
+      const client = await side.connect();
+      await client.query("BEGIN");
+      await applyLocalContext(client, schemaFromConnectionString(databaseUrl!) ?? "");
+      return client;
+    });
+    const zoneSave = await runAsSystem("timezone save probe leg", async () => {
+      const client = await side.connect();
+      await client.query("BEGIN");
+      await applyLocalContext(client, schemaFromConnectionString(databaseUrl!) ?? "");
+      return client;
+    });
     const monitor = await side.connect();
     const deadlocks = async () => {
       const { rows } = await monitor.query<{ deadlocks: string }>(
@@ -289,13 +303,11 @@ describePostgres("commitBotUpdate against a moving default avatar set (PostgreSQ
       const before = await deadlocks();
       // A routine wake holds its routine row and then inserts a task whose foreign
       // key takes a key-share on the bot's thread.
-      await routineWake.query("BEGIN");
       await routineWake.query("SELECT id FROM routines WHERE id = $1 FOR UPDATE", [ids.routineId]);
       const { rows: wakePid } = await routineWake.query<{ pid: number }>(
         "SELECT pg_backend_pid() AS pid",
       );
       // A timezone save holds the user row and then locks the routine to move it.
-      await zoneSave.query("BEGIN");
       await zoneSave.query('UPDATE "user" SET timezone = $1 WHERE id = $2', [
         "Europe/London",
         ids.userId,

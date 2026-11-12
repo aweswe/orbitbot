@@ -1,5 +1,17 @@
 import { randomUUID } from "node:crypto";
 import { isDeepStrictEqual } from "node:util";
+import type { SecretStore } from "@forion/orbit-adapter-kit";
+import { SecretStoreUnavailableError } from "@forion/orbit-adapter-kit";
+import {
+  isLocalhostOrLoopbackIp,
+  MCP_OAUTH_CLIENT_REQUIRED,
+  mcpOAuthEnvReferences,
+  parseMcpOAuthAuthorizationParams,
+} from "@forion/orbit-contracts";
+import { readBoundedResponseBytes } from "@forion/orbit-core";
+import type { Prisma, PrismaClient } from "@forion/orbit-db";
+import { availableInSpace, itemSecretIn, runAsSystem } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import type {
   OAuthClientProvider,
   OAuthDiscoveryState,
@@ -18,18 +30,6 @@ import type {
   OAuthClientMetadata,
   OAuthTokens,
 } from "@modelcontextprotocol/sdk/shared/auth.js";
-import type { SecretStore } from "@rakazo/adapter-kit";
-import { SecretStoreUnavailableError } from "@rakazo/adapter-kit";
-import {
-  isLocalhostOrLoopbackIp,
-  MCP_OAUTH_CLIENT_REQUIRED,
-  mcpOAuthEnvReferences,
-  parseMcpOAuthAuthorizationParams,
-} from "@rakazo/contracts";
-import { readBoundedResponseBytes } from "@rakazo/core";
-import type { Prisma, PrismaClient } from "@rakazo/db";
-import { availableInSpace, itemSecretIn, runAsSystem } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
 import { sanitizeConnectorError } from "./connector-safety.js";
 import { MCP_DYNAMIC_REGISTRATION_UNSUPPORTED, needsMcpOAuthClient } from "./mcp-server-health.js";
 import {
@@ -547,7 +547,7 @@ export class StoredMcpOAuthProvider implements OAuthClientProvider {
     const applicationType = hostname === "localhost" || hostname === "127.0.0.1" ? "native" : "web";
     return {
       redirect_uris: [redirectUri],
-      client_name: "Rakazo",
+      client_name: "Orbit",
       grant_types: ["authorization_code", "refresh_token"],
       response_types: ["code"],
       token_endpoint_auth_method: "none",

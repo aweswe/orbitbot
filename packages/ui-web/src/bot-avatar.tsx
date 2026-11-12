@@ -1,5 +1,5 @@
-import type { BotAvatarSet } from "@rakazo/contracts";
-import type { AvatarEyes, BotColorDef, LogoAvatarActivity } from "@rakazo/core";
+import type { BotAvatarSet } from "@forion/orbit-contracts";
+import type { AvatarEyes, BotColorDef, LogoAvatarActivity } from "@forion/orbit-core";
 import {
   ACTIVE_RUN_STATUSES,
   avatarEyeRects,
@@ -18,7 +18,7 @@ import {
   SHIPPED_BOT_AVATAR_SHAPES,
   SHIPPED_BOT_AVATAR_VIEWBOX,
   shippedBotAvatarShapePath,
-} from "@rakazo/core";
+} from "@forion/orbit-core";
 import type { ComponentProps, CSSProperties } from "react";
 import { memo, useEffect, useId, useMemo, useSyncExternalStore } from "react";
 import { useBotAvatarActivity } from "./bot-avatar-activity.js";
@@ -27,8 +27,8 @@ import { cn } from "./lib/utils.js";
 import { LogoAvatar } from "./logo-avatar.js";
 import { AstroAvatar, parseAstroAvatar } from "./orbit-astronaut-avatar.js";
 import { CelestialStarAvatar, parseStarAvatar } from "./orbit-celestial-stars.js";
-import { CosmicCreatureAvatar, parseCreatureAvatar } from "./orbit-space-creatures.js";
 import { OrbitPlanetAvatar, parsePlanetAvatar } from "./orbit-planet-avatar.js";
+import { CosmicCreatureAvatar, parseCreatureAvatar } from "./orbit-space-creatures.js";
 import "./styles.css";
 
 export type { BotColorDef };
@@ -297,7 +297,7 @@ export const BotAvatar = memo(function BotAvatar({
   );
 });
 
-/** Only live Rakazo consumers subscribe to public activity updates. */
+/** Only live Orbit consumers subscribe to public activity updates. */
 function LiveLogoAvatar({
   status,
   ...props
@@ -340,7 +340,7 @@ function OrganicAvatar({
       ref={ref}
       viewBox={ORGANIC_AVATAR_VIEWBOX}
       aria-hidden="true"
-      className={cn("rakazo-organic-avatar overflow-visible select-none", className)}
+      className={cn("orbit-organic-avatar overflow-visible select-none", className)}
       data-working={isWorking}
       data-paused={!visible}
       data-shape-family={seed % 10}
@@ -354,7 +354,7 @@ function OrganicAvatar({
       {(["idle", "working"] as const).map((mode) => (
         <path
           key={mode}
-          className={`rakazo-organic-avatar-body rakazo-organic-avatar-body-${mode}`}
+          className={`orbit-organic-avatar-body orbit-organic-avatar-body-${mode}`}
           d={shapeA}
           fill={color}
           style={
@@ -382,7 +382,7 @@ function OrganicAvatar({
         {(["idle", "working"] as const).map((mode) => (
           <g
             key={mode}
-            className={`rakazo-organic-avatar-eyes rakazo-organic-avatar-eyes-${mode} ${eyeFill(color)}`}
+            className={`orbit-organic-avatar-eyes orbit-organic-avatar-eyes-${mode} ${eyeFill(color)}`}
           >
             <BarEyes eyes={ORGANIC_AVATAR_EYES} />
           </g>
@@ -468,9 +468,7 @@ export function BotShapePreview({
 export function Wordmark({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      <span className="text-heading1 font-bold tracking-tight orbit-gradient-text">
-        Orion
-      </span>
+      <span className="text-heading1 font-bold tracking-tight orbit-gradient-text">Orbit</span>
     </div>
   );
 }

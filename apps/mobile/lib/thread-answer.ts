@@ -1,4 +1,4 @@
-import type { LoginFieldInput, RpcInput } from "@rakazo/contracts";
+import type { LoginFieldInput, RpcInput } from "@forion/orbit-contracts";
 import type { MobileMessage } from "./api";
 import { hapticSuccess } from "./haptics";
 

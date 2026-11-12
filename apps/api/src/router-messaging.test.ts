@@ -1,7 +1,7 @@
+import type { Actor } from "@forion/orbit-contracts";
+import type { PrismaClient } from "@forion/orbit-db";
 import type { InferRouterInitialContext } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
-import type { Actor } from "@rakazo/contracts";
-import type { PrismaClient } from "@rakazo/db";
 import { describe, expect, it, vi } from "vitest";
 import type { RouterDeps } from "./router.js";
 import { createRouter } from "./router.js";
@@ -281,7 +281,7 @@ function messagingDeps(
   const actor = {
     spaceId: "ws-1",
     userId: "user-1",
-    email: "user@rakazo.test",
+    email: "user@orbit.test",
     isDeploymentOwner: false,
   } satisfies Actor;
   return {

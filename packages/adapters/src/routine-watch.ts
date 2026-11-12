@@ -9,20 +9,20 @@ import type {
   PaymentWalletProvider,
   SandboxProvider,
   SecretStore,
-} from "@rakazo/adapter-kit";
-import { routineJobKey, routineWakeupJob } from "@rakazo/adapter-kit";
-import type { RoutineWatch, RoutineWatchState } from "@rakazo/contracts";
-import { RoutineWatchSchema, RoutineWatchStateSchema } from "@rakazo/contracts";
-import type { ActionApprovalRule } from "@rakazo/core";
-import { connectorKindFromToolName, redactSecrets, watchToolRefusal } from "@rakazo/core";
-import type { ComputerMode, PrismaClient, ThreadEvents } from "@rakazo/db";
+} from "@forion/orbit-adapter-kit";
+import { routineJobKey, routineWakeupJob } from "@forion/orbit-adapter-kit";
+import type { RoutineWatch, RoutineWatchState } from "@forion/orbit-contracts";
+import { RoutineWatchSchema, RoutineWatchStateSchema } from "@forion/orbit-contracts";
+import type { ActionApprovalRule } from "@forion/orbit-core";
+import { connectorKindFromToolName, redactSecrets, watchToolRefusal } from "@forion/orbit-core";
+import type { ComputerMode, PrismaClient, ThreadEvents } from "@forion/orbit-db";
 import {
   appendEventInTransaction,
   createThreadMessageInTransaction,
   listApprovalRules,
   parseComputerMode,
-} from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import { loadLoginPasswordRedactions, shellCommandEnvironment } from "./bot-secrets.js";
 import { scheduleComputerSleep } from "./computer-idle.js";
 import { ComputerBusyError, provisionComputer } from "./computer-lifecycle.js";

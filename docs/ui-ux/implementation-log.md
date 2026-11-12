@@ -52,9 +52,9 @@
 - [x] Retained inline SVG / Mermaid diagram engine support in `markdown.web.tsx`.
 
 ### Phase 6: Multi-Viewport & Multi-Theme Visual QA (Completed)
-- [x] Production web build succeeded (`pnpm --filter @rakazo/web build` passed with 0 errors in 14.86s).
+- [x] Production web build succeeded (`pnpm --filter @forion/orbit-web build` passed with 0 errors in 14.86s).
 - [x] Web TypeScript verification cleanly passed (`tsc --noEmit` exited with code 0).
-- [x] Fixed `BotAvatarValueSchema` in `@rakazo/contracts` to support Orbit avatar types (`orbit-planet`, `orbit-creature`, `orbit-star`, `orbit-astro`), resolving bot creation validation failures.
+- [x] Fixed `BotAvatarValueSchema` in `@forion/orbit-contracts` to support Orbit avatar types (`orbit-planet`, `orbit-creature`, `orbit-star`, `orbit-astro`), resolving bot creation validation failures.
 - [x] Both API and Web servers verified running and healthy:
   - Web UI: `http://127.0.0.1:5173`
   - API Server: `http://127.0.0.1:3100`
@@ -81,5 +81,5 @@
 - [x] Streamlined **Contextual Navigator Header** (`apps/web/src/pages/shell/sidebar-header.tsx`):
   - Mobile: Clean Orbit logo & title.
   - Desktop: Dedicated Navigator title avoiding duplicate logo with CommandRail.
-- [x] Full TypeScript typecheck verified (`pnpm --filter @rakazo/web check` passed with 0 errors).
-- [x] Production build verified (`pnpm --filter @rakazo/web build` completed with 0 errors).
+- [x] Full TypeScript typecheck verified (`pnpm --filter @forion/orbit-web check` passed with 0 errors).
+- [x] Production build verified (`pnpm --filter @forion/orbit-web build` completed with 0 errors).

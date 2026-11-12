@@ -8,9 +8,9 @@ import type {
   ComputerRef,
   PortableFile,
   ProcessEvent,
-} from "@rakazo/adapter-kit";
-import { boundedSandboxCommandTimeoutMs } from "@rakazo/core";
-import { COMPUTER_CACHE_ENV } from "@rakazo/core/node/desktop-runtime";
+} from "@forion/orbit-adapter-kit";
+import { boundedSandboxCommandTimeoutMs } from "@forion/orbit-core";
+import { COMPUTER_CACHE_ENV } from "@forion/orbit-core/node/desktop-runtime";
 import {
   normalizeWorkspacePath,
   shellQuote,
@@ -247,7 +247,7 @@ export class ExecComputer {
     try {
       const staged = await this.collect(
         computer,
-        ["bash", "-c", 'umask 077; cat > "$1"', "rakazo-export-list", listPath],
+        ["bash", "-c", 'umask 077; cat > "$1"', "orbit-export-list", listPath],
         context,
         1024 * 1024,
         Readable.from([list]),

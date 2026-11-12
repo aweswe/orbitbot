@@ -1,7 +1,11 @@
 import { mkdtemp, realpath, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { PortableFile, SandboxProvider, StreamedPortableFile } from "@rakazo/adapter-kit";
+import type {
+  PortableFile,
+  SandboxProvider,
+  StreamedPortableFile,
+} from "@forion/orbit-adapter-kit";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import {
   fakeBoatProvider as fakeBoat,

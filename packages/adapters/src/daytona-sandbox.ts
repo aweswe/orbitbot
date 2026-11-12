@@ -16,9 +16,9 @@ import type {
   ScreenRequest,
   ScreenSession,
   TerminalRequest,
-} from "@rakazo/adapter-kit";
-import { abortableDelay, boundedSandboxCommandTimeoutMs } from "@rakazo/core";
-import { getLogger } from "@rakazo/logging";
+} from "@forion/orbit-adapter-kit";
+import { abortableDelay, boundedSandboxCommandTimeoutMs } from "@forion/orbit-core";
+import { getLogger } from "@forion/orbit-logging";
 import { screenSessionKey } from "./computer-screens.js";
 import {
   normalizeWorkspacePath,

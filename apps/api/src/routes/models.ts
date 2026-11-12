@@ -1,5 +1,4 @@
-import { ORPCError } from "@orpc/server";
-import { SecretStoreUnavailableError } from "@rakazo/adapter-kit";
+import { SecretStoreUnavailableError } from "@forion/orbit-adapter-kit";
 import {
   compatibleEndpointPreset,
   listPiCatalog,
@@ -16,16 +15,16 @@ import {
   storedOpenAiCompatibleProbeHeaders,
   storedOpenAiCompatibleProbeKey,
   UNAVAILABLE_MODEL_FOR_AUTH_MESSAGE,
-} from "@rakazo/adapters";
-import type { ThinkingLevel } from "@rakazo/contracts";
+} from "@forion/orbit-adapters";
+import type { ThinkingLevel } from "@forion/orbit-contracts";
 import {
   backupChoiceKey,
   canonicalPiProviderId,
   OPENAI_COMPATIBLE_PROVIDER_ID,
   usableModelId,
-} from "@rakazo/contracts";
-import { clampCatalogThinkingLevel } from "@rakazo/core";
-import type { PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-contracts";
+import { clampCatalogThinkingLevel } from "@forion/orbit-core";
+import type { PrismaClient } from "@forion/orbit-db";
 import {
   appliedModelRole,
   comparePreferenceOrder,
@@ -42,7 +41,8 @@ import {
   updateModelRole,
   withTransactionRetry,
   writeModelRole,
-} from "@rakazo/db";
+} from "@forion/orbit-db";
+import { ORPCError } from "@orpc/server";
 import { mayUsePrivateEndpoint } from "../mcp-servers.js";
 import { firstModelConnectAnalytics } from "../model-connect-analytics.js";
 import {

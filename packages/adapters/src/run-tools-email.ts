@@ -1,7 +1,7 @@
 import { setTimeout as sleep } from "node:timers/promises";
-import { BOT_EMAIL_NAME_TAKEN, BotEmailNameSchema } from "@rakazo/contracts";
-import { attachmentComputerPath, redactSecrets } from "@rakazo/core";
-import { claimBotEmailName } from "@rakazo/db";
+import { BOT_EMAIL_NAME_TAKEN, BotEmailNameSchema } from "@forion/orbit-contracts";
+import { attachmentComputerPath, redactSecrets } from "@forion/orbit-core";
+import { claimBotEmailName } from "@forion/orbit-db";
 import { z } from "zod";
 import { redactConnectorPayload } from "./connector-safety.js";
 import type { RunContext } from "./run-context.js";

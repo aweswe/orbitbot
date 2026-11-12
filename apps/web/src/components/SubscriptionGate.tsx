@@ -1,6 +1,6 @@
+import type { BillingStatus, Me } from "@forion/orbit-contracts";
+import { Dialog, DialogContent } from "@forion/orbit-ui-web";
 import { useLingui } from "@lingui/react/macro";
-import type { BillingStatus, Me } from "@rakazo/contracts";
-import { Dialog, DialogContent } from "@rakazo/ui-web";
 import type { ReactNode } from "react";
 import { createContext, Suspense, useContext, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";

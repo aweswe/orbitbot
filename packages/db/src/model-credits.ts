@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { AgentUsage, BillingCreditPurchase } from "@rakazo/adapter-kit";
+import type { AgentUsage, BillingCreditPurchase } from "@forion/orbit-adapter-kit";
 import type { PrismaClient } from "./client.js";
 import type { Prisma } from "./generated/prisma/client.js";
 import type { CreditAllocation } from "./model-credit-lots.js";

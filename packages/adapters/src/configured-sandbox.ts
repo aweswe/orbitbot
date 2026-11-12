@@ -13,9 +13,9 @@ import type {
   TerminalRequest,
   WorkspaceDirectoryRequest,
   WorkspaceExportLimits,
-} from "@rakazo/adapter-kit";
-import type { PrismaClient } from "@rakazo/db";
-import { runAsSystem } from "@rakazo/db";
+} from "@forion/orbit-adapter-kit";
+import type { PrismaClient } from "@forion/orbit-db";
+import { runAsSystem } from "@forion/orbit-db";
 import { cancelComputerRunWork, probeBackgroundWork, providerKeepsHome } from "./computer-idle.js";
 import {
   computerProviderDescriptor,

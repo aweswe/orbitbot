@@ -1,12 +1,12 @@
-import type { AgentImportSetupItem, AgentImportSetupState } from "@rakazo/contracts";
+import type { AgentImportSetupItem, AgentImportSetupState } from "@forion/orbit-contracts";
 import {
   importSetupStateInput,
   isImportSetupComplete,
   isImportSetupDone,
   isImportSetupVerifiable,
   isRetiredImportSetup,
-} from "@rakazo/core";
-import { typeScale } from "@rakazo/ui-tokens";
+} from "@forion/orbit-core";
+import { typeScale } from "@forion/orbit-ui-tokens";
 import type { Href } from "expo-router";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";

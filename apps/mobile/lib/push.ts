@@ -1,4 +1,4 @@
-import { newClientId } from "@rakazo/core";
+import { newClientId } from "@forion/orbit-core";
 import Constants from "expo-constants";
 import { requireOptionalNativeModule } from "expo-modules-core";
 import * as Notifications from "expo-notifications";
@@ -47,7 +47,7 @@ export async function registerPushToken() {
       token,
       ...(Platform.OS === "android" &&
       nativeSession &&
-      requireOptionalNativeModule<{ supportsSenderAvatars?: boolean }>("RakazoNotifications")
+      requireOptionalNativeModule<{ supportsSenderAvatars?: boolean }>("OrbitNotifications")
         ?.supportsSenderAvatars
         ? { presentation: "android_sender" as const }
         : {}),
@@ -85,7 +85,7 @@ async function installationId() {
 }
 /** Builds without native call handling keep the account's ordinary push for incoming calls. */
 const nativeCalls = Boolean(
-  requireOptionalNativeModule<{ incomingState?: unknown }>("RakazoNotifications")?.incomingState,
+  requireOptionalNativeModule<{ incomingState?: unknown }>("OrbitNotifications")?.incomingState,
 );
 
 export async function registerCallPushToken(tokens: { expoToken?: string; voipToken?: string }) {

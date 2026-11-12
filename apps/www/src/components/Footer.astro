@@ -9,19 +9,7 @@ import {
   localeHomePath,
   type Locale,
 } from "../i18n/locales";
-import { HUB_CARDS } from "../alternatives";
-import { INTEGRATION_PLATFORMS_PATH } from "../integration-platforms/shared";
-import { SANDBOXES_PATH } from "../sandboxes";
-import { VOICE_PROVIDERS_PATH } from "../voice-providers/shared";
-import { getHomeCopy } from "../i18n/home";
-import type { HomeCopy } from "../i18n/home";
-import {
-  CHANGELOG_URL,
-  GITHUB_URL,
-  INBOX_ZERO_URL,
-  PLUGIN_SUBMIT_PATH,
-  SELF_HOST_GUIDE_PATH,
-} from "../site";
+import { DOCS_URL, FORION_URL } from "../site";
 import Logo from "./Logo.astro";
 
 type Props = {
@@ -30,20 +18,16 @@ type Props = {
   navLabel?: string;
   homeHref?: string;
   homeLabel?: string;
-  linkLabels?: HomeCopy["footer"]["links"];
+  linkLabels?: Record<string, string>;
 };
 
 const currentLocale: Locale = isLocale(Astro.currentLocale)
   ? Astro.currentLocale
   : (Astro.props.locale ?? DEFAULT_LOCALE);
-const localeCopy = getHomeCopy(currentLocale);
-
 const {
-  languagesLabel = localeCopy.footer.languagesLabel,
-  navLabel = localeCopy.footer.navLabel,
+  languagesLabel = "Language",
+  navLabel = "Footer",
   homeHref = localeHomePath(currentLocale),
-  homeLabel = localeCopy.nav.home,
-  linkLabels = localeCopy.footer.links,
 } = Astro.props;
 
 const currentPath = Astro.url.pathname.replace(/\/+$/, "") || "/";
@@ -52,38 +36,26 @@ function isCurrentPage(href: string): boolean {
   return (href.replace(/\/+$/, "") || "/") === currentPath;
 }
 
-type FooterLink = { href: string; label: string; external?: boolean };
+type FooterLink = { href: string; label: string };
 
 const columns: Array<{ heading: string; links: FooterLink[] }> = [
   {
-    heading: linkLabels.product,
+    heading: "Product",
     links: [
-      { href: "/download/", label: linkLabels.download },
-      { href: SELF_HOST_GUIDE_PATH, label: linkLabels.docs },
-      { href: SANDBOXES_PATH, label: linkLabels.sandboxes },
-      { href: INTEGRATION_PLATFORMS_PATH, label: linkLabels.integrationPlatforms },
-      { href: VOICE_PROVIDERS_PATH, label: linkLabels.voiceProviders },
-      { href: PLUGIN_SUBMIT_PATH, label: linkLabels.submitPlugin },
-      { href: CHANGELOG_URL, label: linkLabels.changelog, external: true },
-      { href: GITHUB_URL, label: "GitHub", external: true },
+      { href: "/download/", label: "Download" },
+      { href: DOCS_URL, label: "Docs" },
+      { href: "/pricing/", label: "Pricing" },
+      { href: "/blog/", label: "Blog" },
     ],
   },
   {
-    heading: linkLabels.alternatives,
+    heading: "Company",
     links: [
-      ...HUB_CARDS.map((card) => ({ href: card.href, label: card.name })),
-      { href: "/alternatives/", label: linkLabels.all },
-    ],
-  },
-  {
-    heading: linkLabels.company,
-    links: [
-      { href: "/blog/", label: linkLabels.blog },
-      { href: "/about/", label: linkLabels.about },
-      { href: "/brand/", label: linkLabels.brand },
-      { href: "/support/", label: linkLabels.support },
-      { href: "/privacy/", label: linkLabels.privacy },
-      { href: "/terms/", label: linkLabels.terms },
+      { href: "/about/", label: "About" },
+      { href: "/brand/", label: "Brand" },
+      { href: "/support/", label: "Support" },
+      { href: "/privacy/", label: "Privacy" },
+      { href: "/terms/", label: "Terms" },
     ],
   },
 ];
@@ -91,7 +63,7 @@ const columns: Array<{ heading: string; links: FooterLink[] }> = [
 
 <footer class="site-footer">
   <div class="site-footer__brand">
-    <Logo href={homeHref} label={homeLabel} />
+    <Logo href={homeHref} label="Orbit home" />
     <nav class="site-footer__languages" aria-label={languagesLabel}>
       <details class="language-menu">
         <summary>
@@ -118,8 +90,8 @@ const columns: Array<{ heading: string; links: FooterLink[] }> = [
       </details>
     </nav>
     <span class="site-footer__legal">
-      <span>© 2026 <a href={INBOX_ZERO_URL} target="_blank" rel="noopener">Inbox Zero Inc.</a></span>
-      <span>Apache-2.0</span>
+      <span>© 2026 <a href={FORION_URL} target="_blank" rel="noopener">Forion</a></span>
+      <span>Orbit Bot</span>
     </span>
   </div>
   <nav class="site-footer__columns" aria-label={navLabel}>
@@ -130,11 +102,7 @@ const columns: Array<{ heading: string; links: FooterLink[] }> = [
           <ul>
             {column.links.map((link) => (
               <li>
-                <a
-                  href={link.href}
-                  aria-current={!link.external && isCurrentPage(link.href) ? "page" : undefined}
-                  {...(link.external ? { target: "_blank", rel: "noopener" } : {})}
-                >
+                <a href={link.href} aria-current={isCurrentPage(link.href) ? "page" : undefined}>
                   {link.label}
                 </a>
               </li>

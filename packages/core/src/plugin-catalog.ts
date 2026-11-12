@@ -1,5 +1,5 @@
-import type { PluginMarketplaceEntry, PluginPart } from "@rakazo/contracts";
-import { PluginPartSchema } from "@rakazo/contracts";
+import type { PluginMarketplaceEntry, PluginPart } from "@forion/orbit-contracts";
+import { PluginPartSchema } from "@forion/orbit-contracts";
 
 export const PLUGIN_CATEGORIES = [
   "productivity",

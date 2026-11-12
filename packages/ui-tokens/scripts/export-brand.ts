@@ -5,14 +5,13 @@ import { darkTokens } from "../src/index.ts";
 
 const root = new URL("../../../", import.meta.url);
 const path = (name: string) => fileURLToPath(new URL(name, root));
-const source = path("packages/ui-tokens/assets/Rakazo.icon/Assets/orange-bot.png");
+const source = path("packages/ui-tokens/assets/Orbit.icon/Assets/orbit-icon.png");
 
-// Match the Icon Composer portrait: the character sits 90 points below center.
+// The app icon is full-bleed; center it at native size.
 const portrait = await sharp(source).resize(1024, 1024).png().toBuffer();
 async function framed(background: string) {
-  return sharp({ create: { width: 1024, height: 1114, channels: 4, background } })
-    .composite([{ input: portrait, top: 90, left: 0 }])
-    .extract({ left: 0, top: 0, width: 1024, height: 1024 })
+  return sharp({ create: { width: 1024, height: 1024, channels: 4, background } })
+    .composite([{ input: portrait, top: 0, left: 0 }])
     .png()
     .toBuffer();
 }

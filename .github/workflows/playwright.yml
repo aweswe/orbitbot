@@ -100,7 +100,7 @@ jobs:
         timeout-minutes: 5
         # Skip --with-deps: GitHub ubuntu-latest already has Chromium's OS libraries,
         # and apt-get against azure.archive.ubuntu.com can stall until the job timeout.
-        run: pnpm --filter @rakazo/web exec playwright install chromium
+        run: pnpm --filter @forion/orbit-web exec playwright install chromium
       - name: Install CJK fonts
         if: steps.areas.outputs.e2e != 'false'
         timeout-minutes: 6
@@ -197,7 +197,7 @@ jobs:
       - name: Install Chromium
         if: steps.areas.outputs.e2e != 'false'
         timeout-minutes: 5
-        run: pnpm --filter @rakazo/web exec playwright install chromium
+        run: pnpm --filter @forion/orbit-web exec playwright install chromium
       - name: Install agent-browser
         if: steps.areas.outputs.e2e != 'false' && matrix.agent_browser
         timeout-minutes: 2
@@ -256,11 +256,11 @@ jobs:
       - name: Install Chromium
         if: steps.areas.outputs.e2e != 'false'
         timeout-minutes: 5
-        run: pnpm --filter @rakazo/www exec playwright install chromium
+        run: pnpm --filter @forion/orbit-www exec playwright install chromium
       - name: Capture marketing homepage screenshots
         if: steps.areas.outputs.e2e != 'false'
         id: www_e2e
-        run: pnpm --filter @rakazo/www e2e
+        run: pnpm --filter @forion/orbit-www e2e
       - name: Upload homepage screenshots
         if: always() && steps.areas.outputs.e2e != 'false'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

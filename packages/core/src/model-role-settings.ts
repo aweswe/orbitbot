@@ -3,8 +3,8 @@ import type {
   ModelRoleChoice,
   ModelRoleSettings,
   ModelRoleView,
-} from "@rakazo/contracts";
-import { modelRoleChoiceKey } from "@rakazo/contracts";
+} from "@forion/orbit-contracts";
+import { modelRoleChoiceKey } from "@forion/orbit-contracts";
 
 export interface ModelRoleTransport {
   load(): Promise<ModelRoleView>;

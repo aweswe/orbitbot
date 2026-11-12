@@ -1,0 +1,38 @@
+name: licence-compliance
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: licence-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  compliance:
+    name: Licence and provenance
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+          # The provenance inventory reads the local import commit.
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup-workspace
+
+      # Pull requests report warnings but only hard errors fail. Release tags run the stricter
+      # mode after the ordinary check so a blocked font or unresolved policy cannot ship silently.
+      - name: Check licence compliance
+        run: node scripts/licence-compliance.mjs --ci
+
+      - name: Check release blockers
+        if: startsWith(github.ref, 'refs/tags/')
+        run: node scripts/licence-compliance.mjs --release

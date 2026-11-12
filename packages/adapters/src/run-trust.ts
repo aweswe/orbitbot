@@ -1,13 +1,13 @@
-import type { MessageBlock } from "@rakazo/contracts";
-import type { ActionApprovalRule } from "@rakazo/core";
+import type { MessageBlock } from "@forion/orbit-contracts";
+import type { ActionApprovalRule } from "@forion/orbit-core";
 import {
   connectorKindFromToolName,
   inboundRoutinePrompts,
   SITE_SENDING_TOOLS,
   siteAlwaysAllowed,
-} from "@rakazo/core";
-import { sitesInText, urlSite } from "@rakazo/core/egress";
-import { findAutoReviewPreference, listApprovalRules, storedBatchActions } from "@rakazo/db";
+} from "@forion/orbit-core";
+import { sitesInText, urlSite } from "@forion/orbit-core/egress";
+import { findAutoReviewPreference, listApprovalRules, storedBatchActions } from "@forion/orbit-db";
 import { boundDirectApprovalDetails, catalogApprovalDetails } from "./approval-effect.js";
 import type { ExecutorDeps } from "./executor-deps.js";
 import type { EffectiveModelRole } from "./model-roles.js";

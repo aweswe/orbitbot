@@ -1,7 +1,7 @@
-import type { MessagingInboundMessage } from "@rakazo/adapter-kit";
-import { toTeamChatInbound } from "@rakazo/adapters";
-import { SpaceDeletionInProgressError } from "@rakazo/db";
-import { getLogger } from "@rakazo/logging";
+import type { MessagingInboundMessage } from "@forion/orbit-adapter-kit";
+import { toTeamChatInbound } from "@forion/orbit-adapters";
+import { SpaceDeletionInProgressError } from "@forion/orbit-db";
+import { getLogger } from "@forion/orbit-logging";
 import type { MessagingInboundDeps } from "./messaging-inbound.js";
 import { teamChatSenderCanWakeMessageRoutines, wakeMessageRoutines } from "./messaging-inbound.js";
 import type { TeamChatBridge } from "./team-chat-bridge.js";
