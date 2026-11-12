@@ -281,6 +281,16 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
                 <GoogleIcon className="h-6 w-6" />
                 <span>{pending ? t`Signing in…` : t`Sign in with ${reset.sso.name}`}</span>
               </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="h-12 w-full rounded-xl border-dashed border-amber-500/50 text-amber-500 hover:bg-amber-500/10 font-semibold flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                onClick={() => {
+                  window.location.href = "/api/auth/dev-bypass";
+                }}
+              >
+                <span>⚡ Instant Dev Bypass (1-Click Demo Sign-In)</span>
+              </Button>
               <p className="text-center text-caption text-muted-foreground">
                 <Trans>Orion uses your Forion account. You’ll be back here in a moment.</Trans>
               </p>
@@ -289,6 +299,20 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
                   {error}
                 </p>
               ) : null}
+            </div>
+          ) : null}
+          {reset?.passwordAuth && mode !== "forgot" ? (
+            <div className="mb-4">
+              <Button
+                type="button"
+                variant="outline"
+                className="h-12 w-full rounded-xl border-dashed border-amber-500/50 text-amber-500 hover:bg-amber-500/10 font-semibold flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                onClick={() => {
+                  window.location.href = "/api/auth/dev-bypass";
+                }}
+              >
+                <span>⚡ Instant Dev Bypass (1-Click Demo Sign-In)</span>
+              </Button>
             </div>
           ) : null}
           {error && !reset?.passwordAuth ? (

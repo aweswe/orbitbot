@@ -1,6 +1,6 @@
 import type { ChildProcessWithoutNullStreams } from "node:child_process";
 import { spawn } from "node:child_process";
-import koffi from "koffi";
+import { koffi } from "./koffi-lazy.js";
 
 export interface NativeProcessTree {
   alive(): boolean;
@@ -10,8 +10,8 @@ export interface NativeProcessTree {
 
 let windowsApi: ReturnType<typeof loadWindowsApi> | undefined;
 function loadWindowsApi() {
-  const library = koffi.load("kernel32.dll");
-  const limits = koffi.struct("RakazoJobLimits", {
+  const library = koffi().load("kernel32.dll");
+  const limits = koffi().struct("RakazoJobLimits", {
     PerProcessUserTimeLimit: "int64_t",
     PerJobUserTimeLimit: "int64_t",
     LimitFlags: "uint32_t",
@@ -22,7 +22,7 @@ function loadWindowsApi() {
     PriorityClass: "uint32_t",
     SchedulingClass: "uint32_t",
   });
-  const io = koffi.struct("RakazoJobIoCounters", {
+  const io = koffi().struct("RakazoJobIoCounters", {
     ReadOperationCount: "uint64_t",
     WriteOperationCount: "uint64_t",
     OtherOperationCount: "uint64_t",
@@ -30,7 +30,7 @@ function loadWindowsApi() {
     WriteTransferCount: "uint64_t",
     OtherTransferCount: "uint64_t",
   });
-  const extended = koffi.struct("RakazoJobExtendedLimits", {
+  const extended = koffi().struct("RakazoJobExtendedLimits", {
     BasicLimitInformation: limits,
     IoInfo: io,
     ProcessMemoryLimit: "size_t",
@@ -48,9 +48,9 @@ function loadWindowsApi() {
     ),
     terminate: library.func("int __stdcall TerminateJobObject(void *, uint32_t)"),
     close: library.func("int __stdcall CloseHandle(void *)"),
-    size: koffi.sizeof(extended),
+    size: koffi().sizeof(extended),
     flagsOffset:
-      koffi.offsetof(extended, "BasicLimitInformation") + koffi.offsetof(limits, "LimitFlags"),
+      koffi().offsetof(extended, "BasicLimitInformation") + koffi().offsetof(limits, "LimitFlags"),
   };
 }
 
