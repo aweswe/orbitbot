@@ -22,14 +22,27 @@ export function parseAstroAvatar(rawColor: string): { index: number; bgColor: st
 const ASTRONAUT_SVGS = [
   // 0 — Classic visor astronaut
   (color: string) => (
-    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-full">
+    <svg
+      viewBox="0 0 36 36"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-full w-full"
+    >
       <circle cx="18" cy="18" r="18" fill={color} />
       {/* Helmet */}
       <ellipse cx="18" cy="16" rx="9" ry="10" fill="#e8eaf6" stroke="#fff" strokeWidth="1" />
       {/* Visor */}
       <ellipse cx="18" cy="17" rx="6" ry="5" fill="#1a237e" fillOpacity="0.85" />
       {/* Visor shine */}
-      <ellipse cx="15.5" cy="14.5" rx="1.5" ry="1" fill="white" fillOpacity="0.5" transform="rotate(-20 15.5 14.5)" />
+      <ellipse
+        cx="15.5"
+        cy="14.5"
+        rx="1.5"
+        ry="1"
+        fill="white"
+        fillOpacity="0.5"
+        transform="rotate(-20 15.5 14.5)"
+      />
       {/* Suit body */}
       <rect x="12" y="25" width="12" height="7" rx="3" fill="#e8eaf6" />
       {/* Suit arms */}
@@ -46,7 +59,12 @@ const ASTRONAUT_SVGS = [
   ),
   // 1 — Spacewalking astronaut
   (color: string) => (
-    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-full">
+    <svg
+      viewBox="0 0 36 36"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-full w-full"
+    >
       <circle cx="18" cy="18" r="18" fill={color} />
       {/* Helmet */}
       <circle cx="18" cy="14" r="8" fill="#e8eaf6" stroke="#c5cae9" strokeWidth="0.8" />
@@ -57,22 +75,59 @@ const ASTRONAUT_SVGS = [
       <circle cx="20" cy="11" r="0.4" fill="white" fillOpacity="0.6" />
       <circle cx="19" cy="15" r="0.3" fill="white" fillOpacity="0.5" />
       {/* Visor shine */}
-      <ellipse cx="15" cy="12" rx="1.8" ry="1" fill="white" fillOpacity="0.3" transform="rotate(-30 15 12)" />
+      <ellipse
+        cx="15"
+        cy="12"
+        rx="1.8"
+        ry="1"
+        fill="white"
+        fillOpacity="0.3"
+        transform="rotate(-30 15 12)"
+      />
       {/* Suit */}
       <rect x="11" y="21" width="14" height="10" rx="4" fill="#e8eaf6" />
       {/* Arm extended */}
-      <rect x="3" y="22" width="8" height="3.5" rx="1.75" fill="#e8eaf6" transform="rotate(-15 3 22)" />
-      <rect x="25" y="21" width="8" height="3.5" rx="1.75" fill="#e8eaf6" transform="rotate(15 25 21)" />
+      <rect
+        x="3"
+        y="22"
+        width="8"
+        height="3.5"
+        rx="1.75"
+        fill="#e8eaf6"
+        transform="rotate(-15 3 22)"
+      />
+      <rect
+        x="25"
+        y="21"
+        width="8"
+        height="3.5"
+        rx="1.75"
+        fill="#e8eaf6"
+        transform="rotate(15 25 21)"
+      />
       {/* Backpack */}
       <rect x="22" y="22" width="4" height="5" rx="1" fill="#9fa8da" />
       {/* Orbit logo on chest */}
-      <circle cx="18" cy="26" r="2.5" fill="none" stroke={color} strokeOpacity="0.7" strokeWidth="0.8" />
+      <circle
+        cx="18"
+        cy="26"
+        r="2.5"
+        fill="none"
+        stroke={color}
+        strokeOpacity="0.7"
+        strokeWidth="0.8"
+      />
       <circle cx="18" cy="26" r="1" fill={color} fillOpacity="0.7" />
     </svg>
   ),
   // 2 — Floating astronaut with helmet stars
   (color: string) => (
-    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-full">
+    <svg
+      viewBox="0 0 36 36"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-full w-full"
+    >
       <circle cx="18" cy="18" r="18" fill={color} />
       {/* Suit body (rounded, puffy) */}
       <ellipse cx="18" cy="24" rx="8" ry="7" fill="#eceff1" />
@@ -84,7 +139,13 @@ const ASTRONAUT_SVGS = [
       <circle cx="16" cy="13" r="0.8" fill="white" />
       <circle cx="20" cy="13" r="0.8" fill="white" />
       {/* Smile */}
-      <path d="M16 15.5 Q18 17 20 15.5" stroke="white" strokeWidth="0.6" strokeLinecap="round" fill="none" />
+      <path
+        d="M16 15.5 Q18 17 20 15.5"
+        stroke="white"
+        strokeWidth="0.6"
+        strokeLinecap="round"
+        fill="none"
+      />
       {/* Arms */}
       <ellipse cx="10" cy="23" rx="2.5" ry="4" fill="#eceff1" transform="rotate(-20 10 23)" />
       <ellipse cx="26" cy="23" rx="2.5" ry="4" fill="#eceff1" transform="rotate(20 26 23)" />
@@ -99,7 +160,12 @@ const ASTRONAUT_SVGS = [
   ),
   // 3 — Alien astronaut / cosmonaut
   (color: string) => (
-    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-full">
+    <svg
+      viewBox="0 0 36 36"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-full w-full"
+    >
       <circle cx="18" cy="18" r="18" fill={color} />
       {/* Helmet big bubble */}
       <circle cx="18" cy="14" r="9" fill="#e3f2fd" stroke="#90caf9" strokeWidth="0.8" />
@@ -112,11 +178,33 @@ const ASTRONAUT_SVGS = [
       <circle cx="14.8" cy="12.2" r="0.6" fill="white" />
       <circle cx="19.8" cy="12.2" r="0.6" fill="white" />
       {/* Smile */}
-      <path d="M15 17 Q18 19 21 17" stroke="#388e3c" strokeWidth="0.8" strokeLinecap="round" fill="none" />
+      <path
+        d="M15 17 Q18 19 21 17"
+        stroke="#388e3c"
+        strokeWidth="0.8"
+        strokeLinecap="round"
+        fill="none"
+      />
       {/* Antennae */}
-      <line x1="15" y1="8" x2="13" y2="4" stroke="#90caf9" strokeWidth="0.8" strokeLinecap="round" />
+      <line
+        x1="15"
+        y1="8"
+        x2="13"
+        y2="4"
+        stroke="#90caf9"
+        strokeWidth="0.8"
+        strokeLinecap="round"
+      />
       <circle cx="13" cy="3.5" r="1" fill="#42a5f5" />
-      <line x1="21" y1="8" x2="23" y2="4" stroke="#90caf9" strokeWidth="0.8" strokeLinecap="round" />
+      <line
+        x1="21"
+        y1="8"
+        x2="23"
+        y2="4"
+        stroke="#90caf9"
+        strokeWidth="0.8"
+        strokeLinecap="round"
+      />
       <circle cx="23" cy="3.5" r="1" fill="#42a5f5" />
       {/* Suit body */}
       <rect x="12" y="22" width="12" height="10" rx="3" fill="#e3f2fd" />
@@ -126,7 +214,12 @@ const ASTRONAUT_SVGS = [
   ),
   // 4 — Rocket / mission specialist
   (color: string) => (
-    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-full">
+    <svg
+      viewBox="0 0 36 36"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-full w-full"
+    >
       <circle cx="18" cy="18" r="18" fill={color} />
       {/* Rocket body */}
       <path d="M18 4 C14 8 12 14 12 20 L18 23 L24 20 C24 14 22 8 18 4Z" fill="#eceff1" />
@@ -138,7 +231,13 @@ const ASTRONAUT_SVGS = [
       <circle cx="18" cy="14" r="2" fill="#ffe0b2" />
       <circle cx="17" cy="14" r="0.5" fill="#5d4037" />
       <circle cx="19" cy="14" r="0.5" fill="#5d4037" />
-      <path d="M17 15.5 Q18 16.5 19 15.5" stroke="#795548" strokeWidth="0.5" fill="none" strokeLinecap="round" />
+      <path
+        d="M17 15.5 Q18 16.5 19 15.5"
+        stroke="#795548"
+        strokeWidth="0.5"
+        fill="none"
+        strokeLinecap="round"
+      />
       {/* Fins */}
       <path d="M12 20 L8 26 L12 24 Z" fill="#ef5350" />
       <path d="M24 20 L28 26 L24 24 Z" fill="#ef5350" />
@@ -154,7 +253,12 @@ const ASTRONAUT_SVGS = [
   ),
   // 5 — Space station / satellite robot
   (color: string) => (
-    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-full">
+    <svg
+      viewBox="0 0 36 36"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-full w-full"
+    >
       <circle cx="18" cy="18" r="18" fill={color} />
       {/* Robot body */}
       <rect x="11" y="14" width="14" height="14" rx="3" fill="#b0bec5" />
@@ -196,7 +300,13 @@ export interface AstroAvatarProps {
   className?: string;
 }
 
-export function AstroAvatar({ index, bgColor, size = 36, isWorking = false, className }: AstroAvatarProps) {
+export function AstroAvatar({
+  index,
+  bgColor,
+  size = 36,
+  isWorking = false,
+  className,
+}: AstroAvatarProps) {
   const SvgFn = ASTRONAUT_SVGS[index % ORBIT_ASTRONAUT_COUNT];
   return (
     <div
@@ -207,7 +317,9 @@ export function AstroAvatar({ index, bgColor, size = 36, isWorking = false, clas
       <div
         className={cn(
           "overflow-hidden rounded-full transition-transform duration-300",
-          isWorking ? "animate-pulse scale-[1.04] motion-reduce:animate-none" : "hover:scale-[1.03]",
+          isWorking
+            ? "animate-pulse scale-[1.04] motion-reduce:animate-none"
+            : "hover:scale-[1.03]",
         )}
         style={{
           width: size,
@@ -228,7 +340,9 @@ export function AstroAvatar({ index, bgColor, size = 36, isWorking = false, clas
           aria-hidden="true"
         >
           <circle
-            cx="24" cy="24" r="22"
+            cx="24"
+            cy="24"
+            r="22"
             className="stroke-status-working"
             strokeWidth="3.2"
             strokeLinecap="round"
@@ -239,4 +353,3 @@ export function AstroAvatar({ index, bgColor, size = 36, isWorking = false, clas
     </div>
   );
 }
-

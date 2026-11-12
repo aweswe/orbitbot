@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import { Check, Type } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export interface OrbitFontOption {
   id: string;

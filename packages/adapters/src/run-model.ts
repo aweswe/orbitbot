@@ -143,6 +143,7 @@ function assertCompatibleModelEnabled(
 export async function modelCreditBillingEnabled(
   deps: Pick<ExecutorDeps, "prisma" | "billingEnabled">,
 ): Promise<boolean> {
+  if (process.env.ORBIT_BILLING_ENABLED === "true") return true;
   if (deps.billingEnabled !== undefined) return deps.billingEnabled;
   return (
     (

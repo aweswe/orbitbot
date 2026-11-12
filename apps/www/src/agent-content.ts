@@ -5,6 +5,7 @@ import {
   GITHUB_URL,
   IOS_APP_URL,
   SITE_URL,
+  PLUGIN_SUBMISSIONS_URL,
 } from "./site";
 // Relative source path: the edge middleware bundles this file and cannot resolve workspace packages.
 import { ANDROID_APP_STORE_URL } from "../../../packages/contracts/src/client-build.js";
@@ -160,6 +161,30 @@ The requested Orbit page does not exist.
 - [Documentation](${DOCS_URL})
 `;
 
+export const PLUGIN_SUBMIT_MARKDOWN = `# Submit a plugin to Orbit
+
+List a plugin in the Orbit marketplace. We review every submission and email the result.
+
+The plugin must be a public GitHub repository with a plugin manifest (\`plugin.json\` following [Agent Plugins](https://agent-plugins.org), \`.cursor-plugin/plugin.json\`, or \`.grok-plugin/plugin.json\`) and skills, a hosted MCP server, or both.
+
+[Build a plugin](${DOCS_URL}) covers configuration, testing, and marketplace submission.
+
+## Submit with the API
+
+\`POST ${PLUGIN_SUBMISSIONS_URL}\` with a JSON body. No account or key is needed.
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| \`email\` | Yes | Where we send the review result |
+| \`name\` | Yes | Plugin name, up to 80 characters |
+| \`website\` | No | https URL |
+| \`logo\` | Yes | https URL of a square SVG or PNG |
+| \`source\` | Yes | Public GitHub repository URL; add \`/tree/main/<folder>\` for a plugin in a folder |
+| \`description\` | Yes | What the plugin does, up to 2000 characters |
+| \`testing\` | Yes | How to try it in Orbit, up to 4000 characters. Never include real credentials |
+| \`tested\` | Yes | \`true\`: you tested the plugin in Orbit |
+`;
+
 const MARKDOWN_DOCUMENTS = new Map<string, string>([
   ["/", HOME_MARKDOWN],
   ["/about", ABOUT_MARKDOWN],
@@ -169,6 +194,7 @@ const MARKDOWN_DOCUMENTS = new Map<string, string>([
   ["/privacy", PRIVACY_MARKDOWN],
   ["/support", SUPPORT_MARKDOWN],
   ["/terms", TERMS_MARKDOWN],
+  ["/plugins/submit", PLUGIN_SUBMIT_MARKDOWN],
 ]);
 
 type MediaPreference = {

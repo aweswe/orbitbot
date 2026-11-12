@@ -49,5 +49,7 @@ playwright-report-www
 
 # Downloaded embedded computer screen SDK files
 .tools/
+.gradle/
+**/.gradle/
 apps/web/public/computer-screen/*.js
 apps/web/public/computer-screen/sdk/

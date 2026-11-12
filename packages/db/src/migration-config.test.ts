@@ -6,10 +6,8 @@ import {
   requireMigrationUrl,
 } from "./migration-config.js";
 
-const clone =
-  "postgresql://phase7_owner:secret-one@127.0.0.1:55440/phase7_orbit?schema=orbit_bot";
-const app =
-  "postgresql://phase7_app:secret-two@127.0.0.1:55440/phase7_orbit?schema=orbit_bot";
+const clone = "postgresql://phase7_owner:secret-one@127.0.0.1:55440/phase7_orbit?schema=orbit_bot";
+const app = "postgresql://phase7_app:secret-two@127.0.0.1:55440/phase7_orbit?schema=orbit_bot";
 
 describe("requireMigrationUrl", () => {
   it("requires an explicit DATABASE_MIGRATION_URL", () => {
@@ -48,8 +46,7 @@ describe("requireMigrationUrl", () => {
     ).toThrow(/schema=orbit_bot/);
     expect(() =>
       requireMigrationUrl({
-        DATABASE_MIGRATION_URL:
-          "postgresql://owner:pass@127.0.0.1:55440/phase7?schema=public",
+        DATABASE_MIGRATION_URL: "postgresql://owner:pass@127.0.0.1:55440/phase7?schema=public",
       }),
     ).toThrow(/schema=orbit_bot/);
   });
@@ -61,9 +58,7 @@ describe("requireMigrationUrl", () => {
   });
 
   it("returns an explicit clone URL unchanged when the runtime URL differs", () => {
-    expect(requireMigrationUrl({ DATABASE_MIGRATION_URL: clone, DATABASE_URL: app })).toBe(
-      clone,
-    );
+    expect(requireMigrationUrl({ DATABASE_MIGRATION_URL: clone, DATABASE_URL: app })).toBe(clone);
   });
 
   it("enforces optional host and database allowlists", () => {

@@ -1,10 +1,6 @@
 const fs = require("node:fs");
 const path = require("node:path");
-const {
-  IOSConfig,
-  withDangerousMod,
-  withXcodeProject,
-} = require("expo/config-plugins");
+const { IOSConfig, withDangerousMod, withXcodeProject } = require("expo/config-plugins");
 
 const APP_ROOT = path.join(__dirname, "..");
 

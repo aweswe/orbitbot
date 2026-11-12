@@ -16,7 +16,9 @@ describe("schemaFromConnectionString", () => {
 
   it("returns undefined for a non-identifier schema instead of letting it reach SQL", () => {
     expect(
-      schemaFromConnectionString("postgresql://user:pass@host:5432/postgres?schema=orbit_bot%3BDROP"),
+      schemaFromConnectionString(
+        "postgresql://user:pass@host:5432/postgres?schema=orbit_bot%3BDROP",
+      ),
     ).toBeUndefined();
     expect(
       schemaFromConnectionString('postgresql://user:pass@host:5432/postgres?schema=orbit"bot'),

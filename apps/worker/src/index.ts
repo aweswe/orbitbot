@@ -110,7 +110,7 @@ import {
 } from "@forion/orbit-db";
 import { SERVICE_NAMES } from "@forion/orbit-logging";
 import { createRootLogger } from "@forion/orbit-logging/axiom";
-import { MarkdownMemoryStore } from "@forion/orbit-memory";
+import { ForionMemoryStore, MarkdownMemoryStore } from "@forion/orbit-memory";
 
 const logger = await createRootLogger(SERVICE_NAMES.worker);
 
@@ -295,7 +295,13 @@ async function main() {
     // Live per-account Codex catalog; never refreshes or writes credentials.
     codexCatalog: new CodexCatalogCache(),
     sandbox,
-    memory: new MarkdownMemoryStore(prisma),
+    memory:
+      process.env.ORBIT_BILLING_ENABLED === "true"
+        ? new ForionMemoryStore(prisma, {
+            baseUrl: process.env.FORION_SERVER_URL,
+            internalSecret: process.env.FORION_ORBIT_INTERNAL_SECRET,
+          })
+        : new MarkdownMemoryStore(prisma),
     memoryProviders,
     home,
     artifacts,

@@ -63,7 +63,12 @@ describe("Orbit credit observer — settlement", () => {
       expect.objectContaining({ userId: "user-1", amount: 2, referenceId: "call-1" }),
     );
     expect(mocks.refundCredits).toHaveBeenCalledWith(
-      expect.objectContaining({ userId: "user-1", amount: 8, fromLocked: true, referenceId: "call-1" }),
+      expect.objectContaining({
+        userId: "user-1",
+        amount: 8,
+        fromLocked: true,
+        referenceId: "call-1",
+      }),
     );
   });
 

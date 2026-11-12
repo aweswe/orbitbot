@@ -11,7 +11,14 @@ export type { AppearancePreference, ResolvedAppearance };
 const THEME_COLOR_META = 'meta[name="theme-color"]';
 const APPEARANCE_KEY = "orbit.uiAppearance";
 const LEGACY_APPEARANCE_KEY = "rakazo.uiAppearance";
-const DARK_COSMIC_THEMES = new Set(["deep-space", "nebula", "solar", "phantom", "ocean", "blueprint"]);
+const DARK_COSMIC_THEMES = new Set([
+  "deep-space",
+  "nebula",
+  "solar",
+  "phantom",
+  "ocean",
+  "blueprint",
+]);
 
 function storedAppearance(): string | null {
   try {

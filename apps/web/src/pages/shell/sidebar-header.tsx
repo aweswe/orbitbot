@@ -65,11 +65,7 @@ export function SidebarHeader({
               <OrbitLogoMark className="h-4.5 w-4.5 text-foreground" />
             </div>
             <div className="flex items-center leading-none">
-              <img
-                src="/assets/imgs/logo/orbit-wordmark.svg"
-                alt="Orbit"
-                className="h-4 w-auto"
-              />
+              <img src="/assets/imgs/logo/orbit-wordmark.svg" alt="Orbit" className="h-4 w-auto" />
             </div>
           </div>
 

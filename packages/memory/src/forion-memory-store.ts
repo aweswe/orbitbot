@@ -10,8 +10,8 @@ import type {
   MemorySnapshot,
   MemoryStore,
   PortableFile,
-} from "@rakazo/adapter-kit";
-import type { PrismaClient } from "@rakazo/db";
+} from "@forion/orbit-adapter-kit";
+import type { PrismaClient } from "@forion/orbit-db";
 import { MarkdownMemoryStore } from "./index.js";
 
 export interface ForionMemoryStoreOptions {

@@ -47,12 +47,8 @@ export function createRequestyModel(
   };
 }
 
-export function requestyProvider(
-  baseUrl: string = DEFAULT_REQUESTY_BASE_URL,
-): Provider {
-  const models = POPULAR_REQUESTY_MODELS.map((id) =>
-    createRequestyModel(id, baseUrl),
-  );
+export function requestyProvider(baseUrl: string = DEFAULT_REQUESTY_BASE_URL): Provider {
+  const models = POPULAR_REQUESTY_MODELS.map((id) => createRequestyModel(id, baseUrl));
 
   return createProvider({
     id: REQUESTY_PROVIDER_ID,
@@ -76,8 +72,7 @@ export function requestyProvider(
 }
 
 export function registerRequestyCatalog(models: MutableModels): MutableModels {
-  const baseUrl =
-    process.env.REQUESTY_BASE_URL?.trim() || DEFAULT_REQUESTY_BASE_URL;
+  const baseUrl = process.env.REQUESTY_BASE_URL?.trim() || DEFAULT_REQUESTY_BASE_URL;
   models.setProvider(requestyProvider(baseUrl));
   return models;
 }

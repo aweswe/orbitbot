@@ -1,4 +1,11 @@
-import { BrainCircuit, Check, ChevronDown, Gauge, Image as ImageIcon, Settings2 } from "lucide-react";
+import {
+  BrainCircuit,
+  Check,
+  ChevronDown,
+  Gauge,
+  Image as ImageIcon,
+  Settings2,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export type OrbitModelTier = "instant" | "thinking" | "image" | "custom";
@@ -95,7 +102,10 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
             {REASONING_LABELS[reasoningEffort]}
           </span>
         )}
-        <ChevronDown size={11} className={`text-muted-foreground transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+        <ChevronDown
+          size={11}
+          className={`text-muted-foreground transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
       </button>
 
       {/* Popover Card */}
@@ -132,7 +142,9 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
                     Default
                   </span>
                 </div>
-                <p className="text-caption text-muted-foreground truncate">Fast · Zero reasoning overhead</p>
+                <p className="text-caption text-muted-foreground truncate">
+                  Fast · Zero reasoning overhead
+                </p>
               </div>
               {modelTier === "instant" && <Check size={14} className="text-amber-500 shrink-0" />}
             </div>
@@ -162,7 +174,9 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
                     Thinking
                   </span>
                 </div>
-                <p className="text-caption text-muted-foreground truncate">Deep multi-pass reasoning</p>
+                <p className="text-caption text-muted-foreground truncate">
+                  Deep multi-pass reasoning
+                </p>
               </div>
               {modelTier === "thinking" && <Check size={14} className="text-violet-500 shrink-0" />}
             </div>
@@ -170,7 +184,9 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
             {/* Reasoning levels */}
             <div
               className={`mt-2 flex items-center gap-1 rounded-md border p-0.5 ${
-                modelTier === "thinking" ? "dark:border-violet-500/30 border-violet-200 dark:bg-violet-500/[0.05] bg-violet-100/50" : "border-border/30 opacity-70"
+                modelTier === "thinking"
+                  ? "dark:border-violet-500/30 border-violet-200 dark:bg-violet-500/[0.05] bg-violet-100/50"
+                  : "border-border/30 opacity-70"
               }`}
               onClick={(e) => e.stopPropagation()}
             >
@@ -191,7 +207,9 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
                     }`}
                   >
                     <span>{REASONING_LABELS[lvl]}</span>
-                    <span className="opacity-60 text-caption font-mono">{REASONING_COSTS[lvl]}</span>
+                    <span className="opacity-60 text-caption font-mono">
+                      {REASONING_COSTS[lvl]}
+                    </span>
                   </button>
                 );
               })}
@@ -223,7 +241,9 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
                     Image Gen
                   </span>
                 </div>
-                <p className="text-caption text-muted-foreground truncate">Gemini 3.1 Flash Image · Requesty</p>
+                <p className="text-caption text-muted-foreground truncate">
+                  Gemini 3.1 Flash Image · Requesty
+                </p>
               </div>
               {modelTier === "image" && <Check size={14} className="text-sky-500 shrink-0" />}
             </div>
@@ -254,7 +274,9 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
                     Requesty
                   </span>
                 </div>
-                <p className="text-caption text-muted-foreground truncate">Full model catalog router</p>
+                <p className="text-caption text-muted-foreground truncate">
+                  Full model catalog router
+                </p>
               </div>
               {modelTier === "custom" && <Check size={14} className="text-emerald-500 shrink-0" />}
             </div>

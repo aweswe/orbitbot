@@ -42,7 +42,10 @@ export function parseStarAvatar(rawColor: string): { index: number; color: strin
   if (rawColor.startsWith("orbit-astro::")) {
     const parts = rawColor.split("::");
     const idx = parseInt(parts[1] ?? "0", 10);
-    return { index: Number.isNaN(idx) ? 0 : idx % ORBIT_STAR_COUNT, color: CELESTIAL_STARS[idx % ORBIT_STAR_COUNT]?.primaryColor || "#38bdf8" };
+    return {
+      index: Number.isNaN(idx) ? 0 : idx % ORBIT_STAR_COUNT,
+      color: CELESTIAL_STARS[idx % ORBIT_STAR_COUNT]?.primaryColor || "#38bdf8",
+    };
   }
   return null;
 }
@@ -63,7 +66,10 @@ export function CelestialStarAvatar({
 
   return (
     <div
-      className={cn("relative shrink-0 select-none flex items-center justify-center rounded-full bg-[#050508] border border-white/10 overflow-hidden", className)}
+      className={cn(
+        "relative shrink-0 select-none flex items-center justify-center rounded-full bg-[#050508] border border-white/10 overflow-hidden",
+        className,
+      )}
       style={{ width: size, height: size }}
       data-working={isWorking}
       title={`${star.name} (${star.type})`}
@@ -74,7 +80,7 @@ export function CelestialStarAvatar({
         xmlns="http://www.w3.org/2000/svg"
         className={cn(
           "w-full h-full transition-transform duration-500",
-          isWorking ? "animate-pulse scale-105" : "hover:scale-105"
+          isWorking ? "animate-pulse scale-105" : "hover:scale-105",
         )}
       >
         <defs>
@@ -133,10 +139,44 @@ export function CelestialStarAvatar({
             <circle cx="32" cy="32" r="30" fill="url(#sirius-glow)" opacity="0.3" />
             <circle cx="32" cy="32" r="18" fill="url(#sirius-glow)" opacity="0.7" />
             {/* Diffraction Crosshairs (Astrophotography feature) */}
-            <line x1="32" y1="6" x2="32" y2="58" stroke="#bae6fd" strokeWidth="1" strokeOpacity="0.6" strokeLinecap="round" />
-            <line x1="6" y1="32" x2="58" y2="32" stroke="#bae6fd" strokeWidth="1" strokeOpacity="0.6" strokeLinecap="round" />
-            <line x1="15" y1="15" x2="49" y2="49" stroke="#38bdf8" strokeWidth="0.6" strokeOpacity="0.3" />
-            <line x1="49" y1="15" x2="15" y2="49" stroke="#38bdf8" strokeWidth="0.6" strokeOpacity="0.3" />
+            <line
+              x1="32"
+              y1="6"
+              x2="32"
+              y2="58"
+              stroke="#bae6fd"
+              strokeWidth="1"
+              strokeOpacity="0.6"
+              strokeLinecap="round"
+            />
+            <line
+              x1="6"
+              y1="32"
+              x2="58"
+              y2="32"
+              stroke="#bae6fd"
+              strokeWidth="1"
+              strokeOpacity="0.6"
+              strokeLinecap="round"
+            />
+            <line
+              x1="15"
+              y1="15"
+              x2="49"
+              y2="49"
+              stroke="#38bdf8"
+              strokeWidth="0.6"
+              strokeOpacity="0.3"
+            />
+            <line
+              x1="49"
+              y1="15"
+              x2="15"
+              y2="49"
+              stroke="#38bdf8"
+              strokeWidth="0.6"
+              strokeOpacity="0.3"
+            />
             {/* Luminous Nucleus */}
             <circle cx="32" cy="32" r="7" fill="#ffffff" />
             <circle cx="32" cy="32" r="3.5" fill="#f0f9ff" />
@@ -156,8 +196,20 @@ export function CelestialStarAvatar({
             <circle cx="32" cy="32" r="8" fill="#fef08a" />
             <circle cx="32" cy="32" r="4" fill="#ffffff" />
             {/* Coronal mass arcs */}
-            <path d="M18 24 Q32 12 46 24" stroke="#f97316" strokeWidth="1" strokeOpacity="0.5" fill="none" />
-            <path d="M16 38 Q32 50 48 38" stroke="#ef4444" strokeWidth="1" strokeOpacity="0.4" fill="none" />
+            <path
+              d="M18 24 Q32 12 46 24"
+              stroke="#f97316"
+              strokeWidth="1"
+              strokeOpacity="0.5"
+              fill="none"
+            />
+            <path
+              d="M16 38 Q32 50 48 38"
+              stroke="#ef4444"
+              strokeWidth="1"
+              strokeOpacity="0.4"
+              fill="none"
+            />
           </g>
         )}
 
@@ -166,13 +218,66 @@ export function CelestialStarAvatar({
           <g>
             <circle cx="32" cy="32" r="28" fill="url(#polaris-glow)" opacity="0.3" />
             {/* Celestial navigation concentric rings */}
-            <circle cx="32" cy="32" r="22" stroke="#e0e7ff" strokeWidth="0.8" strokeOpacity="0.25" strokeDasharray="3 3" fill="none" />
-            <circle cx="32" cy="32" r="15" stroke="#c7d2fe" strokeWidth="1" strokeOpacity="0.4" fill="none" />
+            <circle
+              cx="32"
+              cy="32"
+              r="22"
+              stroke="#e0e7ff"
+              strokeWidth="0.8"
+              strokeOpacity="0.25"
+              strokeDasharray="3 3"
+              fill="none"
+            />
+            <circle
+              cx="32"
+              cy="32"
+              r="15"
+              stroke="#c7d2fe"
+              strokeWidth="1"
+              strokeOpacity="0.4"
+              fill="none"
+            />
             {/* 8-point subtle astronomical spikes */}
-            <line x1="32" y1="4" x2="32" y2="60" stroke="#e0e7ff" strokeWidth="1.2" strokeOpacity="0.8" strokeLinecap="round" />
-            <line x1="4" y1="32" x2="60" y2="32" stroke="#e0e7ff" strokeWidth="1.2" strokeOpacity="0.8" strokeLinecap="round" />
-            <line x1="14" y1="14" x2="50" y2="50" stroke="#c7d2fe" strokeWidth="0.8" strokeOpacity="0.5" strokeLinecap="round" />
-            <line x1="50" y1="14" x2="14" y2="50" stroke="#c7d2fe" strokeWidth="0.8" strokeOpacity="0.5" strokeLinecap="round" />
+            <line
+              x1="32"
+              y1="4"
+              x2="32"
+              y2="60"
+              stroke="#e0e7ff"
+              strokeWidth="1.2"
+              strokeOpacity="0.8"
+              strokeLinecap="round"
+            />
+            <line
+              x1="4"
+              y1="32"
+              x2="60"
+              y2="32"
+              stroke="#e0e7ff"
+              strokeWidth="1.2"
+              strokeOpacity="0.8"
+              strokeLinecap="round"
+            />
+            <line
+              x1="14"
+              y1="14"
+              x2="50"
+              y2="50"
+              stroke="#c7d2fe"
+              strokeWidth="0.8"
+              strokeOpacity="0.5"
+              strokeLinecap="round"
+            />
+            <line
+              x1="50"
+              y1="14"
+              x2="14"
+              y2="50"
+              stroke="#c7d2fe"
+              strokeWidth="0.8"
+              strokeOpacity="0.5"
+              strokeLinecap="round"
+            />
             {/* Core */}
             <circle cx="32" cy="32" r="6.5" fill="#ffffff" />
           </g>
@@ -183,10 +288,37 @@ export function CelestialStarAvatar({
           <g>
             <circle cx="32" cy="32" r="28" fill="url(#vega-glow)" opacity="0.3" />
             {/* Oblate Circumstellar Accretion Disk */}
-            <ellipse cx="32" cy="32" rx="28" ry="9" stroke="#818cf8" strokeWidth="1.5" strokeOpacity="0.5" fill="none" transform="rotate(-20 32 32)" />
-            <ellipse cx="32" cy="32" rx="22" ry="7" stroke="#c7d2fe" strokeWidth="0.8" strokeOpacity="0.4" fill="none" transform="rotate(-20 32 32)" />
+            <ellipse
+              cx="32"
+              cy="32"
+              rx="28"
+              ry="9"
+              stroke="#818cf8"
+              strokeWidth="1.5"
+              strokeOpacity="0.5"
+              fill="none"
+              transform="rotate(-20 32 32)"
+            />
+            <ellipse
+              cx="32"
+              cy="32"
+              rx="22"
+              ry="7"
+              stroke="#c7d2fe"
+              strokeWidth="0.8"
+              strokeOpacity="0.4"
+              fill="none"
+              transform="rotate(-20 32 32)"
+            />
             {/* Oblate Rapid-Spinning Core */}
-            <ellipse cx="32" cy="32" rx="11" ry="8.5" fill="#6366f1" transform="rotate(-20 32 32)" />
+            <ellipse
+              cx="32"
+              cy="32"
+              rx="11"
+              ry="8.5"
+              fill="#6366f1"
+              transform="rotate(-20 32 32)"
+            />
             <ellipse cx="32" cy="32" rx="7" ry="5.5" fill="#e0e7ff" transform="rotate(-20 32 32)" />
             <circle cx="32" cy="32" r="3" fill="#ffffff" />
           </g>
@@ -199,10 +331,31 @@ export function CelestialStarAvatar({
             {/* Relativistic Collimated Polar Jet Beams */}
             <path d="M32 32 L20 4 L44 4 Z" fill="#c084fc" fillOpacity="0.25" />
             <path d="M32 32 L20 60 L44 60 Z" fill="#c084fc" fillOpacity="0.25" />
-            <line x1="32" y1="2" x2="32" y2="62" stroke="#f0abfc" strokeWidth="1.5" strokeOpacity="0.85" strokeLinecap="round" />
+            <line
+              x1="32"
+              y1="2"
+              x2="32"
+              y2="62"
+              stroke="#f0abfc"
+              strokeWidth="1.5"
+              strokeOpacity="0.85"
+              strokeLinecap="round"
+            />
             {/* Magnetic Field Line Arcs */}
-            <path d="M16 22 Q4 32 16 42" stroke="#a855f7" strokeWidth="1" strokeOpacity="0.6" fill="none" />
-            <path d="M48 22 Q60 32 48 42" stroke="#a855f7" strokeWidth="1" strokeOpacity="0.6" fill="none" />
+            <path
+              d="M16 22 Q4 32 16 42"
+              stroke="#a855f7"
+              strokeWidth="1"
+              strokeOpacity="0.6"
+              fill="none"
+            />
+            <path
+              d="M48 22 Q60 32 48 42"
+              stroke="#a855f7"
+              strokeWidth="1"
+              strokeOpacity="0.6"
+              fill="none"
+            />
             {/* Dense Relativistic Core */}
             <circle cx="32" cy="32" r="7" fill="#9333ea" />
             <circle cx="32" cy="32" r="4" fill="#fdf4ff" />
@@ -215,9 +368,27 @@ export function CelestialStarAvatar({
             <circle cx="32" cy="32" r="30" fill="url(#sol-glow)" opacity="0.35" />
             <circle cx="32" cy="32" r="20" fill="url(#sol-glow)" opacity="0.8" />
             {/* Solar Prominence Flare Loops */}
-            <path d="M22 14 Q32 6 42 14" stroke="#f59e0b" strokeWidth="1.2" strokeOpacity="0.7" fill="none" />
-            <path d="M48 24 Q58 32 48 40" stroke="#f59e0b" strokeWidth="1.2" strokeOpacity="0.7" fill="none" />
-            <path d="M14 26 Q6 34 14 42" stroke="#d97706" strokeWidth="1.2" strokeOpacity="0.6" fill="none" />
+            <path
+              d="M22 14 Q32 6 42 14"
+              stroke="#f59e0b"
+              strokeWidth="1.2"
+              strokeOpacity="0.7"
+              fill="none"
+            />
+            <path
+              d="M48 24 Q58 32 48 40"
+              stroke="#f59e0b"
+              strokeWidth="1.2"
+              strokeOpacity="0.7"
+              fill="none"
+            />
+            <path
+              d="M14 26 Q6 34 14 42"
+              stroke="#d97706"
+              strokeWidth="1.2"
+              strokeOpacity="0.6"
+              fill="none"
+            />
             {/* Photosphere & Radiant Core */}
             <circle cx="32" cy="32" r="11" fill="#fbbf24" />
             <circle cx="32" cy="32" r="6" fill="#fffbeb" />
@@ -248,4 +419,3 @@ export function CelestialStarAvatar({
     </div>
   );
 }
-

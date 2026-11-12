@@ -10,27 +10,6 @@ export {
   resolvePersonaColorDef,
   Wordmark,
 } from "./bot-avatar.js";
-export {
-  AstroAvatar,
-  parseAstroAvatar,
-  ORBIT_ASTRONAUT_COUNT,
-} from "./orbit-astronaut-avatar.js";
-export {
-  CelestialStarAvatar,
-  parseStarAvatar,
-  ORBIT_STAR_COUNT,
-  CELESTIAL_STARS,
-} from "./orbit-celestial-stars.js";
-export {
-  OrbitPlanetAvatar,
-  parsePlanetAvatar,
-} from "./orbit-planet-avatar.js";
-export {
-  CosmicCreatureAvatar,
-  parseCreatureAvatar,
-  ORBIT_CREATURE_COUNT,
-  COSMIC_CREATURES,
-} from "./orbit-space-creatures.js";
 export type { BotAvatarActivitySource } from "./bot-avatar-activity.js";
 export { BotAvatarActivityProvider } from "./bot-avatar-activity.js";
 export * from "./components/ui/alert-dialog.js";
@@ -78,4 +57,25 @@ export { GroupAvatar, type GroupAvatarMember, type GroupAvatarProps } from "./gr
 export { cn } from "./lib/utils.js";
 export { LogoAvatar } from "./logo-avatar.js";
 export { ModelThinkingOptions } from "./model-thinking-options.js";
+export {
+  AstroAvatar,
+  ORBIT_ASTRONAUT_COUNT,
+  parseAstroAvatar,
+} from "./orbit-astronaut-avatar.js";
+export {
+  CELESTIAL_STARS,
+  CelestialStarAvatar,
+  ORBIT_STAR_COUNT,
+  parseStarAvatar,
+} from "./orbit-celestial-stars.js";
+export {
+  OrbitPlanetAvatar,
+  parsePlanetAvatar,
+} from "./orbit-planet-avatar.js";
+export {
+  COSMIC_CREATURES,
+  CosmicCreatureAvatar,
+  ORBIT_CREATURE_COUNT,
+  parseCreatureAvatar,
+} from "./orbit-space-creatures.js";
 export { SectionHeading } from "./section-heading.js";

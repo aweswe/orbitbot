@@ -1,4 +1,4 @@
-import type { AdapterContext } from "@rakazo/adapter-kit";
+import type { AdapterContext } from "@forion/orbit-adapter-kit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ForionMemoryStore } from "./forion-memory-store.js";
 

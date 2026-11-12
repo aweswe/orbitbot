@@ -49,9 +49,9 @@ describe("bot avatar values", () => {
     ).toBe(false);
     expect(BotAvatarValueSchema.safeParse("#fff").success).toBe(true);
     expect(BotAvatarValueSchema.safeParse("orbit-planet::#ff8a3d").success).toBe(true);
-    expect(CreateBotInput.safeParse({ name: "Friday", color: "orbit-planet::#ff8a3d" }).success).toBe(
-      true,
-    );
+    expect(
+      CreateBotInput.safeParse({ name: "Friday", color: "orbit-planet::#ff8a3d" }).success,
+    ).toBe(true);
     expect(BotAvatarValueSchema.safeParse("not-a-color").success).toBe(false);
     expect(UpdateBotInput.safeParse({ botId: "bot-1", color: "#8B5CF6::shape_2" }).success).toBe(
       true,
