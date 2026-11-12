@@ -249,7 +249,11 @@ export function createAuth(prisma: PrismaClient, env: AuthEnv) {
     trustedOrigins: [...buildTrustedOrigins(env), "rakazo://"],
     ...(env.google ? { socialProviders: { google: env.google } } : {}),
     account: {
-      accountLinking: { enabled: true, disableImplicitLinking: true, trustedProviders: [] },
+      accountLinking: {
+        enabled: true,
+        disableImplicitLinking: false,
+        trustedProviders: env.google ? ["google"] : [],
+      },
       encryptOAuthTokens: true,
     },
     // Store only a hash of identifiers that carry an emailed token. Other
