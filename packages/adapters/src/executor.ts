@@ -1026,9 +1026,17 @@ export function createRunExecutor(executorDeps: ExecutorDeps) {
           await failRunBeforeModel(PINNED_PROVIDER_NOT_CONNECTED, true);
           return;
         }
-        const modelAccessDenied = async () =>
-          (await modelCreditBillingEnabled(deps)) &&
-          !(await memberHasModelAccess(deps.prisma, run));
+        const modelAccessDenied = async () => {
+          if (process.env.ORBIT_BILLING_ENABLED === "true") {
+            // Option A: Central credit ledger is sole authority.
+            // Eliminate local billing enforcement; the central CreditObserver handles reservation.
+            return false;
+          }
+          return (
+            (await modelCreditBillingEnabled(deps)) &&
+            !(await memberHasModelAccess(deps.prisma, run))
+          );
+        };
         const scripted = deps.runtime.describe().capabilities.scripted;
         let backupChoices: Promise<ModelRoleChoice[]> | undefined;
         const loadBackups = () =>

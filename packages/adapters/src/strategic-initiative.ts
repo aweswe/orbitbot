@@ -169,8 +169,13 @@ export async function reconcileStrategicInitiatives(deps: {
         select: { id: true },
       });
       if (!membership) continue;
-      // The bot's person pays: a guest's run is decided by their own plan, not the space's.
-      if (deps.billingEnabled && !(await memberHasModelAccess(deps.prisma, bot))) continue;
+      // Option A: Central billing is sole authority; skip local check when ORBIT_BILLING_ENABLED
+      if (
+        deps.billingEnabled &&
+        process.env.ORBIT_BILLING_ENABLED !== "true" &&
+        !(await memberHasModelAccess(deps.prisma, bot))
+      )
+        continue;
       const runId = await queueStrategicInitiativeRun(deps, { ...bot, scratchpadItems }, deps.now);
       if (!runId) continue;
       queued += 1;
