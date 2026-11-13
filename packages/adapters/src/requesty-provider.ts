@@ -3,7 +3,14 @@ import { createProvider } from "@earendil-works/pi-ai";
 import { openAICompletionsApi } from "@earendil-works/pi-ai/api/openai-completions.lazy";
 
 export const REQUESTY_PROVIDER_ID = "requesty";
-export const DEFAULT_REQUESTY_BASE_URL = "https://router.requesty.ai/v1";
+
+export function getRequestyBaseUrl(): string {
+  const controlPlane =
+    process.env.FORION_SERVER_URL || process.env.ORBIT_CONTROL_PLANE_URL || "http://localhost:3001";
+  return `${controlPlane.replace(/\/+$/, "")}/api/ai`;
+}
+
+export const DEFAULT_REQUESTY_BASE_URL = getRequestyBaseUrl();
 export const DEFAULT_REQUESTY_MODEL_ID = "deepseek/deepseek-v4-flash";
 
 export const POPULAR_REQUESTY_MODELS = [
@@ -23,9 +30,10 @@ export const POPULAR_REQUESTY_MODELS = [
 
 export function createRequestyModel(
   modelId: string,
-  baseUrl: string = DEFAULT_REQUESTY_BASE_URL,
+  baseUrl: string = getRequestyBaseUrl(),
   contextWindow: number = 131_072,
   maxTokens: number = 16_384,
+  headers?: Record<string, string>,
 ): Model<"openai-completions"> {
   const isReasoning =
     modelId.includes("r1") ||
@@ -44,25 +52,34 @@ export function createRequestyModel(
     cost: { input: 0.00000045, output: 0.000002, cacheRead: 0, cacheWrite: 0 },
     contextWindow,
     maxTokens,
+    ...(headers ? { headers } : {}),
   };
 }
 
-export function requestyProvider(baseUrl: string = DEFAULT_REQUESTY_BASE_URL): Provider {
-  const models = POPULAR_REQUESTY_MODELS.map((id) => createRequestyModel(id, baseUrl));
+export function requestyProvider(
+  baseUrl: string = getRequestyBaseUrl(),
+  headers?: Record<string, string>,
+): Provider {
+  const models = POPULAR_REQUESTY_MODELS.map((id) =>
+    createRequestyModel(id, baseUrl, 131_072, 16_384, headers),
+  );
 
   return createProvider({
     id: REQUESTY_PROVIDER_ID,
-    name: "Requesty (Orbit Router)",
+    name: "Forion Central AI Gateway (Requesty-compatible)",
     baseUrl: baseUrl.replace(/\/$/, ""),
     auth: {
       apiKey: {
-        name: "Requesty API Key",
+        name: "Forion Internal Gateway Secret",
         resolve: async () => ({
           auth: {
-            apiKey: process.env.REQUESTY_API_KEY?.trim() || "local",
+            apiKey:
+              process.env.FORION_ORBIT_INTERNAL_SECRET?.trim() ||
+              process.env.FORION_API_KEY?.trim() ||
+              "local",
             baseUrl: baseUrl.replace(/\/$/, ""),
           },
-          source: "REQUESTY_API_KEY",
+          source: "FORION_ORBIT_INTERNAL_SECRET",
         }),
       },
     },
@@ -72,7 +89,6 @@ export function requestyProvider(baseUrl: string = DEFAULT_REQUESTY_BASE_URL): P
 }
 
 export function registerRequestyCatalog(models: MutableModels): MutableModels {
-  const baseUrl = process.env.REQUESTY_BASE_URL?.trim() || DEFAULT_REQUESTY_BASE_URL;
-  models.setProvider(requestyProvider(baseUrl));
+  models.setProvider(requestyProvider(DEFAULT_REQUESTY_BASE_URL));
   return models;
 }

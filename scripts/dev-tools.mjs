@@ -212,7 +212,7 @@ async function doctor() {
   }
   const provider = (env.PI_DEFAULT_PROVIDER || "").toLowerCase();
   const providerKey = {
-    requesty: "REQUESTY_API_KEY",
+    requesty: "FORION_ORBIT_INTERNAL_SECRET",
     openrouter: "OPENROUTER_API_KEY",
     anthropic: "ANTHROPIC_API_KEY",
     openai: "OPENAI_API_KEY",

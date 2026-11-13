@@ -47,6 +47,8 @@ const NOT_PASSED: Record<string, string> = {
   PM2_HOME: "restart-supervisor detection for PM2 hosts; Compose restarts containers",
   INVOCATION_ID: "restart-supervisor detection for systemd hosts; Compose restarts containers",
   RAKAZO_ALLOW_DEV_SECRETS: "development-only escape hatch for placeholder secrets",
+  ALLOW_DEV_AUTH_BYPASS: "development-only escape hatch for dev auth bypass endpoint",
+  ORBIT_SETTLEMENT_WAL_PATH: "optional test and local dev file path override for settlement WAL",
   EMAIL_EMULATOR: "ignored when NODE_ENV=production",
   AWS_KMS_PROFILE: "for maintainer laptops; servers use AWS_KMS_ACCESS_KEY_ID and its secret",
   GIT_SHA: "baked into the image at build time; a pass-through entry would unset it",

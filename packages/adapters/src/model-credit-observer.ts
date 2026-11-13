@@ -20,7 +20,7 @@ export async function hostedModelCreditObserver(
   // from the local credit ledger — and a test run must never reach a live control
   // plane just because `FORION_SERVER_URL` leaked into the environment.
   if (process.env.ORBIT_BILLING_ENABLED === "true") {
-    return createOrbitModelCreditObserver(scope);
+    return createOrbitModelCreditObserver(scope, prisma);
   }
 
   const membership = await organizationForMember(prisma, scope);

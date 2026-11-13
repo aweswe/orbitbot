@@ -10,6 +10,7 @@ import { MediaGenerationError } from "@forion/orbit-adapter-kit";
 import { ATTACHMENT_MAX_BYTES } from "@forion/orbit-contracts";
 import { z } from "zod";
 import { FAKE_VIDEO_BASE64 } from "./fake-media-assets.js";
+import { getRequestyBaseUrl } from "./requesty-provider.js";
 import type { ResolveHostname } from "./web-ssrf.js";
 import { fetchSafeWebBytes } from "./web-ssrf.js";
 
@@ -260,7 +261,7 @@ export class RequestyMediaGenerationProvider implements MediaGenerationProvider 
   }) {
     if (!options.apiKey) throw new Error("Requesty API key required");
     this.apiKey = options.apiKey;
-    this.baseUrl = (options.baseUrl ?? "https://router.requesty.ai/v1").replace(/\/$/, "");
+    this.baseUrl = (options.baseUrl ?? getRequestyBaseUrl()).replace(/\/$/, "");
     this.imageModel = options.imageModel ?? "google/gemini-3.1-flash-image";
     this.fetchImpl = options.fetch ?? fetch;
   }

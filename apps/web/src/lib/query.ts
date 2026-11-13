@@ -120,6 +120,13 @@ let cachedUserId: string | null | undefined;
 
 /** Forgets everything cached for another user, so sign-out or a switch never shows their data. */
 export function setQueryUser(userId: string | null): void {
-  if (cachedUserId !== undefined && cachedUserId !== userId) queryClient.clear();
+  if (cachedUserId !== undefined && cachedUserId !== userId) {
+    try {
+      queryClient.cancelQueries();
+      queryClient.clear();
+    } catch {
+      // Graceful fallback
+    }
+  }
   cachedUserId = userId;
 }

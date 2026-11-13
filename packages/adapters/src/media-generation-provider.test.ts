@@ -87,6 +87,7 @@ describe("media generation connection", () => {
     );
     const provider = new RequestyMediaGenerationProvider({
       apiKey: "test-key",
+      baseUrl: "https://router.requesty.ai/v1",
       fetch,
     });
     const result = await provider.generateImage({ prompt: "blue circle" }, context);

@@ -22,6 +22,7 @@ import {
 
 export { MemoryProviderPrivateEndpointRequiredError } from "./serenity-memory-provider.js";
 
+import { ForionSemanticMemoryProvider } from "./forion-semantic-memory-provider.js";
 import {
   createSupermemoryProvider,
   decodeLegacySupermemoryCredentials,
@@ -183,7 +184,19 @@ export class SpaceMemoryProviderResolver implements MemoryProviderResolver {
       where: { spaceId },
       include: { secret: true },
     });
-    if (!config) return null;
+    if (!config) {
+      if (
+        process.env.ORBIT_BILLING_ENABLED === "true" ||
+        process.env.FORION_SERVER_URL ||
+        process.env.ORBIT_CONTROL_PLANE_URL
+      ) {
+        return {
+          provider: new ForionSemanticMemoryProvider(),
+          defaultScope: "isolated",
+        };
+      }
+      return null;
+    }
     const settings = toStringRecord(config.settings);
     if (memoryProviderRequiresPrivateEndpoint(config.provider, settings)) {
       // Saved configurations cannot bypass an operator's current network policy.

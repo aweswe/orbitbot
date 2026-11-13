@@ -123,7 +123,7 @@ import {
   personSpeaker,
 } from "./history-speakers.js";
 import { createMediaGenerationProvider } from "./media-generation-factory.js";
-import { loadAgentMemoryContext } from "./memory-context.js";
+import { buildMemoryRetrievalQuery, loadAgentMemoryContext } from "./memory-context.js";
 import { HostedModelCreditsRequiredError } from "./model-credit-observer.js";
 import {
   effectiveModelRole,
@@ -138,6 +138,7 @@ import {
 } from "./model-selection.js";
 import { modelAcceptsImageInput } from "./model-vision.js";
 import { usesNativeShell } from "./native-shell.js";
+import { finalizeRunCredits } from "./orbit-control-plane/orbit-credit-observer.js";
 import { paymentWalletConnected } from "./payment-wallets.js";
 import { isRetiredModelCredentialError } from "./pi-oauth.js";
 import { restoreComputerModels } from "./pi-runtime-computer-mode.js";
@@ -930,7 +931,13 @@ export function createRunExecutor(executorDeps: ExecutorDeps) {
           loadCurrentTurnImages(deps, turnBlocks, context),
           nonOwnerChatRun
             ? Promise.resolve("")
-            : loadAgentMemoryContext(deps.memory, bot.id, context),
+            : loadAgentMemoryContext(
+                deps.memory,
+                bot.id,
+                context,
+                undefined,
+                buildMemoryRetrievalQuery(task.prompt, history, bot.name ?? undefined),
+              ),
           nonOwnerChatRun
             ? Promise.resolve("")
             : loadAgentScratchpadContext(deps, {
@@ -2235,6 +2242,9 @@ export function createRunExecutor(executorDeps: ExecutorDeps) {
         // this reads then only repeats that.
         if (await runEndedForThisWorker(deps.prisma, { runId, leaseOwner: workerId })) {
           endRunConnectorState(runId);
+          await finalizeRunCredits(runId).catch((err) =>
+            getLogger().warn("finalize_credits_failed", { runId, err }),
+          );
         }
         if (!lease.retainComputer) {
           if (computerUse.screenRelease) {

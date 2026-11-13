@@ -34,11 +34,12 @@ export function hostCredentialSource(provider: string): string {
  * Vendor env names and model ids live here, in the adapter layer, not in core.
  */
 export function resolveDeploymentModel(env: NodeJS.ProcessEnv = process.env) {
-  const defaultProvider = env.REQUESTY_API_KEY ? "requesty" : "openrouter";
+  const hasRequesty = Boolean(env.FORION_ORBIT_INTERNAL_SECRET || env.FORION_API_KEY);
+  const defaultProvider = hasRequesty ? "requesty" : "openrouter";
   const provider = env.PI_DEFAULT_PROVIDER?.trim() || defaultProvider;
   // An unknown provider gets no key rather than another vendor's.
   const keys: Record<string, string | undefined> = {
-    requesty: env.REQUESTY_API_KEY || env.RQSTY_API_KEY,
+    requesty: env.FORION_ORBIT_INTERNAL_SECRET || env.FORION_API_KEY,
     openrouter: env.OPENROUTER_API_KEY,
     anthropic: env.ANTHROPIC_API_KEY,
     deepseek: env.DEEPSEEK_API_KEY,

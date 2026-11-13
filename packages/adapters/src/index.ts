@@ -139,6 +139,8 @@ export * from "./openai-compatible-voice.js";
 export * from "./openai-voice.js";
 export * from "./openrouter-usage.js";
 export * from "./orbit-control-plane/index.js";
+export * from "./orbit-control-plane/orbit-user-sync.js";
+export * from "./orbit-control-plane/orbit-user-sync.js";
 export * from "./page-browser-session.js";
 export * from "./page-share-secrets.js";
 export * from "./parallel-web.js";

@@ -925,7 +925,11 @@ export async function hasHostedModelCredits(
   scope: { userId: string; spaceId: string },
   provider: string,
 ): Promise<boolean> {
-  if (process.env.ORBIT_BILLING_ENABLED === "true" || process.env.REQUESTY_API_KEY) {
+  if (
+    process.env.ORBIT_BILLING_ENABLED === "true" ||
+    process.env.FORION_ORBIT_INTERNAL_SECRET ||
+    process.env.FORION_API_KEY
+  ) {
     return true;
   }
   const deployment = resolveDeploymentModel();

@@ -53,3 +53,7 @@ playwright-report-www
 **/.gradle/
 apps/web/public/computer-screen/*.js
 apps/web/public/computer-screen/sdk/
+
+# Settlement outbox WAL files
+*.wal.json
+

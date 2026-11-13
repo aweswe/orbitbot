@@ -13,6 +13,8 @@ export interface AdapterContext {
   traceId: string;
   spaceId: string;
   userId: string;
+  workspaceId?: string;
+  projectId?: string;
   botId?: string;
   runId?: string;
   /** Opaque fence for releasing a graphical screen without tearing down its replacement. */
@@ -337,10 +339,15 @@ export interface ConnectorCapabilities {
 
 export type ConnectorCatalogItem = ConnectionCatalogItem;
 
+export type MemoryScope = "bot" | "user" | "workspace" | "project";
+
 export interface MemoryReadRequest {
-  scope: "bot" | "user";
+  scope: MemoryScope;
   botId?: string;
+  workspaceId?: string;
+  projectId?: string;
   path?: string;
+  query?: string;
 }
 
 export interface MemorySnapshot {
@@ -355,8 +362,10 @@ export interface MemorySnapshot {
 
 export interface MemorySearchRequest {
   query: string;
-  scope: "bot" | "user" | "all";
+  scope: MemoryScope | "all";
   botId?: string;
+  workspaceId?: string;
+  projectId?: string;
 }
 
 export interface MemorySearchResult {
@@ -370,8 +379,10 @@ export const MEMORY_REVISION_CONFLICT_ERROR =
   "Shared memory changed since it was read. Read the latest version and save again.";
 
 export interface MemoryCommitRequest {
-  scope: "bot" | "user";
+  scope: MemoryScope;
   botId?: string;
+  workspaceId?: string;
+  projectId?: string;
   path: string;
   content: string;
   /** When set, commit fails if the live document revision is no longer this value. */
@@ -383,8 +394,10 @@ export interface MemoryCommitRequest {
 export interface MemoryRemoveRequest {
   /** When set, only this exact document is removed, never a newer one at the same path. */
   id?: string;
-  scope: "bot" | "user";
+  scope: MemoryScope;
   botId?: string;
+  workspaceId?: string;
+  projectId?: string;
   path: string;
 }
 
@@ -396,8 +409,10 @@ export interface MemoryRevision {
 }
 
 export interface MemoryExportRequest {
-  scope: "bot" | "user" | "all";
+  scope: MemoryScope | "all";
   botId?: string;
+  workspaceId?: string;
+  projectId?: string;
 }
 
 export interface MemoryCapabilities {

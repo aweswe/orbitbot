@@ -22,6 +22,7 @@ model AiDataConsent {
 }
 
 model User {
+  identityMappings IdentityMapping[]
   aiDataConsents AiDataConsent[]
   pages          Page[]
   id                          String                       @id
@@ -2663,3 +2664,59 @@ model CapabilityInstallSpace {
   @@index([spaceId, userId])
   @@map("capability_install_spaces")
 }
+
+model IdentityMapping {
+  id                   String   @id @default(uuid())
+  localUserId          String   @map("local_user_id")
+  canonicalPrincipalId String   @map("canonical_principal_id")
+  provider             String
+  providerSubject      String   @map("provider_subject")
+  verifiedAt           DateTime @default(now()) @map("verified_at")
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+  metadata             Json?
+
+  localUser            User     @relation(fields: [localUserId], references: [id], onDelete: Cascade)
+
+  @@unique([localUserId, provider])
+  @@index([canonicalPrincipalId])
+  @@index([provider, providerSubject])
+  @@map("identity_mappings")
+}
+
+model CreditReservation {
+  id                 String   @id @default(cuid())
+  userId             String   @map("user_id")
+  billingReferenceId String   @map("billing_reference_id")
+  lockedCredits      Int      @map("locked_credits")
+  spentCredits       Int      @default(0) @map("spent_credits")
+  status             String   @default("active")
+  expiresAt          DateTime @default(now()) @map("expires_at")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@unique([userId, billingReferenceId], map: "idx_credit_reservations_active_ref")
+  @@map("credit_reservations")
+}
+
+model SettlementOutbox {
+  id            String    @id @default(cuid())
+  userId        String    @map("user_id")
+  referenceId   String    @map("reference_id")
+  amount        Int
+  model         String    @default("orbit-flash")
+  product       String    @default("orbit-bot")
+  status        String    @default("pending")
+  attempts      Int       @default(0)
+  lastAttemptAt DateTime? @map("last_attempt_at")
+  nextRetryAt   DateTime  @default(now()) @map("next_retry_at")
+  lastError     String?   @map("last_error")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  @@unique([referenceId], map: "idx_settlement_outbox_active_ref")
+  @@index([status, nextRetryAt], map: "idx_settlement_outbox_draining")
+  @@map("settlement_outbox")
+}
+
+

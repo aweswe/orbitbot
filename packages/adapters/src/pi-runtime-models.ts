@@ -107,7 +107,13 @@ export function resolveRuntimeModel(modelConfig: AgentRunRequest["model"]): {
   ) {
     model = configuredOpenRouterModel(modelId, modelConfig.contextWindow);
   } else if (provider === REQUESTY_PROVIDER_ID && !model && modelId) {
-    model = createRequestyModel(modelId, undefined, modelConfig.contextWindow);
+    model = createRequestyModel(
+      modelId,
+      modelConfig.baseUrl,
+      modelConfig.contextWindow,
+      modelConfig.maxTokens,
+      modelConfig.headers,
+    );
   }
   // Saved generic limits and deployment defaults take precedence over inferred siblings.
   model ??= liveModelSibling(models, provider, modelId);
@@ -118,6 +124,21 @@ export function resolveRuntimeModel(modelConfig: AgentRunRequest["model"]): {
         ? { contextWindow: modelConfig.contextWindow }
         : {}),
       ...(modelConfig.maxTokens !== undefined ? { maxTokens: modelConfig.maxTokens } : {}),
+    };
+  }
+  if (model && modelConfig.baseUrl) {
+    model = {
+      ...model,
+      baseUrl: modelConfig.baseUrl.replace(/\/$/, ""),
+    };
+  }
+  if (model && modelConfig.headers) {
+    model = {
+      ...model,
+      headers: {
+        ...(model.headers ?? {}),
+        ...modelConfig.headers,
+      },
     };
   }
   if (model && provider === CHATGPT_OAUTH_PROVIDER) {
@@ -131,7 +152,7 @@ export function resolveRuntimeModel(modelConfig: AgentRunRequest["model"]): {
         (provider === "openrouter"
           ? process.env.OPENROUTER_API_KEY
           : provider === REQUESTY_PROVIDER_ID
-            ? process.env.REQUESTY_API_KEY || process.env.RQSTY_API_KEY
+            ? process.env.FORION_ORBIT_INTERNAL_SECRET || process.env.FORION_API_KEY
             : undefined));
   return { provider, modelId, models, model, apiKey, credentials };
 }

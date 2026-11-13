@@ -69,7 +69,7 @@ vi.mock("../lib/auth", () => ({
     emailOtp: { sendVerificationOtp: vi.fn() },
   },
 }));
-vi.mock("../lib/rpc", () => ({ clearSpaceSelection: vi.fn() }));
+vi.mock("../lib/rpc", () => ({ clearSpaceSelection: vi.fn(), rpc: {} }));
 const capabilities: AuthCapabilities = {
   passwordAuth: false,
   sso: { name: "Example", availability: "unavailable" },

@@ -13,11 +13,11 @@ import { Link, useSearchParams } from "react-router-dom";
 import { IconTooltip } from "../components/IconTooltip";
 import { OrbitLogoMark } from "../components/OrbitLogoMark";
 import { PasskeySignIn } from "../components/PasskeySignIn";
+import { purgeAccountState } from "../lib/account-purge";
 import { authClient } from "../lib/auth";
 import type { AuthCapabilities } from "../lib/auth-capabilities";
 import { fetchAuthCapabilities } from "../lib/auth-capabilities";
 import { desktopBridge } from "../lib/desktop";
-import { clearSpaceSelection } from "../lib/rpc";
 import { newAccountDestination, signInNext } from "../lib/sign-in-next";
 import { runSsoFlow } from "../lib/sso-flow";
 import { authErrorText, credentialIssueText } from "../lib/user-error";
@@ -95,6 +95,7 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
     );
 
   useEffect(() => {
+    purgeAccountState();
     setReset(null);
     setCapabilityError(false);
     let active = true;
@@ -137,6 +138,7 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
     }
     setPending(true);
     setError(null);
+    purgeAccountState();
     try {
       if (mode === "forgot") {
         if (!reset?.passwordReset || !reset.resetUrl) {
@@ -196,6 +198,7 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
     if (pending) return;
     setPending(true);
     setError(null);
+    purgeAccountState();
     try {
       const trimmedEmail = email.trim();
       const result = await authClient.signIn.emailOtp({
@@ -218,7 +221,7 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
   }
 
   function enterApp() {
-    clearSpaceSelection();
+    purgeAccountState();
     // The routes move a signed-in user on once the session refetch lands. Navigating
     // first beats it, so the guards bounce through sign-in and the shell.
     entering.current = true;
@@ -233,6 +236,7 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
 
   async function signInWithSso() {
     setError(null);
+    purgeAccountState();
     // Deliberately not `pending`: an authorization request the person wants to
     // retry must stay clickable. A browser redirect leaves this page anyway.
     try {
@@ -293,16 +297,20 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
                 <GoogleIcon className="h-6 w-6" />
                 <span>{pending ? t`Signing in…` : t`Sign in with ${reset.sso.name}`}</span>
               </Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="h-12 w-full rounded-xl border-dashed border-amber-500/50 text-amber-500 hover:bg-amber-500/10 font-semibold flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-                onClick={() => {
-                  window.location.href = "/api/auth/dev-bypass";
-                }}
-              >
-                <span>⚡ Instant Dev Bypass (1-Click Demo Sign-In)</span>
-              </Button>
+              {import.meta.env.DEV ||
+              window.location.hostname === "localhost" ||
+              window.location.hostname === "127.0.0.1" ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-12 w-full rounded-xl border-dashed border-amber-500/50 text-amber-500 hover:bg-amber-500/10 font-semibold flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                  onClick={() => {
+                    window.location.href = "/api/auth/dev-bypass";
+                  }}
+                >
+                  <span>⚡ Instant Dev Bypass (1-Click Demo Sign-In)</span>
+                </Button>
+              ) : null}
               <p className="text-center text-caption text-muted-foreground">
                 <Trans>Orbit uses your Forion account. You’ll be back here in a moment.</Trans>
               </p>
@@ -551,6 +559,7 @@ export function PasswordResetPage() {
     }
     setPending(true);
     setError(null);
+    purgeAccountState();
     try {
       const result = await authClient.resetPassword({ newPassword: password, token });
       if (result.error) {

@@ -10,6 +10,7 @@ import type {
   ProviderHeaders,
 } from "@earendil-works/pi-ai";
 import { AssistantMessageEventStream } from "@earendil-works/pi-ai/utils/event-stream";
+import { signOrbitInternalRequest } from "./orbit-control-plane/orbit-control-plane-client.js";
 import { codexComputeResidency } from "./pi-oauth.js";
 import {
   modelStreamIdleTimeoutMs,
@@ -191,13 +192,87 @@ function modelRequestFetch(
   idleTimeoutMs: number,
 ): NonNullable<ModelsSimpleStreamOptions["fetch"]> {
   return async (input, init) => {
+    let resolvedInput = input;
+    let resolvedInit = init;
+
+    const urlString =
+      typeof input === "string"
+        ? input
+        : input instanceof URL
+          ? input.href
+          : typeof input === "object" && input !== null && "url" in input
+            ? (input as { url: string }).url
+            : "";
+
+    if (urlString.includes("/api/ai")) {
+      try {
+        const urlObj = new URL(urlString);
+        const reqId = randomUUID();
+        urlObj.searchParams.set("reqId", reqId);
+        resolvedInput = urlObj.toString();
+
+        const pathAndQuery = `${urlObj.pathname}${urlObj.search}`;
+        const method = (resolvedInit?.method || "POST").toUpperCase();
+        const secret =
+          process.env.FORION_ORBIT_INTERNAL_SECRET ||
+          process.env.FORION_API_KEY ||
+          "orbit-forion-internal-dev-secret-12345";
+
+        let currentUserId = "";
+        const rawHeaders = resolvedInit?.headers;
+        if (rawHeaders) {
+          if (rawHeaders instanceof Headers) {
+            currentUserId = rawHeaders.get("x-orbit-user-id") || rawHeaders.get("x-user-id") || "";
+          } else if (Array.isArray(rawHeaders)) {
+            const found = rawHeaders.find(
+              ([k]) => k.toLowerCase() === "x-orbit-user-id" || k.toLowerCase() === "x-user-id",
+            );
+            if (found) currentUserId = found[1];
+          } else {
+            const map = rawHeaders as Record<string, string>;
+            const userKey = Object.keys(map).find(
+              (k) => k.toLowerCase() === "x-orbit-user-id" || k.toLowerCase() === "x-user-id",
+            );
+            if (userKey && map[userKey]) currentUserId = map[userKey];
+          }
+        }
+
+        if (currentUserId && secret) {
+          const signed = signOrbitInternalRequest(secret, method, pathAndQuery, currentUserId);
+          if (resolvedInit?.headers instanceof Headers) {
+            for (const [k, v] of Object.entries(signed)) {
+              resolvedInit.headers.set(k, v);
+            }
+          } else if (Array.isArray(resolvedInit?.headers)) {
+            const nextHeaders = [...resolvedInit.headers];
+            for (const [k, v] of Object.entries(signed)) {
+              const idx = nextHeaders.findIndex(([hk]) => hk.toLowerCase() === k.toLowerCase());
+              if (idx >= 0) nextHeaders[idx] = [k, v];
+              else nextHeaders.push([k, v]);
+            }
+            resolvedInit = { ...resolvedInit, headers: nextHeaders };
+          } else {
+            resolvedInit = {
+              ...resolvedInit,
+              headers: {
+                ...((resolvedInit?.headers as Record<string, string>) || {}),
+                ...signed,
+              },
+            };
+          }
+        }
+      } catch {
+        // Degrade to unmodified fetch if URL parsing fails
+      }
+    }
+
     // Compatible providers attach a package undici Agent after this wrapper is
     // installed. Pair that dispatcher without replacing other providers' fetch.
     const transport =
-      init && "dispatcher" in init
+      resolvedInit && "dispatcher" in resolvedInit
         ? fetchPairedWithDispatcher(fetchImpl)
         : (fetchImpl ?? globalThis.fetch);
-    const response = await transport(input, init);
+    const response = await transport(resolvedInput, resolvedInit);
     return boundRetryableErrorBody(response, idleTimeoutMs);
   };
 }

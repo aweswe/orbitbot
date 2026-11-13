@@ -1,9 +1,9 @@
 import { t } from "@lingui/core/macro";
 import { useEffect, useRef, useState } from "react";
+import { purgeAccountState } from "./account-purge";
 import { authClient } from "./auth";
-import { endCallBeforeSignOut, forgetSignedInUser, sessionChangedUnderPage } from "./call-session";
+import { endCallBeforeSignOut, sessionChangedUnderPage } from "./call-session";
 import { clearComposerDrafts } from "./composer-draft";
-import { clearSpaceSelection } from "./rpc";
 
 /** Kept across the reload after a failed sign-out, so the fresh page can say it failed. */
 export const LOG_OUT_FAILED_KEY = "orbit.logOutFailed";
@@ -24,9 +24,7 @@ export async function signOut(destination: string): Promise<void> {
   }
   const result = await authClient.signOut().catch(() => null);
   if (result && !result.error) {
-    forgetSignedInUser();
-    clearSpaceSelection();
-    clearComposerDrafts();
+    purgeAccountState();
     window.location.assign(destination);
   } else {
     try {

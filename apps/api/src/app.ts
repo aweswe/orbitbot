@@ -192,7 +192,7 @@ import { createMessagingInboundHandler } from "./messaging-inbound.js";
 import { createMessagingReceipts } from "./messaging-receipts.js";
 import { mountMessagingWebhookRoutes } from "./messaging-webhook.js";
 import { monitoringRoutes } from "./monitoring.js";
-import { syncOrbitUser } from "./orbit-user-sync.js";
+import { resolveCanonicalPrincipalId, syncOrbitUser } from "./orbit-user-sync.js";
 import { pluginSubmissionRoutes } from "./plugin-submissions.js";
 import { sendReferralEmails } from "./referral-email.js";
 import { mountApiRequestBodyLimits, rpcBodyLimit } from "./request-body-limit.js";
@@ -984,6 +984,14 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
   });
 
   app.all("/api/auth/dev-bypass", async (c) => {
+    // Instant dev bypass is strictly limited to development with explicit flag enabled.
+    const isDevBypassAllowed =
+      process.env.NODE_ENV === "development" && process.env.ALLOW_DEV_AUTH_BYPASS === "true";
+
+    if (!isDevBypassAllowed) {
+      return c.json({ error: "Dev bypass is disabled in this environment" }, 403);
+    }
+
     try {
       const { user, token } = await runAsSystem("dev bypass auth", async () => {
         let u = await prisma.user.findFirst({
@@ -1003,7 +1011,7 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
         }
         const memberCount = await prisma.member.count({ where: { userId: u.id } });
         if (memberCount === 0) {
-          await bootstrapUserSpace(prisma, u, process.env);
+          await bootstrapUserSpace(prisma, u, env);
         }
         const t = randomUUID();
         const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
@@ -1043,7 +1051,8 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
       return c.json({ success: false, error: "Not authenticated" }, 401);
     }
     try {
-      const snapshot = await getOrbitControlPlaneClient().getBillingSnapshot(session.user.id);
+      const canonicalUserId = await resolveCanonicalPrincipalId(prisma, session.user.id);
+      const snapshot = await getOrbitControlPlaneClient().getBillingSnapshot(canonicalUserId);
       // Never invent a balance: an unreachable control plane is a 503, not 500 credits.
       if (!snapshot) return c.json({ success: false, error: "Billing unavailable" }, 503);
       return c.json({ success: true, data: snapshot });
@@ -1269,26 +1278,7 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
   );
   const limitRpcBody = rpcBodyLimit(env.maxUploadSizeBytes);
   app.use("/rpc/*", async (c, next) => {
-    let session = await requestSession(c.req.raw);
-    if (!session?.actor) {
-      // In dev mode: automatically fallback to default active user so bootstrap/rpc NEVER 401s!
-      try {
-        const actor = await runAsSystem("dev rpc fallback", async () => {
-          const user = await prisma.user.findFirst({
-            where: {
-              OR: [{ email: "adityaownseverything@gmail.com" }, { email: "orbit@forion.dev" }],
-            },
-          });
-          if (!user) return null;
-          return actorFromMembership(requireMembership(prisma, user.id));
-        });
-        if (actor) {
-          session = { actor, sessionId: "dev-session" };
-        }
-      } catch {
-        // ignore
-      }
-    }
+    const session = await requestSession(c.req.raw);
     const actor = session?.actor ?? null;
     const tooLarge = await limitRpcBody(c, actor !== null);
     if (tooLarge) return tooLarge;

@@ -32,6 +32,8 @@ import {
 } from "./model-selection.js";
 import { compatibleModelSeesImages } from "./model-vision.js";
 import { assertAllowedOpenAiCompatibleUrl } from "./openai-compatible-url.js";
+import { signOrbitInternalRequest } from "./orbit-control-plane/orbit-control-plane-client.js";
+import { resolveCanonicalPrincipalId } from "./orbit-control-plane/orbit-user-sync.js";
 import { codexLiveModel } from "./pi-codex-catalog.js";
 import { toOAuthCredential } from "./pi-credentials.js";
 import { LOCAL_PROVIDER_ID } from "./pi-local-provider.js";
@@ -49,6 +51,7 @@ import {
   serializeModelSecret,
   withModelCredentialLock,
 } from "./pi-oauth.js";
+import { REQUESTY_PROVIDER_ID } from "./requesty-provider.js";
 
 export function runtimeFallbackModel(runtime: AgentRuntime) {
   return runtime.describe().capabilities.scripted ? { provider: "scripted", id: "scripted" } : null;
@@ -393,7 +396,34 @@ async function resolveModelKeyMaterial(
   }
   if (requireStoredSecret) throw new Error("Backup model credential is no longer available");
   cloudflareProviderEnv({ provider });
-  return { apiKey: deploymentKeyFor(deps, provider), redact: [] };
+  const apiKey = deploymentKeyFor(deps, provider);
+  if (provider === REQUESTY_PROVIDER_ID || provider === "requesty") {
+    const secret =
+      apiKey ||
+      process.env.FORION_ORBIT_INTERNAL_SECRET ||
+      process.env.FORION_API_KEY ||
+      "orbit-forion-internal-dev-secret-12345";
+    let canonicalUserId = userId;
+    if (deps.prisma) {
+      try {
+        canonicalUserId = await resolveCanonicalPrincipalId(deps.prisma, userId);
+      } catch {
+        // Keep local userId if resolution fails
+      }
+    }
+    const headers = signOrbitInternalRequest(
+      secret,
+      "POST",
+      "/api/ai/chat/completions",
+      canonicalUserId,
+    );
+    return {
+      apiKey: secret,
+      headers,
+      redact: secret ? [secret] : [],
+    };
+  }
+  return { apiKey, redact: [] };
 }
 
 /** Translate resolved credentials and capabilities consistently for every run path. */

@@ -4,6 +4,7 @@ import {
   FalMediaGenerationProvider,
   RequestyMediaGenerationProvider,
 } from "./media-generation-provider.js";
+import { getRequestyBaseUrl } from "./requesty-provider.js";
 
 export function createMediaGenerationProvider(
   env: NodeJS.ProcessEnv = process.env,
@@ -25,19 +26,23 @@ export function createMediaGenerationProvider(
     });
   }
   if (kind === "requesty") {
-    const apiKey = env.MEDIA_GENERATION_API_KEY?.trim() || env.REQUESTY_API_KEY?.trim();
+    const apiKey =
+      env.MEDIA_GENERATION_API_KEY?.trim() ||
+      env.FORION_ORBIT_INTERNAL_SECRET?.trim() ||
+      env.FORION_API_KEY?.trim();
     if (!apiKey) throw new Error("Requesty media generation requires an API key");
     return new RequestyMediaGenerationProvider({
       apiKey,
-      baseUrl: env.MEDIA_GENERATION_BASE_URL || env.REQUESTY_BASE_URL,
+      baseUrl: env.MEDIA_GENERATION_BASE_URL || getRequestyBaseUrl(),
       imageModel: env.MEDIA_GENERATION_IMAGE_MODEL,
     });
   }
   if (!kind) {
-    if (env.REQUESTY_API_KEY?.trim()) {
+    const fallbackKey = env.FORION_ORBIT_INTERNAL_SECRET?.trim() || env.FORION_API_KEY?.trim();
+    if (fallbackKey) {
       return new RequestyMediaGenerationProvider({
-        apiKey: env.REQUESTY_API_KEY.trim(),
-        baseUrl: env.REQUESTY_BASE_URL,
+        apiKey: fallbackKey,
+        baseUrl: env.MEDIA_GENERATION_BASE_URL || getRequestyBaseUrl(),
         imageModel: env.MEDIA_GENERATION_IMAGE_MODEL,
       });
     }

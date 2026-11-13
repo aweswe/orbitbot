@@ -1,4 +1,5 @@
 import { createHmac } from "node:crypto";
+import { getLogger } from "@forion/orbit-logging";
 
 /**
  * Orbit Control Plane Client for Orbit
@@ -40,6 +41,14 @@ export interface OrbitCreditRefundInput {
   product?: string;
 }
 
+export interface OrbitCreditSettleInput {
+  userId: string;
+  amount: number;
+  referenceId: string;
+  model?: string;
+  product?: string;
+}
+
 export interface OrbitBillingSnapshot {
   wallet: {
     userId: string;
@@ -53,6 +62,30 @@ export interface OrbitBillingSnapshot {
     currentPeriodEnd?: string;
   };
   executionTier?: "free" | "pro" | "unlimited";
+}
+
+export function signOrbitInternalRequest(
+  secret: string,
+  method: string,
+  pathAndQuery: string,
+  userId: string,
+  extraHeaders?: Record<string, string>,
+): Record<string, string> {
+  const ts = Math.floor(Date.now() / 1000).toString();
+  const payload = `v2|${method.toUpperCase()}|${userId}|${pathAndQuery}|${ts}`;
+  const sig = createHmac("sha256", secret).update(payload).digest("base64");
+
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${secret}`,
+    "x-orbit-user-id": userId,
+    "x-user-id": userId,
+    "x-orbit-req-ts": ts,
+    "x-orbit-sig-version": "2",
+    "x-orbit-req-sig": sig,
+    "X-Orbit-Client": "orbit-bot",
+    ...extraHeaders,
+  };
 }
 
 export class OrbitControlPlaneClient {
@@ -89,19 +122,7 @@ export class OrbitControlPlaneClient {
   }
 
   private headers(method: string, pathAndQuery: string, userId: string): Record<string, string> {
-    const ts = Math.floor(Date.now() / 1000).toString();
-    const payload = `v2|${method.toUpperCase()}|${userId}|${pathAndQuery}|${ts}`;
-    const sig = createHmac("sha256", this.internalSecret).update(payload).digest("base64");
-
-    return {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${this.internalSecret}`,
-      "x-orbit-user-id": userId,
-      "x-orbit-req-ts": ts,
-      "x-orbit-sig-version": "2",
-      "x-orbit-req-sig": sig,
-      "X-Orbit-Client": "orbit-bot",
-    };
+    return signOrbitInternalRequest(this.internalSecret, method, pathAndQuery, userId);
   }
 
   /**
@@ -184,13 +205,13 @@ export class OrbitControlPlaneClient {
 
       if (!response.ok) {
         const errText = await response.text();
-        console.warn(`[OrbitControlPlane] Commit credits returned ${response.status}: ${errText}`);
+        getLogger().warn("orbit_billing.commit_failed", { status: response.status, errText });
         return false;
       }
 
       return true;
     } catch (err) {
-      console.warn(`[OrbitControlPlane] Error committing credits: ${(err as Error).message}`);
+      getLogger().warn("orbit_billing.commit_error", { error: (err as Error).message });
       return false;
     }
   }
@@ -218,13 +239,48 @@ export class OrbitControlPlaneClient {
 
       if (!response.ok) {
         const errText = await response.text();
-        console.warn(`[OrbitControlPlane] Refund credits returned ${response.status}: ${errText}`);
+        getLogger().warn("orbit_billing.refund_failed", { status: response.status, errText });
         return false;
       }
 
       return true;
     } catch (err) {
-      console.warn(`[OrbitControlPlane] Error refunding credits: ${(err as Error).message}`);
+      getLogger().warn("orbit_billing.refund_error", { error: (err as Error).message });
+      return false;
+    }
+  }
+
+  /**
+   * Settle credits atomically: commits actual spent credits and releases
+   * any unused remaining locked capacity in one atomic server operation.
+   */
+  async settleCredits(input: OrbitCreditSettleInput): Promise<boolean> {
+    const userId = this.requireUserId(input.userId);
+    const path = "/api/credits/settle";
+    const url = `${this.baseUrl}${path}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: this.headers("POST", path, userId),
+        body: JSON.stringify({
+          user_id: userId,
+          amount: Math.max(0, Math.round(input.amount)),
+          reference_id: input.referenceId,
+          model: input.model || "orbit-flash",
+          product: input.product || "orbit-bot",
+        }),
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        getLogger().warn("orbit_billing.settle_failed", { status: response.status, errText });
+        return false;
+      }
+
+      return true;
+    } catch (err) {
+      getLogger().warn("orbit_billing.settle_error", { error: (err as Error).message });
       return false;
     }
   }
@@ -270,9 +326,7 @@ export class OrbitControlPlaneClient {
         executionTier: json.data.executionTier ?? "pro",
       };
     } catch (err) {
-      console.warn(
-        `[OrbitControlPlane] Failed to fetch billing snapshot: ${(err as Error).message}`,
-      );
+      getLogger().warn("orbit_billing.snapshot_error", { error: (err as Error).message });
       return null;
     }
   }
@@ -296,7 +350,7 @@ export class OrbitControlPlaneClient {
       };
       return json.data || [];
     } catch (err) {
-      console.warn(`[OrbitControlPlane] Failed to fetch AI models: ${(err as Error).message}`);
+      getLogger().warn("orbit_billing.list_models_error", { error: (err as Error).message });
       return [];
     }
   }
