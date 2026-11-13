@@ -2,7 +2,8 @@ import { createDb } from "./packages/db/src/index.js";
 import { createAuth } from "./packages/auth/src/index.js";
 
 async function main() {
-  const { prisma } = createDb("postgresql://postgres:p0probe@127.0.0.1:55433/orbit_bot");
+  const dbUrl = process.env.DATABASE_URL || "postgresql://postgres.loanzmtsltoppejrmfdj:CrackOnTech2026@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?schema=orbit_bot";
+  const { prisma } = createDb(dbUrl);
   const auth = createAuth(prisma, {
     secret: "ba248cf030d765e4e265c92fcc80af80c1676798347ac29547b0b88d24b41d21",
     baseURL: "http://127.0.0.1:5173",
