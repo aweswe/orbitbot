@@ -47,6 +47,8 @@ export interface AppEnv {
   /** Bearer token the identity provider presents to provision accounts over SCIM. */
   scimBearerToken?: string;
   nodeEnv: string;
+  /** Hosted product policy: reject BYO providers, media, voice, and memory. */
+  cloudOnly: boolean;
   desktopStackToken?: string;
   databaseUrl: string;
   realtimeDatabaseUrl: string;
@@ -245,6 +247,13 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): AppEnv {
   ) {
     resolveForionInternalSecret(source);
   }
+  const cloudOnly = source.ORBIT_CLOUD_ONLY === "true";
+  if (cloudOnly) {
+    if (source.ORBIT_BILLING_ENABLED !== "true") {
+      throw new Error("ORBIT_CLOUD_ONLY requires ORBIT_BILLING_ENABLED=true");
+    }
+    resolveForionInternalSecret(source);
+  }
   const webOrigin = resolveWebOrigin(source.WEB_ORIGIN, DEFAULT_WEB_ORIGIN, "WEB_ORIGIN");
   const sandboxProvider = resolveSandboxProvider(source);
   const cloudAgentProvider = resolveCloudAgentProvider(source);
@@ -256,6 +265,7 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): AppEnv {
     google: googleProvider(source),
     scimBearerToken,
     nodeEnv: source.NODE_ENV ?? "",
+    cloudOnly,
     databaseUrl: required(source, "DATABASE_URL"),
     realtimeDatabaseUrl: source.REALTIME_DATABASE_URL ?? required(source, "DATABASE_URL"),
     desktopStackToken: optional(source.RAKAZO_DESKTOP_STACK_TOKEN),

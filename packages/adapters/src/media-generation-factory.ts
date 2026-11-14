@@ -9,6 +9,9 @@ import { getRequestyBaseUrl } from "./requesty-provider.js";
 export function createMediaGenerationProvider(
   env: NodeJS.ProcessEnv = process.env,
 ): MediaGenerationProvider | undefined {
+  // Cloud-only builds never expose an unmetered media path. Voice, image and
+  // video are disabled until Forion can meter them (audit MOD-1 / D5).
+  if (env.ORBIT_CLOUD_ONLY === "true") return undefined;
   const kind = env.MEDIA_GENERATION_PROVIDER?.trim().toLowerCase();
   if (kind === "disabled") return undefined;
   if (kind === "fake") return new FakeMediaGenerationProvider();

@@ -180,6 +180,11 @@ export class SpaceMemoryProviderResolver implements MemoryProviderResolver {
   ) {}
 
   async resolve(spaceId: string): Promise<ConfiguredMemoryProvider | null> {
+    // Cloud-only builds use the vendor memory service. A saved Supermemory,
+    // Honcho, or Serenity configuration must not route around Forion.
+    if (process.env.ORBIT_CLOUD_ONLY === "true") {
+      return { provider: new ForionSemanticMemoryProvider(), defaultScope: "isolated" };
+    }
     const config = await this.prisma.spaceMemoryConfig.findUnique({
       where: { spaceId },
       include: { secret: true },

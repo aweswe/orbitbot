@@ -490,4 +490,33 @@ describe("Forion billing environment", () => {
       }).nodeEnv,
     ).toBe("test");
   });
+
+  it("cloud-only mode requires hosted billing and a secret", () => {
+    expect(() =>
+      loadEnv({
+        ...base,
+        ORBIT_CLOUD_ONLY: "true",
+        FORION_SERVER_URL: "http://127.0.0.1:3001",
+        FORION_ORBIT_INTERNAL_SECRET: "test-secret",
+      }),
+    ).toThrow("ORBIT_BILLING_ENABLED=true");
+
+    expect(() =>
+      loadEnv({
+        ...base,
+        ORBIT_CLOUD_ONLY: "true",
+        ORBIT_BILLING_ENABLED: "true",
+      }),
+    ).toThrow("FORION_ORBIT_INTERNAL_SECRET");
+
+    expect(
+      loadEnv({
+        ...base,
+        ORBIT_CLOUD_ONLY: "true",
+        ORBIT_BILLING_ENABLED: "true",
+        FORION_SERVER_URL: "http://127.0.0.1:3001",
+        FORION_ORBIT_INTERNAL_SECRET: "test-secret",
+      }).cloudOnly,
+    ).toBe(true);
+  });
 });

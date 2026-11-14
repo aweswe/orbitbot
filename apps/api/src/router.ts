@@ -120,6 +120,8 @@ export interface RouterDeps {
   onEmailError?: (error: unknown) => void;
   speechSummary?: VoiceDeps["speechSummary"];
   env: {
+    /** Hosted product policy; rejects BYO providers, media, voice, and memory. */
+    cloudOnly?: boolean;
     /** Domain of bots' email addresses; unset when this server receives no email. */
     inboundEmailDomain?: string;
     ticketBoardEnabled?: boolean;

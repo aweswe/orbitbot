@@ -39,6 +39,7 @@ import {
 } from "@forion/orbit-db";
 import { getLogger } from "@forion/orbit-logging";
 import { ORPCError } from "@orpc/server";
+import { refuseCloudOnly } from "./cloud-only.js";
 import { createAccessGrant, listAccessGrants, revokeAccessGrant } from "../access-grants.js";
 import { requireAdmin } from "../admins.js";
 import { aiConsentStatus, allowAiConsent } from "../ai-consent.js";
@@ -457,8 +458,9 @@ export function accountRoutes(ctx: RouterContext) {
           }),
         );
       }),
-      connect: authed.voice.connect.handler(async ({ context, input }) =>
-        persistVoiceCredential(deps, context.actor, {
+      connect: authed.voice.connect.handler(async ({ context, input }) => {
+        refuseCloudOnly(deps.env.cloudOnly, "voice connections");
+        return persistVoiceCredential(deps, context.actor, {
           provider: input.provider,
           plaintext: input.apiKey,
           voiceId: input.voiceId,
@@ -468,8 +470,8 @@ export function accountRoutes(ctx: RouterContext) {
           sttModel: input.sttModel,
           scope: input.scope,
           signal: context.signal,
-        }),
-      ),
+        });
+      }),
       disconnect: authed.voice.disconnect.handler(async ({ context, input }) =>
         disconnectVoiceCredential(deps, context.actor, { provider: input.provider }),
       ),

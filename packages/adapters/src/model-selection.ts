@@ -620,6 +620,9 @@ export async function validateBotModelChange(
   const { provider, model } = input;
   const changing = provider !== input.current?.provider || model !== input.current?.model;
   if (changing && provider && model) {
+    if (process.env.ORBIT_CLOUD_ONLY === "true" && provider !== "requesty" && provider !== "orbit") {
+      return { ok: false, error: "Orbit Cloud supports hosted models only" };
+    }
     const hosted =
       (deps.hostedProvider === provider || provider === "requesty" || provider === "orbit") &&
       (await hasHostedModelCredits(deps.prisma, scope, provider));
@@ -925,6 +928,11 @@ export async function hasHostedModelCredits(
   scope: { userId: string; spaceId: string },
   provider: string,
 ): Promise<boolean> {
+  // Cloud-only builds serve only the vendor gateway. A BYO provider must not
+  // inherit the hosted-credit path just because billing is enabled.
+  if (process.env.ORBIT_CLOUD_ONLY === "true") {
+    return provider === "requesty" || provider === "orbit";
+  }
   if (
     process.env.ORBIT_BILLING_ENABLED === "true" ||
     process.env.FORION_ORBIT_INTERNAL_SECRET ||

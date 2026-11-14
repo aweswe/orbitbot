@@ -35,7 +35,14 @@ Pinned audit: `ORBIT_AUDIT_2026-11-14.md` (orbitbot@c3bd4da). Work branches: `fe
 
 ## Phase 3 — cloud-only server policy
 
-Status: not started.
+| Task | Status | Evidence |
+|---|---|---|
+| T3.1 Model/provider/import gate | Done | `ORBIT_CLOUD_ONLY` boot check; `refuseCloudOnly` on models.connect/probe/OAuth; agent import strips third-party keys |
+| T3.2 Aux model routing | Partial | Decision/aux direct paths still need the gateway sweep; main model traffic is Forion-only |
+| T3.3 Voice/memory/media disabled | Done | Voice + memory connect routes reject; media factory returns undefined; memory factory forces Forion |
+| T3.4 Identity/RLS/HMAC hardening | Partial | Canonical-ID, body-bound HMAC, and RLS role separation remain; tracked in HUMAN_ACTIONS and the audit |
+| T3.5 Catalog from Forion | Partial | Server now restricts providers; the composer catalog is still hardcoded (Phase 4/UI) |
+| T3.6 Gate | Partial | 66 cloud-only/env tests pass; adapters + API tsc pass; identity negative tests pending |
 
 ## Phase 4 — web alpha / managed execution
 

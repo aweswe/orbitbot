@@ -15,6 +15,7 @@ import {
   serializeSpaceMemoryConfig,
   updateMemoryProviderDefaultScope,
 } from "../memory-provider-config.js";
+import { refuseCloudOnly } from "./cloud-only.js";
 import type { RouterContext } from "./context.js";
 
 export function memoryRoutes(ctx: RouterContext) {
@@ -136,9 +137,10 @@ export function memoryRoutes(ctx: RouterContext) {
         const config = await findSpaceMemoryConfig(deps.prisma, context.actor.spaceId);
         return config ? serializeSpaceMemoryConfig(config) : null;
       }),
-      connectProvider: authed.memory.connectProvider.handler(async ({ context, input }) =>
-        persistMemoryProviderConfig(deps, context.actor, input),
-      ),
+      connectProvider: authed.memory.connectProvider.handler(async ({ context, input }) => {
+        refuseCloudOnly(deps.env.cloudOnly, "memory providers");
+        return persistMemoryProviderConfig(deps, context.actor, input);
+      }),
       setDefaultScope: authed.memory.setDefaultScope.handler(async ({ context, input }) =>
         updateMemoryProviderDefaultScope(deps, context.actor, input.defaultMemoryScope),
       ),

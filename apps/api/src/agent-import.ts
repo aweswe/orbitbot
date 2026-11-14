@@ -389,10 +389,15 @@ export async function writeImportedBot<PreparedKey>(
   if (new Set(input.selection.apiKeys).size !== input.selection.apiKeys.length) {
     throw refused("BAD_REQUEST", "selection_mismatch", "The selection does not match the files.");
   }
-  const keys = selected(
-    plan.apiKeys,
-    input.selection.apiKeys.filter((id) => !connectedKeyIds.has(id)),
-  );
+  // Cloud-only builds never persist third-party model keys from an import.
+  // The imported agent still runs on the hosted catalog.
+  const keys =
+    process.env.ORBIT_CLOUD_ONLY === "true"
+      ? []
+      : selected(
+          plan.apiKeys,
+          input.selection.apiKeys.filter((id) => !connectedKeyIds.has(id)),
+        );
   const model = input.selection.model ? plan.model : null;
   if (input.selection.model) {
     const keyed = keys.some((key) => key.provider === model?.provider);
