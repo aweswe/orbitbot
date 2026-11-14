@@ -7,20 +7,42 @@ import {
   recordModelCreditReceipt,
   reserveModelCredits,
 } from "@forion/orbit-db";
-import { createOrbitModelCreditObserver } from "./orbit-control-plane/orbit-credit-observer.js";
+import { getLogger } from "@forion/orbit-logging";
 
 export class HostedModelCreditsRequiredError extends Error {}
+
+/**
+ * Hosted mode has one meter: the Forion AI gateway. The gateway locks and
+ * settles every managed call itself. Orbit still observes usage for the UI,
+ * but it must never lock or settle against the same wallet — that produced the
+ * live "Cannot commit 19 credits — only 7 locked" failure.
+ */
+function gatewayTelemetryObserver(): ModelCallObserver {
+  return {
+    beforeCall: (call) =>
+      `gateway:${call.runId ?? "run"}:${call.callId ?? call.modelId ?? "call"}`,
+    afterCall: async (reservationId, usage) => {
+      if (usage) {
+        getLogger().info("orbit_billing.gateway_usage", {
+          reservationId,
+          inputTokens: usage.inputTokens,
+          outputTokens: usage.outputTokens,
+          costUsd: usage.costUsd,
+        });
+      }
+    },
+    onRequestId: async () => {},
+  };
+}
 
 /** Only deployment credentials are metered; a personal connection never reaches this boundary. */
 export async function hostedModelCreditObserver(
   prisma: PrismaClient,
   scope: { userId: string; spaceId: string },
 ): Promise<ModelCallObserver> {
-  // Explicit opt-in only. A configured URL must not silently divert metering away
-  // from the local credit ledger — and a test run must never reach a live control
-  // plane just because `FORION_SERVER_URL` leaked into the environment.
+  // Hosted mode: the Forion gateway is the sole billing authority.
   if (process.env.ORBIT_BILLING_ENABLED === "true") {
-    return createOrbitModelCreditObserver(scope, prisma);
+    return gatewayTelemetryObserver();
   }
 
   const membership = await organizationForMember(prisma, scope);

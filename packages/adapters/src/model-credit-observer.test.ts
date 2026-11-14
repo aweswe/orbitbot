@@ -33,6 +33,31 @@ describe("hosted model credit gate", () => {
     vi.mocked(creditAccount).mockResolvedValue({ mode: "byok", balanceMicros: 1n } as never);
     await expect(hostedModelCreditObserver({} as never, scope)).resolves.toBeDefined();
   });
+  it("does not meter when the Forion gateway owns billing", async () => {
+    const previous = process.env.ORBIT_BILLING_ENABLED;
+    process.env.ORBIT_BILLING_ENABLED = "true";
+    try {
+      const observer = await hostedModelCreditObserver({} as never, scope);
+      const call = {
+        callId: "call-1",
+        provider: "requesty",
+        modelId: "test-model",
+        runId: "run-1",
+      } as Parameters<ModelCallObserver["beforeCall"]>[0];
+
+      const reservationId = await observer.beforeCall(call);
+      expect(reservationId).toContain("gateway:");
+      await observer.afterCall(reservationId, null);
+
+      expect(organizationForMember).not.toHaveBeenCalled();
+      expect(creditAccount).not.toHaveBeenCalled();
+      expect(reserveModelCredits).not.toHaveBeenCalled();
+    } finally {
+      if (previous === undefined) delete process.env.ORBIT_BILLING_ENABLED;
+      else process.env.ORBIT_BILLING_ENABLED = previous;
+    }
+  });
+
   it("requires a reservation before a funded-mode account may use the server key", async () => {
     vi.mocked(creditAccount).mockResolvedValue({ mode: "credits" } as never);
     vi.mocked(reserveModelCredits).mockRejectedValue(new Error("Not enough model credits"));

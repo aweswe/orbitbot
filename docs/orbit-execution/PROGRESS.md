@@ -18,12 +18,20 @@ Pinned audit: `ORBIT_AUDIT_2026-11-14.md` (orbitbot@c3bd4da). Work branches: `fe
 |---|---|---|
 | T1.1 Hermetic unit harness | Done | `orbit-adversarial-gate.test.ts` no longer reads `.env` or calls Forion; DB half gated on `VERIFY_DATABASE`; `pin-test-env.ts` and `harness.ts` clear billing vars; `scripts/check-test-hermeticity.mjs` wired into `pnpm test` |
 | T1.2 Fake gateway + wallet harness | Partial | In-process HMAC verifier in the adversarial gate; real-Postgres `wallet.service.spec.ts` harness. Full fault-injecting FakeForionGateway still to build |
-| T1.3 Cross-service invariant suite | Partial | I1, I2 (aggregate), I3, I5, I8 green; I4 and I6 recorded as `it.failing`; I7/I9/I10 remain Phase 2/3 targets. See `docs/billing/INVARIANTS.md` |
-| T1.4 Gate | Pending full-suite confirmation | First run: 23,239 passed, 1,064 skipped, 1 failed (UI type-scale); fixed; rerun in progress. Wallet spec 6/6 passed against a fresh pgvector DB |
+| T1.3 Cross-service invariant suite | Done | I1-I8 mapped in `docs/billing/INVARIANTS.md`; I4/I6 now green after Phase 2 |
+| T1.4 Gate | Done | Full suite 23,240 passed / 1,064 skipped / 0 failed; wallet spec 8/8 against a fresh pgvector DB |
 
 ## Phase 2 — single billing authority
 
-Status: not started. Entry gate: Phase 1 full suite green + invariant baseline documented.
+| Task | Status | Evidence |
+|---|---|---|
+| T2.1 Per-reservation ledger validation | Done | Forion `cb90b5d4`: reservation validated under `FOR UPDATE`; commit/refund no longer trust the user-wide bucket |
+| T2.2 Locked-credit cap + TTL | Done | `FORION_MAX_LOCKED_CREDITS_PER_USER` default 10,000; TTL 30m |
+| T2.3 One pricing function | Hosted done | Gateway `usdToCredits` is authoritative for hosted calls; legacy self-host math remains outside the closed path |
+| T2.4 Observer telemetry-only | Done | `model-credit-observer.ts`: hosted mode never locks/settles; 4/4 tests |
+| T2.5 Durable gateway outbox / requests IDs | Partial | Deferred: gateway settlement is still synchronous; no per-request ledger correlation yet |
+| T2.6 Hot-chat revenue leak (BILL-10) | Done | Forion `8ddd479c`: real lock + per-run overage key |
+| T2.8 Gate | Partial | I1-I4, I6-I9 green in hosted mode; I5 local; I10 pending Phase 3; T2.5/T2.7 pending |
 
 ## Phase 3 — cloud-only server policy
 
