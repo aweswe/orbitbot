@@ -79,6 +79,14 @@ async function main() {
     process.env.SANDBOX_PROVIDER = sandboxProvider;
     process.env.AGENT_RUNTIME = agentRuntime;
     process.env.RAKAZO_LIVE_MODEL_CATALOG = "off";
+    // Tests must never reach the live Forion control plane. Integration/e2e
+    // uses fake adapters; a developer .env must not leak billing into them.
+    delete process.env.ORBIT_BILLING_ENABLED;
+    delete process.env.FORION_SERVER_URL;
+    delete process.env.ORBIT_CONTROL_PLANE_URL;
+    delete process.env.FORION_ORBIT_INTERNAL_SECRET;
+    delete process.env.FORION_API_KEY;
+    delete process.env.ORBIT_AUTH_MODE;
     if (!integration) {
       process.env.TICKET_BOARD_ENABLED = "true";
       process.env.PHONE_CALLS_ENABLED = "true";
@@ -125,6 +133,7 @@ async function main() {
       // the other suites need the database too but carry no suffix.
       const suites = [
         ...globSync("{apps,packages}/*/src/**/*.postgres.test.ts").sort(),
+        "packages/adapters/src/orbit-control-plane/orbit-adversarial-gate.test.ts",
         "packages/testkit/src/journeys.test.ts",
         "packages/testkit/src/authorization.test.ts",
         "packages/testkit/src/attachments.test.ts",

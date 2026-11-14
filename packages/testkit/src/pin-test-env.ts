@@ -44,6 +44,14 @@ if (!process.env.VERIFY_PROVIDERS) {
     delete process.env.REALTIME_DATABASE_URL;
   }
 }
+// Billing must be a fake in every test. A developer .env that points at Forion
+// would otherwise let a "unit" run lock or commit real credits.
+delete process.env.ORBIT_BILLING_ENABLED;
+delete process.env.FORION_SERVER_URL;
+delete process.env.ORBIT_CONTROL_PLANE_URL;
+delete process.env.FORION_ORBIT_INTERNAL_SECRET;
+delete process.env.FORION_API_KEY;
+delete process.env.ORBIT_AUTH_MODE;
 delete process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
 delete process.env.OTEL_EXPORTER_OTLP_HEADERS;
 delete process.env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT;

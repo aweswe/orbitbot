@@ -32,15 +32,12 @@ import {
   setWalFilePath,
 } from "./orbit-credit-observer.js";
 
-if (!process.env.DATABASE_URL && fs.existsSync(".env")) {
-  const envContent = fs.readFileSync(".env", "utf8");
-  const m = envContent.match(/^DATABASE_URL=(.+)$/m);
-  if (m?.[1]) {
-    process.env.DATABASE_URL = m[1].trim().replace(/^["']|["']$/g, "");
-  }
-}
-
-const dbTests = process.env.DATABASE_URL ? describe.sequential : describe.skip;
+// Only the integration harness supplies both flags, with a disposable database.
+// Reading the repo .env here used to point unit runs at a shared Supabase DB.
+const dbTests =
+  process.env.VERIFY_DATABASE && process.env.DATABASE_URL
+    ? describe.sequential
+    : describe.skip;
 
 dbTests("Orbit credit observer — PostgreSQL Integration Suite", () => {
   let db: ReturnType<typeof createDb>;

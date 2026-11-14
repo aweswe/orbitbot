@@ -92,7 +92,7 @@ export function OrbitCreditBadge({
       size="sm"
       title={`Credits & billing${lockedTitle} — click to manage`}
       onClick={onClick}
-      className={`h-7 min-w-0 max-w-full gap-1.5 overflow-hidden px-2 text-xs text-foreground hover:bg-accent/50 ${
+      className={`h-7 min-w-0 max-w-full gap-1.5 overflow-hidden px-2 text-label text-foreground hover:bg-accent/50 ${
         collapsed ? "justify-center px-1" : ""
       } ${className}`}
     >
@@ -102,6 +102,7 @@ export function OrbitCreditBadge({
       />
       <span
         className={`min-w-0 max-w-[min(100%,8rem)] truncate tabular-nums font-medium ${
+          // off-scale: 10px keeps the collapsed credit text inside the 28px control
           collapsed ? "text-center text-[10px] font-semibold" : "text-left"
         }`}
       >

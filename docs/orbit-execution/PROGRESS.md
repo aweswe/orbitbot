@@ -14,11 +14,16 @@ Pinned audit: `ORBIT_AUDIT_2026-11-14.md` (orbitbot@c3bd4da). Work branches: `fe
 
 ## Phase 1 — hermetic harness + billing invariants
 
-Status: not started. Next after Phase 0 gate.
+| Task | Status | Evidence |
+|---|---|---|
+| T1.1 Hermetic unit harness | Done | `orbit-adversarial-gate.test.ts` no longer reads `.env` or calls Forion; DB half gated on `VERIFY_DATABASE`; `pin-test-env.ts` and `harness.ts` clear billing vars; `scripts/check-test-hermeticity.mjs` wired into `pnpm test` |
+| T1.2 Fake gateway + wallet harness | Partial | In-process HMAC verifier in the adversarial gate; real-Postgres `wallet.service.spec.ts` harness. Full fault-injecting FakeForionGateway still to build |
+| T1.3 Cross-service invariant suite | Partial | I1, I2 (aggregate), I3, I5, I8 green; I4 and I6 recorded as `it.failing`; I7/I9/I10 remain Phase 2/3 targets. See `docs/billing/INVARIANTS.md` |
+| T1.4 Gate | Pending full-suite confirmation | First run: 23,239 passed, 1,064 skipped, 1 failed (UI type-scale); fixed; rerun in progress. Wallet spec 6/6 passed against a fresh pgvector DB |
 
 ## Phase 2 — single billing authority
 
-Status: not started.
+Status: not started. Entry gate: Phase 1 full suite green + invariant baseline documented.
 
 ## Phase 3 — cloud-only server policy
 
