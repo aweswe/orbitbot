@@ -252,6 +252,13 @@ export class ModelTeamChatEngagementJudge implements TeamChatEngagementJudge {
     const provider = useOverride ? requestedProvider : (main ?? fallback)?.provider;
     const modelId = useOverride ? requestedModel : (main ?? fallback)?.modelId;
     if (!provider || !modelId) return null;
+    if (
+      process.env.ORBIT_CLOUD_ONLY === "true" &&
+      provider !== "requesty" &&
+      provider !== "orbit"
+    ) {
+      return null;
+    }
 
     const hosted =
       settings?.modelCreditsEnabled &&

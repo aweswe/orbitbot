@@ -13,7 +13,7 @@ Status as of 2026-11-14, before the Phase 2 single-authority rewrite. Green test
 | I7 | Exactly one meter writes per inference | `orbitbot/packages/adapters/src/model-credit-observer.test.ts` — "does not meter when the Forion gateway owns billing" | Green in hosted mode: the observer is telemetry-only; the gateway is the sole meter |
 | I8 | Balance never negative via settle overage without explicit policy | `wallet.service.spec.ts` — I8 | Green (settle caps at the lock; the undercharge is tracked separately) |
 | I9 | One pricing function; same usage yields one price | Hosted: Forion `usdToCredits`; self-host legacy `costUsd/0.002` remains behind the cloud-only split | Green for hosted traffic; self-host path is not part of the closed product |
-| I10 | Every metered path emits a credit event; unmetered paths are explicitly free | `cloud-only-policy.test.ts`, `media-generation-factory.test.ts` | Green for hosted: voice/image/video/third-party memory are rejected or disabled in cloud mode rather than silently free |
+| I10 | Every metered path emits a credit event; unmetered paths are explicitly free | `billing-paths.test.ts`, `media-generation-factory.test.ts` | Green for hosted: every model/media/voice/memory entry point is tagged `metered-gateway`, `included`, or `disabled-cloud`; direct decision/Cursor paths are rejected in cloud mode |
 
 ## How to run
 

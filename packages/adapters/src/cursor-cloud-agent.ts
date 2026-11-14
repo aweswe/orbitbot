@@ -43,6 +43,9 @@ export class CursorCloudAgentProvider implements CloudAgentProvider {
   private readonly timeoutMs: number;
 
   constructor(options: CursorCloudAgentOptions) {
+    if (process.env.ORBIT_CLOUD_ONLY === "true") {
+      throw new Error("Cursor cloud agents are disabled in Orbit Cloud");
+    }
     this.apiKey = options.apiKey.trim();
     if (!this.apiKey) throw new Error("CURSOR_API_KEY is required");
     this.fetchImpl = options.fetch ?? fetch;

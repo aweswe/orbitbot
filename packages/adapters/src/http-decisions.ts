@@ -36,6 +36,9 @@ export class HttpDecisionProvider implements DecisionProvider {
     private readonly provider: "openrouter" | "typesafe",
     private readonly options: DecisionProviderOptions,
   ) {
+    if (process.env.ORBIT_CLOUD_ONLY === "true") {
+      throw new DecisionProviderError("unavailable");
+    }
     if (!options.apiKey.trim()) throw new DecisionProviderError("authentication");
   }
 

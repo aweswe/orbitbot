@@ -90,6 +90,13 @@ export function resolveRuntimeModel(modelConfig: AgentRunRequest["model"]): {
   const provider = canonicalPiProviderId(
     modelConfig.provider === "scripted" ? "openrouter" : modelConfig.provider,
   );
+  if (
+    process.env.ORBIT_CLOUD_ONLY === "true" &&
+    provider !== "requesty" &&
+    provider !== "orbit"
+  ) {
+    throw new Error("Orbit Cloud supports the hosted model provider only");
+  }
   const envDefaultModel = process.env.PI_DEFAULT_MODEL?.trim();
   const envDefaultProvider = process.env.PI_DEFAULT_PROVIDER?.trim() || "openrouter";
   const requestedId =
