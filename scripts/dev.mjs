@@ -41,6 +41,10 @@ const dotenv = require("dotenv");
 
 const DEFAULT_PORTS = { web: 5173, api: 3100, supervisor: 7091 };
 const PORT_STEP = 10;
+/** Explicit staging runs use the configured database instead of a per-branch copy. */
+const useConfiguredSharedDatabase = /^(1|true)$/i.test(
+  process.env.ORBIT_DEV_SHARED_DB ?? "",
+);
 // Keep every local URL and bind on the same hostname so cookies, auth origins, and the Vite
 // proxy agree. Use localhost rather than a mix of localhost and 127.0.0.1. Prefer IPv4 for
 // localhost so macOS's IPv6-first resolution cannot bind the API where the proxy cannot reach it.
@@ -237,6 +241,13 @@ function loginOf(url) {
 async function sharedDatabase() {
   const url = setting("DATABASE_URL");
   const migrationUrl = setting("DATABASE_MIGRATION_URL") || url;
+  if (useConfiguredSharedDatabase) {
+    if (!url || !migrationUrl) {
+      throw new Error("ORBIT_DEV_SHARED_DB requires DATABASE_URL and DATABASE_MIGRATION_URL");
+    }
+    log("Using the configured shared database; account data is shared with every client.");
+    return { url, migrationUrl };
+  }
   if (url && loginOf(url) === loginOf(migrationUrl)) {
     log(
       "DATABASE_URL and DATABASE_MIGRATION_URL use the same login; using the local container so migrations run with a separate owner",
@@ -500,24 +511,31 @@ let database = shared;
 const onMain = mainMigrations();
 const pending = branchOnlyMigrations(onMain);
 await pruneBranchDatabases(shared, sharedDataDir, onMain, pending.length ? currentBranch() : null);
-if (pending.length) {
+if (pending.length && !useConfiguredSharedDatabase) {
   log(`This branch adds ${pending.length} migration(s), so it gets its own database`);
   database = await branchDatabase(shared, sharedDataDir);
+} else if (pending.length) {
+  log(`Applying ${pending.length} branch migration(s) to the configured shared database`);
 }
 env.DATABASE_URL = database.url;
 env.DATABASE_MIGRATION_URL = database.migrationUrl;
 env.DATA_DIR = database.dataDir;
 
 generateClientIfStale(env);
-// Checkouts starting together would otherwise grant the server-wide runtime role at the same
-// moment and fail. Advisory locks are per database, so every checkout locks the shared one.
-const migrationLock = new Client({ connectionString: shared.migrationUrl });
-await migrationLock.connect();
-try {
-  await migrationLock.query("SELECT pg_advisory_lock(hashtext('rakazo dev migrate'))");
-  runPnpm(["db:migrate"], { cwd: root, env, stdio: "inherit" });
-} finally {
-  await migrationLock.end();
+if (useConfiguredSharedDatabase) {
+  // Staging already owns its schema and migration role; this client points at it as-is.
+  log("Skipping migrations; the configured shared database is already provisioned.");
+} else {
+  // Checkouts starting together would otherwise grant the server-wide runtime role at the same
+  // moment and fail. Advisory locks are per database, so every checkout locks the shared one.
+  const migrationLock = new Client({ connectionString: shared.migrationUrl });
+  await migrationLock.connect();
+  try {
+    await migrationLock.query("SELECT pg_advisory_lock(hashtext('rakazo dev migrate'))");
+    runPnpm(["db:migrate"], { cwd: root, env, stdio: "inherit" });
+  } finally {
+    await migrationLock.end();
+  }
 }
 
 let tailnet = null;
