@@ -33,12 +33,14 @@ test("a short reply thread shows one time separator and navigates to its parent"
   await captureScreenshot(page, testInfo, "time-separator-reply-composer");
   await composer.fill("OK");
   await page.getByRole("button", { name: "Send", exact: true }).click();
-  await expect(page.getByTestId("reply-chip")).toHaveCount(0);
   const reply = transcript
     .locator("[data-message-id]")
     .filter({ has: page.getByTestId("message-user-bubble") })
     .filter({ hasText: "OK" })
     .first();
+  // The chip clears when the send settles; let the reply land before checking it.
+  await expect(reply).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByTestId("reply-chip")).toHaveCount(0);
   const quote = reply.getByTestId("reply-parent-preview");
   await expect(quote).toHaveText("↩ You: Let's review the release notes.");
   // A quote wider than its bubble must not pull the user bubble off the right edge.

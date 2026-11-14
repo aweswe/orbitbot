@@ -26,6 +26,18 @@ async function routeScreen(page: Page) {
   );
 }
 
+/** Rewrite the boot state in a thread snapshot; a superseded refresh can dispose its response. */
+async function rewriteComputerState(route: Route, state: string | null) {
+  try {
+    const response = await route.fetch();
+    const body = (await response.json()) as { json?: { computer?: { state?: string } } };
+    if (state && body.json?.computer) body.json.computer.state = state;
+    await route.fulfill({ response, json: body });
+  } catch {
+    await route.abort().catch(() => undefined);
+  }
+}
+
 test("a retrying computer can be closed and keeps booting without a stale error label", async ({
   page,
 }, testInfo) => {
@@ -33,12 +45,9 @@ test("a retrying computer can be closed and keeps booting without a stale error 
   await completeOnboarding(page);
   await routeScreen(page);
   let staleError = true;
-  await page.route("**/rpc/threads/get", async (route) => {
-    const response = await route.fetch();
-    const body = (await response.json()) as { json?: { computer?: { state?: string } } };
-    if (staleError && body.json?.computer) body.json.computer.state = "error";
-    await route.fulfill({ response, json: body });
-  });
+  await page.route("**/rpc/threads/get", (route) =>
+    rewriteComputerState(route, staleError ? "error" : null),
+  );
   const held: Route[] = [];
   await page.route("**/rpc/computer/boot", (route) => {
     held.push(route);
@@ -87,12 +96,9 @@ test("opening a computer refreshes a stale booting snapshot", async ({ page }, t
   await rpc(page, "computer/boot", { botId: activeBotId(page) });
   await routeScreen(page);
   let stale = true;
-  await page.route("**/rpc/threads/get", async (route) => {
-    const response = await route.fetch();
-    const body = (await response.json()) as { json?: { computer?: { state?: string } } };
-    if (stale && body.json?.computer) body.json.computer.state = "booting";
-    await route.fulfill({ response, json: body });
-  });
+  await page.route("**/rpc/threads/get", (route) =>
+    rewriteComputerState(route, stale ? "booting" : null),
+  );
   const boots: Route[] = [];
   await page.route("**/rpc/computer/boot", (route) => {
     boots.push(route);
@@ -118,12 +124,7 @@ test("opening a computer the server reports as booting does not start a second b
   await signup(page, `boot-server-${Date.now()}@orbit.test`, "password12", "Boot Server");
   await completeOnboarding(page);
   // Another tab or the phone started this computer; the server reports it booting.
-  await page.route("**/rpc/threads/get", async (route) => {
-    const response = await route.fetch();
-    const body = (await response.json()) as { json?: { computer?: { state?: string } } };
-    if (body.json?.computer) body.json.computer.state = "booting";
-    await route.fulfill({ response, json: body });
-  });
+  await page.route("**/rpc/threads/get", (route) => rewriteComputerState(route, "booting"));
   const boots: Route[] = [];
   await page.route("**/rpc/computer/boot", (route) => {
     boots.push(route);

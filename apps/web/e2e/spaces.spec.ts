@@ -112,7 +112,7 @@ test("deleting the last bot in a space stays in the app after first use", {
   await expect(page).not.toHaveURL(/\/onboarding/);
   await expect(sidebar.getByRole("button", { name: "Open Side" })).toBeVisible();
   await expect(
-    page.locator("main").getByRole("button", { name: "New bot", exact: true }),
+    page.locator("main").getByRole("button", { name: "Create bot", exact: true }),
   ).toBeVisible();
 
   await sidebar.getByRole("button", { name: "Actions for Side" }).click();

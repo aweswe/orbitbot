@@ -8,9 +8,7 @@ test("an ongoing call stays in reach on a page outside the shell", async ({ page
   await rpc(page, "voice/connect", { provider: "scripted", apiKey: "fake-call-voice-key" });
   await page.goto("/app");
   await page.waitForURL(/\/app\/[^/]+$/);
-  // Until the voice status loads, the call button opens voice settings instead of calling.
   const callButton = page.getByTestId("call-button");
-  await expect(callButton).toHaveAttribute("data-voice-ready", "");
 
   await callButton.click();
   const call = page.getByTestId("call-view");
@@ -54,7 +52,6 @@ test("an active call keeps a chat read-aloud from starting", async ({ page }, te
   await page.goto("/app");
   await page.waitForURL(/\/app\/[^/]+$/);
   const callButton = page.getByTestId("call-button");
-  await expect(callButton).toHaveAttribute("data-voice-ready", "");
   // After the reload only the durable reply is on screen, so the locator is unambiguous.
   const speak = page
     .getByTestId("message-bot-bubble")

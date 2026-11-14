@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 import { captureScreenshot, completeOnboarding, rpc, signup } from "./helpers";
 
 async function openBotInSpace(page: Page, spaceId: string, botId: string, name: string) {
-  await page.evaluate((id) => localStorage.setItem("rakazo:space-id", id), spaceId);
+  await page.evaluate((id) => localStorage.setItem("orbit:space-id", id), spaceId);
   await page.goto(`/app/${botId}`);
   await expect(page.getByPlaceholder(`Message ${name}`)).toBeVisible();
 }
@@ -113,7 +113,7 @@ test("an owner invites someone by link and both see the space's members", async 
     name: "Household",
     botIds: [bot.id, planner.id],
   });
-  await inviteePage.evaluate((id) => localStorage.setItem("rakazo:space-id", id), home.id);
+  await inviteePage.evaluate((id) => localStorage.setItem("orbit:space-id", id), home.id);
   await inviteePage.goto(`/app/g/${group.id}`);
   await send(inviteePage, "@everyone what should we cook tonight?");
   await expect(inviteePage.getByTestId("message-bot-bubble")).toHaveCount(2, { timeout: 30_000 });

@@ -89,7 +89,7 @@ test("adds a stdio MCP server with encrypted environment variables", async ({ pa
 
   await page.getByLabel("Server name").fill("Invoices");
   await page.getByRole("tab", { name: "STDIO", exact: true }).click();
-  await page.getByLabel("Command").fill("npx");
+  await page.getByRole("textbox", { name: "Command", exact: true }).fill("npx");
   await page.getByLabel("Arguments").fill("-y invoices-mcp@1.0.0");
   await page.getByText("Advanced", { exact: true }).click();
 

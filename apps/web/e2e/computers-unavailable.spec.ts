@@ -20,7 +20,7 @@ function stopComputer(computer: unknown) {
   record.screenAvailable = false;
 }
 
-test("unavailable computers say so plainly and link setup help", async ({ page }, testInfo) => {
+test("unavailable computers say so plainly and offer a retry", async ({ page }, testInfo) => {
   await signup(page, `computers-off-${Date.now()}@orbit.test`, "password12", "Computers Off");
   await completeOnboarding(page);
   let sandboxProvider = "none";
@@ -65,10 +65,7 @@ test("unavailable computers say so plainly and link setup help", async ({ page }
   await expect(hint).not.toContainText(".env");
   await expect(hint.getByRole("button", { name: "Check again" })).toBeVisible();
   await expect(hint.getByRole("button", { name: "Open computer settings" })).toBeVisible();
-  await expect(hint.getByRole("link", { name: "Setup help" })).toHaveAttribute(
-    "href",
-    "https://github.com/elie222/rakazo/blob/main/docs/self-host-sandbox-providers.md",
-  );
+  await expect(hint.getByRole("link")).toHaveCount(0);
   await expect(preview.getByTestId("computer-preview-open")).toHaveCount(0);
   await captureScreenshot(page, testInfo, "computers-unavailable-preview");
 
@@ -87,7 +84,6 @@ test("unavailable computers say so plainly and link setup help", async ({ page }
   await expect(
     settingsHint.getByText("Computers are off on this server.", { exact: true }),
   ).toBeVisible();
-  await expect(settingsHint.getByRole("link", { name: "Setup help" })).toBeVisible();
   await captureScreenshot(page, testInfo, "computers-unavailable-settings");
 
   meFails = true;
@@ -99,7 +95,7 @@ test("unavailable computers say so plainly and link setup help", async ({ page }
       /^Could not verify computer setup \(.+\)\. Fix the connection, then check again\.$/,
     ),
   ).toBeVisible();
-  await expect(failure.getByRole("link", { name: "Setup help" })).toBeVisible();
+  await expect(failure.getByRole("button", { name: "Check again" })).toBeVisible();
   meFails = false;
 
   sandboxProvider = "docker";

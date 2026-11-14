@@ -13,8 +13,9 @@ const helper = path.resolve(
 );
 
 // The helper drives Chromium through agent-browser; CI installs the pinned binary and sets this.
+// A local hermetic run has no image tooling even when it sets CI=1, so require the explicit path.
 test.skip(
-  !process.env.CI && !process.env.RAKAZO_AGENT_BROWSER,
+  !process.env.RAKAZO_AGENT_BROWSER,
   "set RAKAZO_AGENT_BROWSER (infra/sandboxes/computer/install-agent-browser.sh)",
 );
 

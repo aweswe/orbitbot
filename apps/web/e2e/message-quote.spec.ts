@@ -70,8 +70,14 @@ test("selecting a text span quotes it into a reply", async ({ page }, testInfo) 
   const quoteButton = page.getByTestId("quote-selection");
 
   const sourceText = `quote-source-${stamp} shows **forty two percent** growth`;
+  // The composer ignores Enter while a send is in flight; let this one settle
+  // before choosing the quote, so the reply below is not swallowed.
+  const sourceSent = page.waitForResponse(
+    (response) => response.url().includes("/rpc/threads/send") && response.ok(),
+  );
   await composer.fill(sourceText);
   await composer.press("Enter");
+  await sourceSent;
   const sourceRow = transcript
     .locator("[data-message-id]")
     .filter({ has: page.getByTestId("message-user-bubble") })
@@ -109,18 +115,21 @@ test("selecting a text span quotes it into a reply", async ({ page }, testInfo) 
 
   const replyText = `quote-reply-${stamp} why this number?`;
   await composer.fill(replyText);
+  // The composer ignores a send while the previous one is still in flight.
+  await expect(page.getByRole("button", { name: "Send", exact: true })).toBeEnabled();
   await composer.press("Enter");
-  await expect(replyChip).toHaveCount(0);
-  // Sending disarms the reply — the live region must not keep a stale
-  // "Replying to" that no longer describes anything after the chip is gone.
-  await expect(page.getByTestId("composer-announcement")).toHaveText("");
-
   const replyRow = transcript
     .locator("[data-message-id]")
     .filter({ has: page.getByTestId("message-user-bubble") })
     .filter({ hasText: replyText })
     .first();
-  await expect(replyRow).toBeVisible({ timeout: 20_000 });
+  // The chip clears when the send settles; let the reply land before checking it.
+  await expect(replyRow).toBeVisible({ timeout: 60_000 });
+  await expect(replyChip).toHaveCount(0);
+  // Sending disarms the reply — the live region must not keep a stale
+  // "Replying to" that no longer describes anything after the chip is gone.
+  await expect(page.getByTestId("composer-announcement")).toHaveText("");
+
   const parentPreview = replyRow.getByTestId("reply-parent-preview");
   await expect(parentPreview).toBeVisible();
   // The accessible name names the action AND the excerpt — the quote must not

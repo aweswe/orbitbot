@@ -124,6 +124,9 @@ test("bots can be reordered by drag or keyboard and keep that order", async ({ p
     notifyOnFinish: true,
     computerMode: "team",
   });
+  // Pin the starting order so onboarding's asynchronous position assignment
+  // cannot make the drag assertions depend on creation timing.
+  await rpc(page, "bots/reorder", { botIds: [chiefId, alpha.id, beta.id] });
   await page.reload();
 
   const sidebar = page.locator("aside").first();
@@ -174,9 +177,16 @@ test("bots can be reordered by drag or keyboard and keep that order", async ({ p
   await expect.poll(order).toEqual([beta.id, chiefId, alpha.id]);
 
   const betaRow = sidebar.locator(`[data-roster-bot-id="${beta.id}"]`);
-  await betaRow.focus();
+  await expect(async () => {
+    await betaRow.focus();
+    await expect(betaRow).toBeFocused({ timeout: 2_000 });
+  }).toPass({ timeout: 10_000 });
+  const keyboardReorderSaved = page.waitForResponse(
+    (response) => response.url().includes("/rpc/bots/reorder") && response.ok(),
+  );
   await page.keyboard.press("Alt+ArrowDown");
   await expect.poll(order).toEqual([chiefId, beta.id, alpha.id]);
+  await keyboardReorderSaved;
   await page.reload();
   await expect.poll(order).toEqual([chiefId, beta.id, alpha.id]);
 
@@ -334,7 +344,10 @@ test("group chats share every context-menu action", async ({ page }, testInfo) =
 
   await group.click({ button: "right" });
   await page.getByRole("menuitem", { name: "Unpin", exact: true }).click();
+  // Let the previous context menu finish closing before opening it again.
+  await expect(page.getByRole("menu")).toHaveCount(0);
   await group.click({ button: "right" });
+  await expect(page.getByRole("menu")).toBeVisible();
   await page.getByRole("menuitem", { name: "Move to", exact: true }).hover();
   await page
     .getByRole("menu", { name: "Move to", exact: true })

@@ -145,9 +145,13 @@ test("the chat follows your sends and a reader at the bottom, not a reader who s
     await expect.poll(gapToEnd).toBeLessThan(2);
   };
   const scrollAway = async () => {
-    await transcript.hover();
-    await page.mouse.wheel(0, -1_500);
-    await expect(jumpToLatest).toBeVisible();
+    // A wheel that lands while a follow/scroll animation is settling can be absorbed;
+    // repeat it until the transcript treats the reader as away.
+    await expect(async () => {
+      await transcript.hover();
+      await page.mouse.wheel(0, -2_000);
+      await expect(jumpToLatest).toBeVisible({ timeout: 2_000 });
+    }).toPass({ timeout: 20_000 });
   };
   const resetToEnd = async () => {
     await transcript.hover();
@@ -209,6 +213,10 @@ test("the chat follows your sends and a reader at the bottom, not a reader who s
   expect(await gapToEnd()).toBeGreaterThan(0);
   await arrive(`after a nudge ${stamp}`);
   await followed(`after a nudge ${stamp}`);
+  // Let the run settle before the next scroll: a late progress event could re-pin the view.
+  await expect(page.getByRole("button", { name: "Stop", exact: true })).toHaveCount(0, {
+    timeout: 60_000,
+  });
 
   // Messages you did not send leave a reader who scrolled away in place.
   await resetToEnd();

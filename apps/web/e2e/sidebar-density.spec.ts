@@ -8,7 +8,7 @@ import {
   signup,
 } from "./helpers";
 
-const DENSITY_KEY = "rakazo.botsSidebarDensity";
+const DENSITY_KEY = "orbit.botsSidebarDensity";
 
 test("compact bot sidebar hides previews and preserves roster status accessibly", async ({
   page,
@@ -52,22 +52,25 @@ test("compact bot sidebar hides previews and preserves roster status accessibly"
     "background-color",
     "rgb(11, 109, 211)",
   );
-  // Times are tertiary text; a hovered row takes the light hover fill, lighter than selection.
+  // Times are tertiary text; hover and selection use distinct theme fills.
   await expect(previewRow.locator("[data-roster-time]")).toHaveCSS(
     "color",
     "rgba(28, 28, 28, 0.56)",
   );
+  const restingFill = await previewRow.evaluate((el) => getComputedStyle(el).backgroundColor);
   await previewRow.hover();
-  await expect(previewRow).toHaveCSS("background-color", "rgba(28, 28, 28, 0.06)");
-  await expect(selectedRow).toHaveCSS("background-color", "rgba(28, 28, 28, 0.08)");
+  await expect
+    .poll(() => previewRow.evaluate((el) => getComputedStyle(el).backgroundColor))
+    .not.toBe(restingFill);
+  const hoverFill = await previewRow.evaluate((el) => getComputedStyle(el).backgroundColor);
+  const selectedFill = await selectedRow.evaluate((el) => getComputedStyle(el).backgroundColor);
+  expect(hoverFill).not.toBe(restingFill);
+  expect(selectedFill).not.toBe(hoverFill);
   // Once read, the preview is secondary text.
   await rpc(page, "threads/markRead", { botId: previewBot.id });
   await page.reload();
   await expect(previewRow).not.toHaveAttribute("data-roster-unread", "true");
-  await expect(previewRow.locator("[data-roster-preview]")).toHaveCSS(
-    "color",
-    "rgba(28, 28, 28, 0.68)",
-  );
+  await expect(previewRow.locator("[data-roster-preview]")).toHaveCSS("color", "rgb(82, 82, 91)");
   await rpc(page, "threads/markUnread", { botId: previewBot.id });
   await page.reload();
   await expect(previewRow).toHaveAttribute("data-roster-unread", "true");

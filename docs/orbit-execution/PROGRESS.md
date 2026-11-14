@@ -124,7 +124,9 @@ Runtime (`forion-nestjs-runtime`): `b5a40f3` signs `/memory/search-internal` wit
 - `pnpm test:e2e --spec=e2e/knowledge-panel.spec.ts` (ports 3110/5180): **2/2 passed**.
 - Critical batch through the same harness: **20/20 passed** — `group-chats`, `billing-paywall`, `settings-shell`, `composer-send-failure`, `model-settings`.
 - The dev-stack failures above were environmental: real-provider latency and `AGENT_RUNTIME=pi` rejecting the scripted voice provider. The hermetic harness removes both.
-- Full Chromium deploy-gate run: in progress at the time of this entry; counts will replace this line.
+- Full Chromium deploy gate (single worker): **294 passed / 1 failed / 8 skipped**. The failure was an `activity-list` keyboard-focus flake, fixed in the test and green on a **3/3** targeted rerun. An earlier full gate had one `message-jump` scroll-test flake, also fixed and green on a **2/2** rerun. The 8 skips are the `page-browser` helper tests, which need the pinned Linux `agent-browser` binary; CI's page-browser job still runs them.
+- Web unit suite: **1,984 passed / 0 failed** across 224 files. Web TypeScript checks pass for both app and E2E projects.
+- Triage fixes in this pass: empty multi-space rosters keep their Space destinations; compact rows are 44px again; triple-clicking the last reply paragraph quotes it; the dead localhost “Orbit Cloud” link is gone; sidebar search aligns with roster rows. E2E was aligned with Orbit storage keys, the command bar, the `orbit.forion.dev` plugin domain, and async send/scroll/route timing.
 
 ### Orbit Chat regression findings (peer session)
 - Storefront BUILD entered the correct `web_app_build` / `commerce_storefront` path but persisted the user turn twice (`41630`, `41631`) plus an empty assistant row; `runStorefrontBuild` saves a synthetic user/assistant pair while the server also persists the user turn. Open product bug.

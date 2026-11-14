@@ -112,6 +112,7 @@ test("sidebar Working and Recent surface active and terminal runs", async ({ pag
   await aside.getByTestId("sidebar-search-trigger").click();
   await expect(runSearch).toHaveValue("");
   await filtersButton.focus();
+  await expect(filtersButton).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(filtersButton).toHaveAttribute("aria-expanded", "true");
   await page.getByTestId("activity-status-filter").selectOption("running");

@@ -306,7 +306,23 @@ test(
     await page.goto("/app");
     await chiefComposer.fill("message the bot named Researcher saying which city peer-fold-beta");
     await chiefComposer.press("Enter");
-    await expect(page.getByRole("button", { name: "Send" })).toBeVisible({ timeout: 60_000 });
+    // Peer-run activity is not streamed into another bot's transcript, so wait for the
+    // ask to exist before opening Researcher: the fresh snapshot then includes it.
+    await expect
+      .poll(
+        async () => {
+          const history = await rpc<{
+            messages: Array<{ blocks: Array<{ kind: string; text?: string }> }>;
+          }>(page, "threads/messages", { botId: researcher.id, includePeerRuns: true });
+          return history.messages.some((message) =>
+            message.blocks.some(
+              (block) => block.kind === "ask" && block.text === "Which city should I use?",
+            ),
+          );
+        },
+        { timeout: 60_000 },
+      )
+      .toBe(true);
     await page.goto(`/app/${researcher.id}`);
     const researcherTranscript = page.getByTestId("transcript");
     await expect(

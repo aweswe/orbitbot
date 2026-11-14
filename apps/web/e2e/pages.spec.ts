@@ -48,8 +48,12 @@ function pageFrame(page: Page, title: string) {
 
 async function send(page: Page, text: string) {
   const composer = page.getByRole("combobox", { name: /^Message/ });
+  const sent = page.waitForResponse(
+    (response) => response.url().includes("/rpc/threads/send") && response.ok(),
+  );
   await composer.fill(text);
   await composer.press("Enter");
+  await sent;
 }
 
 test("a week calendar keeps its days aligned in a desktop two-column page", async ({

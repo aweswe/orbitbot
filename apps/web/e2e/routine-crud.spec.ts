@@ -32,12 +32,17 @@ test("a delayed schedule is visible only while the routine is active", async ({
   });
   let scheduleDelayed = true;
   await page.route("**/rpc/routines/list", async (route) => {
-    const response = await route.fetch();
-    const body = await response.json();
-    body.json = body.json.map((item: Routine) =>
-      item.id === routine.id ? { ...item, active: true, scheduleDelayed } : item,
-    );
-    await route.fulfill({ response, json: body });
+    try {
+      const response = await route.fetch();
+      const body = await response.json();
+      body.json = body.json.map((item: Routine) =>
+        item.id === routine.id ? { ...item, active: true, scheduleDelayed } : item,
+      );
+      await route.fulfill({ response, json: body });
+    } catch {
+      // A superseded refresh can dispose its response before it is read.
+      await route.continue().catch(() => undefined);
+    }
   });
   await page.reload();
   await openBotPanelTab(page, "Routines");
