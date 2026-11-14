@@ -1,58 +1,67 @@
-import {
-  BrainCircuit,
-  Check,
-  ChevronDown,
-  Gauge,
-  Image as ImageIcon,
-  Settings2,
-} from "lucide-react";
+import type { ModelCatalogEntry, ModelRoleChoice } from "@forion/orbit-contracts";
+import { BrainCircuit, Check, ChevronDown, Gauge } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-
-export type OrbitModelTier = "instant" | "thinking" | "image" | "custom";
-export type ReasoningEffortLevel = "low" | "medium" | "high" | "max";
-
-const REASONING_LEVELS: ReasoningEffortLevel[] = ["low", "medium", "high", "max"];
-const REASONING_LABELS: Record<ReasoningEffortLevel, string> = {
-  low: "Low",
-  medium: "Med",
-  high: "High",
-  max: "Max",
-};
-const REASONING_COSTS: Record<ReasoningEffortLevel, string> = {
-  low: "1×",
-  medium: "2×",
-  high: "4×",
-  max: "8×",
-};
+import { rpc } from "../../lib/rpc";
+import { errorText } from "../../lib/user-error";
 
 interface OrbitModelPickerProps {
   disabled?: boolean;
 }
 
+type ModelChoice = Pick<ModelRoleChoice, "provider" | "modelId" | "thinkingLevel">;
+
+function sameModel(left: ModelChoice | null, right: ModelRoleChoice | null): boolean {
+  return Boolean(
+    left && right && left.provider === right.provider && left.modelId === right.modelId,
+  );
+}
+
+/**
+ * The composer picks the model that runs this Space's main role from the Forion
+ * catalog. There is no free-text provider or model field: a hosted deployment
+ * only runs models the catalog knows and the deployment can bill.
+ */
 export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
   const [open, setOpen] = useState(false);
-  const [modelTier, setModelTier] = useState<OrbitModelTier>(() => {
-    return (localStorage.getItem("orbit_model_tier") as OrbitModelTier) || "instant";
-  });
-  const [reasoningEffort, setReasoningEffort] = useState<ReasoningEffortLevel>(() => {
-    return (localStorage.getItem("orbit_reasoning_effort") as ReasoningEffortLevel) || "medium";
-  });
-
+  const [catalog, setCatalog] = useState<ModelCatalogEntry[]>([]);
+  const [current, setCurrent] = useState<ModelChoice | null>(null);
+  const [deep, setDeep] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    localStorage.setItem("orbit_model_tier", modelTier);
-  }, [modelTier]);
+    let cancelled = false;
+    void Promise.allSettled([rpc.models.list(), rpc.models.role({ role: "main" })]).then(
+      ([list, role]) => {
+        if (cancelled) return;
+        if (list.status === "fulfilled") {
+          setCatalog(
+            list.value.filter((entry) => entry.protocol !== "decisions" && !entry.placeholder),
+          );
+        }
+        if (role.status === "fulfilled") {
+          const primary = role.value.primary ?? role.value.deploymentPrimary ?? null;
+          if (primary) {
+            setCurrent({
+              provider: primary.provider,
+              modelId: primary.modelId,
+              thinkingLevel: primary.thinkingLevel ?? null,
+            });
+            setDeep(Boolean(primary.thinkingLevel && primary.thinkingLevel !== "off"));
+          }
+        }
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-  useEffect(() => {
-    localStorage.setItem("orbit_reasoning_effort", reasoningEffort);
-  }, [reasoningEffort]);
-
-  // Click outside to close
   useEffect(() => {
     if (!open) return;
-    function handleClickOutside(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setOpen(false);
       }
     }
@@ -60,229 +69,145 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
     return () => window.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
 
-  const activeLabel =
-    modelTier === "instant"
-      ? "Orbit Flash"
-      : modelTier === "thinking"
-        ? "Orbit Forge"
-        : modelTier === "image"
-          ? "Orbit Canvas"
-          : "Custom AI";
+  const selectedEntry =
+    catalog.find(
+      (entry) => entry.provider === current?.provider && entry.id === current?.modelId,
+    ) ?? null;
+  const label = selectedEntry?.label ?? current?.modelId ?? "Model";
+  const canReason = Boolean(selectedEntry?.reasoning || selectedEntry?.thinkingLevels?.length);
+
+  async function choose(entry: ModelCatalogEntry, thinkingDeep = deep) {
+    if (saving) return;
+    const thinkingLevel =
+      thinkingDeep && (entry.reasoning || entry.thinkingLevels?.length) ? "high" : null;
+    const choice = {
+      provider: entry.provider,
+      modelId: entry.id,
+      thinkingLevel,
+    } satisfies ModelChoice;
+    setSaving(true);
+    setError(null);
+    try {
+      await rpc.models.setRole({ role: "main", primary: choice });
+      setCurrent(choice);
+      setDeep(Boolean(thinkingLevel));
+      setOpen(false);
+    } catch (cause) {
+      setError(errorText(cause, "Could not change the model"));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function setThinking(nextDeep: boolean) {
+    if (!selectedEntry || saving) return;
+    await choose(selectedEntry, nextDeep);
+  }
 
   return (
     <div className="relative inline-block" ref={menuRef}>
-      {/* Trigger Button */}
       <button
         type="button"
-        disabled={disabled}
-        onClick={() => setOpen(!open)}
-        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-caption font-medium transition-all duration-150 border ${
-          modelTier === "thinking"
-            ? "dark:bg-violet-950/50 bg-violet-50 dark:text-violet-300 text-violet-800 dark:border-violet-500/40 border-violet-300 hover:border-violet-400"
-            : modelTier === "image"
-              ? "dark:bg-sky-950/50 bg-sky-50 dark:text-sky-300 text-sky-800 dark:border-sky-500/40 border-sky-300 hover:border-sky-400"
-              : modelTier === "custom"
-                ? "dark:bg-emerald-950/50 bg-emerald-50 dark:text-emerald-300 text-emerald-800 dark:border-emerald-500/40 border-emerald-300 hover:border-emerald-400"
-                : "dark:bg-amber-950/40 bg-amber-50 dark:text-amber-300 text-amber-800 dark:border-amber-500/30 border-amber-300 hover:border-amber-400/50"
-        } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer active:scale-95"}`}
-        title={`Selected Model: ${activeLabel}`}
+        disabled={disabled || saving}
+        onClick={() => setOpen((value) => !value)}
+        className={`inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-caption font-medium text-foreground transition-colors hover:bg-muted ${
+          disabled || saving ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+        }`}
+        aria-label={`Model: ${label}`}
+        aria-expanded={open}
+        title={`Selected model: ${label}`}
       >
-        {modelTier === "thinking" ? (
-          <BrainCircuit size={12} className="dark:text-violet-400 text-violet-600 shrink-0" />
-        ) : modelTier === "image" ? (
-          <ImageIcon size={12} className="dark:text-sky-400 text-sky-600 shrink-0" />
-        ) : modelTier === "custom" ? (
-          <Settings2 size={12} className="dark:text-emerald-400 text-emerald-600 shrink-0" />
-        ) : (
-          <Gauge size={12} className="dark:text-amber-400 text-amber-600 shrink-0" />
-        )}
-        <span className="truncate max-w-[85px] sm:max-w-none">{activeLabel}</span>
-        {modelTier === "thinking" && (
-          <span className="text-caption px-1 py-px rounded dark:bg-violet-500/20 bg-violet-100 dark:text-violet-300 text-violet-800 font-mono">
-            {REASONING_LABELS[reasoningEffort]}
-          </span>
-        )}
+        {deep ? <BrainCircuit size={12} /> : <Gauge size={12} />}
+        <span className="truncate max-w-[85px] sm:max-w-[160px]">{label}</span>
+        {deep ? (
+          <span className="rounded bg-muted px-1 py-px font-mono text-caption">Deep</span>
+        ) : null}
         <ChevronDown
           size={11}
-          className={`text-muted-foreground transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`text-muted-foreground transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
         />
       </button>
 
-      {/* Popover Card */}
-      {open && (
-        <div className="absolute bottom-full right-0 mb-2 w-72 rounded-xl border border-border/80 bg-popover/95 p-1.5 text-popover-foreground shadow-2xl backdrop-blur-xl z-50 animate-in fade-in-0 zoom-in-95">
-          <div className="px-2.5 py-1.5 border-b border-border/40 mb-1">
-            <span className="text-caption font-semibold tracking-wider uppercase text-muted-foreground">
-              Intelligence Tier
+      {open ? (
+        <div className="absolute bottom-full right-0 z-50 mb-2 w-80 rounded-xl border border-border bg-popover/95 p-1.5 text-popover-foreground shadow-2xl backdrop-blur-xl animate-in fade-in-0 zoom-in-95">
+          <div className="mb-1 flex items-center justify-between border-b border-border/40 px-2.5 py-1.5">
+            <span className="text-caption font-semibold uppercase tracking-wider text-muted-foreground">
+              Model
             </span>
-          </div>
-
-          {/* Orbit Flash Option */}
-          <div
-            role="button"
-            tabIndex={0}
-            onClick={() => {
-              setModelTier("instant");
-              setOpen(false);
-            }}
-            className={`group relative w-full cursor-pointer rounded-lg border p-2 text-left transition-colors mb-1 ${
-              modelTier === "instant"
-                ? "dark:border-amber-500/40 border-amber-400/60 dark:bg-amber-500/[0.08] bg-amber-50/80"
-                : "border-transparent hover:bg-muted/50"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md dark:bg-amber-500/10 bg-amber-100 dark:text-amber-400 text-amber-700">
-                <Gauge size={14} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-caption font-semibold text-foreground">Orbit Flash</span>
-                  <span className="rounded px-1 py-px text-caption font-medium dark:bg-amber-500/20 bg-amber-100 dark:text-amber-300 text-amber-800">
-                    Default
-                  </span>
-                </div>
-                <p className="text-caption text-muted-foreground truncate">
-                  Fast · Zero reasoning overhead
-                </p>
-              </div>
-              {modelTier === "instant" && <Check size={14} className="text-amber-500 shrink-0" />}
-            </div>
-          </div>
-
-          {/* Orbit Forge Option */}
-          <div
-            role="button"
-            tabIndex={0}
-            onClick={() => {
-              setModelTier("thinking");
-            }}
-            className={`group relative w-full cursor-pointer rounded-lg border p-2 text-left transition-colors mb-1 ${
-              modelTier === "thinking"
-                ? "dark:border-violet-500/40 border-violet-400/60 dark:bg-violet-500/[0.08] bg-violet-50/80"
-                : "border-transparent hover:bg-muted/50"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md dark:bg-violet-500/10 bg-violet-100 dark:text-violet-400 text-violet-700">
-                <BrainCircuit size={14} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-caption font-semibold text-foreground">Orbit Forge</span>
-                  <span className="rounded px-1 py-px text-caption font-medium dark:bg-violet-500/20 bg-violet-100 dark:text-violet-300 text-violet-800">
-                    Thinking
-                  </span>
-                </div>
-                <p className="text-caption text-muted-foreground truncate">
-                  Deep multi-pass reasoning
-                </p>
-              </div>
-              {modelTier === "thinking" && <Check size={14} className="text-violet-500 shrink-0" />}
-            </div>
-
-            {/* Reasoning levels */}
-            <div
-              className={`mt-2 flex items-center gap-1 rounded-md border p-0.5 ${
-                modelTier === "thinking"
-                  ? "dark:border-violet-500/30 border-violet-200 dark:bg-violet-500/[0.05] bg-violet-100/50"
-                  : "border-border/30 opacity-70"
-              }`}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {REASONING_LEVELS.map((lvl) => {
-                const isActive = reasoningEffort === lvl && modelTier === "thinking";
-                return (
+            {canReason ? (
+              <div className="flex items-center gap-0.5 rounded-md border border-border p-0.5">
+                {[false, true].map((value) => (
                   <button
-                    key={lvl}
+                    key={String(value)}
                     type="button"
-                    onClick={() => {
-                      setModelTier("thinking");
-                      setReasoningEffort(lvl);
-                    }}
-                    className={`flex flex-1 items-center justify-center gap-0.5 rounded py-0.5 text-caption transition-colors ${
-                      isActive
-                        ? "dark:bg-violet-500/25 bg-violet-200 font-semibold dark:text-violet-200 text-violet-900"
+                    disabled={saving}
+                    onClick={() => void setThinking(value)}
+                    className={`rounded px-1.5 py-0.5 text-caption ${
+                      deep === value
+                        ? "bg-muted font-semibold text-foreground"
                         : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
-                    <span>{REASONING_LABELS[lvl]}</span>
-                    <span className="opacity-60 text-caption font-mono">
-                      {REASONING_COSTS[lvl]}
-                    </span>
+                    {value ? "Deep" : "Standard"}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
+
+          <div className="max-h-80 space-y-0.5 overflow-y-auto">
+            {catalog.length === 0 ? (
+              <p className="px-2.5 py-2 text-caption text-muted-foreground">No models available</p>
+            ) : (
+              catalog.map((entry) => {
+                const active = sameModel(current, {
+                  provider: entry.provider,
+                  modelId: entry.id,
+                  thinkingLevel: null,
+                });
+                return (
+                  <button
+                    key={`${entry.provider}:${entry.id}`}
+                    type="button"
+                    disabled={saving}
+                    onClick={() => void choose(entry)}
+                    className={`flex w-full items-center gap-2 rounded-lg border p-2 text-left transition-colors ${
+                      active ? "border-border bg-muted" : "border-transparent hover:bg-muted/50"
+                    }`}
+                  >
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-muted">
+                      {entry.reasoning || entry.thinkingLevels?.length ? (
+                        <BrainCircuit size={14} />
+                      ) : (
+                        <Gauge size={14} />
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5">
+                        <span className="truncate text-caption font-semibold text-foreground">
+                          {entry.label}
+                        </span>
+                        {entry.managed ? (
+                          <span className="rounded bg-muted px-1 py-px text-caption text-muted-foreground">
+                            Included
+                          </span>
+                        ) : null}
+                      </div>
+                      <p className="truncate text-caption text-muted-foreground">
+                        {entry.providerName ?? entry.provider}
+                      </p>
+                    </div>
+                    {active ? <Check size={14} className="shrink-0" /> : null}
                   </button>
                 );
-              })}
-            </div>
+              })
+            )}
           </div>
-
-          {/* Orbit Canvas Option (Image Generation) */}
-          <div
-            role="button"
-            tabIndex={0}
-            onClick={() => {
-              setModelTier("image");
-              setOpen(false);
-            }}
-            className={`group relative w-full cursor-pointer rounded-lg border p-2 text-left transition-colors mb-1 ${
-              modelTier === "image"
-                ? "dark:border-sky-500/40 border-sky-400/60 dark:bg-sky-500/[0.08] bg-sky-50/80"
-                : "border-transparent hover:bg-muted/50"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md dark:bg-sky-500/10 bg-sky-100 dark:text-sky-400 text-sky-700">
-                <ImageIcon size={14} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-caption font-semibold text-foreground">Orbit Canvas</span>
-                  <span className="rounded px-1 py-px text-caption font-medium dark:bg-sky-500/20 bg-sky-100 dark:text-sky-300 text-sky-800">
-                    Image Gen
-                  </span>
-                </div>
-                <p className="text-caption text-muted-foreground truncate">
-                  Gemini 3.1 Flash Image · Requesty
-                </p>
-              </div>
-              {modelTier === "image" && <Check size={14} className="text-sky-500 shrink-0" />}
-            </div>
-          </div>
-
-          {/* Custom Option */}
-          <div
-            role="button"
-            tabIndex={0}
-            onClick={() => {
-              setModelTier("custom");
-              setOpen(false);
-            }}
-            className={`group relative w-full cursor-pointer rounded-lg border p-2 text-left transition-colors ${
-              modelTier === "custom"
-                ? "dark:border-emerald-500/40 border-emerald-400/60 dark:bg-emerald-500/[0.08] bg-emerald-50/80"
-                : "border-transparent hover:bg-muted/50"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md dark:bg-emerald-500/10 bg-emerald-100 dark:text-emerald-400 text-emerald-700">
-                <Settings2 size={14} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-caption font-semibold text-foreground">Custom Model</span>
-                  <span className="rounded px-1 py-px text-caption font-medium dark:bg-emerald-500/20 bg-emerald-100 dark:text-emerald-300 text-emerald-800">
-                    Requesty
-                  </span>
-                </div>
-                <p className="text-caption text-muted-foreground truncate">
-                  Full model catalog router
-                </p>
-              </div>
-              {modelTier === "custom" && <Check size={14} className="text-emerald-500 shrink-0" />}
-            </div>
-          </div>
+          {error ? <p className="px-2.5 py-1.5 text-caption text-destructive">{error}</p> : null}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
