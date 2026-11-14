@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import type {
   AdapterContext,
   SemanticMemoryCapabilities,
@@ -7,6 +8,7 @@ import type {
   SemanticMemoryResult,
   SemanticMemorySaveRequest,
 } from "@forion/orbit-adapter-kit";
+import { signOrbitInternalRequest } from "./orbit-control-plane/orbit-control-plane-client.js";
 
 export const FORION_MEMORY_PROVIDER_ID = "forion";
 
@@ -53,13 +55,12 @@ export class ForionSemanticMemoryProvider implements SemanticMemoryProvider {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/memory/search-internal`, {
+      const path = "/memory/search-internal";
+      const response = await fetch(`${this.baseUrl}${path}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.internalSecret}`,
-          "x-orbit-user-id": userId,
-        },
+        headers: signOrbitInternalRequest(this.internalSecret, "POST", path, userId, {
+          "x-request-id": randomUUID(),
+        }),
         body: JSON.stringify({
           userId,
           query: request.query,
@@ -106,13 +107,12 @@ export class ForionSemanticMemoryProvider implements SemanticMemoryProvider {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/memory`, {
+      const path = "/memory";
+      const response = await fetch(`${this.baseUrl}${path}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.internalSecret}`,
-          "x-orbit-user-id": userId,
-        },
+        headers: signOrbitInternalRequest(this.internalSecret, "POST", path, userId, {
+          "x-request-id": randomUUID(),
+        }),
         body: JSON.stringify({
           userId,
           content: request.content.trim(),
