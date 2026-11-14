@@ -77,7 +77,9 @@ API, database validation, fleet tools, web, and mobile. Credit calls retry 429/5
 
 Orbit Bot (`feat/orbit-phase0-containment`): `9a38636` Phase 0 containment; `6140fa1` hermetic harness + invariants; `e316f3b` observer telemetry-only; `207907f` cloud-only policy; `64203c7` fonts + source maps; `796be87` desktop-dist asset gate; `50343d0` final router/compose fixes; `096a1d6` I10 AI path tagging; `9907674` signed memory identity; `a4005c4` group responder router; `d41cd2c` 30-bot cap; `6a76b57` jittered credit retries; `1fc1fe1` 30-bot soak; `1dbb4ca` body-bound v3 signing; `f9c73fb` catalog composer; `fc0676b` cloud-first defaults + compliance release dependency; `26487b8` gate test fixes; `2e12e0f` bot-model picker; `d8064e3` lease-test stabilization.
 
-Forion Server (`feat/orbit-billing-authority`): `8ddd479c` BILL-10 hot chat; `23ebc1bf` wallet harness + CI; `cb90b5d4` per-reservation ledger, 30m TTL, locked-credit cap; `0119e5ac` 30-run reconciliation fuzz; `a9b6b1d5` 5m TTL + heartbeat + 30-bot cap; `7fc655bb` rate-bucket refill fix; `d165835c` body-bound HMAC v3 + replay; `d18af82f` migration verifier ignores down files; `c9170c22` replay-check only nonce-bearing v3 (v2 concurrent false-401 fix).
+Forion Server (`feat/orbit-billing-authority`): `8ddd479c` BILL-10 hot chat; `23ebc1bf` wallet harness + CI; `cb90b5d4` per-reservation ledger, 30m TTL, locked-credit cap; `0119e5ac` 30-run reconciliation fuzz; `a9b6b1d5` 5m TTL + heartbeat + 30-bot cap; `7fc655bb` rate-bucket refill fix; `d165835c` body-bound HMAC v3 + replay; `d18af82f` migration verifier ignores down files; `c9170c22` replay-check only nonce-bearing v3 (v2 concurrent false-401 fix); `11f61503` usable memory quotas for every tier + `/memory/:userId/memory-usage`.
+
+Runtime (`forion-nestjs-runtime`): `b5a40f3` signs `/memory/search-internal` with the user identity; the unsigned call was a silent 401 that made runtime cross-session recall empty.
 
 ### Green gates
 
@@ -91,6 +93,7 @@ Forion Server (`feat/orbit-billing-authority`): `8ddd479c` BILL-10 hot chat; `23
 - Secret scan: no tracked-file leaks in 33.59 MB (prior public publication still requires rotation).
 - Orbit Chat: Sandpack/Nodebox removed (`4e6a11ab`), unused GSAP removed (`ec636709`), dependency licence guard 2/2 (`3bfe4028`), artifact tests 12/12, eslint/tsc clean on changed files; dev fixture verifies ready-URL and pending-code states (`f80d4418`).
 - Shared database: additive migrations `0015_request_correlation` and `0016_settlement_outbox` applied on 2026-11-14 after `request_id` caused a live credit 500; both columns and tables verified. Forion security suite 61/61 after the replay fix.
+- Memory: free quota now 1,000 (was 50) and paid 10,000, env-tunable; `dev-user-local` reports 306/1,000 with 694 remaining. Runtime memory search is signed; its tests pass 2/2. New memory writes should succeed after runtime restart.
 
 ### Still blocked
 
