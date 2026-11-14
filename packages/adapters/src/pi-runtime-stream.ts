@@ -236,7 +236,9 @@ function modelRequestFetch(
         }
 
         if (currentUserId && secret) {
-          const signed = signOrbitInternalRequest(secret, method, pathAndQuery, currentUserId);
+          const signed = signOrbitInternalRequest(secret, method, pathAndQuery, currentUserId, {
+            "x-request-id": reqId,
+          });
           if (resolvedInit?.headers instanceof Headers) {
             for (const [k, v] of Object.entries(signed)) {
               resolvedInit.headers.set(k, v);

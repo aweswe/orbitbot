@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import type {
   AgentModelOAuthCredential,
   AgentRunRequest,
@@ -413,6 +414,7 @@ async function resolveModelKeyMaterial(
       "POST",
       "/api/ai/chat/completions",
       canonicalUserId,
+      { "x-request-id": randomUUID() },
     );
     return {
       apiKey: secret,

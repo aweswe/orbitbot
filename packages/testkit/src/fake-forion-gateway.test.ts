@@ -35,8 +35,10 @@ describe("FakeForionGateway", () => {
       inputTokens: 100,
       maxOutputTokens: 100,
       referenceId: "run-1",
+      requestId: "req-1",
     });
     expect(lock.lockedCredits).toBe(7);
+    expect(gateway.requests[0]?.requestId).toBe("req-1");
     expect(gateway.balance("user-1")).toEqual({ balance: 1_000, locked: 7, available: 993 });
 
     expect(

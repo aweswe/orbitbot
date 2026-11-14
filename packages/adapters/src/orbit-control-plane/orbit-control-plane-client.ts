@@ -24,6 +24,7 @@ export interface OrbitCreditLockInput {
   maxOutputTokens: number;
   product?: string;
   referenceId?: string;
+  requestId?: string;
 }
 
 export interface OrbitCreditCommitInput {
@@ -31,6 +32,7 @@ export interface OrbitCreditCommitInput {
   amount: number;
   referenceId?: string;
   product?: string;
+  requestId?: string;
 }
 
 export interface OrbitCreditRefundInput {
@@ -39,6 +41,7 @@ export interface OrbitCreditRefundInput {
   fromLocked?: boolean;
   referenceId?: string;
   product?: string;
+  requestId?: string;
 }
 
 export interface OrbitCreditSettleInput {
@@ -47,6 +50,7 @@ export interface OrbitCreditSettleInput {
   referenceId: string;
   model?: string;
   product?: string;
+  requestId?: string;
 }
 
 export interface OrbitBillingSnapshot {
@@ -121,8 +125,19 @@ export class OrbitControlPlaneClient {
     return userId;
   }
 
-  private headers(method: string, pathAndQuery: string, userId: string): Record<string, string> {
-    return signOrbitInternalRequest(this.internalSecret, method, pathAndQuery, userId);
+  private headers(
+    method: string,
+    pathAndQuery: string,
+    userId: string,
+    requestId?: string,
+  ): Record<string, string> {
+    return signOrbitInternalRequest(
+      this.internalSecret,
+      method,
+      pathAndQuery,
+      userId,
+      requestId ? { "x-request-id": requestId } : undefined,
+    );
   }
 
   /**
@@ -143,7 +158,7 @@ export class OrbitControlPlaneClient {
     // caller turns this into a refused model call, never a fabricated lock.
     const response = await fetch(url, {
       method: "POST",
-      headers: this.headers("POST", path, userId),
+      headers: this.headers("POST", path, userId, input.requestId),
       signal: AbortSignal.timeout(10_000),
       body: JSON.stringify({
         user_id: userId,
@@ -194,7 +209,7 @@ export class OrbitControlPlaneClient {
     try {
       const response = await fetch(url, {
         method: "POST",
-        headers: this.headers("POST", path, userId),
+        headers: this.headers("POST", path, userId, input.requestId),
         body: JSON.stringify({
           user_id: userId,
           amount: Math.max(1, Math.round(input.amount)),
@@ -227,7 +242,7 @@ export class OrbitControlPlaneClient {
     try {
       const response = await fetch(url, {
         method: "POST",
-        headers: this.headers("POST", path, userId),
+        headers: this.headers("POST", path, userId, input.requestId),
         body: JSON.stringify({
           user_id: userId,
           amount: Math.max(0, Math.round(input.amount)),
@@ -262,7 +277,7 @@ export class OrbitControlPlaneClient {
     try {
       const response = await fetch(url, {
         method: "POST",
-        headers: this.headers("POST", path, userId),
+        headers: this.headers("POST", path, userId, input.requestId),
         body: JSON.stringify({
           user_id: userId,
           amount: Math.max(0, Math.round(input.amount)),
