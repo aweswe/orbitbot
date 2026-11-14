@@ -119,3 +119,9 @@ Runtime (`forion-nestjs-runtime`): `b5a40f3` signs `/memory/search-internal` wit
 - `knowledge-panel`: 1/2; the chat memory write did not land inside the 30s poll (run reached “Finding a tool”).
 - `group-chats`: 0/1; the spec connects a `scripted` voice provider while the dev stack runs `AGENT_RUNTIME=pi` (environmental).
 - `model-settings`: 1/3; OpenAI-compatible local discovery and the cleanup-frames nightly case failed.
+
+### Hermetic E2E harness (disposable stack)
+- `pnpm test:e2e --spec=e2e/knowledge-panel.spec.ts` (ports 3110/5180): **2/2 passed**.
+- Critical batch through the same harness: **20/20 passed** — `group-chats`, `billing-paywall`, `settings-shell`, `composer-send-failure`, `model-settings`.
+- The dev-stack failures above were environmental: real-provider latency and `AGENT_RUNTIME=pi` rejecting the scripted voice provider. The hermetic harness removes both.
+- Full Chromium deploy-gate run: in progress at the time of this entry; counts will replace this line.
