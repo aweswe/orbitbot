@@ -56,17 +56,23 @@ export class ForionSemanticMemoryProvider implements SemanticMemoryProvider {
 
     try {
       const path = "/memory/search-internal";
+      const body = {
+        userId,
+        query: request.query,
+        topK: request.limit || 5,
+        minSimilarity: 0.25,
+      };
       const response = await fetch(`${this.baseUrl}${path}`, {
         method: "POST",
-        headers: signOrbitInternalRequest(this.internalSecret, "POST", path, userId, {
-          "x-request-id": randomUUID(),
-        }),
-        body: JSON.stringify({
+        headers: signOrbitInternalRequest(
+          this.internalSecret,
+          "POST",
+          path,
           userId,
-          query: request.query,
-          topK: request.limit || 5,
-          minSimilarity: 0.25,
-        }),
+          { "x-request-id": randomUUID() },
+          body,
+        ),
+        body: JSON.stringify(body),
         signal: context.signal || AbortSignal.timeout(6_000),
       });
 
@@ -108,18 +114,24 @@ export class ForionSemanticMemoryProvider implements SemanticMemoryProvider {
 
     try {
       const path = "/memory";
+      const body = {
+        userId,
+        content: request.content.trim(),
+        sourceType: "orbit-bot",
+        category: "knowledge",
+        importance: 0.85,
+      };
       const response = await fetch(`${this.baseUrl}${path}`, {
         method: "POST",
-        headers: signOrbitInternalRequest(this.internalSecret, "POST", path, userId, {
-          "x-request-id": randomUUID(),
-        }),
-        body: JSON.stringify({
+        headers: signOrbitInternalRequest(
+          this.internalSecret,
+          "POST",
+          path,
           userId,
-          content: request.content.trim(),
-          sourceType: "orbit-bot",
-          category: "knowledge",
-          importance: 0.85,
-        }),
+          { "x-request-id": randomUUID() },
+          body,
+        ),
+        body: JSON.stringify(body),
         signal: context.signal || AbortSignal.timeout(6_000),
       });
 

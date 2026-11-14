@@ -1,4 +1,4 @@
-import { createHmac } from "node:crypto";
+import { createHash, createHmac, randomUUID } from "node:crypto";
 import { getLogger } from "@forion/orbit-logging";
 
 /**
@@ -68,15 +68,60 @@ export interface OrbitBillingSnapshot {
   executionTier?: "free" | "pro" | "unlimited";
 }
 
+/** JSON with sorted object keys so both services hash the same bytes. */
+export function canonicalJson(value: unknown): string {
+  if (value === null || typeof value !== "object") return JSON.stringify(value) ?? "null";
+  if (Array.isArray(value)) {
+    return `[${value.map((item) => canonicalJson(item === undefined ? null : item)).join(",")}]`;
+  }
+  const record = value as Record<string, unknown>;
+  const entries = Object.keys(record)
+    .filter((key) => record[key] !== undefined)
+    .sort()
+    .map((key) => `${JSON.stringify(key)}:${canonicalJson(record[key])}`);
+  return `{${entries.join(",")}}`;
+}
+
+/** SHA-256 of the canonical request body; the empty body has a stable hash. */
+export function canonicalBodyHash(body: unknown): string {
+  let value = body;
+  if (body instanceof Uint8Array) {
+    value = new TextDecoder().decode(body);
+  }
+  if (value === undefined || value === null || value === "") {
+    return createHash("sha256").update("").digest("hex");
+  }
+  if (typeof value === "string") {
+    const text = value;
+    try {
+      value = JSON.parse(text);
+    } catch {
+      return createHash("sha256").update(text).digest("hex");
+    }
+  }
+  return createHash("sha256").update(canonicalJson(value)).digest("hex");
+}
+
+/**
+ * Sign a Forion internal request. Passing `body` upgrades the request to v3,
+ * which binds the canonical body and adds a nonce; omitting it keeps the
+ * method/path-bound v2 format for callers that have no body yet.
+ */
 export function signOrbitInternalRequest(
   secret: string,
   method: string,
   pathAndQuery: string,
   userId: string,
   extraHeaders?: Record<string, string>,
+  body?: unknown,
 ): Record<string, string> {
   const ts = Math.floor(Date.now() / 1000).toString();
-  const payload = `v2|${method.toUpperCase()}|${userId}|${pathAndQuery}|${ts}`;
+  const bodyBound = body !== undefined;
+  const nonce = bodyBound ? randomUUID() : undefined;
+  const bodyHash = bodyBound ? canonicalBodyHash(body) : undefined;
+  const payload = bodyBound
+    ? `v3|${method.toUpperCase()}|${userId}|${pathAndQuery}|${ts}|${bodyHash}|${nonce}`
+    : `v2|${method.toUpperCase()}|${userId}|${pathAndQuery}|${ts}`;
   const sig = createHmac("sha256", secret).update(payload).digest("base64");
 
   return {
@@ -85,8 +130,11 @@ export function signOrbitInternalRequest(
     "x-orbit-user-id": userId,
     "x-user-id": userId,
     "x-orbit-req-ts": ts,
-    "x-orbit-sig-version": "2",
+    "x-orbit-sig-version": bodyBound ? "3" : "2",
     "x-orbit-req-sig": sig,
+    ...(bodyBound
+      ? { "x-orbit-body-sha256": bodyHash!, "x-orbit-req-nonce": nonce! }
+      : {}),
     "X-Orbit-Client": "orbit-bot",
     ...extraHeaders,
   };
@@ -162,6 +210,7 @@ export class OrbitControlPlaneClient {
     pathAndQuery: string,
     userId: string,
     requestId?: string,
+    body?: unknown,
   ): Record<string, string> {
     return signOrbitInternalRequest(
       this.internalSecret,
@@ -169,6 +218,7 @@ export class OrbitControlPlaneClient {
       pathAndQuery,
       userId,
       requestId ? { "x-request-id": requestId } : undefined,
+      body,
     );
   }
 
@@ -177,11 +227,13 @@ export class OrbitControlPlaneClient {
    * rate-limited or transiently failed call is safe to repeat. Back off with
    * jitter so thirty bots answering at once do not retry in lockstep.
    */
-  private async fetchWithRetry(url: string, init: RequestInit): Promise<Response> {
+  private async fetchWithRetry(url: string, makeInit: () => RequestInit): Promise<Response> {
     const { maxAttempts, baseDelayMs, maxDelayMs, jitterRatio } = this.retry;
     for (let attempt = 1; ; attempt++) {
       try {
-        const response = await fetch(url, init);
+        // Re-sign every attempt: the nonce and timestamp are part of the
+        // signature, and a replayed signature is rejected by Forion.
+        const response = await fetch(url, makeInit());
         if (!RETRYABLE_STATUS.has(response.status) || attempt >= maxAttempts) {
           return response;
         }
@@ -229,22 +281,23 @@ export class OrbitControlPlaneClient {
       input.referenceId || `orbit_bot_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
     const path = "/api/credits/use";
     const url = `${this.baseUrl}${path}`;
+    const body = {
+      user_id: userId,
+      model: input.model,
+      input_tokens: Math.max(0, input.inputTokens),
+      max_output_tokens: Math.max(1, input.maxOutputTokens),
+      product: input.product || "orbit-bot",
+      reference_id: referenceId,
+    };
 
     // Fail closed: an unreachable control plane must not grant free usage. The
     // caller turns this into a refused model call, never a fabricated lock.
-    const response = await this.fetchWithRetry(url, {
+    const response = await this.fetchWithRetry(url, () => ({
       method: "POST",
-      headers: this.headers("POST", path, userId, input.requestId),
+      headers: this.headers("POST", path, userId, input.requestId, body),
       signal: AbortSignal.timeout(10_000),
-      body: JSON.stringify({
-        user_id: userId,
-        model: input.model,
-        input_tokens: Math.max(0, input.inputTokens),
-        max_output_tokens: Math.max(1, input.maxOutputTokens),
-        product: input.product || "orbit-bot",
-        reference_id: referenceId,
-      }),
-    });
+      body: JSON.stringify(body),
+    }));
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -281,18 +334,19 @@ export class OrbitControlPlaneClient {
     const userId = this.requireUserId(input.userId);
     const path = "/api/credits/commit";
     const url = `${this.baseUrl}${path}`;
+    const body = {
+      user_id: userId,
+      amount: Math.max(1, Math.round(input.amount)),
+      reference_id: input.referenceId,
+      product: input.product || "orbit-bot",
+    };
 
     try {
-      const response = await this.fetchWithRetry(url, {
+      const response = await this.fetchWithRetry(url, () => ({
         method: "POST",
-        headers: this.headers("POST", path, userId, input.requestId),
-        body: JSON.stringify({
-          user_id: userId,
-          amount: Math.max(1, Math.round(input.amount)),
-          reference_id: input.referenceId,
-          product: input.product || "orbit-bot",
-        }),
-      });
+        headers: this.headers("POST", path, userId, input.requestId, body),
+        body: JSON.stringify(body),
+      }));
 
       if (!response.ok) {
         const errText = await response.text();
@@ -314,19 +368,20 @@ export class OrbitControlPlaneClient {
     const userId = this.requireUserId(input.userId);
     const path = "/api/credits/refund";
     const url = `${this.baseUrl}${path}`;
+    const body = {
+      user_id: userId,
+      amount: Math.max(0, Math.round(input.amount)),
+      from_locked: input.fromLocked ?? true,
+      reference_id: input.referenceId,
+      product: input.product || "orbit-bot",
+    };
 
     try {
-      const response = await this.fetchWithRetry(url, {
+      const response = await this.fetchWithRetry(url, () => ({
         method: "POST",
-        headers: this.headers("POST", path, userId, input.requestId),
-        body: JSON.stringify({
-          user_id: userId,
-          amount: Math.max(0, Math.round(input.amount)),
-          from_locked: input.fromLocked ?? true,
-          reference_id: input.referenceId,
-          product: input.product || "orbit-bot",
-        }),
-      });
+        headers: this.headers("POST", path, userId, input.requestId, body),
+        body: JSON.stringify(body),
+      }));
 
       if (!response.ok) {
         const errText = await response.text();
@@ -349,19 +404,20 @@ export class OrbitControlPlaneClient {
     const userId = this.requireUserId(input.userId);
     const path = "/api/credits/settle";
     const url = `${this.baseUrl}${path}`;
+    const body = {
+      user_id: userId,
+      amount: Math.max(0, Math.round(input.amount)),
+      reference_id: input.referenceId,
+      model: input.model || "orbit-flash",
+      product: input.product || "orbit-bot",
+    };
 
     try {
-      const response = await this.fetchWithRetry(url, {
+      const response = await this.fetchWithRetry(url, () => ({
         method: "POST",
-        headers: this.headers("POST", path, userId, input.requestId),
-        body: JSON.stringify({
-          user_id: userId,
-          amount: Math.max(0, Math.round(input.amount)),
-          reference_id: input.referenceId,
-          model: input.model || "orbit-flash",
-          product: input.product || "orbit-bot",
-        }),
-      });
+        headers: this.headers("POST", path, userId, input.requestId, body),
+        body: JSON.stringify(body),
+      }));
 
       if (!response.ok) {
         const errText = await response.text();
@@ -385,10 +441,10 @@ export class OrbitControlPlaneClient {
     const url = `${this.baseUrl}${path}`;
 
     try {
-      const response = await this.fetchWithRetry(url, {
+      const response = await this.fetchWithRetry(url, () => ({
         method: "GET",
-        headers: this.headers("GET", path, targetUser),
-      });
+        headers: this.headers("GET", path, targetUser, undefined, null),
+      }));
 
       if (!response.ok) {
         return null;
@@ -429,10 +485,16 @@ export class OrbitControlPlaneClient {
     const path = "/api/ai/models";
     const url = `${this.baseUrl}${path}`;
     try {
-      const response = await this.fetchWithRetry(url, {
+      const response = await this.fetchWithRetry(url, () => ({
         method: "GET",
-        headers: this.headers("GET", path, this.defaultUserId || "orbit-internal"),
-      });
+        headers: this.headers(
+          "GET",
+          path,
+          this.defaultUserId || "orbit-internal",
+          undefined,
+          null,
+        ),
+      }));
 
       if (!response.ok) return [];
       const json = (await response.json()) as {

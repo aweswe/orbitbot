@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { canonicalBodyHash } from "@forion/orbit-adapters";
 import type { IncomingMessage, Server, ServerResponse } from "node:http";
 import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
@@ -148,7 +149,12 @@ export class FakeForionGateway {
     return String(header ?? `gateway-${++this.sequence}`);
   }
 
-  private authorized(req: IncomingMessage, userId: string, requestId: string): boolean {
+  private authorized(
+    req: IncomingMessage,
+    userId: string,
+    requestId: string,
+    body: Record<string, unknown>,
+  ): boolean {
     const auth = String(req.headers.authorization ?? "");
     if (auth !== `Bearer ${this.secret}`) return false;
     const ts = Number(req.headers["x-orbit-req-ts"]);
@@ -156,9 +162,15 @@ export class FakeForionGateway {
       return false;
     }
     const sig = String(req.headers["x-orbit-req-sig"] ?? "");
-    const expected = createHmac("sha256", this.secret)
-      .update(`v2|${req.method}|${userId}|${req.url}|${ts}`)
-      .digest("base64");
+    const version = String(req.headers["x-orbit-sig-version"] ?? "");
+    let payload = `v2|${req.method}|${userId}|${req.url}|${ts}`;
+    if (version === "3") {
+      const declared = String(req.headers["x-orbit-body-sha256"] ?? "");
+      const nonce = String(req.headers["x-orbit-req-nonce"] ?? "");
+      if (!declared || !nonce || declared !== canonicalBodyHash(body)) return false;
+      payload = `v3|${req.method}|${userId}|${req.url}|${ts}|${declared}|${nonce}`;
+    }
+    const expected = createHmac("sha256", this.secret).update(payload).digest("base64");
     const got = Buffer.from(sig);
     const want = Buffer.from(expected);
     return got.length === want.length && timingSafeEqual(got, want);
@@ -186,7 +198,7 @@ export class FakeForionGateway {
       return;
     }
 
-    if (!this.authorized(req, userId, requestId)) {
+    if (!this.authorized(req, userId, requestId, body)) {
       this.record(req, url.pathname, userId, requestId, 401, body);
       this.send(res, 401, { error: "invalid signature" }, requestId);
       return;

@@ -236,9 +236,19 @@ function modelRequestFetch(
         }
 
         if (currentUserId && secret) {
-          const signed = signOrbitInternalRequest(secret, method, pathAndQuery, currentUserId, {
-            "x-request-id": reqId,
-          });
+          // Bind the body when it is already buffered. A streamed body cannot
+          // be hashed without consuming it, so that request keeps v2.
+          const rawBody = resolvedInit?.body;
+          const signableBody =
+            typeof rawBody === "string" || rawBody instanceof Uint8Array ? rawBody : undefined;
+          const signed = signOrbitInternalRequest(
+            secret,
+            method,
+            pathAndQuery,
+            currentUserId,
+            { "x-request-id": reqId },
+            signableBody,
+          );
           if (resolvedInit?.headers instanceof Headers) {
             for (const [k, v] of Object.entries(signed)) {
               resolvedInit.headers.set(k, v);
