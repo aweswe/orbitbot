@@ -69,7 +69,7 @@ API, database validation, fleet tools, web, and mobile. Credit calls retry 429/5
 | T6.3 Bundle third-party license texts | Done existing | `THIRD_PARTY_NOTICES.md`, `apps/web/public/licenses`, and generated dependency licence reports ship |
 | T6.4 Release gate | Done | Source maps off for web/desktop/server; Caddy 404s `.map`; desktop and mobile release workflows now call the compliance workflow as a hard dependency (`fc0676b`) |
 | T6.5 Rebrand mobile/desktop identity | Deferred | `com.rakazo.app`, `rakazo://`, Expo owner, updater feed; see DEFERRED.md |
-| T6.6 Nodebox/GSAP | Human decision | Orbit Chat still has `@codesandbox/sandpack-react` (pulls `@codesandbox/nodebox`) and GSAP. GSAP 3.15 declares the free standard licence; Nodebox remains the blocker |
+| T6.6 Nodebox/GSAP | Done code-side | Orbit Chat `4e6a11ab` removes Sandpack/Nodebox and renders E2B preview URLs; `ec636709` removes unused GSAP. Shipping Orbit Chat itself remains a product decision |
 
 ## Final status — 2026-11-14
 

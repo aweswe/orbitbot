@@ -25,7 +25,7 @@ The agent cannot perform these. Do them in order. Never paste secret values into
 - [ ] **Signed-only internal identity.** Body-bound HMAC v3 is implemented for credits, memory, and buffered model calls, with replay rejection. Remaining human step: confirm every auxiliary caller signs, then set `FORION_REQUIRE_SIGNED_INTERNAL=1` and `FORION_REQUIRE_SIGNATURE_V3=1` in the hosted environment, and resolve one canonical Forion user ID for credits and memory. Orbit's runtime/migration database roles and RLS cross-tenant test already exist; run them against the hosted database before enabling enforcement.
 - [ ] **Managed execution.** Provision the E2B/Daytona/K8s sandbox provider and per-bot quotas for the web alpha; `SANDBOX_PROVIDER=desktop` is not a consumer path.
 - [ ] **Signing and update feed.** Provide Apple Developer ID/notarization and Windows signing credentials; resolve the updater repository (`forion-ai/orbit` vs the upstream feed).
-- [ ] **Orbit Chat shipping decision.** If Orbit Chat ships, resolve `@codesandbox/nodebox` (non-commercial Sustainable Use License) and GSAP terms before distribution.
+- [x] **Orbit Chat Nodebox/GSAP.** Sandpack and its `@codesandbox/nodebox` dependency are removed; React artifacts use the existing E2B preview URL and show code until it is ready. Unused GSAP is removed. Remaining: the product decision on whether Orbit Chat ships at all.
 
 ## P2 — launch operations
 
