@@ -82,6 +82,25 @@ describe("Orbit credit observer — lock", () => {
     );
   });
 
+  it("locks against an existing canonical identity mapping first", async () => {
+    mocks.lockCredits.mockResolvedValue({ lockedCredits: 7, referenceId: "call-1" });
+    const prismaMock = {
+      identityMapping: {
+        findFirst: vi.fn(async () => ({
+          canonicalPrincipalId: "user-canonical",
+          provider: "google",
+          providerSubject: "google-sub",
+        })),
+      },
+    } as any;
+
+    const observer = createOrbitModelCreditObserver({ ...scope }, prismaMock);
+    await expect(observer.beforeCall(call)).resolves.toBe("call-1");
+    expect(mocks.lockCredits).toHaveBeenCalledWith(
+      expect.objectContaining({ userId: "user-canonical", referenceId: "call-1" }),
+    );
+  });
+
   it("auto-syncs and retries when control plane reports User not found", async () => {
     mocks.lockCredits
       .mockRejectedValueOnce(new Error("400: User not found"))
