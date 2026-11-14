@@ -20,6 +20,9 @@ describe("desktop release workflow", () => {
     const actionReferences = [...workflow.matchAll(/uses:\s+([^\s#]+)/g)].map((match) => match[1]);
     expect(actionReferences.length).toBeGreaterThan(0);
     for (const reference of actionReferences) {
+      // Local reusable workflows live in the same tagged commit; only remote
+      // actions need an immutable SHA.
+      if (reference.startsWith("./")) continue;
       expect(reference, reference).toMatch(/@[0-9a-f]{40}$/);
     }
   });
