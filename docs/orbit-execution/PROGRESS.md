@@ -50,8 +50,19 @@ Status: blocked on cloud IAM and E2B credential (human); code-side work can star
 
 ## Phase 5 — group scale
 
-Status: deferred until Phase 2 gate is green.
+Status: **deliberately deferred.** The 10-bot cap stays until speaker selection and
+backpressure exist. Raising it now would fan out 20–30 simultaneous runs into one
+wallet and sandbox fleet, making billing and latency worse. The test to write first
+is a 30-bot soak with a fake gateway; the product decision is which responder policy
+(mentions only, 1–3 speakers, or all) the room should use.
 
 ## Phase 6 — licensing / release hygiene
 
-Status: not started; can run in parallel with Phase 3.
+| Task | Status | Evidence |
+|---|---|---|
+| T6.1 Remove unlicensed fonts | Done for HEAD | Corpta/Aeonik deleted; stale artifacts cleaned; truthful `compliance/FONT_REMOVAL_AUDIT.md`; `check:shipped-assets` |
+| T6.2 Regenerate §4(b) manifest | Not done | Requires legal sign-off; `compliance/report.json` still `release:false` |
+| T6.3 Bundle third-party license texts | Not done | Notices list SPDX names only |
+| T6.4 Release gate | Partial | Source maps off for web/desktop/server; Caddy 404s `.map`; CI + desktop release run the asset gate; compliance job still not a release dependency |
+| T6.5 Rebrand mobile/desktop identity | Deferred | `com.rakazo.app`, `rakazo://`, Expo owner, updater feed; see DEFERRED.md |
+| T6.6 Nodebox/GSAP | Human decision | `HUMAN_ACTIONS.md` |

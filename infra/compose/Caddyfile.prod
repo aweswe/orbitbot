@@ -27,6 +27,10 @@
 	import access_log
 	encode zstd gzip
 
+	# Defense in depth: source maps must never be downloadable from the hosted app.
+	@sourcemaps path *.map
+	respond @sourcemaps 404
+
 	# A localhost trial must not pin HTTPS onto every local dev server.
 	@hsts not host localhost 127.0.0.1
 	header @hsts Strict-Transport-Security "max-age=31536000"

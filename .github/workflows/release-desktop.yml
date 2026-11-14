@@ -131,6 +131,9 @@ jobs:
           RAKAZO_ALLOW_DEV_SECRETS: "1"
           RAKAZO_DESKTOP_RELEASE: "1"
 
+      - name: Reject shipped source maps and unlicensed fonts
+        run: node scripts/check-shipped-assets.mjs
+
       - name: Require macOS signing and notarization credentials
         if: runner.os == 'macOS'
         shell: bash

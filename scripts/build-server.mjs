@@ -22,7 +22,7 @@ export function serverBuildOptions(entry, outfile) {
     platform: "node",
     format: "esm",
     target: "node22",
-    sourcemap: true,
+    sourcemap: process.env.RAKAZO_SERVER_SOURCEMAPS === "true",
     // No "module" condition: resolve externals the way Node will.
     conditions: ["node"],
     logLevel: "warning",

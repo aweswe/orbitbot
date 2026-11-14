@@ -531,7 +531,9 @@ export default defineConfig(({ command, mode }) => {
   });
   return {
     build: {
-      sourcemap: true,
+      // Closed-source client: never ship source in the public bundle. Set the
+      // flag only for a private symbol-upload build.
+      sourcemap: process.env.RAKAZO_BUILD_SOURCEMAPS === "true",
       rolldownOptions: {
         output: {
           codeSplitting: {

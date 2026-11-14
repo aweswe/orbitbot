@@ -69,6 +69,8 @@ jobs:
           BETTER_AUTH_SECRET: ci-build-auth-secret-at-least-32-characters
           ENCRYPTION_KEY: ci-build-encryption-key-at-least-32-characters
           electron_config_cache: ${{ runner.temp }}/electron-cache
+      - name: Reject shipped source maps and unlicensed fonts
+        run: node scripts/check-shipped-assets.mjs
       - name: Save turbo build cache
         if: success()
         continue-on-error: true
