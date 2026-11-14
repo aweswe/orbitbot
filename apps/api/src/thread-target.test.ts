@@ -10,6 +10,7 @@ import {
   latestWaitingRun,
   reactToThreadMessage,
   replyParentBotId,
+  selectGroupResponders,
   sendTargetBotIds,
   sendThreadMessage,
   stopThreadRuns,
@@ -2384,6 +2385,7 @@ describe("sendThreadMessage", () => {
         run: {
           findMany: vi.fn().mockResolvedValueOnce(activeRuns).mockResolvedValue([]),
           findFirst: vi.fn(),
+          update: vi.fn().mockResolvedValue({}),
           updateMany: vi.fn(),
           findUnique: vi.fn().mockResolvedValue({ status: "queued", startedAt: null }),
           create: vi.fn().mockResolvedValue({
@@ -3047,10 +3049,10 @@ describe("sendThreadMessage", () => {
       return { tx, created: tx.run.create.mock.calls.map(([args]) => args.data) };
     }
 
-    it("that names nobody wakes every member, each free to stay silent", async () => {
+    it("that names nobody wakes the bounded responder set, who must reply", async () => {
       const { created } = await sendToGroup("what is the plan?");
       expect(created.map((run) => run.botId)).toEqual(["bot-a", "bot-b"]);
-      expect(created.map((run) => run.groupReplyOptional)).toEqual([true, true]);
+      expect(created.map((run) => run.groupReplyOptional)).toEqual([false, false]);
     });
 
     it("that names one member wakes only that member, who must reply", async () => {
@@ -3069,10 +3071,10 @@ describe("sendThreadMessage", () => {
       expect(created.map((run) => run.groupReplyOptional)).toEqual([false, false]);
     });
 
-    it("that only names someone outside the group still reaches every member", async () => {
+    it("that only names someone outside the group still wakes the bounded set", async () => {
       const { created } = await sendToGroup("@Zed what is the plan?");
       expect(created.map((run) => run.botId)).toEqual(["bot-a", "bot-b"]);
-      expect(created.map((run) => run.groupReplyOptional)).toEqual([true, true]);
+      expect(created.map((run) => run.groupReplyOptional)).toEqual([false, false]);
     });
 
     it("that replies to a member's message goes to that member, who must answer", async () => {
@@ -3125,15 +3127,15 @@ describe("sendThreadMessage", () => {
       });
     });
 
-    it("that names a member working on an unnamed message makes its reply required", async () => {
+    it("requires a reply from a named or routed member", async () => {
       const working = { id: "run-old", botId: "bot-a", status: "running", trigger: "user" };
-      const named = await sendToGroup("@Alpha and the budget?", undefined, [working]);
-      expect(named.tx.run.update).toHaveBeenCalledWith({
-        where: { id: "run-old" },
-        data: { groupReplyOptional: false },
-      });
-      const unnamed = await sendToGroup("and the budget?", undefined, [working]);
-      expect(unnamed.tx.run.update).not.toHaveBeenCalled();
+      for (const text of ["@Alpha and the budget?", "and the budget?"]) {
+        const { tx } = await sendToGroup(text, undefined, [working]);
+        expect(tx.run.update).toHaveBeenCalledWith({
+          where: { id: "run-old" },
+          data: { groupReplyOptional: false },
+        });
+      }
     });
   });
 
@@ -5094,6 +5096,39 @@ describe("helper snapshot settlement", () => {
       });
     },
   );
+});
+
+describe("group responder router", () => {
+  const members = [
+    { botId: "bot-a", name: "Alpha" },
+    { botId: "bot-b", name: "Beta" },
+    { botId: "bot-c", name: "Gamma" },
+    { botId: "bot-d", name: "Delta" },
+    { botId: "bot-e", name: "Epsilon" },
+  ];
+
+  it("caps an unaddressed room at three responders", () => {
+    expect(selectGroupResponders(members).map((member) => member.botId)).toEqual([
+      "bot-a",
+      "bot-b",
+      "bot-c",
+    ]);
+  });
+
+  it("prefers the most recently active members", () => {
+    const active = new Map([
+      ["bot-a", 10],
+      ["bot-b", 50],
+      ["bot-c", 30],
+      ["bot-d", 60],
+      ["bot-e", 5],
+    ]);
+    expect(selectGroupResponders(members, active).map((member) => member.botId)).toEqual([
+      "bot-d",
+      "bot-b",
+      "bot-c",
+    ]);
+  });
 });
 
 describe("sendTargetBotIds", () => {

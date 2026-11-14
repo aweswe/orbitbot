@@ -328,10 +328,33 @@ async function lockAndLoadGroupMembers(
   }));
 }
 
+/** D8: an unaddressed group message wakes at most this many responders. */
+export const GROUP_RESPONDER_MAX = 3;
+
 /**
- * The members a group send wakes. A message that names nobody and replies to a member's message
- * goes to that member alone; one that names nobody and replies to no member reaches everyone,
- * and `namesNobody` then lets each member stay silent.
+ * Deterministic responder router: explicit mentions/replies are handled by the
+ * caller; this ranks the remaining members by last activity and caps the room
+ * at 1-3 speakers. A cheap model router can replace the ranking later without
+ * changing the cap or the caller contract.
+ */
+export function selectGroupResponders<T extends { botId: string }>(
+  members: readonly T[],
+  lastActiveAt?: ReadonlyMap<string, number>,
+): T[] {
+  return [...members]
+    .sort(
+      (a, b) =>
+        (lastActiveAt?.get(b.botId) ?? 0) - (lastActiveAt?.get(a.botId) ?? 0) ||
+        a.botId.localeCompare(b.botId),
+    )
+    .slice(0, Math.min(GROUP_RESPONDER_MAX, members.length));
+}
+
+/**
+ * The members a group send wakes. Named members bypass the router. A reply to
+ * a member's message goes to that member alone. An unaddressed message wakes a
+ * bounded responder set; the send path may re-rank it with live activity and
+ * lets a waiting question pick its own responder.
  */
 function groupSendTargets(
   members: Array<{ botId: string; name: string }>,
@@ -347,7 +370,13 @@ function groupSendTargets(
   if (!named && replied && members.some((member) => member.botId === replied)) {
     return { botIds: [replied], namesNobody: false };
   }
-  return { botIds: resolveGroupTargetBotIds(targeting), namesNobody: !named };
+  if (!named) {
+    return {
+      botIds: selectGroupResponders(members).map((member) => member.botId),
+      namesNobody: true,
+    };
+  }
+  return { botIds: resolveGroupTargetBotIds(targeting), namesNobody: false };
 }
 
 export function latestWaitingRun<T extends { id: string; status: string; updatedAt: Date }>(
@@ -1179,10 +1208,13 @@ export async function sendThreadMessage(
       // Group ownership is locked first, then the thread, as in the normal write path.
       await tx.$queryRaw`SELECT id FROM threads WHERE id = ${target.threadId} FOR UPDATE`;
       routineRuns = (await startRoutines?.(tx)) ?? [];
+      // An unaddressed room needs every member's activity to rank responders;
+      // a named/replied send only needs its targets.
+      const activeRunBotIds = namesNobody ? memberBotIds : targetBotIds;
       let activeRuns = await tx.run.findMany({
         where: {
           threadId: target.threadId,
-          botId: { in: targetBotIds },
+          botId: { in: activeRunBotIds },
           status: { in: [...ACTIVE_RUN_STATUSES] },
         },
         select: {
@@ -1206,6 +1238,24 @@ export async function sendThreadMessage(
         namesNobody = false;
         activeRuns = activeRuns.filter((run) => run.botId === asking.botId);
       }
+      if (namesNobody) {
+        const lastActive = new Map(
+          activeRuns.map((run) => [
+            run.botId,
+            run.updatedAt ? new Date(run.updatedAt).getTime() : 0,
+          ]),
+        );
+        targetBotIds = selectGroupResponders(members, lastActive).map(
+          (member) => member.botId,
+        );
+        namesNobody = false;
+        getLogger().info("group.responders.routed", {
+          groupId: target.groupId,
+          responderBotIds: targetBotIds,
+          policy: "deterministic-last-active",
+        });
+      }
+      activeRuns = activeRuns.filter((run) => targetBotIds.includes(run.botId));
       if (input.imageHandling === "confirm") {
         for (const botId of targetBotIds) {
           await assertImageRecipients(tx, actor, target, input.text, attachmentBlocks, {
