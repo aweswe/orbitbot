@@ -103,3 +103,19 @@ Runtime (`forion-nestjs-runtime`): `b5a40f3` signs `/memory/search-internal` wit
 4. Desktop/device control remains Stage 4; per-bot budget and group pause/resume are not shipped. See `DEFERRED.md`.
 
 **Next action:** finish the fresh full-suite run, then Stage 2 discovery against the existing Playwright/testkit harness.
+
+## Compatibility and E2E pass — 2026-11-14
+
+### Forion support
+- Cross-session memory verified end-to-end: runtime recall returned 3 memories and the assistant answered “Teal.” for the saved favorite color.
+- Free tier memory is usable: 306/1,000 with 694 remaining; a signed write returned 201.
+- Runtime memory search signs the user identity (`b5a40f3`); v1 is accepted transitionally by the memory route (`88973ad5`).
+- Orbit Bot resolves the canonical Forion identity before the first credit lock (`0e60d1b`), so the shared wallet is used without waiting for a User-not-found retry.
+
+### Browser flows against the running stack (Chromium, one worker)
+- `settings-shell`: 4/4 passed.
+- `billing-paywall`: 6/6 passed.
+- `composer-send-failure`: 6/6 passed.
+- `knowledge-panel`: 1/2; the chat memory write did not land inside the 30s poll (run reached “Finding a tool”).
+- `group-chats`: 0/1; the spec connects a `scripted` voice provider while the dev stack runs `AGENT_RUNTIME=pi` (environmental).
+- `model-settings`: 1/3; OpenAI-compatible local discovery and the cleanup-frames nightly case failed.
