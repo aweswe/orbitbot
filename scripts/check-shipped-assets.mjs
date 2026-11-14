@@ -15,6 +15,7 @@ const blockedHashes = new Set([
 ]);
 const buildDirs = [
   "apps/web/dist",
+  "apps/desktop/dist",
   "apps/desktop/out",
   "apps/www/dist",
   "apps/api/dist",
