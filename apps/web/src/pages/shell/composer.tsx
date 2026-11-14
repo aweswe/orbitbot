@@ -1128,7 +1128,6 @@ const ComposerBody = memo(function Composer({
               {phoneCallsEnabled && draft.trim().length === 0 ? (
                 <HoldToTalkControls talk={talk} disabled={disabled || onCall} />
               ) : null}
-              <OrbitModelPicker disabled={disabled || sending} target={modelTarget} />
               <Button
                 size="icon"
                 aria-label={t`Send`}
@@ -1149,13 +1148,16 @@ const ComposerBody = memo(function Composer({
               >
                 <Square size={11} strokeWidth={0} fill="currentColor" />
               </Button>
+              {/* Visually first, but after Send/Stop in DOM so Tab lands on Send. */}
+              <div className="order-first">
+                <OrbitModelPicker disabled={disabled || sending} target={modelTarget} />
+              </div>
             </>
           ) : (
             <>
               {phoneCallsEnabled && draft.trim().length === 0 ? (
                 <HoldToTalkControls talk={talk} disabled={disabled || onCall} />
               ) : null}
-              <OrbitModelPicker disabled={disabled || sending} target={modelTarget} />
               <Button
                 size="icon"
                 aria-label={t`Send`}
@@ -1166,6 +1168,10 @@ const ComposerBody = memo(function Composer({
               >
                 <ArrowUp size={16} strokeWidth={2.2} />
               </Button>
+              {/* Visually first, but after Send in DOM so Tab lands on Send. */}
+              <div className="order-first">
+                <OrbitModelPicker disabled={disabled || sending} target={modelTarget} />
+              </div>
             </>
           )}
         </div>

@@ -1046,6 +1046,11 @@ async function buildApp(overrides: CreateAppOverrides): Promise<AppHandles> {
   });
 
   app.get("/api/orbit/billing", async (c) => {
+    // A self-hosted or test deployment without hosted billing should simply have
+    // no credits badge, not log a 503 on every page load.
+    if (process.env.ORBIT_BILLING_ENABLED !== "true") {
+      return c.json({ success: true, data: null });
+    }
     // Billing is per signed-in user. There is no default wallet to fall back to.
     const session = await auth.api.getSession({ headers: c.req.raw.headers });
     if (!session?.user?.id) {
