@@ -6,6 +6,8 @@ import { errorText } from "../../lib/user-error";
 
 interface OrbitModelPickerProps {
   disabled?: boolean;
+  /** The active chat. A bot keeps its own model; a group has no single override. */
+  target?: { botId?: string; groupId?: string };
 }
 
 type ModelChoice = Pick<ModelRoleChoice, "provider" | "modelId" | "thinkingLevel">;
@@ -17,11 +19,13 @@ function sameModel(left: ModelChoice | null, right: ModelRoleChoice | null): boo
 }
 
 /**
- * The composer picks the model that runs this Space's main role from the Forion
- * catalog. There is no free-text provider or model field: a hosted deployment
- * only runs models the catalog knows and the deployment can bill.
+ * The composer picks the active bot's model from the Forion catalog. A group
+ * has no single model override, so the control stays hidden there. There is no
+ * free-text provider or model field: a hosted deployment only runs models the
+ * catalog knows and the deployment can bill.
  */
-export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
+export function OrbitModelPicker({ disabled, target }: OrbitModelPickerProps) {
+  const botId = target?.botId;
   const [open, setOpen] = useState(false);
   const [catalog, setCatalog] = useState<ModelCatalogEntry[]>([]);
   const [current, setCurrent] = useState<ModelChoice | null>(null);
@@ -31,32 +35,45 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!botId) return;
     let cancelled = false;
-    void Promise.allSettled([rpc.models.list(), rpc.models.role({ role: "main" })]).then(
-      ([list, role]) => {
-        if (cancelled) return;
-        if (list.status === "fulfilled") {
-          setCatalog(
-            list.value.filter((entry) => entry.protocol !== "decisions" && !entry.placeholder),
-          );
+    void Promise.allSettled([
+      rpc.models.list(),
+      rpc.models.role({ role: "main" }),
+      rpc.bots.get({ botId }),
+    ]).then(([list, role, bot]) => {
+      if (cancelled) return;
+      if (list.status === "fulfilled") {
+        setCatalog(
+          list.value.filter((entry) => entry.protocol !== "decisions" && !entry.placeholder),
+        );
+      }
+      // The bot's own model wins over the Space's main role, so show that.
+      if (bot.status === "fulfilled" && bot.value.modelProvider && bot.value.modelId) {
+        setCurrent({
+          provider: bot.value.modelProvider,
+          modelId: bot.value.modelId,
+          thinkingLevel: bot.value.thinkingLevel ?? null,
+        });
+        setDeep(Boolean(bot.value.thinkingLevel && bot.value.thinkingLevel !== "off"));
+        return;
+      }
+      if (role.status === "fulfilled") {
+        const primary = role.value.primary ?? role.value.deploymentPrimary ?? null;
+        if (primary) {
+          setCurrent({
+            provider: primary.provider,
+            modelId: primary.modelId,
+            thinkingLevel: primary.thinkingLevel ?? null,
+          });
+          setDeep(Boolean(primary.thinkingLevel && primary.thinkingLevel !== "off"));
         }
-        if (role.status === "fulfilled") {
-          const primary = role.value.primary ?? role.value.deploymentPrimary ?? null;
-          if (primary) {
-            setCurrent({
-              provider: primary.provider,
-              modelId: primary.modelId,
-              thinkingLevel: primary.thinkingLevel ?? null,
-            });
-            setDeep(Boolean(primary.thinkingLevel && primary.thinkingLevel !== "off"));
-          }
-        }
-      },
-    );
+      }
+    });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [botId]);
 
   useEffect(() => {
     if (!open) return;
@@ -88,7 +105,16 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
     setSaving(true);
     setError(null);
     try {
-      await rpc.models.setRole({ role: "main", primary: choice });
+      if (botId) {
+        await rpc.bots.update({
+          botId,
+          modelProvider: choice.provider,
+          modelId: choice.modelId,
+          thinkingLevel: choice.thinkingLevel,
+        });
+      } else {
+        await rpc.models.setRole({ role: "main", primary: choice });
+      }
       setCurrent(choice);
       setDeep(Boolean(thinkingLevel));
       setOpen(false);
@@ -103,6 +129,9 @@ export function OrbitModelPicker({ disabled }: OrbitModelPickerProps) {
     if (!selectedEntry || saving) return;
     await choose(selectedEntry, nextDeep);
   }
+
+  // A group runs each member on its own model; one picker would be a lie.
+  if (!botId) return null;
 
   return (
     <div className="relative inline-block" ref={menuRef}>

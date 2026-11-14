@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import type { Root } from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { OrbitModelPicker } from "./OrbitModelPicker";
 
@@ -10,7 +11,8 @@ const models = vi.hoisted(() => ({
   role: vi.fn(),
   setRole: vi.fn(),
 }));
-vi.mock("../../lib/rpc", () => ({ rpc: { models } }));
+const bots = vi.hoisted(() => ({ get: vi.fn(), update: vi.fn() }));
+vi.mock("../../lib/rpc", () => ({ rpc: { models, bots } }));
 
 const catalog = [
   {
@@ -41,13 +43,15 @@ async function render() {
   document.body.append(host);
   root = createRoot(host);
   await act(async () => {
-    root!.render(<OrbitModelPicker />);
+    root!.render(<OrbitModelPicker target={{ botId: "bot-1" }} />);
   });
 }
 
 function button(name: RegExp | string) {
   return [...document.querySelectorAll("button")].find((element) =>
-    typeof name === "string" ? element.textContent?.includes(name) : name.test(element.textContent ?? ""),
+    typeof name === "string"
+      ? element.textContent?.includes(name)
+      : name.test(element.textContent ?? ""),
   );
 }
 
@@ -59,6 +63,13 @@ beforeEach(() => {
     backups: [],
   });
   models.setRole.mockResolvedValue({ primary: null, backups: [] });
+  bots.get.mockResolvedValue({
+    id: "bot-1",
+    modelProvider: "orbit",
+    modelId: "orbit-flash",
+    thinkingLevel: null,
+  });
+  bots.update.mockResolvedValue({});
 });
 
 afterEach(async () => {
@@ -81,9 +92,11 @@ describe("OrbitModelPicker", () => {
     expect(document.body.textContent).not.toContain("Custom Model");
 
     await act(async () => button("Orbit Forge")!.click());
-    expect(models.setRole).toHaveBeenCalledWith({
-      role: "main",
-      primary: { provider: "orbit", modelId: "orbit-forge", thinkingLevel: null },
+    expect(bots.update).toHaveBeenCalledWith({
+      botId: "bot-1",
+      modelProvider: "orbit",
+      modelId: "orbit-forge",
+      thinkingLevel: null,
     });
   });
 
@@ -93,9 +106,11 @@ describe("OrbitModelPicker", () => {
     await act(async () => button("Orbit Forge")!.click());
     await act(async () => button(/Orbit Forge/)!.click());
     await act(async () => button("Deep")!.click());
-    expect(models.setRole).toHaveBeenLastCalledWith({
-      role: "main",
-      primary: { provider: "orbit", modelId: "orbit-forge", thinkingLevel: "high" },
+    expect(bots.update).toHaveBeenLastCalledWith({
+      botId: "bot-1",
+      modelProvider: "orbit",
+      modelId: "orbit-forge",
+      thinkingLevel: "high",
     });
   });
 });

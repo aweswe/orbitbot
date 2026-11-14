@@ -1239,6 +1239,7 @@ function SpaceShell() {
               enterToSend={enterToSend}
               sendColors={userBubble}
               activeName={inGroup ? (activeGroup?.name ?? activeSnapshot?.groupName) : active?.name}
+              modelTarget={inGroup ? { groupId } : active ? { botId: active.id } : undefined}
               running={composerRunning}
               disabled={Boolean(recordingSkill)}
               pendingAttachments={composer.activePendingAttachments}

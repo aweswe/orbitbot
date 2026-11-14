@@ -82,6 +82,7 @@ const COMPOSER_TEXT = "rk-scroll whitespace-pre-wrap break-words px-0.5 py-0.5 t
 const ComposerBody = memo(function Composer({
   artifactTarget,
   activeName,
+  modelTarget,
   running,
   disabled,
   pendingAttachments,
@@ -117,6 +118,8 @@ const ComposerBody = memo(function Composer({
   docked = false,
 }: {
   activeName?: string;
+  /** Which chat the model picker edits: a bot's own model, or no picker for a group. */
+  modelTarget?: { botId?: string; groupId?: string };
   running: boolean;
   disabled?: boolean;
   pendingAttachments: PendingAttachment[];
@@ -1125,7 +1128,7 @@ const ComposerBody = memo(function Composer({
               {phoneCallsEnabled && draft.trim().length === 0 ? (
                 <HoldToTalkControls talk={talk} disabled={disabled || onCall} />
               ) : null}
-              <OrbitModelPicker disabled={disabled || sending} />
+              <OrbitModelPicker disabled={disabled || sending} target={modelTarget} />
               <Button
                 size="icon"
                 aria-label={t`Send`}
@@ -1152,7 +1155,7 @@ const ComposerBody = memo(function Composer({
               {phoneCallsEnabled && draft.trim().length === 0 ? (
                 <HoldToTalkControls talk={talk} disabled={disabled || onCall} />
               ) : null}
-              <OrbitModelPicker disabled={disabled || sending} />
+              <OrbitModelPicker disabled={disabled || sending} target={modelTarget} />
               <Button
                 size="icon"
                 aria-label={t`Send`}
