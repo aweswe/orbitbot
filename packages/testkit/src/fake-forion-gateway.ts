@@ -1,10 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import {
-  createServer,
-  type IncomingMessage,
-  type Server,
-  type ServerResponse,
-} from "node:http";
+import type { IncomingMessage, Server, ServerResponse } from "node:http";
+import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 
 /**
@@ -12,25 +8,25 @@ import type { AddressInfo } from "node:net";
  * 30-bot soak. It verifies HMAC v2 exactly as the client signs it, keeps an
  * in-memory wallet/reservation ledger, and never touches a network or database.
  */
-export type FakeGatewayFault =
+export type FakeGatewayFault = (
   | { kind: "status"; status: number; body?: unknown }
   | { kind: "delay"; ms: number }
   | { kind: "close" }
   /** Apply the mutation, then return 500 (settle-after-serve failure). */
   | { kind: "mutate-then-500" }
   /** Apply the mutation twice before responding, to test idempotency. */
-  | { kind: "duplicate-mutation" };
+  | { kind: "duplicate-mutation" }
+) & {
+  /** Only consume this fault for a matching route and/or reservation. */
+  when?: { path?: string; referenceId?: string };
+};
 
 export interface FakeForionGatewayOptions {
   secret?: string;
   /** Ledger clock. HMAC timestamps still use real time so the client's window is valid. */
   now?: () => number;
   initialBalance?: Record<string, number>;
-  lockCost?: (input: {
-    model?: string;
-    inputTokens?: number;
-    maxOutputTokens?: number;
-  }) => number;
+  lockCost?: (input: { model?: string; inputTokens?: number; maxOutputTokens?: number }) => number;
 }
 
 interface Reservation {
@@ -129,6 +125,24 @@ export class FakeForionGateway {
     this.baseUrl = "";
   }
 
+  /**
+   * Consume the first fault that applies to this request. Targeted faults let
+   * a concurrent soak pin a failure to one bot's reservation instead of
+   * letting whichever request arrives first take it.
+   */
+  private takeFault(path: string, body: Record<string, unknown>): FakeGatewayFault | undefined {
+    const index = this.faults.findIndex((fault) => {
+      if (!fault.when) return true;
+      if (fault.when.path && fault.when.path !== path) return false;
+      if (fault.when.referenceId && String(body.reference_id ?? "") !== fault.when.referenceId) {
+        return false;
+      }
+      return true;
+    });
+    if (index < 0) return undefined;
+    return this.faults.splice(index, 1)[0];
+  }
+
   private requestId(req: IncomingMessage): string {
     const header = req.headers["x-request-id"] ?? req.headers["x-orbit-request-id"];
     return String(header ?? `gateway-${++this.sequence}`);
@@ -150,12 +164,7 @@ export class FakeForionGateway {
     return got.length === want.length && timingSafeEqual(got, want);
   }
 
-  private send(
-    res: ServerResponse,
-    status: number,
-    body: unknown,
-    requestId: string,
-  ): void {
+  private send(res: ServerResponse, status: number, body: unknown, requestId: string): void {
     res.writeHead(status, {
       "content-type": "application/json",
       "x-request-id": requestId,
@@ -183,7 +192,7 @@ export class FakeForionGateway {
       return;
     }
 
-    const fault = this.faults.shift();
+    const fault = this.takeFault(url.pathname, body);
     if (fault?.kind === "delay") {
       await new Promise((resolve) => setTimeout(resolve, fault.ms));
     }
@@ -214,9 +223,7 @@ export class FakeForionGateway {
     this.send(
       res,
       finalStatus,
-      fault?.kind === "mutate-then-500"
-        ? { error: "settle failed after mutation" }
-        : result.body,
+      fault?.kind === "mutate-then-500" ? { error: "settle failed after mutation" } : result.body,
       requestId,
     );
   }
@@ -279,7 +286,10 @@ export class FakeForionGateway {
     const referenceId = String(body.reference_id ?? `ref-${++this.sequence}`);
     const existing = this.reservations.get(referenceId);
     if (existing && existing.status === "active") {
-      return { status: 200, body: { success: true, data: { cost: existing.amount, locked: true } } };
+      return {
+        status: 200,
+        body: { success: true, data: { cost: existing.amount, locked: true } },
+      };
     }
     if (existing) {
       return { status: 409, body: { error: "reference already settled" } };
