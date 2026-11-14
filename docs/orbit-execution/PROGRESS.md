@@ -125,3 +125,8 @@ Runtime (`forion-nestjs-runtime`): `b5a40f3` signs `/memory/search-internal` wit
 - Critical batch through the same harness: **20/20 passed** — `group-chats`, `billing-paywall`, `settings-shell`, `composer-send-failure`, `model-settings`.
 - The dev-stack failures above were environmental: real-provider latency and `AGENT_RUNTIME=pi` rejecting the scripted voice provider. The hermetic harness removes both.
 - Full Chromium deploy-gate run: in progress at the time of this entry; counts will replace this line.
+
+### Orbit Chat regression findings (peer session)
+- Storefront BUILD entered the correct `web_app_build` / `commerce_storefront` path but persisted the user turn twice (`41630`, `41631`) plus an empty assistant row; `runStorefrontBuild` saves a synthetic user/assistant pair while the server also persists the user turn. Open product bug.
+- Hub auto-route without Build mode ended with an apology and no build card/artifact; open behavior gap.
+- Runtime memory recall fixed on the live stack: “Teal.” after `88973ad5`.
