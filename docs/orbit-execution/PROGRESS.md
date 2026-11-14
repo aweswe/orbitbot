@@ -75,13 +75,13 @@ API, database validation, fleet tools, web, and mobile. Credit calls retry 429/5
 
 ### Commits
 
-Orbit Bot (`feat/orbit-phase0-containment`): `9a38636` Phase 0 containment; `6140fa1` hermetic harness + invariants; `e316f3b` observer telemetry-only; `207907f` cloud-only policy; `64203c7` fonts + source maps; `796be87` desktop-dist asset gate; `50343d0` final router/compose fixes; `096a1d6` I10 AI path tagging; `9907674` signed memory identity; `a4005c4` group responder router; `d41cd2c` 30-bot cap; `6a76b57` jittered credit retries; `1fc1fe1` 30-bot soak; `1dbb4ca` body-bound v3 signing; `f9c73fb` catalog composer; `fc0676b` cloud-first defaults + compliance release dependency; `26487b8` gate test fixes.
+Orbit Bot (`feat/orbit-phase0-containment`): `9a38636` Phase 0 containment; `6140fa1` hermetic harness + invariants; `e316f3b` observer telemetry-only; `207907f` cloud-only policy; `64203c7` fonts + source maps; `796be87` desktop-dist asset gate; `50343d0` final router/compose fixes; `096a1d6` I10 AI path tagging; `9907674` signed memory identity; `a4005c4` group responder router; `d41cd2c` 30-bot cap; `6a76b57` jittered credit retries; `1fc1fe1` 30-bot soak; `1dbb4ca` body-bound v3 signing; `f9c73fb` catalog composer; `fc0676b` cloud-first defaults + compliance release dependency; `26487b8` gate test fixes; `2e12e0f` bot-model picker; `d8064e3` lease-test stabilization.
 
 Forion Server (`feat/orbit-billing-authority`): `8ddd479c` BILL-10 hot chat; `23ebc1bf` wallet harness + CI; `cb90b5d4` per-reservation ledger, 30m TTL, locked-credit cap; `0119e5ac` 30-run reconciliation fuzz; `a9b6b1d5` 5m TTL + heartbeat + 30-bot cap; `7fc655bb` rate-bucket refill fix; `d165835c` body-bound HMAC v3 + replay; `d18af82f` migration verifier ignores down files; `c9170c22` replay-check only nonce-bearing v3 (v2 concurrent false-401 fix).
 
 ### Green gates
 
-- Orbit full unit suite: **23,265 passed / 1,064 skipped / 0 failed** across 1,400 files (final run, exit 0). Hermeticity guard and node harness checks included.
+- Orbit full unit suite: **23,267 passed / 1,064 skipped / 0 failed** across 1,401 files (final run, exit 0). Hermeticity guard and node harness checks included. The lease-handoff timing test was stabilized in `d8064e3`.
 - New composer picker test: 2/2.
 - Billing/gateway: fake gateway 7/7, 30-bot soak passes twice, adversarial gate 3 passed / 2 skipped.
 - Forion: security suite 56/56 (guard, memory v3, AI gateway); rate bucket 2/2; `tsc` clean.
