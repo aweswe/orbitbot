@@ -17,6 +17,14 @@ vi.mock("../lib/rpc", () => ({
           account.load = resolve;
         }),
     ),
+    bots: {
+      list: vi.fn(async () => []),
+      create: vi.fn(async () => ({ id: "bot-1" })),
+    },
+    onboarding: {
+      start: vi.fn(() => new Promise(() => {})),
+      promptFocus: vi.fn(async () => ({ ok: true as const })),
+    },
     models: {
       list: vi.fn(async () => [
         {
@@ -61,6 +69,29 @@ beforeEach(() => {
 afterEach(() => {
   document.body.innerHTML = "";
   vi.unstubAllGlobals();
+});
+
+it("opens the first bot while its greeting is still starting", async () => {
+  const host = document.body.appendChild(document.createElement("div"));
+  const root = createRoot(host);
+  await act(async () =>
+    root.render(
+      <MemoryRouter initialEntries={["/onboarding"]}>
+        <Routes>
+          <Route path="/onboarding/:step?" element={<OnboardingPage />} />
+          <Route path="/app/:botId" element={<div>Chief chat</div>} />
+        </Routes>
+      </MemoryRouter>,
+    ),
+  );
+
+  await act(async () =>
+    account.load({ needsModel: false, needsSignupSurvey: false, billingEnabled: false }),
+  );
+
+  expect(host.textContent).toContain("Chief chat");
+  expect(rpc.onboarding.start).toHaveBeenCalledWith({ botId: "bot-1" });
+  act(() => root.unmount());
 });
 
 it("marks onboarding as usable for the desktop only once a step shows", async () => {

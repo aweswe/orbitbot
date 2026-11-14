@@ -450,16 +450,13 @@ export function OnboardingPage() {
     setError(null);
     try {
       const bot = await ensureFirstBot();
-      // Onboarding continues conversationally in the thread: greeting first,
-      // then the focus choice (immediate for the first bot).
-      const started = await rpc.onboarding
-        .start({ botId: bot.id })
-        .then(() => true)
-        .catch(() => false);
-      if (started) {
-        await rpc.onboarding.promptFocus({ botId: bot.id }).catch(() => undefined);
-      }
+      // Open the chat as soon as the bot exists. The greeting and focus card
+      // arrive on the thread subscription, so a slow model call cannot hold the spinner.
       navigate(`/app/${bot.id}`);
+      void rpc.onboarding
+        .start({ botId: bot.id })
+        .then(() => rpc.onboarding.promptFocus({ botId: bot.id }))
+        .catch(() => undefined);
     } catch (err) {
       createStartedRef.current = false;
       setError(errorText(err, t`Could not create your bot`));
