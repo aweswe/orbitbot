@@ -77,7 +77,7 @@ require one.
 
 ## Limits
 
-- A group has 2 to 10 members.
+- A group has 2 to 30 members.
 - Instructions are at most 20,000 characters.
 - `list_fleet` returns at most 200 bots and 100 groups, and says when the result is truncated.
 - A bot writes at most one set of instructions per bot per run, and must pass the version it read.

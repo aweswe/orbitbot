@@ -3585,7 +3585,7 @@ describeJourneys("required product journeys", () => {
           `create a group named Sized with ${members.join(", ")}`,
         );
         expect(await toolOutcomes(done.run.id, "create_group")).toEqual([
-          expect.objectContaining({ outcome: "error", error: "A group needs 2 to 10 bots." }),
+          expect.objectContaining({ outcome: "error", error: "A group needs 2 to 30 bots." }),
         ]);
       }
       expect(await activeGroups(me.userId, "Sized")).toEqual([]);
