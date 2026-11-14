@@ -1062,7 +1062,11 @@ describe("createPostgresReconciliationLeadership", () => {
   it("lets a follower take over an expired lease after a crash", async () => {
     const { pool } = leasePool();
     const crashed = createPostgresReconciliationLeadership(pool, { leaseMs: 20 });
-    const follower = createPostgresReconciliationLeadership(pool, { leaseMs: 20 });
+    // The follower's lease must outlive the handoff checks. With a 20 ms lease,
+    // its immediate renewal can race the scheduler under a loaded full-suite run
+    // and fail after the expired-lease takeover, which is not what this test
+    // measures.
+    const follower = createPostgresReconciliationLeadership(pool, { leaseMs: 500 });
 
     await expect(crashed.tryAcquire()).resolves.toBe(true);
     await new Promise((resolve) => setTimeout(resolve, 35));
