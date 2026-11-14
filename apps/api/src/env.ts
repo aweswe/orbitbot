@@ -255,7 +255,18 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): AppEnv {
     resolveForionInternalSecret(source);
   }
   const webOrigin = resolveWebOrigin(source.WEB_ORIGIN, DEFAULT_WEB_ORIGIN, "WEB_ORIGIN");
-  const sandboxProvider = resolveSandboxProvider(source);
+  // Hosted Orbit has no local host to run computers on. E2B is the default;
+  // an explicit local provider is a configuration error, not a silent fallback.
+  const sandboxProvider = resolveSandboxProvider(
+    cloudOnly && !source.SANDBOX_PROVIDER?.trim()
+      ? { ...source, SANDBOX_PROVIDER: "e2b" }
+      : source,
+  );
+  if (cloudOnly && (sandboxProvider === "desktop" || sandboxProvider === "docker")) {
+    throw new Error(
+      "ORBIT_CLOUD_ONLY cannot use a local SANDBOX_PROVIDER; configure a remote provider",
+    );
+  }
   const cloudAgentProvider = resolveCloudAgentProvider(source);
   const deploymentModel = resolveDeploymentModel(source);
   return {

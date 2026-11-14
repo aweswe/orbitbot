@@ -15,6 +15,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  licence:
+    name: Licence and provenance
+    uses: ./.github/workflows/licence-compliance.yml
+
   validate:
     name: Validate stable release
     runs-on: ubuntu-24.04
@@ -99,7 +103,7 @@ jobs:
 
   build:
     name: Build ${{ matrix.artifact }} artifacts
-    needs: validate
+    needs: [validate, licence]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     # Azure trusts GitHub OIDC tokens only from this environment, so Windows signing needs no stored secret.

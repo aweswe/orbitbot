@@ -509,14 +509,31 @@ describe("Forion billing environment", () => {
       }),
     ).toThrow("FORION_ORBIT_INTERNAL_SECRET");
 
-    expect(
-      loadEnv({
-        ...base,
-        ORBIT_CLOUD_ONLY: "true",
-        ORBIT_BILLING_ENABLED: "true",
-        FORION_SERVER_URL: "http://127.0.0.1:3001",
-        FORION_ORBIT_INTERNAL_SECRET: "test-secret",
-      }).cloudOnly,
-    ).toBe(true);
+    const hosted = loadEnv({
+      ...base,
+      ORBIT_CLOUD_ONLY: "true",
+      ORBIT_BILLING_ENABLED: "true",
+      FORION_SERVER_URL: "http://127.0.0.1:3001",
+      FORION_ORBIT_INTERNAL_SECRET: "test-secret",
+      E2B_API_KEY: "test-e2b-key",
+    });
+    expect(hosted.cloudOnly).toBe(true);
+    // Hosted mode defaults to the remote sandbox, never the developer's Docker.
+    expect(hosted.sandboxProvider).toBe("e2b");
+  });
+
+  it("cloud-only mode rejects a local sandbox provider", () => {
+    for (const provider of ["desktop", "docker"]) {
+      expect(() =>
+        loadEnv({
+          ...base,
+          ORBIT_CLOUD_ONLY: "true",
+          ORBIT_BILLING_ENABLED: "true",
+          FORION_SERVER_URL: "http://127.0.0.1:3001",
+          FORION_ORBIT_INTERNAL_SECRET: "test-secret",
+          SANDBOX_PROVIDER: provider,
+        }),
+      ).toThrow("cannot use a local SANDBOX_PROVIDER");
+    }
   });
 });

@@ -24,8 +24,13 @@ concurrency:
   queue: max
 
 jobs:
+  licence:
+    name: Licence and provenance
+    uses: ./.github/workflows/licence-compliance.yml
+
   ios:
     name: Build iOS and submit it for App Store review
+    needs: licence
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     timeout-minutes: 180
@@ -116,6 +121,7 @@ jobs:
 
   android:
     name: Android APK
+    needs: licence
     if: inputs.ios_build_id == ''
     uses: ./.github/workflows/release-android-apk.yml
     permissions:
@@ -124,6 +130,7 @@ jobs:
 
   google-play:
     name: Google Play
+    needs: [licence, android]
     if: inputs.ios_build_id == ''
     uses: ./.github/workflows/release-google-play.yml
     secrets: inherit

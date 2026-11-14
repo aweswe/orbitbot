@@ -217,7 +217,7 @@ Browser ──https──> Vercel host ($PUBLIC) ──rewrites /(.*)──> Clo
     --platform managed \
     --region <region> \
     --allow-unauthenticated \
-    --set-env-vars="NODE_ENV=production,API_HOST=127.0.0.1,API_PORT=3100,BETTER_AUTH_URL=https://$PUBLIC,WEB_ORIGIN=https://$PUBLIC,RAKAZO_ALLOWED_HOSTS=*,FORION_SERVER_URL=https://forion-main-bfq6huxo2q-ew.a.run.app,ORBIT_BILLING_ENABLED=true"
+    --set-env-vars="NODE_ENV=production,API_HOST=127.0.0.1,API_PORT=3100,BETTER_AUTH_URL=https://$PUBLIC,WEB_ORIGIN=https://$PUBLIC,RAKAZO_ALLOWED_HOSTS=*,FORION_SERVER_URL=https://forion-main-bfq6huxo2q-ew.a.run.app,ORBIT_BILLING_ENABLED=true,ORBIT_CLOUD_ONLY=true,SANDBOX_PROVIDER=e2b"
   ```
 
 ### Option B (Fallback) — Static SPA on Vercel with Cloud Run API Proxy
