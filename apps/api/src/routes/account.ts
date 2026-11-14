@@ -459,7 +459,7 @@ export function accountRoutes(ctx: RouterContext) {
         );
       }),
       connect: authed.voice.connect.handler(async ({ context, input }) => {
-        refuseCloudOnly(deps.env.cloudOnly, "voice connections");
+        refuseCloudOnly(deps.env?.cloudOnly, "voice connections");
         return persistVoiceCredential(deps, context.actor, {
           provider: input.provider,
           plaintext: input.apiKey,

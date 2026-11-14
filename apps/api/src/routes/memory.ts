@@ -138,7 +138,7 @@ export function memoryRoutes(ctx: RouterContext) {
         return config ? serializeSpaceMemoryConfig(config) : null;
       }),
       connectProvider: authed.memory.connectProvider.handler(async ({ context, input }) => {
-        refuseCloudOnly(deps.env.cloudOnly, "memory providers");
+        refuseCloudOnly(deps.env?.cloudOnly, "memory providers");
         return persistMemoryProviderConfig(deps, context.actor, input);
       }),
       setDefaultScope: authed.memory.setDefaultScope.handler(async ({ context, input }) =>

@@ -68,7 +68,7 @@ export function modelsRoutes(ctx: RouterContext) {
     validateRoleChoices,
     authed,
   } = ctx;
-  const cloudOnly = deps.env.cloudOnly;
+  const cloudOnly = deps.env?.cloudOnly;
   return {
     models: {
       list: authed.models.list.handler(async ({ context }) => chatCatalog(context.actor)),

@@ -66,3 +66,29 @@ is a 30-bot soak with a fake gateway; the product decision is which responder po
 | T6.4 Release gate | Partial | Source maps off for web/desktop/server; Caddy 404s `.map`; CI + desktop release run the asset gate; compliance job still not a release dependency |
 | T6.5 Rebrand mobile/desktop identity | Deferred | `com.rakazo.app`, `rakazo://`, Expo owner, updater feed; see DEFERRED.md |
 | T6.6 Nodebox/GSAP | Human decision | `HUMAN_ACTIONS.md` |
+
+## Final status — 2026-11-14
+
+### Commits
+
+Orbit Bot (`feat/orbit-phase0-containment`): `9a38636` Phase 0 containment; `6140fa1` hermetic harness + invariants; `e316f3b` observer telemetry-only; `207907f` cloud-only policy; `64203c7` fonts + source maps; `796be87` desktop-dist asset gate.
+
+Forion Server (`feat/orbit-billing-authority`): `8ddd479c` BILL-10 hot chat; `23ebc1bf` wallet harness + CI; `cb90b5d4` per-reservation ledger, 30m TTL, locked-credit cap.
+
+### Green gates
+
+- Orbit full unit suite: 23,249 passed / 1,064 skipped / 0 failed (1,397 files, final run).
+- Targeted router/compose regressions after the final fixes: 23/23 passed.
+- Forion: wallet 8/8, credits + queue 10/10, all 18 in the combined run; `tsc` clean in adapters, API, worker, and Forion.
+- `check:shipped-assets`: clean after a fresh web build.
+- Hermeticity guard: clean; no test reads root `.env` or loads dotenv config.
+- Secret scan: no tracked-file leaks (prior public publication still requires rotation).
+
+### Still blocked
+
+1. Secret rotation and repo privacy (human; see `HUMAN_ACTIONS.md`).
+2. Group responder policy + 30-bot soak; cap deliberately remains 10.
+3. Signed-only identity / canonical IDs / RLS role separation.
+4. Cloud origin, device login, managed sandbox, signing/update feed, provider resale, §4(b) legal sign-off.
+
+**Next action:** rotate the exposed credentials, then decide the group responder policy.
