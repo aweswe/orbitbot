@@ -13,7 +13,7 @@ The agent cannot perform these. Do them in order. Never paste secret values into
 
 ## P0 — immediately after this code pass
 
-- [ ] **Rebuild every client artifact.** The unlicensed Corpta and Aeonik files were deleted from HEAD and from local build outputs. Any previously packaged `Orbit.app`, web `dist`, or marketing `dist` still contains them and must be rebuilt before distribution `node scripts/check-shipped-assets.mjs` must pass on the new artifacts.
+- [ ] **Rebuild every client artifact.** The unlicensed Corpta and Aeonik files were deleted from HEAD and from local build outputs. Any previously packaged `Orbit.app`, web `dist`, or marketing `dist` still contains them and must be rebuilt before distribution. `node scripts/check-shipped-assets.mjs` must pass on the new artifacts.
 - [ ] **Decide the group responder policy before raising the cap.** The cap remains 10 because a 30-bot room currently wakes every member at once. Choose mentions-only, a 1–3 speaker router, or all-members with a concurrency budget; then implement it with a 30-bot soak against `FakeForionGateway`. Do not raise `GROUP_MEMBER_MAX` as a standalone change.
 
 ## P1 — before external distribution

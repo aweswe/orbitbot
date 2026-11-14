@@ -71,7 +71,7 @@ is a 30-bot soak with a fake gateway; the product decision is which responder po
 
 ### Commits
 
-Orbit Bot (`feat/orbit-phase0-containment`): `9a38636` Phase 0 containment; `6140fa1` hermetic harness + invariants; `e316f3b` observer telemetry-only; `207907f` cloud-only policy; `64203c7` fonts + source maps; `796be87` desktop-dist asset gate.
+Orbit Bot (`feat/orbit-phase0-containment`): `9a38636` Phase 0 containment; `6140fa1` hermetic harness + invariants; `e316f3b` observer telemetry-only; `207907f` cloud-only policy; `64203c7` fonts + source maps; `796be87` desktop-dist asset gate; `50343d0` final router/compose fixes.
 
 Forion Server (`feat/orbit-billing-authority`): `8ddd479c` BILL-10 hot chat; `23ebc1bf` wallet harness + CI; `cb90b5d4` per-reservation ledger, 30m TTL, locked-credit cap.
 
