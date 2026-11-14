@@ -17,6 +17,7 @@ describe("FakeForionGateway", () => {
       baseUrl: gateway.baseUrl,
       apiKey: gateway.secret,
       defaultUserId: "user-1",
+      retry: { maxAttempts: 3, baseDelayMs: 1, maxDelayMs: 5, jitterRatio: 0 },
     });
   });
 
@@ -69,9 +70,9 @@ describe("FakeForionGateway", () => {
     ).toBe(false);
     expect(gateway.balance("user-1")).toEqual({ balance: 1_000, locked: 7, available: 993 });
 
-    expect(
-      await client.settleCredits({ userId: "user-1", amount: 7, referenceId: "run-2" }),
-    ).toBe(true);
+    expect(await client.settleCredits({ userId: "user-1", amount: 7, referenceId: "run-2" })).toBe(
+      true,
+    );
   });
 
   it("is idempotent when settle is delivered twice", async () => {
@@ -84,13 +85,13 @@ describe("FakeForionGateway", () => {
     });
     gateway.faults.push({ kind: "duplicate-mutation" });
 
-    expect(
-      await client.settleCredits({ userId: "user-1", amount: 7, referenceId: "run-3" }),
-    ).toBe(true);
+    expect(await client.settleCredits({ userId: "user-1", amount: 7, referenceId: "run-3" })).toBe(
+      true,
+    );
     expect(gateway.balance("user-1")).toEqual({ balance: 993, locked: 0, available: 993 });
   });
 
-  it("records a settle-after-serve failure and completes on retry", async () => {
+  it("retries a settle-after-serve failure and deducts exactly once", async () => {
     await client.lockCredits({
       userId: "user-1",
       model: "test-model",
@@ -100,26 +101,72 @@ describe("FakeForionGateway", () => {
     });
     gateway.faults.push({ kind: "mutate-then-500" });
 
+    expect(await client.settleCredits({ userId: "user-1", amount: 7, referenceId: "run-4" })).toBe(
+      true,
+    );
     expect(
-      await client.settleCredits({ userId: "user-1", amount: 7, referenceId: "run-4" }),
-    ).toBe(false);
-    expect(gateway.balance("user-1")).toEqual({ balance: 993, locked: 0, available: 993 });
-
+      gateway.requests
+        .filter((request) => request.path === "/api/credits/settle")
+        .map((request) => request.status),
+    ).toEqual([500, 200]);
     expect(
-      await client.settleCredits({ userId: "user-1", amount: 7, referenceId: "run-4" }),
-    ).toBe(true);
+      gateway.transactions.filter((row) => row.referenceId === "run-4" && row.type === "deduct"),
+    ).toHaveLength(1);
     expect(gateway.balance("user-1")).toEqual({ balance: 993, locked: 0, available: 993 });
   });
 
-  it("surfaces a 429 without mutating the ledger", async () => {
+  it("reports a persistent settle failure so the outbox can carry it", async () => {
+    await client.lockCredits({
+      userId: "user-1",
+      model: "test-model",
+      inputTokens: 100,
+      maxOutputTokens: 100,
+      referenceId: "run-7",
+    });
+    gateway.faults.push(
+      { kind: "status", status: 500 },
+      { kind: "status", status: 500 },
+      { kind: "status", status: 500 },
+    );
+
+    expect(await client.settleCredits({ userId: "user-1", amount: 7, referenceId: "run-7" })).toBe(
+      false,
+    );
+    expect(gateway.balance("user-1")).toEqual({ balance: 1_000, locked: 7, available: 993 });
+
+    expect(await client.settleCredits({ userId: "user-1", amount: 7, referenceId: "run-7" })).toBe(
+      true,
+    );
+    expect(gateway.balance("user-1")).toEqual({ balance: 993, locked: 0, available: 993 });
+  });
+
+  it("retries one rate-limited call instead of failing the run", async () => {
     gateway.faults.push({ kind: "status", status: 429 });
+    const lock = await client.lockCredits({
+      userId: "user-1",
+      model: "test-model",
+      inputTokens: 100,
+      maxOutputTokens: 100,
+      referenceId: "run-5",
+    });
+    expect(lock.lockedCredits).toBe(7);
+    expect(gateway.requests.map((request) => request.status)).toEqual([429, 200]);
+    expect(gateway.balance("user-1")).toEqual({ balance: 1_000, locked: 7, available: 993 });
+  });
+
+  it("surfaces a persistent 429 without mutating the ledger", async () => {
+    gateway.faults.push(
+      { kind: "status", status: 429 },
+      { kind: "status", status: 429 },
+      { kind: "status", status: 429 },
+    );
     await expect(
       client.lockCredits({
         userId: "user-1",
         model: "test-model",
         inputTokens: 100,
         maxOutputTokens: 100,
-        referenceId: "run-5",
+        referenceId: "run-6",
       }),
     ).rejects.toThrow(/429/);
     expect(gateway.balance("user-1")).toEqual({ balance: 1_000, locked: 0, available: 1_000 });

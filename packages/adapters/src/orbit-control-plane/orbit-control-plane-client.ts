@@ -92,16 +92,48 @@ export function signOrbitInternalRequest(
   };
 }
 
+export interface OrbitControlPlaneRetryOptions {
+  /** Total attempts including the first. */
+  maxAttempts?: number;
+  baseDelayMs?: number;
+  maxDelayMs?: number;
+  /** Fraction of random extra delay added to every backoff. */
+  jitterRatio?: number;
+}
+
+const RETRYABLE_STATUS = new Set([429, 500, 502, 503, 504]);
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function retryAfterMs(response: Response): number | undefined {
+  const header = response.headers.get("retry-after");
+  if (!header) return undefined;
+  const seconds = Number(header);
+  if (Number.isFinite(seconds)) return Math.max(0, seconds * 1_000);
+  const date = Date.parse(header);
+  return Number.isNaN(date) ? undefined : Math.max(0, date - Date.now());
+}
+
 export class OrbitControlPlaneClient {
   private readonly baseUrl: string;
   private readonly internalSecret: string;
   private readonly defaultUserId: string;
+  private readonly retry: Required<OrbitControlPlaneRetryOptions>;
 
   constructor(options?: {
     baseUrl?: string;
     apiKey?: string;
     defaultUserId?: string;
+    retry?: OrbitControlPlaneRetryOptions;
   }) {
+    this.retry = {
+      maxAttempts: Math.max(1, options?.retry?.maxAttempts ?? 3),
+      baseDelayMs: Math.max(0, options?.retry?.baseDelayMs ?? 100),
+      maxDelayMs: Math.max(0, options?.retry?.maxDelayMs ?? 2_000),
+      jitterRatio: Math.max(0, options?.retry?.jitterRatio ?? 0.5),
+    };
     this.baseUrl = (
       options?.baseUrl ||
       process.env.FORION_SERVER_URL ||
@@ -141,6 +173,50 @@ export class OrbitControlPlaneClient {
   }
 
   /**
+   * Billing calls carry an idempotency key (the reservation reference), so a
+   * rate-limited or transiently failed call is safe to repeat. Back off with
+   * jitter so thirty bots answering at once do not retry in lockstep.
+   */
+  private async fetchWithRetry(url: string, init: RequestInit): Promise<Response> {
+    const { maxAttempts, baseDelayMs, maxDelayMs, jitterRatio } = this.retry;
+    for (let attempt = 1; ; attempt++) {
+      try {
+        const response = await fetch(url, init);
+        if (!RETRYABLE_STATUS.has(response.status) || attempt >= maxAttempts) {
+          return response;
+        }
+        await response.body?.cancel().catch(() => {});
+        await sleep(this.retryDelay(response, attempt, baseDelayMs, maxDelayMs, jitterRatio));
+      } catch (err) {
+        if (attempt >= maxAttempts) throw err;
+        await sleep(this.backoff(attempt, baseDelayMs, maxDelayMs, jitterRatio));
+      }
+    }
+  }
+
+  private retryDelay(
+    response: Response,
+    attempt: number,
+    baseDelayMs: number,
+    maxDelayMs: number,
+    jitterRatio: number,
+  ): number {
+    const named = retryAfterMs(response);
+    const base = named ?? baseDelayMs * 2 ** (attempt - 1);
+    return Math.min(maxDelayMs, base * (1 + Math.random() * jitterRatio));
+  }
+
+  private backoff(
+    attempt: number,
+    baseDelayMs: number,
+    maxDelayMs: number,
+    jitterRatio: number,
+  ): number {
+    const base = baseDelayMs * 2 ** (attempt - 1);
+    return Math.min(maxDelayMs, base * (1 + Math.random() * jitterRatio));
+  }
+
+  /**
    * Step 1: Pre-lock credits before a model call or agent step.
    * If the user's available credits are insufficient, forion-server throws 402/400.
    */
@@ -156,7 +232,7 @@ export class OrbitControlPlaneClient {
 
     // Fail closed: an unreachable control plane must not grant free usage. The
     // caller turns this into a refused model call, never a fabricated lock.
-    const response = await fetch(url, {
+    const response = await this.fetchWithRetry(url, {
       method: "POST",
       headers: this.headers("POST", path, userId, input.requestId),
       signal: AbortSignal.timeout(10_000),
@@ -207,7 +283,7 @@ export class OrbitControlPlaneClient {
     const url = `${this.baseUrl}${path}`;
 
     try {
-      const response = await fetch(url, {
+      const response = await this.fetchWithRetry(url, {
         method: "POST",
         headers: this.headers("POST", path, userId, input.requestId),
         body: JSON.stringify({
@@ -240,7 +316,7 @@ export class OrbitControlPlaneClient {
     const url = `${this.baseUrl}${path}`;
 
     try {
-      const response = await fetch(url, {
+      const response = await this.fetchWithRetry(url, {
         method: "POST",
         headers: this.headers("POST", path, userId, input.requestId),
         body: JSON.stringify({
@@ -275,7 +351,7 @@ export class OrbitControlPlaneClient {
     const url = `${this.baseUrl}${path}`;
 
     try {
-      const response = await fetch(url, {
+      const response = await this.fetchWithRetry(url, {
         method: "POST",
         headers: this.headers("POST", path, userId, input.requestId),
         body: JSON.stringify({
@@ -309,7 +385,7 @@ export class OrbitControlPlaneClient {
     const url = `${this.baseUrl}${path}`;
 
     try {
-      const response = await fetch(url, {
+      const response = await this.fetchWithRetry(url, {
         method: "GET",
         headers: this.headers("GET", path, targetUser),
       });
@@ -353,7 +429,7 @@ export class OrbitControlPlaneClient {
     const path = "/api/ai/models";
     const url = `${this.baseUrl}${path}`;
     try {
-      const response = await fetch(url, {
+      const response = await this.fetchWithRetry(url, {
         method: "GET",
         headers: this.headers("GET", path, this.defaultUserId || "orbit-internal"),
       });
