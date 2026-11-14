@@ -91,8 +91,8 @@ The objective of this integration is to connect **Orbit Bot** (an autonomous ful
   ```
 - Both connection strings target `schema=orbit_bot`:
   ```env
-  DATABASE_URL="postgresql://postgres.loanzmtsltoppejrmfdj:...@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?schema=orbit_bot&pgbouncer=true"
-  DATABASE_MIGRATION_URL="postgresql://postgres.loanzmtsltoppejrmfdj:...@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?schema=orbit_bot"
+  DATABASE_URL="postgresql://postgres.loanzmtsltoppejrmfdj:<REDACTED>@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?schema=orbit_bot&pgbouncer=true"
+  DATABASE_MIGRATION_URL="postgresql://postgres.loanzmtsltoppejrmfdj:<REDACTED>@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?schema=orbit_bot"
   ```
 
 ### 3.2 Additive Migration Repairs
@@ -244,11 +244,11 @@ Vercel serves the static Vite SPA and rewrites backend paths (`/api`, `/rpc`, `/
 Supabase enforces connection types strictly by port:
 - **Migrations (`DATABASE_MIGRATION_URL`)**: MUST use direct port **5432** (session mode). Transaction-mode PgBouncer on 6543 rejects DDL transactions.
   ```env
-  DATABASE_MIGRATION_URL=postgresql://postgres.loanzmtsltoppejrmfdj:<PASSWORD>@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres?schema=orbit_bot
+  DATABASE_MIGRATION_URL=postgresql://postgres.loanzmtsltoppejrmfdj:<REDACTED>@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres?schema=orbit_bot
   ```
 - **Runtime (`DATABASE_URL`)**: Uses pooler port **6543** with PgBouncer flag and scoped application role:
   ```env
-  DATABASE_URL=postgresql://orbit_bot_app:<SECURE_PASSWORD>@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?schema=orbit_bot&pgbouncer=true
+  DATABASE_URL=postgresql://orbit_bot_app:<REDACTED>@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?schema=orbit_bot&pgbouncer=true
   ```
 
 ### 7.4 Forion Control Plane & Orion Integration Contract

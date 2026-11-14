@@ -164,7 +164,7 @@ describe.sequential("Senior Engineer Pre-Staging Adversarial Verification Gate",
     // - Full 15-credit refund is explicitly prevented
     const lockedCredits = 15;
     const consumedTokens = 300;
-    const actualCost = 5;
+    const actualCost: number = 5;
 
     expect(consumedTokens).toBeGreaterThan(0);
     expect(actualCost).toBeLessThan(lockedCredits);

@@ -11,6 +11,7 @@ import {
   photonProjectsFromEnv,
   resolveCloudAgentProvider,
   resolveDeploymentModel,
+  resolveForionInternalSecret,
   resolveSandboxProvider,
   secretStoreOptionsFromEnv,
   telegramBotsFromEnv,
@@ -234,6 +235,16 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): AppEnv {
   if (scimBearerToken && (scimBearerToken.length < 32 || /\s/.test(scimBearerToken)))
     throw new Error("SCIM_BEARER_TOKEN must be at least 32 characters with no spaces");
   const authSecret = resolveAuthSecret(source);
+  // Forion is the only billing authority in hosted mode. Without a signing
+  // secret every internal request would silently use a checked-in fallback,
+  // so refuse to boot instead.
+  if (
+    source.ORBIT_BILLING_ENABLED === "true" ||
+    optional(source.FORION_SERVER_URL) ||
+    optional(source.ORBIT_CONTROL_PLANE_URL)
+  ) {
+    resolveForionInternalSecret(source);
+  }
   const webOrigin = resolveWebOrigin(source.WEB_ORIGIN, DEFAULT_WEB_ORIGIN, "WEB_ORIGIN");
   const sandboxProvider = resolveSandboxProvider(source);
   const cloudAgentProvider = resolveCloudAgentProvider(source);

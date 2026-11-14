@@ -82,6 +82,7 @@ export * from "./fake-web.js";
 export * from "./favicon.js";
 export * from "./fish-audio-voice.js";
 export * from "./fleet-tools.js";
+export * from "./forion-internal-secret.js";
 export * from "./github-webhook-emulator.js";
 export * from "./graphql-connectors.js";
 export * from "./group-handoff.js";

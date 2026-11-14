@@ -16,6 +16,7 @@ import {
 import { resolveDeploymentModel } from "./deployment-model.js";
 import type { ExecutorDeps } from "./executor-deps.js";
 import type { FleetPrepareDeps } from "./fleet-tools.js";
+import { resolveForionInternalSecret } from "./forion-internal-secret.js";
 import {
   HostedModelCreditsRequiredError,
   hostedModelCreditObserver,
@@ -398,11 +399,7 @@ async function resolveModelKeyMaterial(
   cloudflareProviderEnv({ provider });
   const apiKey = deploymentKeyFor(deps, provider);
   if (provider === REQUESTY_PROVIDER_ID || provider === "requesty") {
-    const secret =
-      apiKey ||
-      process.env.FORION_ORBIT_INTERNAL_SECRET ||
-      process.env.FORION_API_KEY ||
-      "orbit-forion-internal-dev-secret-12345";
+    const secret = apiKey || resolveForionInternalSecret();
     let canonicalUserId = userId;
     if (deps.prisma) {
       try {

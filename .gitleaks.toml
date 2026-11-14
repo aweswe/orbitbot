@@ -1,0 +1,28 @@
+title = "Orbit secret scan"
+# Scan tracked files only. scripts/secret-scan.sh builds a tracked-files copy so
+# node_modules, dist, .next, and local data never produce noise.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Generated upstream baseline stores source content/hashes, not live credentials"
+paths = [
+  '''compliance/upstream-baseline\.json$''',
+]
+
+[[allowlists]]
+description = "Test fixtures and smoke scripts generate fake keys to exercise secret handling"
+paths = [
+  '''(^|/)apps/web/e2e/.*\.spec\.ts$''',
+  '''(^|/).*\.(test|spec)\.(ts|tsx|js|mjs|py)$''',
+  '''(^|/)packages/testkit/src/cli/evals\.ts$''',
+  '''(^|/)infra/compose/check-image\.smoke\.sh$''',
+  '''(^|/)infra/compose/host-safeguards\.test\.py$''',
+]
+
+[[allowlists]]
+description = "Template values in .env.example and the local dev seed identity are not credentials"
+paths = [
+  '''(^|/)\.env\.example$''',
+  '''(^|/)apps/api/src/app\.ts$''',
+]

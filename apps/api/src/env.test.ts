@@ -470,3 +470,24 @@ describe("directory provisioning environment", () => {
     },
   );
 });
+
+describe("Forion billing environment", () => {
+  it("fails closed when Forion is configured without an internal secret", () => {
+    expect(() => loadEnv({ ...base, FORION_SERVER_URL: "http://127.0.0.1:3001" })).toThrow(
+      "FORION_ORBIT_INTERNAL_SECRET",
+    );
+    expect(() => loadEnv({ ...base, ORBIT_BILLING_ENABLED: "true" })).toThrow(
+      "FORION_ORBIT_INTERNAL_SECRET",
+    );
+  });
+
+  it("boots when Forion is configured with a secret", () => {
+    expect(
+      loadEnv({
+        ...base,
+        FORION_SERVER_URL: "http://127.0.0.1:3001",
+        FORION_ORBIT_INTERNAL_SECRET: "test-secret",
+      }).nodeEnv,
+    ).toBe("test");
+  });
+});

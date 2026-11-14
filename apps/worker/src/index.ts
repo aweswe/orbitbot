@@ -4,6 +4,7 @@ import type { JobPublisher, JobWorkerHost } from "@forion/orbit-adapter-kit";
 import {
   ComposioConnector,
   IntegrationProviderSettings,
+  resolveForionInternalSecret,
   unwrapEnvFromKeyManager,
 } from "@forion/orbit-adapters";
 import { phoneCallSettings } from "@forion/orbit-core";
@@ -115,6 +116,13 @@ import { ForionMemoryStore, MarkdownMemoryStore } from "@forion/orbit-memory";
 const logger = await createRootLogger(SERVICE_NAMES.worker);
 
 async function main() {
+  if (
+    process.env.ORBIT_BILLING_ENABLED === "true" ||
+    process.env.FORION_SERVER_URL ||
+    process.env.ORBIT_CONTROL_PLANE_URL
+  ) {
+    resolveForionInternalSecret(process.env);
+  }
   const stopStallWatch = watchEventLoopStalls();
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) throw new Error("DATABASE_URL is required");

@@ -73,8 +73,8 @@ The single-worker deep verification uncovered 5 specific implementation details 
 ### Nuance 1: Local Docker Container vs. Staging Supabase
 - **The Finding:** `orbit-bot/.env` lines 10–11 currently points to:
   ```env
-  DATABASE_URL="postgresql://postgres:p0probe@127.0.0.1:55433/orbit_bot"
-  DATABASE_MIGRATION_URL="postgresql://postgres:p0probe@127.0.0.1:55433/orbit_bot"
+  DATABASE_URL="postgresql://postgres:<REDACTED>@127.0.0.1:55433/orbit_bot"
+  DATABASE_MIGRATION_URL="postgresql://postgres:<REDACTED>@127.0.0.1:55433/orbit_bot"
   ```
   Orbit Bot is **NOT currently connected to Supabase in its working copy**; it points to a local Docker container (`orbit-baseline-pg`). The staging Supabase connection string is documented only in `docs/FORION_ORBIT_INTEGRATION_HANDOFF.md` (lines 94–95).
 - **The Trap:** Simply switching `ORBIT_BILLING_ENABLED=true` without pointing `DATABASE_URL` to Supabase will cause Orbit Bot to lock credits against Forion while writing agent data to local Docker.
@@ -262,7 +262,7 @@ To move from audit to production, complete these tasks in order:
 1. **[CRITICAL] Point Orbit Bot to Supabase Staging with Schema Flag:**
    Update `orbit-bot/.env`:
    ```env
-   DATABASE_URL="postgresql://postgres.loanzmtsltoppejrmfdj:CrackOnTech2026@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?schema=orbit_bot"
+   DATABASE_URL="postgresql://postgres.loanzmtsltoppejrmfdj:<REDACTED>@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?schema=orbit_bot"
    ```
    *Crucial:* Ensure `?schema=orbit_bot` is present so `packages/db/src/client.ts` sets `search_path=orbit_bot`.
 2. **[CRITICAL] Fix the Silent OAuth Clash Swallow:**

@@ -10,6 +10,7 @@ import type {
   ProviderHeaders,
 } from "@earendil-works/pi-ai";
 import { AssistantMessageEventStream } from "@earendil-works/pi-ai/utils/event-stream";
+import { resolveForionInternalSecret } from "./forion-internal-secret.js";
 import { signOrbitInternalRequest } from "./orbit-control-plane/orbit-control-plane-client.js";
 import { codexComputeResidency } from "./pi-oauth.js";
 import {
@@ -213,10 +214,7 @@ function modelRequestFetch(
 
         const pathAndQuery = `${urlObj.pathname}${urlObj.search}`;
         const method = (resolvedInit?.method || "POST").toUpperCase();
-        const secret =
-          process.env.FORION_ORBIT_INTERNAL_SECRET ||
-          process.env.FORION_API_KEY ||
-          "orbit-forion-internal-dev-secret-12345";
+        const secret = resolveForionInternalSecret();
 
         let currentUserId = "";
         const rawHeaders = resolvedInit?.headers;
