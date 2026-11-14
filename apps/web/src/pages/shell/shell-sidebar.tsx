@@ -273,7 +273,7 @@ export function ShellSidebar({
         ) ? null : (
           <InputGroup
             data-testid="sidebar-search"
-            className="mx-4 mb-2.5 w-auto rounded-lg bg-card border border-border text-muted-foreground focus-within:border-ring text-label"
+            className="mx-2.5 mb-2.5 w-auto rounded-lg bg-card border border-border text-muted-foreground focus-within:border-ring text-label"
           >
             <InputGroupAddon>
               <Search size={14} strokeWidth={1.5} aria-hidden="true" />

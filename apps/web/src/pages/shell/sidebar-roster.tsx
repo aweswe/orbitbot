@@ -150,7 +150,10 @@ export function SidebarRoster({
     );
   }
 
-  if (!mini && initialBotsLoaded && totalBots === 0) {
+  // With more than one space, keep the empty-space destinations visible even when
+  // every space has no bots, so the user can still switch to and manage them.
+  const hasSpaceDestinations = sidebarGroups.some((group) => group.emptySpaceId !== undefined);
+  if (!mini && initialBotsLoaded && totalBots === 0 && !hasSpaceDestinations) {
     return (
       <div className="flex flex-col items-center justify-center gap-2.5 py-10 px-4 text-center">
         <p className="text-label text-muted-foreground">{t`No bots yet`}</p>
@@ -490,8 +493,8 @@ export function SidebarRoster({
                       mini
                         ? "mx-auto size-10 justify-center rounded-lg"
                         : compact
-                          ? "w-full min-h-[36px] max-h-9 gap-2 rounded-lg px-2.5 py-1"
-                          : "w-full min-h-[38px] max-h-10 gap-2.5 rounded-lg px-2.5 py-1.5"
+                          ? "w-full min-h-11 gap-2 rounded-lg px-2.5 py-1"
+                          : "w-full min-h-11 gap-2.5 rounded-lg px-2.5 py-1.5"
                     } text-start transition-colors ${
                       item.kind === "bot" ? "cursor-grab active:cursor-grabbing" : ""
                     } ${

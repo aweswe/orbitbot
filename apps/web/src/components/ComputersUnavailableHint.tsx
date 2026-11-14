@@ -1,4 +1,4 @@
-import { Button, buttonVariants, Spinner } from "@forion/orbit-ui-web";
+import { Button, Spinner } from "@forion/orbit-ui-web";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
 import type { SandboxAvailabilityPhase } from "../lib/computer-sandbox";
@@ -124,14 +124,6 @@ export function ComputersUnavailableHint({
               <Trans>Open computer settings</Trans>
             </Button>
           ) : null}
-          <a
-            className={buttonVariants({ variant: "ghost", size: "sm" })}
-            href="http://localhost:3000"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Trans>Orbit Cloud</Trans>
-          </a>
         </div>
       ) : null}
     </div>

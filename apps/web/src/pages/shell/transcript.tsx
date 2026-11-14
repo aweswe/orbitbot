@@ -272,7 +272,21 @@ export const Transcript = memo(function Transcript({
         "[data-quote-message-id]",
       ) ?? null;
     const startContent = contentOf(range.startContainer);
-    const endContent = contentOf(lastSelectedText(range));
+    let endContent = contentOf(lastSelectedText(range));
+    if (!endContent && startContent) {
+      // A triple-click ends the range at offset 0 of the block that follows, so the
+      // backward walk can land on trailing chrome such as a reply's Speak button.
+      // Fall back to the last selected text that actually belongs to a quote region.
+      const walker = document.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_TEXT);
+      const textNodes: Text[] = [];
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        textNodes.push(node as Text);
+      }
+      for (let index = textNodes.length - 1; index >= 0 && !endContent; index -= 1) {
+        const node = textNodes[index]!;
+        if (range.intersectsNode(node) && node.textContent?.trim()) endContent = contentOf(node);
+      }
+    }
     // selection.toString() serializes the whole range (a Ctrl+A transcript is
     // unbounded), so it only runs once both endpoints sit in one message.
     const draft = quoteDraftForSelection(
