@@ -86,15 +86,16 @@ Forion Server (`feat/orbit-billing-authority`): `8ddd479c` BILL-10 hot chat; `23
 - Billing/gateway: fake gateway 7/7, 30-bot soak passes twice, adversarial gate 3 passed / 2 skipped.
 - Forion: security suite 56/56 (guard, memory v3, AI gateway); rate bucket 2/2; `tsc` clean.
 - Web composer tests 123/123; web `tsc` clean; contracts 38/38; fleet tools 101/101; thread-target 114/114; env 60/60.
-- `check:shipped-assets`: clean after a fresh web build.
+- `check:shipped-assets`: clean after a fresh web build; web build exits 0.
 - Hermeticity guard: clean; no test reads root `.env` or loads dotenv config.
-- Secret scan: no tracked-file leaks (prior public publication still requires rotation).
+- Secret scan: no tracked-file leaks in 33.59 MB (prior public publication still requires rotation).
+- Orbit Chat: Sandpack/Nodebox removed (`4e6a11ab`), unused GSAP removed (`ec636709`), dependency licence guard 2/2 (`3bfe4028`), artifact tests 12/12, eslint/tsc clean on changed files.
 
 ### Still blocked
 
 1. Secret rotation and repo privacy (human; see `HUMAN_ACTIONS.md`).
 2. Hosted flag flip for signed-only identity (`FORION_REQUIRE_SIGNED_INTERNAL=1`, `FORION_REQUIRE_SIGNATURE_V3=1`) after every auxiliary caller is confirmed.
 3. Cloud origin/IAM/DNS, E2B production key and quotas, signing/update feed, provider resale, §4(b) legal sign-off.
-4. Orbit Chat `@codesandbox/nodebox` decision and E2B preview migration; desktop/device control remains Stage 4.
+4. Desktop/device control remains Stage 4; per-bot budget and group pause/resume are not shipped. See `DEFERRED.md`.
 
 **Next action:** finish the fresh full-suite run, then Stage 2 discovery against the existing Playwright/testkit harness.
