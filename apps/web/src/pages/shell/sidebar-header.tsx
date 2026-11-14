@@ -1,7 +1,7 @@
 import type { Bot } from "@forion/orbit-contracts";
 import { Button } from "@forion/orbit-ui-web";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { PanelLeftClose, PanelLeftOpen, Plus, Search } from "lucide-react";
+import { Activity, PanelLeftClose, PanelLeftOpen, Plus, Search } from "lucide-react";
 import { IconTooltip } from "../../components/IconTooltip";
 import { OrbitLogoMark } from "../../components/OrbitLogoMark";
 import { OrbitThemeSwitcher } from "../../components/OrbitThemeSwitcher";
@@ -70,6 +70,22 @@ export function SidebarHeader({
           </div>
 
           <div className="flex items-center gap-1.5">
+            {toggleActivityMode ? (
+              <IconTooltip label={activityMode ? t`Show bots` : t`Activity`}>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className="app-no-drag shrink-0 text-muted-foreground hover:text-foreground h-8 w-8 rounded-lg"
+                  aria-label={t`Activity`}
+                  aria-pressed={activityMode ? "true" : "false"}
+                  data-activity-mode={activityMode ? "on" : "off"}
+                  data-testid="sidebar-activity-trigger"
+                  onClick={toggleActivityMode}
+                >
+                  <Activity size={16} strokeWidth={1.5} aria-hidden="true" />
+                </Button>
+              </IconTooltip>
+            ) : null}
             {onSearch ? (
               <IconTooltip label={searchOpen ? t`Close search` : t`Search`}>
                 <Button

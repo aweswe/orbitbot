@@ -250,6 +250,19 @@ export function SidebarFooter({
             </PopoverContent>
           ) : null}
         </Popover>
+        {!mini ? (
+          <IconTooltip label={t`Connect apps`}>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              aria-label={t`Connect apps`}
+              className="size-9 shrink-0 rounded-full text-muted-foreground hover:text-foreground"
+              onClick={onIntegrations}
+            >
+              <Plug size={16} strokeWidth={1.75} aria-hidden="true" />
+            </Button>
+          </IconTooltip>
+        ) : null}
         <OrbitCreditBadge onClick={onSettings} collapsed={mini} />
       </div>
       {update.available ? (
