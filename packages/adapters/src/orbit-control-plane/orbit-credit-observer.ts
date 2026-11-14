@@ -4,7 +4,7 @@ import type { AgentUsage, ModelCallObserver, UsageOperationKind } from "@forion/
 import type { PrismaClient } from "@forion/orbit-db";
 import { getLogger } from "@forion/orbit-logging";
 import { getOrbitControlPlaneClient } from "./orbit-control-plane-client.js";
-import { syncOrbitUserWithRebind } from "./orbit-user-sync.js";
+import { resolveCanonicalPrincipalId, syncOrbitUserWithRebind } from "./orbit-user-sync.js";
 
 interface ActiveRunState {
   runId: string;
@@ -854,12 +854,21 @@ async function lockCreditsWithAutoSync(
   },
   prisma?: PrismaClient,
 ): Promise<{ lockedCredits: number; referenceId: string; effectiveUserId: string }> {
+  // Orbit Chat and Orbit Bot share one Forion wallet. The local sign-in id may
+  // be mapped to an existing canonical Forion user; lock against that id from
+  // the first call, not only after Forion answers "User not found".
+  const canonicalUserId = prisma
+    ? await resolveCanonicalPrincipalId(prisma, scope.userId)
+    : scope.userId;
+  if (canonicalUserId !== scope.userId) {
+    scope.userId = canonicalUserId;
+  }
   try {
     const res = await client.lockCredits({
-      userId: scope.userId,
+      userId: canonicalUserId,
       ...params,
     });
-    return { ...res, effectiveUserId: scope.userId };
+    return { ...res, effectiveUserId: canonicalUserId };
   } catch (err: unknown) {
     const errMsg = err instanceof Error ? err.message : String(err);
     if (errMsg.includes("User not found") && prisma) {
